@@ -12,7 +12,7 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { AgentNode } from "./agent-node";
-import { GlassPanel } from "@/components/ui/glass-panel";
+import { LiquidGlassPanel } from "@/components/ui/liquid-glass";
 import { Button } from "@/components/ui/button";
 import { Plus, Save } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -151,7 +151,7 @@ export function WorkflowEditor() {
 
   return (
     <div className="flex-1 relative">
-      <GlassPanel className="h-full relative overflow-hidden">
+      <LiquidGlassPanel className="h-full relative overflow-hidden" style={{ width: '100%', height: '600px' }}>
         <div className="absolute top-4 right-4 flex space-x-2 z-10">
           <Button
             size="sm"
@@ -195,7 +195,7 @@ export function WorkflowEditor() {
             maskColor="rgba(0, 0, 0, 0.2)"
           />
         </ReactFlow>
-      </GlassPanel>
+      </LiquidGlassPanel>
     </div>
   );
 }
