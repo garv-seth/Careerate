@@ -1,0 +1,121 @@
+You are tasked with building Careerate—a next-generation, agentic DevOps & hosting platform that far outclasses Starsling and Monk.io.
+you have this contextual summary of its capabilities to guide you:
+
+Context Summary
+• Backend API (Node.js/TypeScript) under apps/api/
+– Orchestrator modules: agents.ts, llm.ts, state.ts, observability-agent.ts, workflow-import.ts, workflow.ts
+– Routers for projects, users, workflows
+– Tool integrations in tools/ (AWS, Azure, Terraform, Kubernetes, Jenkins, CircleCI, Datadog, Snyk, etc.)
+– Data layer: Prisma + CosmosDB (db.ts, cosmosdb.ts)
+– Auth via Passport in auth/passport.ts
+• Frontend UI (Next.js + TypeScript) under apps/web/
+– Dynamic workflow graph editor, chat panel, message bubbles, Glass UI components, Mermaid integration
+– Auth provider, MSAL config, global layout, Tailwind CSS
+– State management via a Redux-like store and deployment utilities
+• Monorepo extras: shared UI library, agent packages, types, utilities
+
+Use this summary to reference existing features—but do not assume file-level access or modify the repo. Instead, design Careerate from the ground up around these nine pillars:
+
+Autonomous Multi-Agent Core
+• Leverage Google ADK + the Google A2A protocol for secure, high-throughput inter-agent messaging.
+• Embed LangChain (or LangGraph, Griptape) for prompt orchestration, memory, dynamic tool chaining.
+• Define a registry of agents (planner, builder, tester, deployer, monitor) that negotiate tasks via A2A:
+
+// AgentRegistry pseudo-module
+registerAgent("planner",  ["analyze-repo","generate-plan"]);
+registerAgent("builder",  ["render-templates","compile-assets"]);
+registerAgent("deployer", ["k8s-deploy","serverless-deploy"]);
+registerAgent("monitor",  ["health-check","auto-heal"]);
+
+// A2A handshake flow
+planner → builder: {
+  taskId: 101,
+  infraSpec: { aws: ["vpc","ecs"], gcp: ["gke","cloud-run"] },
+  codeRef: "git@repo:main"
+}
+builder → deployer: {
+  taskId: 101,
+  artifacts: ["docker:api:101","helm:charts/web"]
+}
+deployer → monitor: {
+  taskId: 101,
+  endpoints: ["https://app.careerate.ai"]
+}
+
+Comprehensive Auth Workflows
+• Azure AD B2C / AAD (single-tenant & multi-tenant) via MSAL, OIDC, refresh tokens.
+• Firebase Auth (Google, Apple, Email link) for mobile/app clients.
+• GitHub & GitLab OAuth for repo-based permissions and webhooks.
+• Gmail API integration for transactional emails and calendar invites.
+
+// Example Azure OIDC config
+export const azureConfig: OIDCConfig = {
+  tenantId:   process.env.AZURE_TENANT_ID!,
+  clientId:   process.env.AZURE_CLIENT_ID!,
+  clientSecret: process.env.AZURE_CLIENT_SECRET!,
+  redirectUri:  `${APP_URL}/api/auth/callback/azure`,
+  scopes:     ["openid","profile","email","offline_access"],
+};
+
+Competitor Analysis & Differentiation
+• Starsling: strong event-driven pipelines but limited multi-cloud IaC.
+• Monk.lio: ephemeral dev workspaces yet basic agent orchestration.
+Careerate must fuse ephemeral developer enclaves, real-time observability, and enterprise-grade, multi-cloud IaC with secure rollbacks and self-healing.
+
+Multi-Cloud Infrastructure & Best Practices
+• AWS: CDK modules for VPC, ECS/EKS, Lambda; IAM least privilege; SSM Parameter Store.
+• GCP: Terraform modules for VPC, GKE, Cloud Run; Workload Identity; Secret Manager.
+• Provide an abstraction layer so users choose Terraform, CloudFormation, or CDK.
+
+infrastructure:
+  aws:
+    modules:
+      - "git::https://github.com/careerate-templates/aws-vpc.git"
+      - "git::https://github.com/careerate-templates/aws-eks.git"
+  gcp:
+    modules:
+      - "git::https://github.com/careerate-templates/gcp-network.git"
+      - "git::https://github.com/careerate-templates/gcp-gke.git"
+
+Agent Prompting & Orchestration Best Practices
+• Dynamic system messages describing domain context (e.g., “You are the builder reading orchestrator/agents.ts and WorkflowEditor.tsx”).
+• Chain-of-thought + inner monologue to improve plan clarity.
+• Provide few-shot examples for rollback, secret rotation, security audits.
+
+Liquid-Glass-Inspired UI
+• Adopt “glassmorphism”: layered translucency, soft shadows, fluid blur behind components.
+• Build a React/Tailwind component library with a <GlassPanel> that uses CSS backdrop-filter.
+• Support real-time, collaborative graph editing for workflows.
+
+// GlassPanel.tsx
+export function GlassPanel({ children }: { children: ReactNode }) {
+  return (
+    <div className="backdrop-blur-lg bg-white/20 rounded-2xl p-8 shadow-xl">
+      {children}
+    </div>
+  );
+}
+
+Vibe-Hosting & Agent-Powered Runtime
+• One-click “agent-powered hosting”: agents build container images, provision serverless functions or VMs, configure TLS/CDN, and manage autoscaling.
+• Self-healing via health probes → agent-triggered rollbacks or redeploys.
+• GitOps: desired state stored in Git; agents reconcile continuously.
+
+Integration Matrix
+• Firebase: Firestore for state, Functions for lightweight agents.
+• GitHub: Webhooks → agents; accelerate CI/CD via custom GitHub Actions.
+• Gmail API: automated status emails, meeting scheduling.
+• LangChain: Redis/PG memory backends, vector DB (Pinecone/Weaviate), dynamic tool registry.
+• Monitoring: Datadog, Prometheus, Grafana agents embedded in platform.
+
+Autonomous Hosting, Maintenance & Cost Optimization
+• Health checks → auto-scale, auto-heal, agent-triggered rollbacks.
+• Cost audits: agent reviews cloud spend, suggests rightsizing & reserved instances.
+• Billing dashboards integrated into UI for indie devs and enterprises.
+
+Deliverables:
+• A high-level architecture diagram and component breakdown.
+• Detailed pseudocode scaffolding for core services (agent registry, A2A messaging, auth modules, IaC templates).
+• Sample config snippets (Azure, GCP, AWS, LangChain).
+• UI component prototypes illustrating Liquid-Glass design.
+• A roadmap showing how all pieces—Google ADK/A2A, LangChain, multi-cloud IaC, autonomous hosting—form a cohesive, premium DevOps/hosting platform.
