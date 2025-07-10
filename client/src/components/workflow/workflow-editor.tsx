@@ -150,8 +150,8 @@ export function WorkflowEditor() {
   };
 
   return (
-    <div className="flex-1 relative">
-      <LiquidGlassPanel className="h-full relative overflow-hidden" style={{ width: '100%', height: '600px' }}>
+    <div className="w-full h-full relative">
+      <LiquidGlassPanel className="w-full h-full relative overflow-hidden" style={{ minHeight: '600px' }}>
         <div className="absolute top-4 right-4 flex space-x-2 z-10">
           <Button
             size="sm"
@@ -173,28 +173,30 @@ export function WorkflowEditor() {
           </Button>
         </div>
 
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          nodeTypes={nodeTypes}
-          fitView
-          className="bg-transparent"
-        >
-          <Background 
-            color="rgba(255, 255, 255, 0.1)" 
-            gap={20} 
-            size={1}
-          />
-          <Controls className="glass-panel" />
-          <MiniMap 
-            className="glass-panel" 
-            nodeColor="#6366f1"
-            maskColor="rgba(0, 0, 0, 0.2)"
-          />
-        </ReactFlow>
+        <div style={{ width: '100%', height: '500px' }}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            fitView
+            className="bg-transparent"
+            >
+            <Background 
+              color="rgba(255, 255, 255, 0.1)" 
+              gap={20} 
+              size={1}
+            />
+            <Controls className="glass-panel" />
+            <MiniMap 
+              className="glass-panel" 
+              nodeColor="#6366f1"
+              maskColor="rgba(0, 0, 0, 0.2)"
+            />
+          </ReactFlow>
+        </div>
       </LiquidGlassPanel>
     </div>
   );

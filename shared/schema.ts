@@ -13,9 +13,9 @@ export const agents = pgTable("agents", {
   name: text("name").notNull(),
   type: text("type").notNull(), // planner, builder, tester, deployer, monitor
   status: text("status").notNull().default("standby"), // active, building, queued, waiting, standby
-  capabilities: json("capabilities").$type<string[]>().notNull().default([]),
+  capabilities: text("capabilities").notNull().default("[]"),
   taskId: text("task_id"),
-  metadata: json("metadata").$type<Record<string, any>>(),
+  metadata: text("metadata"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -36,7 +36,7 @@ export const cloudResources = pgTable("cloud_resources", {
   status: text("status").notNull(), // active, provisioning, standby, error
   region: text("region"),
   resourceType: text("resource_type").notNull(),
-  metadata: json("metadata").$type<Record<string, any>>(),
+  metadata: text("metadata"),
   cost: integer("cost"), // in cents
   createdAt: timestamp("created_at").defaultNow(),
 });

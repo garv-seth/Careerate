@@ -106,6 +106,55 @@ export const gmailConfig: GmailConfig = {
 // Authentication Service
 export class AuthService {
   
+  async authenticateGitHub(code: string): Promise<any> {
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+    
+    if (!clientId || !clientSecret) {
+      throw new Error("GitHub credentials not configured");
+    }
+
+    // Exchange code for access token
+    const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: code,
+      }),
+    });
+
+    const tokenData = await tokenResponse.json();
+    
+    if (tokenData.error) {
+      throw new Error(`GitHub OAuth error: ${tokenData.error_description}`);
+    }
+
+    // Get user info
+    const userResponse = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+        "User-Agent": "Careerate-Platform",
+      },
+    });
+
+    const userData = await userResponse.json();
+    
+    return {
+      id: userData.id,
+      username: userData.login,
+      name: userData.name,
+      email: userData.email,
+      avatar: userData.avatar_url,
+      provider: "github",
+      accessToken: tokenData.access_token,
+    };
+  }
+  
   // Azure AD Authentication
   async authenticateAzure(code: string): Promise<any> {
     try {

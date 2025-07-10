@@ -66,41 +66,41 @@ export class MemStorage implements IStorage {
         name: "Planner Agent",
         type: "planner",
         status: "active",
-        capabilities: ["analyze-repo", "generate-plan"],
+        capabilities: JSON.stringify(["analyze-repo", "generate-plan"]),
         taskId: "101",
-        metadata: { color: "indigo" }
+        metadata: JSON.stringify({ color: "indigo" })
       },
       {
         name: "Builder Agent",
         type: "builder", 
         status: "building",
-        capabilities: ["render-templates", "compile-assets"],
+        capabilities: JSON.stringify(["render-templates", "compile-assets"]),
         taskId: "101",
-        metadata: { color: "violet" }
+        metadata: JSON.stringify({ color: "violet" })
       },
       {
         name: "Tester Agent",
         type: "tester",
         status: "queued", 
-        capabilities: ["run-tests", "validate-security"],
+        capabilities: JSON.stringify(["run-tests", "validate-security"]),
         taskId: "102",
-        metadata: { color: "emerald" }
+        metadata: JSON.stringify({ color: "emerald" })
       },
       {
         name: "Deployer Agent",
         type: "deployer",
         status: "waiting",
-        capabilities: ["k8s-deploy", "serverless-deploy"],
+        capabilities: JSON.stringify(["k8s-deploy", "serverless-deploy"]),
         taskId: "101",
-        metadata: { color: "blue" }
+        metadata: JSON.stringify({ color: "blue" })
       },
       {
         name: "Monitor Agent",
         type: "monitor",
         status: "standby",
-        capabilities: ["health-check", "auto-heal"],
+        capabilities: JSON.stringify(["health-check", "auto-heal"]),
         taskId: null,
-        metadata: { color: "orange" }
+        metadata: JSON.stringify({ color: "orange" })
       }
     ];
 
@@ -113,7 +113,7 @@ export class MemStorage implements IStorage {
         status: "active",
         region: "us-east-1",
         resourceType: "vpc",
-        metadata: { icon: "fab fa-aws" },
+        metadata: JSON.stringify({ icon: "fab fa-aws" }),
         cost: 52341
       },
       {
@@ -121,7 +121,7 @@ export class MemStorage implements IStorage {
         status: "provisioning",
         region: "us-central1",
         resourceType: "gke",
-        metadata: { icon: "fab fa-google" },
+        metadata: JSON.stringify({ icon: "fab fa-google" }),
         cost: 18793
       },
       {
@@ -129,7 +129,7 @@ export class MemStorage implements IStorage {
         status: "standby",
         region: "eastus",
         resourceType: "aks",
-        metadata: { icon: "fab fa-microsoft" },
+        metadata: JSON.stringify({ icon: "fab fa-microsoft" }),
         cost: 13598
       }
     ];
@@ -187,8 +187,14 @@ export class MemStorage implements IStorage {
     const agent: Agent = { 
       ...insertAgent,
       id,
+      status: insertAgent.status || "standby",
+      capabilities: typeof insertAgent.capabilities === 'string' 
+        ? JSON.parse(insertAgent.capabilities) 
+        : insertAgent.capabilities || [],
       taskId: insertAgent.taskId || null,
-      metadata: insertAgent.metadata || null,
+      metadata: typeof insertAgent.metadata === 'string'
+        ? JSON.parse(insertAgent.metadata || '{}')
+        : insertAgent.metadata || null,
       createdAt: new Date()
     };
     this.agents.set(id, agent);
@@ -260,7 +266,9 @@ export class MemStorage implements IStorage {
       ...insertResource,
       id,
       region: insertResource.region || null,
-      metadata: insertResource.metadata || null,
+      metadata: typeof insertResource.metadata === 'string'
+        ? JSON.parse(insertResource.metadata || '{}')
+        : insertResource.metadata || null,
       cost: insertResource.cost || null,
       createdAt: new Date()
     };

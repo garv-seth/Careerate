@@ -25,6 +25,84 @@ export default function Home() {
     queryKey: ["/api/dashboard/stats"],
   });
 
+  const renderMainContent = () => {
+    switch (activeTab) {
+      case "workflows":
+        return (
+          <div className="flex flex-1 overflow-hidden">
+            {/* Workflow Editor */}
+            <div className="flex-1 p-6 relative overflow-auto">
+              <div className="h-full relative">
+                <WorkflowEditor />
+                
+                {/* Agent Communication Panel */}
+                <div className="absolute bottom-6 left-6 right-6 z-10">
+                  <GlassPanel variant="medium" className="p-4">
+                    <h4 className="font-semibold mb-3 flex items-center">
+                      <MessageSquare className="mr-2 text-indigo-400 h-4 w-4" />
+                      Agent Communication Log
+                    </h4>
+                    <div className="space-y-2 text-sm max-h-20 overflow-y-auto">
+                      {stats?.recentLogs?.map((log) => (
+                        <div key={log.id} className="flex items-center space-x-3">
+                          <span className="text-indigo-400">{log.fromAgent} →</span>
+                          <span className="text-violet-400">{log.toAgent}:</span>
+                          <span className="text-gray-300 flex-1">{log.message}</span>
+                          <span className="text-xs text-gray-500">
+                            {log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : ""}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </GlassPanel>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Panel */}
+            <div className="w-80 p-6 space-y-6 overflow-y-auto">
+              <CloudStatus />
+              <AgentRegistry />
+              <CostOptimization />
+              <HealthMonitoring />
+            </div>
+          </div>
+        );
+      case "agents":
+        return (
+          <div className="flex-1 p-6">
+            <AgentRegistry />
+          </div>
+        );
+      case "infrastructure":
+        return (
+          <div className="flex-1 p-6">
+            <CloudStatus />
+          </div>
+        );
+      case "monitoring":
+        return (
+          <div className="flex-1 p-6">
+            <HealthMonitoring />
+          </div>
+        );
+      case "cost":
+        return (
+          <div className="flex-1 p-6">
+            <CostOptimization />
+          </div>
+        );
+      default:
+        return (
+          <div className="flex-1 p-6">
+            <div className="text-center text-gray-400">
+              Select a tab from the sidebar
+            </div>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -62,46 +140,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
-          
-          {/* Workflow Editor */}
-          <div className="flex-1 p-6 relative overflow-auto">
-            <div className="h-full relative">
-              <WorkflowEditor />
-              
-              {/* Agent Communication Panel */}
-              <div className="absolute bottom-6 left-6 right-6 z-10">
-                <GlassPanel variant="medium" className="p-4">
-                  <h4 className="font-semibold mb-3 flex items-center">
-                    <MessageSquare className="mr-2 text-indigo-400 h-4 w-4" />
-                    Agent Communication Log
-                  </h4>
-                  <div className="space-y-2 text-sm max-h-20 overflow-y-auto">
-                    {stats?.recentLogs?.map((log) => (
-                      <div key={log.id} className="flex items-center space-x-3">
-                        <span className="text-indigo-400">{log.fromAgent} →</span>
-                        <span className="text-violet-400">{log.toAgent}:</span>
-                        <span className="text-gray-300 flex-1">{log.message}</span>
-                        <span className="text-xs text-gray-500">
-                          {log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : ""}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </GlassPanel>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Panel */}
-          <div className="w-80 p-6 space-y-6 overflow-y-auto">
-            <CloudStatus />
-            <AgentRegistry />
-            <CostOptimization />
-            <HealthMonitoring />
-          </div>
-
-        </div>
+        {renderMainContent()}
       </div>
 
       {/* Floating Action Button */}
