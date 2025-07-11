@@ -38,21 +38,18 @@ export default function LandingRedesigned() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
-      {/* Fixed Navigation Overlay */}
-      <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Floating Navigation Bar */}
+      <header className="fixed top-4 left-4 right-4 z-50">
         <motion.nav 
-          className="backdrop-blur-md bg-black/20 border-b border-white/10"
+          className="backdrop-blur-xl bg-black/10 border border-white/20 rounded-2xl shadow-2xl shadow-black/20"
           style={{ opacity: navbarOpacity }}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
+          <div className="max-w-7xl mx-auto px-6 py-3">
+            <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center space-x-3">
                 <img src={careerateLogo} alt="CAREERATE" className="w-8 h-8 rounded-lg" />
-                <div>
-                  <span className="text-lg font-bold">CAREERATE</span>
-                  <p className="text-xs text-blue-300">interacting vibe hosting</p>
-                </div>
+                <span className="text-lg font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
               </div>
 
               {/* Desktop Navigation */}
@@ -101,7 +98,7 @@ export default function LandingRedesigned() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-20 left-4 right-4 z-40 md:hidden"
+          className="fixed top-24 left-4 right-4 z-40 md:hidden"
         >
           <div className="backdrop-blur-xl bg-black/20 border border-white/20 rounded-2xl shadow-2xl shadow-black/20 px-6 py-6 space-y-2">
             <a href="#features" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
@@ -129,7 +126,7 @@ export default function LandingRedesigned() {
       )}
 
       {/* Hero Section - Full Height with Top Padding */}
-      <section className="relative min-h-screen flex items-center justify-center pt-16">
+      <section className="relative min-h-screen flex items-center justify-center pt-24">
         <motion.div 
           className="absolute inset-0 opacity-30"
           style={{ y: backgroundY }}
@@ -375,10 +372,7 @@ export default function LandingRedesigned() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
               <img src={careerateLogo} alt="CAREERATE" className="w-8 h-8 rounded-lg" />
-              <div>
-                <span className="text-xl font-bold">CAREERATE</span>
-                <p className="text-xs text-blue-300">interacting vibe hosting</p>
-              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
             </div>
             <div className="text-gray-400 text-sm text-center md:text-right">
               © 2025 CAREERATE. The future of autonomous DevOps.
