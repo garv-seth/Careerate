@@ -223,7 +223,6 @@ export default function LandingRedesigned() {
       <section id="agents" className="py-24 relative">
         <motion.div 
           className="max-w-7xl mx-auto px-4"
-          style={{ opacity: opacityRange }}
         >
           <motion.div 
             className="text-center mb-16"
