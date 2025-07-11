@@ -48,59 +48,60 @@ export default function LandingRedesigned() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       
-      {/* Floating Translucent Navbar */}
+      {/* Ultra-translucent Glass Navbar */}
       <motion.header 
-        className="fixed top-4 left-4 right-4 z-50"
-        style={{ opacity: navbarOpacity }}
+        className="fixed top-0 left-0 right-0 z-[100]"
+        style={{ opacity: 1 }}
       >
-        <nav className="max-w-7xl mx-auto bg-white/25 backdrop-blur-2xl border border-white/40 rounded-2xl px-6 py-4 shadow-2xl" style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.3) 100%)',
-          backdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
-          WebkitBackdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(255,255,255,0.2)'
+        <nav className="w-full bg-white/[0.08] backdrop-blur-3xl border-b border-white/[0.15] px-6 py-2.5 shadow-2xl" style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.10) 100%)',
+          backdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
+          WebkitBackdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
+          boxShadow: '0 4px 32px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(255,255,255,0.15)',
+          borderImage: 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)) 1'
         }}>
-          <div className="flex items-center justify-between">
-            {/* Logo Section */}
+          <div className="max-w-7xl mx-auto flex items-center justify-center relative">
+            {/* Centered Logo Section */}
             <motion.div 
-              className="flex items-center space-x-3 cursor-pointer"
+              className="flex items-center space-x-3 cursor-pointer absolute left-1/2 transform -translate-x-1/2"
               onClick={handleNavigation}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <img src={careerateLogo} alt="CAREERATE" className="w-16 h-16 rounded-xl" />
+              <img src={careerateLogo} alt="CAREERATE" className="w-12 h-12 rounded-lg" />
               <div className="hidden sm:block">
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="text-xl font-bold text-white/90 tracking-wide">
                   CAREERATE
                 </span>
               </div>
             </motion.div>
             
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
-              <a href="#features" className="text-white/80 hover:text-blue-300 transition-colors font-medium">Features</a>
-              <a href="#agents" className="text-white/80 hover:text-blue-300 transition-colors font-medium">Agents</a>
-              <a href="#workflow" className="text-white/80 hover:text-blue-300 transition-colors font-medium">Workflow</a>
-              <a href="#pricing" className="text-white/80 hover:text-blue-300 transition-colors font-medium">Pricing</a>
+            {/* Desktop Navigation - Left side */}
+            <div className="hidden lg:flex items-center space-x-8 absolute left-0">
+              <a href="#features" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Features</a>
+              <a href="#agents" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Agents</a>
+              <a href="#workflow" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Workflow</a>
+              <a href="#pricing" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Pricing</a>
             </div>
 
-            {/* CTA Button */}
-            <div className="flex items-center space-x-4">
+            {/* CTA Button - Right side */}
+            <div className="flex items-center space-x-4 absolute right-0">
               <Button
                 onClick={handleGetStarted}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group"
+                className="bg-white/15 hover:bg-white/25 text-white border border-white/20 hover:border-white/30 px-5 py-1.5 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm backdrop-blur-sm"
               >
                 {isLoggedIn ? 'Dashboard' : 'Start Building'}
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </Button>
 
               {/* Mobile Menu Button */}
               <Button
                 variant="ghost"
                 size="sm"
-                className="lg:hidden text-white hover:bg-white/10"
+                className="lg:hidden text-white/80 hover:bg-white/10 hover:text-white border border-white/20 rounded-lg p-2"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </Button>
             </div>
           </div>
@@ -111,13 +112,13 @@ export default function LandingRedesigned() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="lg:hidden mt-6 pt-6 border-t border-white/10"
+              className="lg:hidden mt-4 pt-4 border-t border-white/15"
             >
-              <div className="flex flex-col space-y-4">
-                <a href="#features" className="text-white/80 hover:text-blue-300 transition-colors py-2 font-medium">Features</a>
-                <a href="#agents" className="text-white/80 hover:text-blue-300 transition-colors py-2 font-medium">Agents</a>
-                <a href="#workflow" className="text-white/80 hover:text-blue-300 transition-colors py-2 font-medium">Workflow</a>
-                <a href="#pricing" className="text-white/80 hover:text-blue-300 transition-colors py-2 font-medium">Pricing</a>
+              <div className="flex flex-col space-y-3 max-w-7xl mx-auto">
+                <a href="#features" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Features</a>
+                <a href="#agents" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Agents</a>
+                <a href="#workflow" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Workflow</a>
+                <a href="#pricing" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Pricing</a>
               </div>
             </motion.div>
           )}
@@ -133,7 +134,7 @@ export default function LandingRedesigned() {
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10" />
         </motion.div>
 
-        <div className="relative z-10 text-center max-w-6xl mx-auto px-4 pt-32">
+        <div className="relative z-10 text-center max-w-6xl mx-auto px-4 pt-24">
           {/* Particle Text Effect - Hero Element */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
