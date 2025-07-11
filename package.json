@@ -11,11 +11,15 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@aws-sdk/client-ec2": "^3.844.0",
+    "@azure/arm-resources": "^6.1.0",
     "@azure/msal-browser": "^4.15.0",
     "@azure/msal-node": "^3.6.3",
+    "@google-cloud/compute": "^5.3.0",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
     "@langchain/core": "^0.3.62",
+    "@langchain/openai": "^0.5.18",
     "@neondatabase/serverless": "^0.10.4",
     "@radix-ui/react-accordion": "^1.2.4",
     "@radix-ui/react-alert-dialog": "^1.1.7",
