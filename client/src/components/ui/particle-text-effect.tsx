@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -13,16 +14,16 @@ class Particle {
   acc: Vector2D = { x: 0, y: 0 };
   target: Vector2D = { x: 0, y: 0 };
 
-  closeEnoughTarget = 100;
-  maxSpeed = 1.0;
-  maxForce = 0.1;
-  particleSize = 4;
+  closeEnoughTarget = 80;
+  maxSpeed = 2.5;
+  maxForce = 0.15;
+  particleSize = 2.5; // Thinner particles for better legibility
   isKilled = false;
 
-  startColor = { r: 60, g: 120, b: 200 }; // Brighter blue for better visibility
-  targetColor = { r: 120, g: 80, b: 200 }; // Brighter purple for better visibility
+  startColor = { r: 100, g: 150, b: 255 }; // Brighter blue
+  targetColor = { r: 180, g: 120, b: 255 }; // Brighter purple
   colorWeight = 0;
-  colorBlendRate = 0.01;
+  colorBlendRate = 0.02; // Faster color transitions
 
   move() {
     // Check if particle is close enough to its target to slow down
@@ -82,8 +83,8 @@ class Particle {
     };
 
     ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    ctx.shadowColor = `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.4)`;
-    ctx.shadowBlur = 4;
+    ctx.shadowColor = `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.6)`;
+    ctx.shadowBlur = 3;
     ctx.beginPath();
     ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
     ctx.fill();
@@ -143,7 +144,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
   const frameCountRef = useRef(0);
   const wordIndexRef = useRef(0);
 
-  const pixelSteps = 8; // Reduced for better text density and legibility
+  const pixelSteps = 6; // Better density for legibility
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
     const randomX = Math.random() * 1000;
@@ -173,26 +174,28 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     offscreenCanvas.height = canvas.height;
     const offscreenCtx = offscreenCanvas.getContext("2d")!;
 
-    // Draw text with better contrast and responsive font size
+    // Draw text with better contrast and legibility
     offscreenCtx.fillStyle = "white";
-    const fontSize = Math.min(90, canvas.width / 10);
-    offscreenCtx.font = `900 ${fontSize}px Arial, sans-serif`;
+    const fontSize = Math.min(120, canvas.width / 8);
+    offscreenCtx.font = `900 ${fontSize}px "Inter", "Arial", sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     
-    // Add thicker stroke for better definition and legibility
-    offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-    offscreenCtx.lineWidth = 4;
+    // Add stroke for better definition
+    offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+    offscreenCtx.lineWidth = 6;
     offscreenCtx.strokeText(word, canvas.width / 2, canvas.height / 2);
     offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2);
 
     const imageData = offscreenCtx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
 
-    // Generate new color gradient
+    // Enhanced color palette for better contrast
     const colors = [
-      { r: 59, g: 130, b: 246 },   // Blue
-      { r: 147, g: 51, b: 234 },   // Purple
+      { r: 99, g: 150, b: 255 },   // Bright Blue
+      { r: 167, g: 89, b: 255 },   // Bright Purple
+      { r: 59, g: 130, b: 246 },   // Sky Blue
+      { r: 147, g: 51, b: 234 },   // Violet
       { r: 236, g: 72, b: 153 },   // Pink
     ];
     const newColor = colors[Math.floor(Math.random() * colors.length)];
@@ -233,10 +236,10 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
           particle.pos.x = randomPos.x;
           particle.pos.y = randomPos.y;
 
-          particle.maxSpeed = Math.random() * 4 + 2;
-          particle.maxForce = particle.maxSpeed * 0.05;
-          particle.particleSize = Math.random() * 4 + 4;
-          particle.colorBlendRate = Math.random() * 0.02 + 0.005;
+          particle.maxSpeed = Math.random() * 3 + 2.5;
+          particle.maxForce = particle.maxSpeed * 0.06;
+          particle.particleSize = Math.random() * 2 + 2.5; // Consistent thin particles
+          particle.colorBlendRate = Math.random() * 0.025 + 0.015;
 
           particles.push(particle);
         }
@@ -268,7 +271,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
 
-    // Clear background completely for seamless blending
+    // Clear background completely
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw particles
@@ -290,9 +293,9 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
       }
     }
 
-    // Auto-advance words more frequently  
+    // Faster word transitions  
     frameCountRef.current++;
-    if (frameCountRef.current % 250 === 0) {
+    if (frameCountRef.current % 180 === 0) { // Faster transitions (was 250)
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length;
       nextWord(words[wordIndexRef.current], canvas);
     }
@@ -305,7 +308,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     if (!canvas) return;
 
     canvas.width = window.innerWidth;
-    canvas.height = 200;
+    canvas.height = 250; // Slightly taller for better text spacing
 
     // Initialize with first word
     nextWord(words[0], canvas);
@@ -314,7 +317,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     const handleResize = () => {
       if (canvas) {
         canvas.width = window.innerWidth;
-        canvas.height = 200;
+        canvas.height = 250;
         nextWord(words[wordIndexRef.current], canvas);
       }
     };
@@ -339,7 +342,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
         className="w-full h-auto relative z-10"
         style={{ 
           width: "100%", 
-          height: "200px"
+          height: "250px"
         }}
       />
     </div>
