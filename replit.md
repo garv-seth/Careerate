@@ -8,20 +8,21 @@ CAREERATE is the world's first truly autonomous DevOps platform featuring "inter
 
 Preferred communication style: Simple, everyday language.
 UI Requirements: 
-- Horizon theme throughout entire landing page with dynamic scrolling effects
+- Professional, sleek, and futuristic design inspired by StarSling.dev
+- Particle text effect for "INTRODUCING" hero section (not "interacting vibe coding")
+- Translucent frosted glass UI with smooth Framer Motion animations
 - Hamburger sidebar menu navigation (not traditional navbar)
-- "Interacting vibe hosting" tagline prominently featured
 - Logo integration from attached assets (IMG_3575_1752232705773.png)
-- Smooth light effects optimized for mobile devices 
-- Dynamic horizon elements that move as user scrolls
-- Glass morphism UI design with realistic glass effects
-- Integrate AWS, GCP, and Azure with OAuth authentication
+- Footer that appears/disappears with scrolling
+- Clean, not too colorful or tacky design
+- Performance-focused with smooth animations for all interactions
 
 Platform Focus:
-- Beyond competition (StarSling YC S25, Monk.io) through A2A protocol
-- Vibe coding integration meets autonomous DevOps
-- True multi-agent system with 5 specialized agents
+- Beyond competition (StarSling YC W25, Monk.io) through A2A protocol
+- Real agent integrations with actual USP and functionality
+- True multi-agent system orchestrating specialized AI agents
 - Revolutionary A2A communication protocol for agent coordination
+- Useful agents that actually perform intended tasks for users
 
 ## System Architecture
 

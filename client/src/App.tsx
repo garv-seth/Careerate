@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import Home from "@/pages/home";
-import Landing from "@/pages/landing";
+import LandingRedesigned from "@/pages/landing-redesigned";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,7 +22,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/">
-        {isAuthenticated ? <Home /> : <Landing />}
+        {isAuthenticated ? <Home /> : <LandingRedesigned />}
       </Route>
       <Route component={NotFound} />
     </Switch>
