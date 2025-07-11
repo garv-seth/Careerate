@@ -53,11 +53,11 @@ export default function LandingRedesigned() {
         className="fixed top-4 left-4 right-4 z-50"
         style={{ opacity: navbarOpacity }}
       >
-        <nav className="max-w-7xl mx-auto bg-white/15 backdrop-blur-2xl border border-white/30 rounded-2xl px-6 py-4 shadow-2xl" style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.15) 100%)',
+        <nav className="max-w-7xl mx-auto bg-white/25 backdrop-blur-2xl border border-white/40 rounded-2xl px-6 py-4 shadow-2xl" style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.3) 100%)',
           backdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
           WebkitBackdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(255,255,255,0.1)'
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(255,255,255,0.2)'
         }}>
           <div className="flex items-center justify-between">
             {/* Logo Section */}
@@ -67,7 +67,7 @@ export default function LandingRedesigned() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <img src={careerateLogo} alt="CAREERATE" className="w-12 h-12 rounded-xl" />
+              <img src={careerateLogo} alt="CAREERATE" className="w-16 h-16 rounded-xl" />
               <div className="hidden sm:block">
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   CAREERATE
@@ -229,7 +229,8 @@ export default function LandingRedesigned() {
 
       {/* Features Section */}
       <section id="features" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/80 to-indigo-950/80">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+        <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-r from-transparent via-blue-400/30 to-transparent blur-sm"></div>
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-blue-400/60 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto">
           <motion.div
