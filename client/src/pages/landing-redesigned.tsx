@@ -197,7 +197,7 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-[80]"
+            className="lg:hidden fixed inset-0 bg-black/30 z-[80]"
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
