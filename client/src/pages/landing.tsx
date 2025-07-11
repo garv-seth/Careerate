@@ -1,11 +1,12 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { ThreeHero } from "@/components/ui/three-hero";
+import { ParticleTextEffect } from "@/components/ui/particle-text-effect";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Bot, Zap, Shield, Layers, Cloud, GitBranch, Activity, Users, Globe, Menu, X, Sparkles, Rocket, Brain, Cpu, Star, Target, TrendingUp, CheckCircle2, MessageSquare, Workflow } from "lucide-react";
-import careerateLogo from "@assets/IMG_3575_1752232705773.png";
+import careerateLogo from "@assets/CareerateLogo.png";
 
 export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,16 +35,17 @@ export default function Landing() {
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white overflow-hidden">
       
-      {/* Fixed Hamburger Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
-        <nav className="flex items-center justify-between max-w-7xl mx-auto">
-          <div className="flex items-center space-x-3">
-            <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
-            <div>
-              <span className="text-xl font-bold">CAREERATE</span>
-              <p className="text-xs text-blue-300">interacting vibe hosting</p>
+      {/* Floating Glass Navigation */}
+      <header className="fixed top-4 left-4 right-4 z-50">
+        <nav className="backdrop-blur-xl bg-white/5 border border-white/20 rounded-2xl px-6 py-3 mx-auto max-w-7xl shadow-2xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg shadow-lg" />
+              <div>
+                <span className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
+                <p className="text-xs text-blue-300/80">vibe hosting platform</p>
+              </div>
             </div>
-          </div>
           
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -105,23 +107,20 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <Badge className="mb-6 bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-blue-200 border-blue-400/40 backdrop-blur-sm">
+            <Badge className="mb-8 bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-blue-200 border-blue-400/40 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 mr-2" />
               2025 • Next-Generation Autonomous DevOps • A2A Protocol
             </Badge>
             
-            <motion.h1 
-              className="text-5xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent"
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
+            {/* Particle Text Effect */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
+              className="mb-8"
             >
-              INTERACTING
-              <br />
-              <span className="text-4xl md:text-6xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                VIBE HOSTING
-              </span>
-            </motion.h1>
+              <ParticleTextEffect words={["VIBE", "HOSTING"]} />
+            </motion.div>
             
             <motion.p 
               className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
@@ -278,7 +277,7 @@ export default function Landing() {
                 viewport={{ once: true }}
                 className={`relative ${index === 2 ? 'lg:scale-105' : ''}`}
               >
-                <Card className={`${index === 2 ? 'bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-purple-400/30' : 'bg-black/40 border-white/10'} backdrop-blur-sm h-full`}>
+                <Card className={`${index === 2 ? 'bg-gradient-to-br from-purple-900/60 to-blue-900/60 border-purple-400/50' : 'bg-white/10 border-white/30'} backdrop-blur-lg h-full hover:bg-white/15 transition-all duration-300`}>
                   <CardContent className="p-6">
                     {index === 2 && (
                       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -405,7 +404,7 @@ export default function Landing() {
                 whileHover={{ scale: 1.02, y: -5 }}
                 className="group"
               >
-                <Card className="bg-black/40 border border-white/10 hover:border-white/20 transition-all duration-500 h-full backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-blue-500/10">
+                <Card className="bg-white/10 border border-white/30 hover:border-white/50 transition-all duration-500 h-full backdrop-blur-lg group-hover:shadow-2xl group-hover:shadow-blue-500/20 group-hover:bg-white/15">
                   <CardContent className="p-6">
                     <div className={`text-${feature.color}-400 mb-4 group-hover:scale-110 transition-transform duration-300`}>
                       {feature.icon}
