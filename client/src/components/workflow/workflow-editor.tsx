@@ -151,7 +151,7 @@ export function WorkflowEditor() {
 
   return (
     <div className="w-full h-full relative">
-      <LiquidGlassPanel className="w-full h-full relative overflow-hidden" style={{ minHeight: '600px' }}>
+      <LiquidGlassPanel className="w-full h-full relative overflow-hidden min-h-[600px]">
         <div className="absolute top-4 right-4 flex space-x-2 z-10">
           <Button
             size="sm"

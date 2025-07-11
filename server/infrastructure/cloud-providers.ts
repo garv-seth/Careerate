@@ -326,7 +326,7 @@ export class InfrastructureOrchestrator {
   async getAllProvidersStatus(): Promise<Record<string, ProviderStatus>> {
     const statuses: Record<string, ProviderStatus> = {};
     
-    for (const [name, provider] of this.providers) {
+    for (const [name, provider] of Array.from(this.providers.entries())) {
       try {
         statuses[name] = await provider.getStatus();
       } catch (error) {

@@ -106,7 +106,7 @@ export const gmailConfig: GmailConfig = {
 // Authentication Service
 export class AuthService {
   
-  async authenticateGitHub(code: string): Promise<any> {
+  async authenticateGitHubCode(code: string): Promise<any> {
     const clientId = process.env.GITHUB_CLIENT_ID;
     const clientSecret = process.env.GITHUB_CLIENT_SECRET;
     
