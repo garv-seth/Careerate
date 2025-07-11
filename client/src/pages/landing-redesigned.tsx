@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ParticleTextEffect } from "@/components/ui/particle-text-effect";
@@ -38,7 +37,7 @@ export default function LandingRedesigned() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-      
+
       {/* Fixed Navigation Overlay */}
       <header className="fixed top-0 left-0 right-0 z-50">
         <motion.nav 
@@ -57,70 +56,77 @@ export default function LandingRedesigned() {
               </div>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-6">
-                <a href="#features" className="text-white/80 hover:text-white transition-colors">Features</a>
-                <a href="#agents" className="text-white/80 hover:text-white transition-colors">Agents</a>
-                <a href="#workflow" className="text-white/80 hover:text-white transition-colors">Workflow</a>
-                <a href="#competition" className="text-white/80 hover:text-white transition-colors">Why CAREERATE</a>
+              <div className="hidden md:flex items-center space-x-1">
+                <div className="flex items-center space-x-1 bg-white/5 rounded-xl p-1 backdrop-blur-sm">
+                  <a href="#features" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                    Features
+                  </a>
+                  <a href="#pricing" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                    Pricing
+                  </a>
+                  <a href="#about" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                    About
+                  </a>
+                  <a href="#contact" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                    Contact
+                  </a>
+                </div>
                 <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="border-white/20 text-white hover:bg-white/10"
                   onClick={handleNavigation}
+                  className="ml-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 font-medium"
                 >
-                  Get Started
+                  {isLoggedIn ? 'Dashboard' : 'Get Started'}
                 </Button>
               </div>
 
-              {/* Mobile Menu Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="md:hidden text-white"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              {/* Mobile menu button */}
+              <div className="md:hidden">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="text-white hover:bg-white/10 rounded-xl"
+                >
+                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </motion.nav>
+      </header>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-20 left-4 right-4 z-40 md:hidden"
+        >
+          <div className="backdrop-blur-xl bg-black/20 border border-white/20 rounded-2xl shadow-2xl shadow-black/20 px-6 py-6 space-y-2">
+            <a href="#features" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
+              Features
+            </a>
+            <a href="#pricing" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
+              Pricing
+            </a>
+            <a href="#about" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
+              About
+            </a>
+            <a href="#contact" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
+              Contact
+            </a>
+            <div className="pt-2">
+              <Button 
+                onClick={handleNavigation}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl font-medium"
               >
-                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isLoggedIn ? 'Dashboard' : 'Get Started'}
               </Button>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="md:hidden bg-black/90 backdrop-blur-md border-t border-white/10"
-            >
-              <div className="px-4 py-4 space-y-3">
-                <a href="#features" className="block text-white/80 hover:text-white transition-colors py-2">Features</a>
-                <a href="#agents" className="block text-white/80 hover:text-white transition-colors py-2">Agents</a>
-                <a href="#workflow" className="block text-white/80 hover:text-white transition-colors py-2">Workflow</a>
-                <a href="#competition" className="block text-white/80 hover:text-white transition-colors py-2">Why CAREERATE</a>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="w-full border-white/20 text-white hover:bg-white/10 mt-3"
-                  onClick={handleNavigation}
-                >
-                  Get Started
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </motion.nav>
-
-        {/* Mobile Menu Overlay */}
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="md:hidden fixed inset-0 bg-black/30 z-40"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-        )}
-      </header>
+        </motion.div>
+      )}
 
       {/* Hero Section - Full Height with Top Padding */}
       <section className="relative min-h-screen flex items-center justify-center pt-16">
@@ -152,7 +158,7 @@ export default function LandingRedesigned() {
             <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed">
               Next-Generation Autonomous DevOps Platform
             </p>
-            
+
             <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
               Where AI agents orchestrate your infrastructure with precision and intelligence
             </p>
@@ -163,7 +169,7 @@ export default function LandingRedesigned() {
       {/* Features Section */}
       <section id="features" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/80 to-indigo-950/80">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-        
+
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -263,7 +269,7 @@ export default function LandingRedesigned() {
       {/* Competition Section */}
       <section id="competition" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-        
+
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -328,7 +334,7 @@ export default function LandingRedesigned() {
                     )}
                     <h3 className="text-xl font-bold mb-2">{platform.name}</h3>
                     <p className="text-gray-400 mb-4">{platform.description}</p>
-                    
+
                     <div className="space-y-3">
                       <div>
                         <h4 className="text-green-400 font-semibold mb-2">✓ Features</h4>
@@ -341,7 +347,7 @@ export default function LandingRedesigned() {
                           ))}
                         </ul>
                       </div>
-                      
+
                       {platform.limitations[0] && (
                         <div>
                           <h4 className="text-red-400 font-semibold mb-2">✗ Limitations</h4>
