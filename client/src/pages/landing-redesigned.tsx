@@ -50,7 +50,8 @@ export default function LandingRedesigned() {
       
       {/* Floating Glass Navbar - Always Visible */}
       <motion.header 
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-6xl"
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] max-w-6xl"
+        style={{ left: '50%', transform: 'translateX(-50%)' }}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
