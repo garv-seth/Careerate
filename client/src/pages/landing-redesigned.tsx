@@ -48,19 +48,21 @@ export default function LandingRedesigned() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       
-      {/* Ultra-translucent Glass Navbar */}
+      {/* Floating Glass Navbar - Always Visible */}
       <motion.header 
-        className="fixed top-0 left-0 right-0 z-[100]"
-        style={{ opacity: 1 }}
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] max-w-6xl"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <nav className="w-full bg-white/[0.08] backdrop-blur-3xl border-b border-white/[0.15] px-6 py-2.5 shadow-2xl" style={{
+        <nav className="bg-white/[0.08] backdrop-blur-3xl border border-white/[0.15] rounded-2xl px-6 py-3 shadow-2xl" style={{
           background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.10) 100%)',
           backdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
           WebkitBackdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
-          boxShadow: '0 4px 32px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(255,255,255,0.15)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 4px 16px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25)',
           borderImage: 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)) 1'
         }}>
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center justify-between">
             {/* Logo Section - Left */}
             <motion.div 
               className="flex items-center space-x-3 cursor-pointer"
@@ -68,9 +70,9 @@ export default function LandingRedesigned() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
+              <img src={careerateLogo} alt="Careerate" className="w-12 h-12 rounded-lg" />
               <span className="text-xl font-bold text-white/90 tracking-wide">
-                CAREERATE
+                Careerate
               </span>
             </motion.div>
             
@@ -82,15 +84,47 @@ export default function LandingRedesigned() {
               <a href="#pricing" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Pricing</a>
             </div>
 
-            {/* CTA Button - Right side */}
-            <div className="flex items-center space-x-4">
-              <Button
-                onClick={handleGetStarted}
-                className="bg-white/15 hover:bg-white/25 text-white border border-white/20 hover:border-white/30 px-5 py-1.5 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm backdrop-blur-sm"
-              >
-                {isLoggedIn ? 'Dashboard' : 'Start Building'}
-                <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+            {/* Dynamic CTA Buttons - Right side */}
+            <div className="flex items-center space-x-3">
+              {isLoggedIn ? (
+                <>
+                  <Button
+                    onClick={() => window.location.href = '/dashboard'}
+                    className="bg-blue-600/80 hover:bg-blue-600 text-white border-0 px-4 py-2 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm"
+                  >
+                    Dashboard
+                    <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      // Handle logout
+                      setIsLoggedIn(false);
+                      window.location.href = '/';
+                    }}
+                    variant="ghost"
+                    className="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm"
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => window.location.href = '/auth/signin'}
+                    variant="ghost"
+                    className="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm"
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    onClick={handleGetStarted}
+                    className="bg-white/15 hover:bg-white/25 text-white border border-white/20 hover:border-white/30 px-4 py-2 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm backdrop-blur-sm"
+                  >
+                    Start Building
+                    <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </>
+              )}
 
               {/* Mobile Menu Button */}
               <Button
@@ -103,24 +137,67 @@ export default function LandingRedesigned() {
               </Button>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="lg:hidden mt-4 pt-4 border-t border-white/15"
-            >
-              <div className="flex flex-col space-y-3 max-w-7xl mx-auto">
-                <a href="#features" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Features</a>
-                <a href="#agents" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Agents</a>
-                <a href="#workflow" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Workflow</a>
-                <a href="#pricing" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Pricing</a>
-              </div>
-            </motion.div>
-          )}
         </nav>
+
+        {/* Mobile Menu - Floating */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="lg:hidden mt-2 bg-white/[0.08] backdrop-blur-3xl border border-white/[0.15] rounded-xl p-4 shadow-2xl"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.10) 100%)',
+              backdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
+              WebkitBackdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
+            }}
+          >
+            <div className="flex flex-col space-y-3">
+              <a href="#features" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Features</a>
+              <a href="#agents" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Agents</a>
+              <a href="#workflow" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Workflow</a>
+              <a href="#pricing" className="text-white/70 hover:text-white transition-colors py-2 font-medium text-sm">Pricing</a>
+              <div className="border-t border-white/15 pt-3 mt-3">
+                {isLoggedIn ? (
+                  <div className="flex flex-col space-y-2">
+                    <Button
+                      onClick={() => window.location.href = '/dashboard'}
+                      className="bg-blue-600/80 hover:bg-blue-600 text-white w-full justify-center"
+                    >
+                      Dashboard
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setIsLoggedIn(false);
+                        window.location.href = '/';
+                      }}
+                      variant="ghost"
+                      className="text-white/70 hover:text-white w-full"
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col space-y-2">
+                    <Button
+                      onClick={() => window.location.href = '/auth/signin'}
+                      variant="ghost"
+                      className="text-white/70 hover:text-white w-full"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      onClick={handleGetStarted}
+                      className="bg-white/15 hover:bg-white/25 text-white border border-white/20 w-full justify-center"
+                    >
+                      Start Building
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </motion.header>
 
       {/* Hero Section - Centered */}
@@ -132,7 +209,7 @@ export default function LandingRedesigned() {
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10" />
         </motion.div>
 
-        <div className="relative z-10 text-center max-w-6xl mx-auto px-4 pt-24">
+        <div className="relative z-10 text-center max-w-6xl mx-auto px-4 pt-32">
           {/* Particle Text Effect - Hero Element */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
