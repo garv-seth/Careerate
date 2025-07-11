@@ -1,5 +1,4 @@
 import { EventEmitter } from "events";
-import { LangChain } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
