@@ -136,7 +136,7 @@ interface ParticleTextEffectProps {
   words?: string[];
 }
 
-export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleTextEffectProps) {
+export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] }: ParticleTextEffectProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const particlesRef = useRef<Particle[]>([]);
@@ -292,7 +292,7 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
 
     // Auto-advance words less frequently
     frameCountRef.current++;
-    if (frameCountRef.current % 300 === 0) {
+    if (frameCountRef.current % 400 === 0) {
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length;
       nextWord(words[wordIndexRef.current], canvas);
     }
