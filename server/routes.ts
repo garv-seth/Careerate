@@ -7,7 +7,7 @@ import authRoutes from "./auth/auth-routes";
 import session from "express-session";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  
+
   // Session configuration
   app.use(session({
     secret: process.env.SESSION_SECRET || "dev-secret-change-in-production",
@@ -22,7 +22,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Authentication routes
   app.use("/api", authRoutes);
-  
+
   // Agent routes
   app.get("/api/agents", async (req, res) => {
     try {
@@ -143,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const activeAgents = agents.filter(agent => agent.status === "active").length;
       const totalAgents = agents.length;
       const queueDepth = agents.filter(agent => agent.status === "queued").length;
-      
+
       const totalCost = cloudResources.reduce((sum, resource) => sum + (resource.cost || 0), 0);
       const costByType = cloudResources.reduce((acc, resource) => {
         acc[resource.resourceType] = (acc[resource.resourceType] || 0) + (resource.cost || 0);

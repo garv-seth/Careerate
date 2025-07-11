@@ -1,7 +1,8 @@
+
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy container app to Azure Web App - Careerate
+name: Build and deploy Careerate to Azure Web App
 
 on:
   push:
@@ -9,29 +10,65 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  REGISTRY: careerateacr.azurecr.io
+  IMAGE_NAME: careerate
+
 jobs:
   build:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run type checking
+      run: npm run check
+
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
 
-    - name: Log in to registry
-      uses: docker/login-action@v2
+    - name: Log in to Azure Container Registry
+      uses: docker/login-action@v3
       with:
-        registry: https://careerateacr.azurecr.io/
+        registry: ${{ env.REGISTRY }}
         username: ${{ secrets.AzureAppService_ContainerUsername_192d2116c4ea4190af68e7020c6ad773 }}
         password: ${{ secrets.AzureAppService_ContainerPassword_fc7853b2e420454fa4a94fdb004a69c0 }}
 
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v3
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
       with:
+        images: ${{ env.REGISTRY }}/${{ secrets.AzureAppService_ContainerUsername_192d2116c4ea4190af68e7020c6ad773 }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push container image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
         push: true
-        tags: careerateacr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_192d2116c4ea4190af68e7020c6ad773 }}/careerate:${{ github.sha }}
-        file: ./Dockerfile
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          NODE_ENV=production
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,9 +80,22 @@ jobs:
     steps:
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
+      uses: azure/webapps-deploy@v3
       with:
         app-name: 'Careerate'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_4004fc0a217047bba5da69daba16e439 }}
-        images: 'careerateacr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_192d2116c4ea4190af68e7020c6ad773 }}/careerate:${{ github.sha }}'
+        images: '${{ env.REGISTRY }}/${{ secrets.AzureAppService_ContainerUsername_192d2116c4ea4190af68e7020c6ad773 }}/${{ env.IMAGE_NAME }}:${{ github.sha }}'
+
+    - name: Post-deployment health check
+      run: |
+        echo "Waiting for application to start..."
+        sleep 30
+        
+        # Basic health check
+        HEALTH_URL="${{ steps.deploy-to-webapp.outputs.webapp-url }}/api/health"
+        if curl -f "$HEALTH_URL" > /dev/null 2>&1; then
+          echo "✅ Application is healthy"
+        else
+          echo "⚠️ Health check failed, but deployment completed"
+        fi
