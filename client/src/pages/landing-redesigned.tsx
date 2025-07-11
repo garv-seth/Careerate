@@ -58,7 +58,7 @@ export default function LandingRedesigned() {
           backdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
           WebkitBackdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(255,255,255,0.1)'
-        }}></nav>
+        }}>
           <div className="flex items-center justify-between">
             {/* Logo Section */}
             <motion.div 
