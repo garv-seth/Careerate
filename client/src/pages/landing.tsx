@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { LiquidGlassPanel } from "@/components/ui/liquid-glass";
-import { FuturisticBackground } from "@/components/ui/futuristic-background";
+import { Badge } from "@/components/ui/badge";
+import { ThreeHero } from "@/components/ui/three-hero";
+import { EnhancedGlass, GlassCard, GlassPanel } from "@/components/ui/enhanced-glass";
 import { 
   Boxes, 
   Github, 
@@ -33,7 +34,13 @@ import {
   AlertTriangle,
   Menu,
   X,
-  Heart
+  Heart,
+  Play,
+  Pause,
+  TrendingUp,
+  Timer,
+  Eye,
+  Settings
 } from "lucide-react";
 
 export default function Landing() {
@@ -183,28 +190,27 @@ export default function Landing() {
 
   return (
     <motion.div 
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen relative overflow-hidden bg-black"
       initial="initial"
       animate="in"
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
     >
-      {/* Futuristic Background with Hero Overlay */}
-      <div className="relative h-screen">
-        <FuturisticBackground variant="hybrid" className="absolute inset-0 z-0" />
-        
-        {/* Floating Navigation */}
-        <motion.header 
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed top-4 left-4 right-4 z-50"
-          style={{
-            x: smoothMotionX,
-            y: smoothMotionY,
-          }}
-        >
+      {/* Three.js Hero Section */}
+      <ThreeHero />
+      
+      {/* Floating Navigation */}
+      <motion.header 
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed top-4 left-4 right-4 z-50"
+        style={{
+          x: smoothMotionX,
+          y: smoothMotionY,
+        }}
+      >
           <motion.nav 
             className={`backdrop-blur-xl border rounded-2xl px-6 py-4 transition-all duration-700 ease-out ${
               isScrolled 
@@ -358,564 +364,260 @@ export default function Landing() {
           </motion.nav>
         </motion.header>
 
-        {/* Hero Section - Overlaying the background */}
-        <section className="absolute inset-0 flex items-center justify-center px-6 pt-24 z-10">
-          <div className="max-w-6xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 100, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ 
-                duration: 1.2, 
-                delay: 0.5,
-                ease: [0.22, 1, 0.36, 1]
-              }}
-              style={{
-                x: smoothMotionX,
-                y: smoothMotionY,
-              }}
-            >
-              <motion.h1 
-                className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 bg-gradient-to-r from-indigo-400 via-violet-400 to-blue-400 bg-clip-text text-transparent"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
-              >
-                Introducing Vibe Hosting
-              </motion.h1>
-              <motion.h2 
-                className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6 text-white"
+      {/* Features Section */}
+      <section id="features" className="relative py-32 px-6 bg-gradient-to-b from-black via-slate-900/20 to-black">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Autonomous Features
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Built with advanced AI agents that work together to deliver seamless DevOps experiences
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.9 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
               >
-                Autonomous DevOps & SRE
-              </motion.h2>
-              <motion.p 
-                className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.1 }}
-              >
-                The next evolution of Vibe coding. Where intuitive development meets autonomous infrastructure. 
-                Five specialized AI agents orchestrate your entire deployment lifecycle—from code analysis to production monitoring.
-              </motion.p>
-              
-              <motion.div 
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.3 }}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                >
-                  <Button 
-                    onClick={() => window.location.href = "/api/auth/azure"}
-                    size="lg"
-                    className="bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white px-8 py-6 text-lg font-semibold shadow-2xl shadow-indigo-500/25"
-                  >
-                    <Rocket className="h-5 w-5 mr-2" />
-                    Start Your Vibe Journey
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                  </Button>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                >
-                  <Button 
-                    onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
-                    size="lg"
-                    variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg font-semibold backdrop-blur-sm"
-                  >
-                    <Monitor className="h-5 w-5 mr-2" />
-                    Watch Demo
-                  </Button>
-                </motion.div>
+                <GlassCard className="h-full group cursor-pointer">
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300`}>
+                    <feature.icon className="text-white text-2xl" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
+                  <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                </GlassCard>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Stats */}
-              <motion.div 
-                className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16"
+      {/* Agents Section */}
+      <section id="agents" className="relative py-32 px-6 bg-gradient-to-b from-black via-slate-800/10 to-black">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">
+              AI Agent Orchestra
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Five specialized AI agents working in perfect harmony to manage your entire DevOps lifecycle
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            {agents.map((agent, index) => (
+              <motion.div
+                key={agent.name}
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.5 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
               >
-                {stats.map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    className="text-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 1.7 + index * 0.1 }}
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -5,
-                      transition: { type: "spring", stiffness: 400, damping: 25 }
-                    }}
-                  >
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
-                    <div className="text-gray-400 text-sm">{stat.label}</div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-      </div>
-
-      {/* Content Layer */}
-      <div className="relative z-10 bg-gradient-to-b from-transparent via-black/50 to-black">
-        {/* Features Section */}
-        <section id="features" className="py-24 px-6">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Revolutionary Features
-              </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Built for the future of development with cutting-edge AI and cloud-native architecture
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true }}
-                  whileHover={{ 
-                    y: -10, 
-                    scale: 1.02,
-                    transition: { type: "spring", stiffness: 400, damping: 25 }
-                  }}
-                  style={{
-                    x: smoothMotionX,
-                    y: smoothMotionY,
-                  }}
-                >
-                  <LiquidGlassPanel className="p-8 h-full">
-                    <motion.div 
-                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6`}
-                      whileHover={{ rotate: 5, scale: 1.1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    >
-                      <feature.icon className="h-8 w-8 text-white" />
-                    </motion.div>
-                    <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
-                    <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-                  </LiquidGlassPanel>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Agents Section */}
-        <section id="agents" className="py-24 px-6">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Meet Your AI Agents
-              </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Five specialized agents working in perfect harmony to revolutionize your development workflow
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {agents.map((agent, index) => (
-                <motion.div
-                  key={agent.name}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  viewport={{ once: true }}
-                  whileHover={{ 
-                    y: -5,
-                    transition: { type: "spring", stiffness: 400, damping: 25 }
-                  }}
-                  style={{
-                    x: smoothMotionX,
-                    y: smoothMotionY,
-                  }}
-                >
-                  <LiquidGlassPanel className="p-8 h-full">
-                    <div className="flex items-start space-x-4 mb-6">
-                      <motion.div 
-                        className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0"
-                        whileHover={{ rotate: 10, scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      >
-                        <Bot className="h-6 w-6 text-white" />
-                      </motion.div>
-                      <div>
-                        <h3 className="text-xl font-bold text-white mb-1">{agent.name}</h3>
-                        <p className="text-blue-400 font-medium">{agent.role}</p>
-                      </div>
+                <GlassPanel className="h-full group cursor-pointer">
+                  <div className="flex items-center mb-6">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-4">
+                      <Bot className="text-white text-xl" />
                     </div>
-                    <p className="text-gray-300 mb-6 leading-relaxed">{agent.description}</p>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <h3 className="text-xl font-bold text-white">{agent.name}</h3>
+                      <p className="text-blue-400 text-sm">{agent.role}</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 mb-6 leading-relaxed">{agent.description}</p>
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-semibold text-white mb-3">Capabilities:</h4>
+                    <div className="flex flex-wrap gap-2">
                       {agent.capabilities.map((capability, capIndex) => (
-                        <motion.div 
-                          key={capability} 
-                          className="flex items-center space-x-2"
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + capIndex * 0.05 }}
-                          viewport={{ once: true }}
+                        <Badge
+                          key={capIndex}
+                          variant="secondary"
+                          className="bg-white/10 text-gray-300 border-white/20 hover:bg-white/20 transition-all duration-300"
                         >
-                          <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
-                          <span className="text-sm text-gray-300">{capability}</span>
-                        </motion.div>
+                          {capability}
+                        </Badge>
                       ))}
                     </div>
-                  </LiquidGlassPanel>
-                </motion.div>
-              ))}
-            </div>
+                  </div>
+                </GlassPanel>
+              </motion.div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Demo Section */}
-        <section id="demo" className="py-24 px-6">
-          <div className="max-w-6xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                See Vibe Hosting In Action
-              </h2>
-              <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
-                Watch how our AI agents collaborate to deploy your applications with zero human intervention
-              </p>
-              
+      {/* Stats Section */}
+      <section className="relative py-20 px-6 bg-gradient-to-b from-black via-blue-900/10 to-black">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          >
+            {stats.map((stat, index) => (
               <motion.div
-                whileHover={{ scale: 1.02, y: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                style={{
-                  x: smoothMotionX,
-                  y: smoothMotionY,
-                }}
-              >
-                <LiquidGlassPanel className="p-8 max-w-4xl mx-auto">
-                  <div className="aspect-video bg-gradient-to-br from-gray-900 to-black rounded-xl flex items-center justify-center border border-gray-700">
-                    <div className="text-center">
-                      <motion.div
-                        animate={{ 
-                          scale: [1, 1.1, 1],
-                          opacity: [0.7, 1, 0.7]
-                        }}
-                        transition={{ 
-                          repeat: Infinity, 
-                          duration: 2,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        <Monitor className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                      </motion.div>
-                      <h3 className="text-xl font-semibold text-white mb-2">Interactive Demo Coming Soon</h3>
-                      <p className="text-gray-400">Experience the full power of Vibe Hosting</p>
-                    </div>
-                  </div>
-                </LiquidGlassPanel>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Pricing Section */}
-        <section id="pricing" className="py-24 px-6">
-          <div className="max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Simple, Transparent Pricing
-              </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Start your Vibe Hosting journey today with our flexible pricing options
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Starter Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
+                key={stat.label}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ 
-                  y: -10,
-                  transition: { type: "spring", stiffness: 400, damping: 25 }
-                }}
-                style={{
-                  x: smoothMotionX,
-                  y: smoothMotionY,
-                }}
               >
-                <LiquidGlassPanel className="p-8 h-full">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Starter</h3>
-                    <div className="text-4xl font-bold text-white mb-4">Free</div>
-                    <p className="text-gray-400">Perfect for small projects</p>
+                <GlassCard className="group">
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-all duration-300">
+                    {stat.value}
                   </div>
-                  <ul className="space-y-4 mb-8">
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">1 Active Project</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Basic Agent Access</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Community Support</span>
-                    </li>
-                  </ul>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button 
-                      onClick={() => window.location.href = "/api/auth/github"}
-                      className="w-full bg-gray-700 hover:bg-gray-600 text-white transition-all duration-300"
-                      variant="outline"
-                    >
-                      Get Started
-                    </Button>
-                  </motion.div>
-                </LiquidGlassPanel>
+                  <div className="text-gray-400 text-sm">{stat.label}</div>
+                </GlassCard>
               </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
-              {/* Pro Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true }}
-                whileHover={{ 
-                  y: -15, 
-                  scale: 1.02,
-                  transition: { type: "spring", stiffness: 400, damping: 25 }
-                }}
-                style={{
-                  x: smoothMotionX,
-                  y: smoothMotionY,
-                }}
-              >
-                <LiquidGlassPanel className="p-8 h-full border-2 border-gradient-to-r from-indigo-500 to-violet-500 relative overflow-hidden">
-                  <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-full opacity-20"></div>
-                  <div className="text-center mb-8">
-                    <motion.div 
-                      className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white px-3 py-1 rounded-full text-sm font-medium mb-4"
-                      animate={{ 
-                        scale: [1, 1.05, 1],
-                        boxShadow: ["0 0 0 0 rgba(99, 102, 241, 0.7)", "0 0 0 10px rgba(99, 102, 241, 0)", "0 0 0 0 rgba(99, 102, 241, 0)"]
-                      }}
-                      transition={{ 
-                        repeat: Infinity, 
-                        duration: 2,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      <Star className="h-4 w-4" />
-                      <span>Most Popular</span>
-                    </motion.div>
-                    <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-                    <div className="text-4xl font-bold text-white mb-4">$49<span className="text-lg text-gray-400">/month</span></div>
-                    <p className="text-gray-400">For growing teams</p>
-                  </div>
-                  <ul className="space-y-4 mb-8">
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Unlimited Projects</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Full Agent Access</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Multi-Cloud Deployment</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Priority Support</span>
-                    </li>
-                  </ul>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button 
-                      onClick={() => window.location.href = "/api/auth/azure"}
-                      className="w-full bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white transition-all duration-300"
-                    >
-                      Start Pro Trial
-                    </Button>
-                  </motion.div>
-                </LiquidGlassPanel>
-              </motion.div>
-
-              {/* Enterprise Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true }}
-                whileHover={{ 
-                  y: -10,
-                  transition: { type: "spring", stiffness: 400, damping: 25 }
-                }}
-                style={{
-                  x: smoothMotionX,
-                  y: smoothMotionY,
-                }}
-              >
-                <LiquidGlassPanel className="p-8 h-full">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Enterprise</h3>
-                    <div className="text-4xl font-bold text-white mb-4">Custom</div>
-                    <p className="text-gray-400">For large organizations</p>
-                  </div>
-                  <ul className="space-y-4 mb-8">
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">Custom Agent Training</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">On-Premise Deployment</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">24/7 Dedicated Support</span>
-                    </li>
-                    <li className="flex items-center space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-gray-300">SLA Guarantees</span>
-                    </li>
-                  </ul>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button 
-                      className="w-full bg-gray-700 hover:bg-gray-600 text-white transition-all duration-300"
-                      variant="outline"
-                    >
-                      Contact Sales
-                    </Button>
-                  </motion.div>
-                </LiquidGlassPanel>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <motion.footer 
-          className="py-12 px-6 border-t border-white/10"
-          style={{
-            x: smoothMotionX,
-            y: smoothMotionY,
-          }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <motion.div 
-              className="flex flex-col md:flex-row items-center justify-between"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-            >
-              <motion.div 
-                className="flex items-center space-x-3 mb-4 md:mb-0"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <motion.div 
-                  className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-lg flex items-center justify-center"
-                  whileHover={{ rotate: 10, scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Boxes className="text-white text-sm" />
-                </motion.div>
-                <div>
-                  <div className="font-bold text-white">Careerate</div>
-                  <div className="text-xs text-gray-400">Vibe Hosting Platform</div>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className="flex items-center space-x-6 text-sm text-gray-400"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <Shield className="h-4 w-4" />
-                <span>Enterprise-grade security with OAuth2 and RBAC</span>
-              </motion.div>
-            </motion.div>
+      {/* CTA Section */}
+      <section className="relative py-32 px-6 bg-gradient-to-b from-black via-slate-900/20 to-black">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Ready to Transform Your DevOps?
+            </h2>
+            <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+              Join the future of autonomous infrastructure management. Start your journey with AI-powered DevOps today.
+            </p>
             
-            <motion.div 
-              className="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm"
+            <motion.div
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <motion.div 
-                className="flex items-center justify-center space-x-1"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <span>© 2025 Careerate. Made with</span>
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    duration: 2,
-                    ease: "easeInOut"
-                  }}
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-12 py-6 text-lg font-medium rounded-full shadow-2xl transition-all duration-300"
+                  onClick={() => window.location.href = "/api/auth/azure"}
                 >
-                  <Heart className="h-4 w-4 text-blue-400 fill-current" />
-                </motion.div>
-                <span>in Seattle</span>
+                  <Rocket className="mr-2 h-5 w-5" />
+                  Get Started with Azure
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </motion.div>
+              
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white/10 hover:bg-white/20 text-white border-white/30 hover:border-white/50 px-12 py-6 text-lg font-medium rounded-full backdrop-blur-sm transition-all duration-300"
+                  onClick={() => window.location.href = "/api/auth/github"}
+                >
+                  <Github className="mr-2 h-5 w-5" />
+                  Connect GitHub
+                </Button>
               </motion.div>
             </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative py-16 px-6 bg-gradient-to-b from-black to-slate-900/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-xl flex items-center justify-center">
+                  <Boxes className="text-white text-lg" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Careerate</h3>
+                  <p className="text-gray-400 text-sm">Autonomous DevOps Platform</p>
+                </div>
+              </div>
+              <p className="text-gray-400 mb-6 max-w-md">
+                The next evolution of DevOps. Where AI agents orchestrate your infrastructure with precision, 
+                delivering seamless deployment experiences across all cloud providers.
+              </p>
+              <div className="flex space-x-4">
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-white/5 hover:bg-white/10 text-gray-400 border-gray-600 hover:border-gray-400"
+                  >
+                    <Github className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-white/5 hover:bg-white/10 text-gray-400 border-gray-600 hover:border-gray-400"
+                  >
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Platform</h4>
+              <div className="space-y-2">
+                {['Features', 'Agents', 'Pricing', 'Documentation'].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="block text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Support</h4>
+              <div className="space-y-2">
+                {['Help Center', 'Community', 'Status', 'Contact'].map((item) => (
+                  <a
+                    key={item}
+                    href="#"
+                    className="block text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
-        </motion.footer>
-      </div>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+            <p className="text-gray-400 text-sm">
+              © 2024 Careerate. Built with ❤️ for the future of DevOps.
+            </p>
+          </div>
+        </div>
+      </footer>
     </motion.div>
   );
 }
