@@ -19,8 +19,8 @@ class Particle {
   particleSize = 8;
   isKilled = false;
 
-  startColor = { r: 30, g: 65, b: 123 }; // Darker blue color
-  targetColor = { r: 74, g: 26, b: 117 }; // Darker purple color
+  startColor = { r: 60, g: 120, b: 200 }; // Brighter blue for better visibility
+  targetColor = { r: 120, g: 80, b: 200 }; // Brighter purple for better visibility
   colorWeight = 0;
   colorBlendRate = 0.01;
 
@@ -82,10 +82,10 @@ class Particle {
     };
 
     ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    ctx.shadowColor = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    ctx.shadowBlur = 5;
+    ctx.shadowColor = `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.8)`;
+    ctx.shadowBlur = 8;
     ctx.beginPath();
-    ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
+    ctx.arc(this.pos.x, this.pos.y, this.particleSize / 1.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
   }
@@ -143,7 +143,7 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
   const frameCountRef = useRef(0);
   const wordIndexRef = useRef(0);
 
-  const pixelSteps = 4;
+  const pixelSteps = 8; // Increased to reduce particle density
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
     const randomX = Math.random() * 1000;
@@ -173,11 +173,16 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     offscreenCanvas.height = canvas.height;
     const offscreenCtx = offscreenCanvas.getContext("2d")!;
 
-    // Draw text
+    // Draw text with better contrast
     offscreenCtx.fillStyle = "white";
-    offscreenCtx.font = "bold 80px Arial";
+    offscreenCtx.font = "bold 90px Arial, sans-serif";
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
+    
+    // Add stroke for better definition
+    offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+    offscreenCtx.lineWidth = 2;
+    offscreenCtx.strokeText(word, canvas.width / 2, canvas.height / 2);
     offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2);
 
     const imageData = offscreenCtx.getImageData(0, 0, canvas.width, canvas.height);
@@ -262,8 +267,8 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
 
-    // Background with motion blur - more transparent for seamless blending
-    ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+    // Very subtle background clear for seamless blending
+    ctx.fillStyle = "rgba(0, 0, 0, 0.01)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw particles
@@ -317,6 +322,8 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
 
   return (
     <div className="flex items-center justify-center w-full relative">
+      {/* Subtle background for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-gray-900/20 to-black/30 rounded-lg blur-sm" />
       <canvas
         ref={canvasRef}
         className="max-w-full h-auto relative z-10"
@@ -326,8 +333,6 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
           background: "transparent"
         }}
       />
-      {/* Dark gradient background overlay to match UI */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-gray-800/10 to-black/20 pointer-events-none" />
     </div>
   );
 }
