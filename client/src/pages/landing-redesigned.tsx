@@ -49,10 +49,17 @@ export default function LandingRedesigned() {
 
       {/* Floating Glass Navbar - Always Visible */}
       <motion.header 
-        className="fixed top-4 left-4 right-4 z-[100]"
+        className="fixed top-4 left-4 right-4 z-[9999]"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        style={{ 
+          position: 'fixed',
+          top: '1rem',
+          left: '1rem',
+          right: '1rem',
+          zIndex: 9999 
+        }}
       >
         <nav className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl px-4 sm:px-6 py-4 max-w-7xl mx-auto" style={{
           background: 'rgba(255,255,255,0.08)',
