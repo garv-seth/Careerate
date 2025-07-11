@@ -111,6 +111,7 @@ interface ParticleWaveProps {
 
 const ParticleWave: React.FC<ParticleWaveProps> = ({ className = '' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const sceneRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -120,6 +121,15 @@ const ParticleWave: React.FC<ParticleWaveProps> = ({ className = '' }) => {
     animationId: number | null;
     mouse: THREE.Vector2;
   } | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const getCurrentTheme = () => {
     return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
@@ -184,8 +194,8 @@ const ParticleWave: React.FC<ParticleWaveProps> = ({ className = '' }) => {
     renderer.setClearColor(getBackgroundColor(currentTheme), 0);
 
     const gap = 0.3;
-    const amountX = 200;
-    const amountY = 200;
+    const amountX = isMobile ? 100 : 200;
+    const amountY = isMobile ? 100 : 200;
     const particleNum = amountX * amountY;
     const particlePositions = new Float32Array(particleNum * 3);
     const particleScales = new Float32Array(particleNum);

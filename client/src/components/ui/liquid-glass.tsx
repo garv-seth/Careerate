@@ -19,7 +19,7 @@ function createRippleEffect(x: number, y: number, intensity: number = 1) {
     z-index: 1000;
     animation: liquid-ripple-expand 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   `;
-  
+
   // Add ripple animation keyframes if not already added
   if (!document.querySelector('#liquid-ripple-styles')) {
     const style = document.createElement('style');
@@ -35,14 +35,14 @@ function createRippleEffect(x: number, y: number, intensity: number = 1) {
           opacity: 0;
         }
       }
-      
+
       @keyframes liquid-wave {
         0%, 100% { transform: translateY(0) scale(1, 1); }
         25% { transform: translateY(-2px) scale(1.02, 0.98); }
         50% { transform: translateY(0) scale(0.98, 1.02); }
         75% { transform: translateY(2px) scale(1.02, 0.98); }
       }
-      
+
       @keyframes liquid-surface {
         0%, 100% { 
           backdrop-filter: blur(20px) saturate(1.2) hue-rotate(0deg);
@@ -64,7 +64,7 @@ function createRippleEffect(x: number, y: number, intensity: number = 1) {
     `;
     document.head.appendChild(style);
   }
-  
+
   return ripple;
 }
 
@@ -86,39 +86,83 @@ export function LiquidGlassPanel({
   const [isPressed, setIsPressed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const liquidLayerRef = useRef<HTMLDivElement>(null);
-  
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useSpring(0, { stiffness: 100, damping: 30 });
   const rotateY = useSpring(0, { stiffness: 100, damping: 30 });
 
+  // Enhanced animations with device motion support
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current || !interactive) return;
-      
+
       const rect = containerRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       const mouseX = (e.clientX - rect.left) / rect.width;
       const mouseY = (e.clientY - rect.top) / rect.height;
-      
+
       setMousePosition({ x: mouseX, y: mouseY });
-      
+
       // 3D tilt effect with liquid physics
       const rotX = ((e.clientY - centerY) / rect.height) * -8 * intensity;
       const rotY = ((e.clientX - centerX) / rect.width) * 8 * intensity;
-      
+
       x.set((e.clientX - centerX) * 0.1);
       y.set((e.clientY - centerY) * 0.1);
       rotateX.set(rotX);
       rotateY.set(rotY);
     };
 
+    const handleDeviceMotion = (event: DeviceMotionEvent) => {
+      if (!containerRef.current || !interactive) return;
+
+      if (event.accelerationIncludingGravity) {
+        const { x: accelX, y: accelY } = event.accelerationIncludingGravity;
+
+        // Apply gentle tilt effect based on device orientation
+        const rotX = (accelY || 0) * 2 * intensity;
+        const rotY = (accelX || 0) * 2 * intensity;
+
+        rotateX.set(rotX);
+        rotateY.set(rotY);
+
+        // Update mouse position for visual effects
+        setMousePosition({ 
+          x: 0.5 + (accelX || 0) * 0.1, 
+          y: 0.5 + (accelY || 0) * 0.1 
+        });
+      }
+    };
+
+    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+      if (!containerRef.current || !interactive) return;
+
+      const { beta, gamma } = event;
+
+      // Beta is front-to-back tilt, gamma is left-to-right tilt
+      const rotX = (beta || 0) * 0.2 * intensity;
+      const rotY = (gamma || 0) * 0.2 * intensity;
+
+      rotateX.set(rotX);
+      rotateY.set(rotY);
+    };
+
+    const cleanup = () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('devicemotion', handleDeviceMotion);
+      window.removeEventListener('deviceorientation', handleDeviceOrientation);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+    };
+
     const handleMouseDown = (e: MouseEvent) => {
       if (!containerRef.current || !interactive) return;
       setIsPressed(true);
-      
+
       // Create ripple effect at click position
       const rect = containerRef.current.getBoundingClientRect();
       const ripple = createRippleEffect(
@@ -127,7 +171,7 @@ export function LiquidGlassPanel({
         intensity
       );
       containerRef.current.appendChild(ripple);
-      
+
       // Remove ripple after animation
       setTimeout(() => {
         if (ripple.parentNode) {
@@ -151,18 +195,15 @@ export function LiquidGlassPanel({
 
     if (interactive) {
       window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('devicemotion', handleDeviceMotion);
+      window.addEventListener('deviceorientation', handleDeviceOrientation);
       window.addEventListener('mousedown', handleMouseDown);
       window.addEventListener('mouseup', handleMouseUp);
       window.addEventListener('mouseleave', handleMouseLeave);
     }
 
     return () => {
-      if (interactive) {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mousedown', handleMouseDown);
-        window.removeEventListener('mouseup', handleMouseUp);
-        window.removeEventListener('mouseleave', handleMouseLeave);
-      }
+      cleanup();
     };
   }, [interactive, intensity, rotateX, rotateY, x, y]);
 
@@ -211,7 +252,7 @@ export function LiquidGlassPanel({
           backgroundSize: { duration: 0.6 }
         }}
       />
-      
+
       {/* Liquid Surface Animation Layer */}
       <motion.div
         className="absolute inset-0 rounded-2xl pointer-events-none"
@@ -260,7 +301,7 @@ export function LiquidGlassPanel({
         }}
         transition={{ duration: 2, ease: "easeInOut" }}
       />
-      
+
       {/* Content Layer with Glass Physics */}
       <motion.div 
         className={cn(
@@ -275,7 +316,7 @@ export function LiquidGlassPanel({
       >
         {children}
       </motion.div>
-      
+
       {/* Edge Highlight Effect */}
       <motion.div
         className="absolute inset-0 rounded-2xl pointer-events-none"
@@ -308,7 +349,7 @@ export function LiquidGlassButton({
   className 
 }: LiquidGlassButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
-  
+
   return (
     <LiquidGlassPanel 
       interactive 
