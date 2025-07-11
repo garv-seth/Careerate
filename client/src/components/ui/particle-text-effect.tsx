@@ -19,8 +19,8 @@ class Particle {
   particleSize = 8;
   isKilled = false;
 
-  startColor = { r: 59, g: 130, b: 246 }; // Blue color
-  targetColor = { r: 147, g: 51, b: 234 }; // Purple color
+  startColor = { r: 30, g: 65, b: 123 }; // Darker blue color
+  targetColor = { r: 74, g: 26, b: 117 }; // Darker purple color
   colorWeight = 0;
   colorBlendRate = 0.01;
 
@@ -83,7 +83,7 @@ class Particle {
 
     ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
     ctx.shadowColor = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 5;
     ctx.beginPath();
     ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
     ctx.fill();
@@ -262,8 +262,8 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
 
-    // Background with motion blur
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    // Background with motion blur - more transparent for seamless blending
+    ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw particles
@@ -316,12 +316,18 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
   }, []);
 
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="flex items-center justify-center w-full relative">
       <canvas
         ref={canvasRef}
-        className="max-w-full h-auto"
-        style={{ width: "800px", height: "200px" }}
+        className="max-w-full h-auto relative z-10"
+        style={{ 
+          width: "800px", 
+          height: "200px",
+          background: "transparent"
+        }}
       />
+      {/* Dark gradient background overlay to match UI */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-gray-800/10 to-black/20 pointer-events-none" />
     </div>
   );
 }

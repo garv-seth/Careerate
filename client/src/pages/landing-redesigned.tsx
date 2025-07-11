@@ -149,6 +149,7 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
+            className="relative z-20 mt-16"
           >
             <ParticleTextEffect />
           </motion.div>
