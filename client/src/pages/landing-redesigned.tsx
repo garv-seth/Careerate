@@ -60,24 +60,22 @@ export default function LandingRedesigned() {
           boxShadow: '0 4px 32px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(255,255,255,0.15)',
           borderImage: 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)) 1'
         }}>
-          <div className="max-w-7xl mx-auto flex items-center justify-center relative">
-            {/* Centered Logo Section */}
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            {/* Logo Section - Left */}
             <motion.div 
-              className="flex items-center space-x-3 cursor-pointer absolute left-1/2 transform -translate-x-1/2"
+              className="flex items-center space-x-3 cursor-pointer"
               onClick={handleNavigation}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <img src={careerateLogo} alt="CAREERATE" className="w-12 h-12 rounded-lg" />
-              <div className="hidden sm:block">
-                <span className="text-xl font-bold text-white/90 tracking-wide">
-                  CAREERATE
-                </span>
-              </div>
+              <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
+              <span className="text-xl font-bold text-white/90 tracking-wide">
+                CAREERATE
+              </span>
             </motion.div>
             
-            {/* Desktop Navigation - Left side */}
-            <div className="hidden lg:flex items-center space-x-8 absolute left-0">
+            {/* Desktop Navigation - Center */}
+            <div className="hidden lg:flex items-center space-x-8">
               <a href="#features" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Features</a>
               <a href="#agents" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Agents</a>
               <a href="#workflow" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Workflow</a>
@@ -85,7 +83,7 @@ export default function LandingRedesigned() {
             </div>
 
             {/* CTA Button - Right side */}
-            <div className="flex items-center space-x-4 absolute right-0">
+            <div className="flex items-center space-x-4">
               <Button
                 onClick={handleGetStarted}
                 className="bg-white/15 hover:bg-white/25 text-white border border-white/20 hover:border-white/30 px-5 py-1.5 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm backdrop-blur-sm"
@@ -145,18 +143,15 @@ export default function LandingRedesigned() {
             <ParticleTextEffect words={["INTRODUCING", "VIBE", "HOSTING"]} />
           </motion.div>
 
-          {/* Tagline */}
-          <motion.div
+          {/* Simple Subtitle */}
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="mb-8"
+            className="text-lg text-gray-400 mb-8"
           >
-            <Badge className="mb-4 bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-blue-200 border-blue-400/40 backdrop-blur-sm px-6 py-2 text-lg">
-              <Zap className="w-5 h-5 mr-2" />
-              Automate DevOps
-            </Badge>
-          </motion.div>
+            Next-Generation Autonomous DevOps Platform
+          </motion.p>
 
           <motion.h2 
             className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent leading-tight"

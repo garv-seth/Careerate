@@ -143,7 +143,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
   const frameCountRef = useRef(0);
   const wordIndexRef = useRef(0);
 
-  const pixelSteps = 12; // Further increased to reduce particle density
+  const pixelSteps = 8; // Reduced for better text density and legibility
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
     const randomX = Math.random() * 1000;
@@ -176,13 +176,13 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     // Draw text with better contrast and responsive font size
     offscreenCtx.fillStyle = "white";
     const fontSize = Math.min(90, canvas.width / 10);
-    offscreenCtx.font = `bold ${fontSize}px Arial, sans-serif`;
+    offscreenCtx.font = `900 ${fontSize}px Arial, sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     
-    // Add stroke for better definition
-    offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-    offscreenCtx.lineWidth = 2;
+    // Add thicker stroke for better definition and legibility
+    offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    offscreenCtx.lineWidth = 4;
     offscreenCtx.strokeText(word, canvas.width / 2, canvas.height / 2);
     offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2);
 
@@ -290,9 +290,9 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
       }
     }
 
-    // Auto-advance words less frequently
+    // Auto-advance words more frequently  
     frameCountRef.current++;
-    if (frameCountRef.current % 400 === 0) {
+    if (frameCountRef.current % 250 === 0) {
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length;
       nextWord(words[wordIndexRef.current], canvas);
     }
