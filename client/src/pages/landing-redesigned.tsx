@@ -54,12 +54,11 @@ export default function LandingRedesigned() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <nav className="bg-white/[0.08] backdrop-blur-3xl border border-white/[0.15] rounded-2xl px-4 sm:px-6 py-4 shadow-2xl max-w-7xl mx-auto" style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.10) 100%)',
-          backdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
-          WebkitBackdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 4px 16px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25)',
-          borderImage: 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)) 1'
+        <nav className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl px-4 sm:px-6 py-4 max-w-7xl mx-auto" style={{
+          background: 'rgba(255,255,255,0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.1)',
         }}>
           <div className="flex items-center justify-between w-full">
             {/* Logo Section */}
@@ -132,11 +131,12 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="lg:hidden mt-3 bg-white/[0.12] backdrop-blur-3xl border border-white/[0.2] rounded-2xl p-6 shadow-2xl z-50 mx-4"
+            className="lg:hidden mt-3 bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl p-6 z-50 mx-4"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.12) 100%)',
-              backdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
-              WebkitBackdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
+              background: 'rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
             }}
           >
             <div className="flex flex-col space-y-4">
