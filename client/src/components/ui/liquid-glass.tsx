@@ -167,7 +167,7 @@ export function LiquidGlassPanel({
   }, [interactive, intensity, rotateX, rotateY, x, y]);
 
   return (
-    <motion.div
+    <div
       ref={containerRef}
       className={cn(
         "relative overflow-hidden rounded-2xl",
@@ -175,18 +175,11 @@ export function LiquidGlassPanel({
         className
       )}
       style={{
-        rotateX,
-        rotateY,
-        x,
-        y,
         transformStyle: "preserve-3d",
         perspective: 1000,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: interactive ? 1.01 : 1 }}
-      whileTap={{ scale: interactive ? 0.98 : 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       {/* Animated Liquid Background Layer */}
       <motion.div
@@ -296,7 +289,7 @@ export function LiquidGlassPanel({
         }}
         transition={{ duration: 0.3 }}
       />
-    </motion.div>
+    </div>
   );
 }
 

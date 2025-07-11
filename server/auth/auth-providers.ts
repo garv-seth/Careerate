@@ -157,19 +157,55 @@ export class AuthService {
   
   // Azure AD Authentication
   async authenticateAzure(code: string): Promise<any> {
-    try {
-      const clientCredentialRequest = {
-        scopes: azureConfig.scopes,
-        code,
-        redirectUri: azureConfig.redirectUri,
-      };
-
-      const response = await azureServerClient.acquireTokenByCode(clientCredentialRequest);
-      return response;
-    } catch (error) {
-      console.error('Azure authentication error:', error);
-      throw new Error('Azure authentication failed');
+    const tenantId = process.env.AZURE_TENANT_ID;
+    const clientId = process.env.AZURE_CLIENT_ID;
+    const clientSecret = process.env.AZURE_CLIENT_SECRET;
+    const redirectUri = process.env.AZURE_REDIRECT_URI;
+    
+    if (!tenantId || !clientId || !clientSecret || !redirectUri) {
+      throw new Error("Azure credentials not configured");
     }
+
+    // Exchange code for access token
+    const tokenResponse = await fetch(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        scope: "openid profile email https://graph.microsoft.com/user.read",
+        code: code,
+        redirect_uri: redirectUri,
+        grant_type: "authorization_code",
+        client_secret: clientSecret,
+      }),
+    });
+
+    const tokenData = await tokenResponse.json();
+    
+    if (tokenData.error) {
+      throw new Error(`Azure OAuth error: ${tokenData.error_description}`);
+    }
+
+    // Get user info from Microsoft Graph
+    const userResponse = await fetch("https://graph.microsoft.com/v1.0/me", {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+      },
+    });
+
+    const userData = await userResponse.json();
+    
+    return {
+      id: userData.id,
+      username: userData.userPrincipalName,
+      name: userData.displayName,
+      email: userData.mail || userData.userPrincipalName,
+      avatar: userData.profilePicture || null,
+      provider: "azure",
+      accessToken: tokenData.access_token,
+    };
   }
 
   // GitHub OAuth
