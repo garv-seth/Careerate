@@ -322,8 +322,6 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
 
   return (
     <div className="flex items-center justify-center w-full relative">
-      {/* Subtle background for text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-gray-900/20 to-black/30 rounded-lg blur-sm" />
       <canvas
         ref={canvasRef}
         className="max-w-full h-auto relative z-10"

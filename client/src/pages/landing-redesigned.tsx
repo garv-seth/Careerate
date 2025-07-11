@@ -72,7 +72,7 @@ export default function LandingRedesigned() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-black/20 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -136,7 +136,7 @@ export default function LandingRedesigned() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         <motion.div 
           className="absolute inset-0 opacity-30"
           style={{ y: backgroundY }}
@@ -220,8 +220,11 @@ export default function LandingRedesigned() {
         </div>
       </section>
 
+      {/* Gradient Transition */}
+      <div className="h-32 bg-gradient-to-b from-black via-gray-900/50 to-gray-800"></div>
+
       {/* Agents Section */}
-      <section id="agents" className="py-24 relative">
+      <section id="agents" className="py-24 relative bg-gradient-to-br from-gray-800 via-gray-800 to-black">
         <motion.div 
           className="max-w-7xl mx-auto px-4"
         >
