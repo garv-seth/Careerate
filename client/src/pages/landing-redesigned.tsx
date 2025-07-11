@@ -50,7 +50,7 @@ export default function LandingRedesigned() {
       
       {/* Floating Glass Navbar - Always Visible */}
       <motion.header 
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] max-w-6xl"
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-6xl"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -70,7 +70,7 @@ export default function LandingRedesigned() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <img src={careerateLogo} alt="Careerate" className="w-12 h-12 rounded-lg" />
+              <img src={careerateLogo} alt="Careerate" className="w-14 h-14 rounded-lg" />
               <span className="text-xl font-bold text-white/90 tracking-wide">
                 Careerate
               </span>
