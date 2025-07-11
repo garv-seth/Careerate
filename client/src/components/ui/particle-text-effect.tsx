@@ -16,7 +16,7 @@ class Particle {
   closeEnoughTarget = 100;
   maxSpeed = 1.0;
   maxForce = 0.1;
-  particleSize = 8;
+  particleSize = 4;
   isKilled = false;
 
   startColor = { r: 60, g: 120, b: 200 }; // Brighter blue for better visibility
@@ -82,10 +82,10 @@ class Particle {
     };
 
     ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    ctx.shadowColor = `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.8)`;
-    ctx.shadowBlur = 8;
+    ctx.shadowColor = `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.4)`;
+    ctx.shadowBlur = 4;
     ctx.beginPath();
-    ctx.arc(this.pos.x, this.pos.y, this.particleSize / 1.5, 0, Math.PI * 2);
+    ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
   }
@@ -143,7 +143,7 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
   const frameCountRef = useRef(0);
   const wordIndexRef = useRef(0);
 
-  const pixelSteps = 8; // Increased to reduce particle density
+  const pixelSteps = 12; // Further increased to reduce particle density
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
     const randomX = Math.random() * 1000;
@@ -173,9 +173,10 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     offscreenCanvas.height = canvas.height;
     const offscreenCtx = offscreenCanvas.getContext("2d")!;
 
-    // Draw text with better contrast
+    // Draw text with better contrast and responsive font size
     offscreenCtx.fillStyle = "white";
-    offscreenCtx.font = "bold 90px Arial, sans-serif";
+    const fontSize = Math.min(90, canvas.width / 10);
+    offscreenCtx.font = `bold ${fontSize}px Arial, sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     
@@ -267,9 +268,8 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
 
-    // Very subtle background clear for seamless blending
-    ctx.fillStyle = "rgba(0, 0, 0, 0.01)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Clear background completely for seamless blending
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw particles
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -290,9 +290,9 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
       }
     }
 
-    // Auto-advance words
+    // Auto-advance words less frequently
     frameCountRef.current++;
-    if (frameCountRef.current % 180 === 0) {
+    if (frameCountRef.current % 300 === 0) {
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length;
       nextWord(words[wordIndexRef.current], canvas);
     }
@@ -304,11 +304,22 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.width = 800;
+    canvas.width = window.innerWidth;
     canvas.height = 200;
 
     // Initialize with first word
     nextWord(words[0], canvas);
+
+    // Handle resize
+    const handleResize = () => {
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = 200;
+        nextWord(words[wordIndexRef.current], canvas);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
 
     // Start animation
     animate();
@@ -317,6 +328,7 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -324,11 +336,10 @@ export function ParticleTextEffect({ words = ["VIBE", "HOSTING"] }: ParticleText
     <div className="flex items-center justify-center w-full relative">
       <canvas
         ref={canvasRef}
-        className="max-w-full h-auto relative z-10"
+        className="w-full h-auto relative z-10"
         style={{ 
-          width: "800px", 
-          height: "200px",
-          background: "transparent"
+          width: "100%", 
+          height: "200px"
         }}
       />
     </div>
