@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Bot, Zap, Shield, Cloud, GitBranch, Activity, Users, Globe, Menu, X, Brain, Cpu, Target, TrendingUp, CheckCircle2, Workflow } from "lucide-react";
-import careerateLogo from "@assets/IMG_3575_1752232705773.png";
+import careerateLogo from "@assets/CareerateLogo.png";
 
 export default function LandingRedesigned() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
