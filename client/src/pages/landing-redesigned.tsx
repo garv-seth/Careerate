@@ -58,17 +58,18 @@ export default function LandingRedesigned() {
           zIndex: '999999 !important',
           pointerEvents: 'auto !important'
         }}
-      ></header>
+      >
         <motion.nav 
           className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl px-4 sm:px-6 py-4 max-w-7xl mx-auto" 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           style={{
-          background: 'rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.1)',
+              zIndex: 999999,
+              background: 'rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.1)',
         }}>
           <div className="flex items-center justify-between w-full">
             {/* Logo Section */}
@@ -213,7 +214,7 @@ export default function LandingRedesigned() {
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
-      </motion.header>
+      </header>
 
       {/* Hero Section - Centered */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
