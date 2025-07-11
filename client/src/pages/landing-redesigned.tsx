@@ -48,22 +48,23 @@ export default function LandingRedesigned() {
     <div className="min-h-screen bg-black text-white overflow-hidden">
 
       {/* Floating Glass Navbar - True Overlay */}
-      <motion.header 
-        className="fixed top-4 left-4 right-4 pointer-events-auto"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      <header 
+        className="fixed top-4 left-4 right-4 z-[999999] pointer-events-auto"
         style={{ 
-          position: 'fixed',
-          top: '1rem',
-          left: '1rem',
-          right: '1rem',
-          zIndex: 999999,
-          pointerEvents: 'auto',
-          willChange: 'transform'
+          position: 'fixed !important',
+          top: '1rem !important',
+          left: '1rem !important',
+          right: '1rem !important',
+          zIndex: '999999 !important',
+          pointerEvents: 'auto !important'
         }}
-      >
-        <nav className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl px-4 sm:px-6 py-4 max-w-7xl mx-auto" style={{
+      ></header>
+        <motion.nav 
+          className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl px-4 sm:px-6 py-4 max-w-7xl mx-auto" 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
           background: 'rgba(255,255,255,0.08)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
@@ -132,7 +133,7 @@ export default function LandingRedesigned() {
               </Button>
             </div>
           </div>
-        </nav>
+        </motion.nav>
 
         {/* Mobile Menu - Floating */}
         {mobileMenuOpen && (
