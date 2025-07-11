@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ParticleTextEffect } from "@/components/ui/particle-text-effect";
@@ -12,7 +11,7 @@ export default function LandingRedesigned() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { scrollY } = useScroll();
-  
+
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
   const navbarOpacity = useTransform(scrollY, [0, 100], [0.8, 0.95]);
 
@@ -47,7 +46,7 @@ export default function LandingRedesigned() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      
+
       {/* Floating Glass Navbar - Always Visible */}
       <motion.header 
         className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] max-w-6xl"
@@ -63,69 +62,57 @@ export default function LandingRedesigned() {
           boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 4px 16px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25)',
           borderImage: 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)) 1'
         }}>
-          <div className="flex items-center justify-between">
-            {/* Logo Section - Left */}
+          <div className="flex items-center justify-center relative">
+            {/* Logo Section - Absolute Left */}
             <motion.div 
-              className="flex items-center space-x-3 cursor-pointer"
+              className="absolute left-0 flex items-center space-x-3 cursor-pointer"
               onClick={handleNavigation}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <img src={careerateLogo} alt="Careerate" className="w-14 h-14 rounded-lg" />
-              <span className="text-xl font-bold text-white/90 tracking-wide">
+              <img src={careerateLogo} alt="Careerate" className="w-10 h-10 lg:w-14 lg:h-14 rounded-lg" />
+              <span className="text-lg lg:text-xl font-bold text-white/90 tracking-wide">
                 Careerate
               </span>
             </motion.div>
-            
-            {/* Desktop Navigation - Center */}
-            <div className="hidden lg:flex items-center space-x-8">
+
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden lg:flex items-center justify-center space-x-8">
               <a href="#features" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Features</a>
               <a href="#agents" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Agents</a>
               <a href="#workflow" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Workflow</a>
               <a href="#pricing" className="text-white/70 hover:text-white transition-colors font-medium text-sm">Pricing</a>
             </div>
 
-            {/* Dynamic CTA Buttons - Right side */}
-            <div className="flex items-center space-x-3">
-              {isLoggedIn ? (
-                <>
+            {/* Right Section - Absolute Right */}
+            <div className="absolute right-0 flex items-center space-x-4">
+              {/* Desktop Auth Buttons */}
+              <div className="hidden lg:flex items-center space-x-3">
+                {isLoggedIn ? (
                   <Button
-                    onClick={() => window.location.href = '/dashboard'}
-                    className="bg-blue-600/80 hover:bg-blue-600 text-white border-0 px-4 py-2 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm"
+                    variant="outline"
+                    className="border-white/20 text-white/80 hover:bg-white/10 hover:text-white bg-white/5"
+                    onClick={handleNavigation}
                   >
                     Dashboard
-                    <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  <Button
-                    onClick={() => {
-                      // Handle logout
-                      setIsLoggedIn(false);
-                      window.location.href = '/';
-                    }}
-                    variant="ghost"
-                    className="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm"
-                  >
-                    Logout
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    onClick={() => window.location.href = '/auth/signin'}
-                    variant="ghost"
-                    className="text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm"
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    onClick={handleGetStarted}
-                    className="bg-white/15 hover:bg-white/25 text-white border border-white/20 hover:border-white/30 px-4 py-2 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 group text-sm backdrop-blur-sm"
-                  >
-                    Start Building
-                    <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </>
-              )}
+                ) : (
+                  <>
+                    <Button
+                      variant="ghost"
+                      className="text-white/70 hover:text-white hover:bg-white/10"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="border-white/20 text-white/80 hover:bg-white/10 hover:text-white bg-white/5"
+                    >
+                      Get Started
+                    </Button>
+                  </>
+                )}
+              </div>
 
               {/* Mobile Menu Button */}
               <Button
@@ -134,7 +121,7 @@ export default function LandingRedesigned() {
                 className="lg:hidden text-white/80 hover:bg-white/10 hover:text-white border border-white/20 rounded-lg p-2"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           </div>
@@ -146,7 +133,7 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="lg:hidden mt-2 bg-white/[0.08] backdrop-blur-3xl border border-white/[0.15] rounded-xl p-4 shadow-2xl"
+            className="lg:hidden mt-2 bg-white/[0.08] backdrop-blur-3xl border border-white/[0.15] rounded-xl p-4 shadow-2xl z-50"
             style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.10) 100%)',
               backdropFilter: 'blur(60px) saturate(200%) contrast(140%) brightness(120%)',
@@ -188,16 +175,27 @@ export default function LandingRedesigned() {
                       Sign In
                     </Button>
                     <Button
-                      onClick={handleGetStarted}
-                      className="bg-white/15 hover:bg-white/25 text-white border border-white/20 w-full justify-center"
+                      variant="outline"
+                      className="w-full border-white/20 text-white/80 hover:bg-white/10 hover:text-white bg-white/5"
                     >
-                      Start Building
+                      Get Started
                     </Button>
                   </div>
                 )}
               </div>
             </div>
           </motion.div>
+        )}
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-[80]"
+            onClick={() => setMobileMenuOpen(false)}
+          />
         )}
       </motion.header>
 
@@ -298,14 +296,14 @@ export default function LandingRedesigned() {
           </motion.div>
         </div>
 
-        
+
       </section>
 
       {/* Features Section */}
       <section id="features" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/80 to-indigo-950/80">
         <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-r from-transparent via-blue-400/30 to-transparent blur-sm"></div>
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-transparent via-blue-400/60 to-transparent"></div>
-        
+
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
