@@ -47,9 +47,9 @@ export default function LandingRedesigned() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
 
-      {/* Floating Glass Navbar - Always Visible */}
+      {/* Floating Glass Navbar - True Overlay */}
       <motion.header 
-        className="fixed top-4 left-4 right-4 z-[9999]"
+        className="fixed top-4 left-4 right-4 pointer-events-auto"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -58,7 +58,8 @@ export default function LandingRedesigned() {
           top: '1rem',
           left: '1rem',
           right: '1rem',
-          zIndex: 9999 
+          zIndex: 999999,
+          pointerEvents: 'auto'
         }}
       >
         <nav className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl px-4 sm:px-6 py-4 max-w-7xl mx-auto" style={{
@@ -138,7 +139,8 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="lg:hidden mt-3 bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl p-6 z-50 mx-4"
+            className="lg:hidden mt-3 bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-2xl p-6 mx-4"
+            style={{ zIndex: 999999 }}
             style={{
               background: 'rgba(255,255,255,0.08)',
               backdropFilter: 'blur(20px)',
@@ -204,7 +206,8 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="lg:hidden fixed inset-0 bg-black/30 z-[80]"
+            className="lg:hidden fixed inset-0 bg-black/30"
+            style={{ zIndex: 999998 }}
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
