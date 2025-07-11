@@ -1,18 +1,27 @@
-# Careerate - Autonomous DevOps Platform
+# CAREERATE - Interacting Vibe Hosting Platform
 
 ## Overview
 
-Careerate is a next-generation agentic DevOps and hosting platform built with a modern full-stack architecture. The application features an autonomous multi-agent system for DevOps workflows, with a React frontend, Express.js backend, and PostgreSQL database managed through Drizzle ORM.
+CAREERATE is the world's first truly autonomous DevOps platform featuring "interacting vibe hosting" - where AI agents think, communicate, and act independently through advanced A2A (Agent-to-Agent) protocols. Built with a modern full-stack architecture, the platform combines vibe coding principles with autonomous infrastructure management.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
 UI Requirements: 
-- Proper centering and mobile optimization is crucial
-- Smooth light effects optimized for mobile devices (user reported rough light effects on mobile)
-- Focus on CAREERATE autonomous DevOps platform concept, not generic landing pages
-- Integrate AWS, GCP, and Azure with OAuth authentication
+- Horizon theme throughout entire landing page with dynamic scrolling effects
+- Hamburger sidebar menu navigation (not traditional navbar)
+- "Interacting vibe hosting" tagline prominently featured
+- Logo integration from attached assets (IMG_3575_1752232705773.png)
+- Smooth light effects optimized for mobile devices 
+- Dynamic horizon elements that move as user scrolls
 - Glass morphism UI design with realistic glass effects
+- Integrate AWS, GCP, and Azure with OAuth authentication
+
+Platform Focus:
+- Beyond competition (StarSling YC S25, Monk.io) through A2A protocol
+- Vibe coding integration meets autonomous DevOps
+- True multi-agent system with 5 specialized agents
+- Revolutionary A2A communication protocol for agent coordination
 
 ## System Architecture
 

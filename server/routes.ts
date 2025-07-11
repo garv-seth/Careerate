@@ -180,6 +180,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // A2A Protocol Test - demonstrates interacting vibe hosting
+  app.get("/api/agents/a2a-test", async (req, res) => {
+    try {
+      const taskId = `vibe-task-${Date.now()}`;
+      console.log(`[CAREERATE] 🚀 A2A protocol demonstration - interacting vibe hosting`);
+      
+      const result = await agentRegistry.executeTask(taskId, {
+        repo: "https://github.com/careerate/demo-app",
+        environment: "production", 
+        cloudProviders: ["aws", "gcp", "azure"],
+        vibeCoding: true,
+        autonomousLevel: "full"
+      });
+      
+      res.json({
+        success: true,
+        ...result,
+        message: "A2A Protocol successfully demonstrated",
+        vibeHosting: "Agents interacting autonomously through advanced protocols",
+        competitiveEdge: "True multi-agent coordination beyond StarSling (YC) & Monk.io",
+        tagline: "interacting vibe hosting - the future is autonomous"
+      });
+    } catch (error: any) {
+      console.error('[CAREERATE] A2A test error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

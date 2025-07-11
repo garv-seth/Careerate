@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Bot, Zap, Shield, Layers, Cloud, GitBranch, Activity, Users, Globe, Menu, X, Sparkles, Rocket, Brain, Cpu, Star, Target, TrendingUp, CheckCircle2, MessageSquare, Workflow } from "lucide-react";
+import { SiAws, SiMicrosoft, SiGoogle, SiGithub } from "react-icons/si";
 import careerateLogo from "@assets/IMG_3575_1752232705773.png";
 
 export default function Landing() {
@@ -163,7 +164,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-blue-400/40 text-blue-300 hover:bg-blue-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <Cloud className="h-4 w-4" />
+                <SiMicrosoft className="h-4 w-4" />
                 Azure Integration
               </Button>
               <Button
@@ -171,7 +172,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-orange-400/40 text-orange-300 hover:bg-orange-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <Cloud className="h-4 w-4" />
+                <SiAws className="h-4 w-4" />
                 AWS Integration
               </Button>
               <Button
@@ -179,7 +180,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-green-400/40 text-green-300 hover:bg-green-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <Cloud className="h-4 w-4" />
+                <SiGoogle className="h-4 w-4" />
                 GCP Integration
               </Button>
               <Button
@@ -187,7 +188,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-purple-400/40 text-purple-300 hover:bg-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <GitBranch className="h-4 w-4" />
+                <SiGithub className="h-4 w-4" />
                 GitHub Integration
               </Button>
             </motion.div>
