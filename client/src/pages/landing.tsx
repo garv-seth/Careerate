@@ -360,10 +360,9 @@ export default function Landing() {
         {/* Hero Section - Overlaying the background */}
         <section className="absolute inset-0 flex items-center justify-center px-6 pt-24 z-10">
           {/* Hero Content */}
-        <div className="relative z-10 flex items-center justify-center h-full pt-20 md:pt-0">
-          <div className="text-center max-w-4xl mx-auto px-4 md:px-6"
->
-            <motion.div
+          <div className="relative z-10 flex items-center justify-center h-full pt-20 md:pt-0">
+            <div className="text-center max-w-4xl mx-auto px-4 md:px-6">
+              <motion.div
               initial={{ opacity: 0, y: 100, scale: 0.8 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ 
@@ -466,6 +465,7 @@ export default function Landing() {
                 ))}
               </motion.div>
             </motion.div>
+            </div>
           </div>
         </section>
       </div>
