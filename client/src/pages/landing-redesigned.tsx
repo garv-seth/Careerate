@@ -53,7 +53,12 @@ export default function LandingRedesigned() {
         className="fixed top-4 left-4 right-4 z-50"
         style={{ opacity: navbarOpacity }}
       >
-        <nav className="max-w-7xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-4 shadow-2xl">
+        <nav className="max-w-7xl mx-auto bg-white/15 backdrop-blur-2xl border border-white/30 rounded-2xl px-6 py-4 shadow-2xl" style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.15) 100%)',
+          backdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
+          WebkitBackdropFilter: 'blur(40px) saturate(180%) contrast(120%)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -1px 0 rgba(255,255,255,0.1)'
+        }}></nav>
           <div className="flex items-center justify-between">
             {/* Logo Section */}
             <motion.div 
@@ -67,7 +72,6 @@ export default function LandingRedesigned() {
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   CAREERATE
                 </span>
-                <p className="text-xs text-blue-300/80">vibe hosting</p>
               </div>
             </motion.div>
             
@@ -220,21 +224,7 @@ export default function LandingRedesigned() {
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center backdrop-blur-sm">
-            <motion.div 
-              className="w-1 h-3 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full mt-2"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </div>
-          <p className="text-xs text-white/60 mt-2 text-center">Scroll to explore</p>
-        </motion.div>
+        
       </section>
 
       {/* Features Section */}
