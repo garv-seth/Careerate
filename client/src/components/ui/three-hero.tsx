@@ -53,6 +53,10 @@ export const ThreeHero = () => {
 
   const smoothCameraPos = useRef({ x: 0, y: 30, z: 100 });
 
+  // Mobile detection for performance optimization
+  const isMobile = window.innerWidth <= 768;
+  const isLowPowerDevice = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
+
   // Initialize Three.js scene
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -60,29 +64,38 @@ export const ThreeHero = () => {
     const initThree = () => {
       const { current: refs } = threeRefs;
       
-      // Scene setup
+      // Scene setup with mobile optimization
       refs.scene = new THREE.Scene();
-      refs.scene.fog = new THREE.FogExp2(0x000000, 0.0001);
+      refs.scene.fog = new THREE.FogExp2(0x000000, isMobile ? 0.0005 : 0.0001);
 
-      // Camera
+      // Camera with mobile-optimized settings
       refs.camera = new THREE.PerspectiveCamera(
-        75,
+        isMobile ? 60 : 75, // Smaller FOV on mobile for better performance
         window.innerWidth / window.innerHeight,
         0.1,
-        2000
+        isMobile ? 1000 : 2000 // Reduced far plane on mobile
       );
       refs.camera.position.set(0, 30, 100);
 
-      // Renderer
+      // Renderer with mobile optimization
       refs.renderer = new THREE.WebGLRenderer({
         canvas: canvasRef.current!,
-        antialias: true,
-        alpha: true
+        antialias: !isMobile, // Disable antialiasing on mobile for better performance
+        alpha: true,
+        precision: isMobile ? 'mediump' : 'highp',
+        powerPreference: isMobile ? 'low-power' : 'high-performance'
       });
       refs.renderer.setSize(window.innerWidth, window.innerHeight);
-      refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Limit pixel ratio on mobile to improve performance
+      refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
       refs.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      refs.renderer.toneMappingExposure = 0.8;
+      refs.renderer.toneMappingExposure = isMobile ? 0.6 : 0.8;
+      
+      // Additional mobile optimizations
+      if (isMobile) {
+        refs.renderer.shadowMap.enabled = false;
+        refs.renderer.physicallyBasedShading = false;
+      }
 
       // Create scene elements
       createStarField();
@@ -100,9 +113,11 @@ export const ThreeHero = () => {
       const { current: refs } = threeRefs;
       if (!refs.scene) return;
 
-      const starCount = 3000;
+      // Mobile optimization: drastically reduce particle count and layers
+      const starCount = isMobile ? 800 : 3000;
+      const layerCount = isMobile ? 2 : 3;
       
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < layerCount; i++) {
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(starCount * 3);
         const colors = new Float32Array(starCount * 3);
@@ -117,71 +132,92 @@ export const ThreeHero = () => {
           positions[j * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
           positions[j * 3 + 2] = radius * Math.cos(phi);
 
-          // DevOps themed colors - blues, purples, cyans
+          // Simplified colors for mobile - reduce color variations
           const color = new THREE.Color();
-          const colorChoice = Math.random();
-          if (colorChoice < 0.4) {
-            color.setHSL(0.6, 0.8, 0.8); // Blue
-          } else if (colorChoice < 0.7) {
-            color.setHSL(0.75, 0.7, 0.9); // Purple
-          } else if (colorChoice < 0.9) {
-            color.setHSL(0.5, 0.6, 0.8); // Cyan
+          if (isMobile) {
+            // Use simpler color scheme on mobile
+            const colorChoice = Math.random();
+            if (colorChoice < 0.5) {
+              color.setHSL(0.6, 0.6, 0.7); // Blue
+            } else {
+              color.setHSL(0.75, 0.5, 0.8); // Purple
+            }
           } else {
-            color.setHSL(0, 0, 0.9); // White
+            // Full color range on desktop
+            const colorChoice = Math.random();
+            if (colorChoice < 0.4) {
+              color.setHSL(0.6, 0.8, 0.8); // Blue
+            } else if (colorChoice < 0.7) {
+              color.setHSL(0.75, 0.7, 0.9); // Purple
+            } else if (colorChoice < 0.9) {
+              color.setHSL(0.5, 0.6, 0.8); // Cyan
+            } else {
+              color.setHSL(0, 0, 0.9); // White
+            }
           }
           
           colors[j * 3] = color.r;
           colors[j * 3 + 1] = color.g;
           colors[j * 3 + 2] = color.b;
 
-          sizes[j] = Math.random() * 3 + 1;
+          sizes[j] = isMobile ? Math.random() * 2 + 0.5 : Math.random() * 3 + 1;
         }
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-        const material = new THREE.ShaderMaterial({
-          uniforms: {
-            time: { value: 0 },
-            depth: { value: i }
-          },
-          vertexShader: `
-            attribute float size;
-            attribute vec3 color;
-            varying vec3 vColor;
-            uniform float time;
-            uniform float depth;
-            
-            void main() {
-              vColor = color;
-              vec3 pos = position;
-              
-              // Rotation based on depth
-              float angle = time * 0.02 * (1.0 - depth * 0.2);
-              mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
-              pos.xy = rot * pos.xy;
-              
-              vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-              gl_PointSize = size * (300.0 / -mvPosition.z);
-              gl_Position = projectionMatrix * mvPosition;
-            }
-          `,
-          fragmentShader: `
-            varying vec3 vColor;
-            
-            void main() {
-              float dist = length(gl_PointCoord - vec2(0.5));
-              if (dist > 0.5) discard;
-              
-              float opacity = 1.0 - smoothstep(0.0, 0.5, dist);
-              gl_FragColor = vec4(vColor, opacity);
-            }
-          `,
-          transparent: true,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false
-        });
+        // Use simplified material on mobile
+        const material = isMobile 
+          ? new THREE.PointsMaterial({
+              size: 2,
+              vertexColors: true,
+              transparent: true,
+              opacity: 0.7,
+              sizeAttenuation: false,
+              blending: THREE.AdditiveBlending
+            })
+          : new THREE.ShaderMaterial({
+              uniforms: {
+                time: { value: 0 },
+                depth: { value: i }
+              },
+              vertexShader: `
+                attribute float size;
+                attribute vec3 color;
+                varying vec3 vColor;
+                uniform float time;
+                uniform float depth;
+                
+                void main() {
+                  vColor = color;
+                  vec3 pos = position;
+                  
+                  // Rotation based on depth
+                  float angle = time * 0.02 * (1.0 - depth * 0.2);
+                  mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+                  pos.xy = rot * pos.xy;
+                  
+                  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                  gl_PointSize = size * (300.0 / -mvPosition.z);
+                  gl_Position = projectionMatrix * mvPosition;
+                }
+              `,
+              fragmentShader: `
+                varying vec3 vColor;
+                
+                void main() {
+                  float dist = length(gl_PointCoord - vec2(0.5));
+                  if (dist > 0.5) discard;
+                  
+                  float opacity = 1.0 - smoothstep(0.0, 0.5, dist);
+                  gl_FragColor = vec4(vColor, opacity);
+                }
+              `,
+              transparent: true,
+              blending: THREE.AdditiveBlending,
+              depthWrite: false
+            });
 
         const stars = new THREE.Points(geometry, material);
         refs.scene.add(stars);
@@ -193,15 +229,25 @@ export const ThreeHero = () => {
       const { current: refs } = threeRefs;
       if (!refs.scene) return;
       
-      const geometry = new THREE.PlaneGeometry(6000, 3000, 50, 50);
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0 },
-          color1: { value: new THREE.Color(0x4f46e5) }, // Indigo
-          color2: { value: new THREE.Color(0x06b6d4) }, // Cyan
-          color3: { value: new THREE.Color(0x8b5cf6) }, // Violet
-          opacity: { value: 0.2 }
-        },
+      // Mobile optimization: reduce geometry complexity and use simpler materials
+      const segments = isMobile ? 20 : 50;
+      const geometry = new THREE.PlaneGeometry(6000, 3000, segments, segments);
+      
+      const material = isMobile 
+        ? new THREE.MeshBasicMaterial({
+            color: 0x4f46e5,
+            transparent: true,
+            opacity: 0.1,
+            blending: THREE.AdditiveBlending
+          })
+        : new THREE.ShaderMaterial({
+            uniforms: {
+              time: { value: 0 },
+              color1: { value: new THREE.Color(0x4f46e5) }, // Indigo
+              color2: { value: new THREE.Color(0x06b6d4) }, // Cyan
+              color3: { value: new THREE.Color(0x8b5cf6) }, // Violet
+              opacity: { value: 0.2 }
+            },
         vertexShader: `
           varying vec2 vUv;
           varying float vElevation;

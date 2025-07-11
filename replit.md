@@ -7,6 +7,12 @@ Careerate is a next-generation agentic DevOps and hosting platform built with a 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+UI Requirements: 
+- Proper centering and mobile optimization is crucial
+- Smooth light effects optimized for mobile devices (user reported rough light effects on mobile)
+- Focus on CAREERATE autonomous DevOps platform concept, not generic landing pages
+- Integrate AWS, GCP, and Azure with OAuth authentication
+- Glass morphism UI design with realistic glass effects
 
 ## System Architecture
 
