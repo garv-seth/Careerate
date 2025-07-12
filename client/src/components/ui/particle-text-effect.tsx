@@ -14,16 +14,16 @@ class Particle {
   acc: Vector2D = { x: 0, y: 0 };
   target: Vector2D = { x: 0, y: 0 };
 
-  closeEnoughTarget = 80;
-  maxSpeed = 2.5;
-  maxForce = 0.15;
-  particleSize = 2.5; // Thinner particles for better legibility
+  closeEnoughTarget = 100;
+  maxSpeed = 1.0;
+  maxForce = 0.1;
+  particleSize = 10;
   isKilled = false;
 
-  startColor = { r: 100, g: 150, b: 255 }; // Brighter blue
-  targetColor = { r: 180, g: 120, b: 255 }; // Brighter purple
+  startColor = { r: 0, g: 0, b: 0 };
+  targetColor = { r: 0, g: 0, b: 0 };
   colorWeight = 0;
-  colorBlendRate = 0.02; // Faster color transitions
+  colorBlendRate = 0.01;
 
   move() {
     // Check if particle is close enough to its target to slow down
@@ -69,7 +69,7 @@ class Particle {
     this.acc.y = 0;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, drawAsPoints: boolean) {
     // Blend towards target color
     if (this.colorWeight < 1.0) {
       this.colorWeight = Math.min(this.colorWeight + this.colorBlendRate, 1.0);
@@ -82,13 +82,15 @@ class Particle {
       b: Math.round(this.startColor.b + (this.targetColor.b - this.startColor.b) * this.colorWeight),
     };
 
-    ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-    ctx.shadowColor = `rgba(${currentColor.r}, ${currentColor.g}, ${currentColor.b}, 0.6)`;
-    ctx.shadowBlur = 3;
-    ctx.beginPath();
-    ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
+    if (drawAsPoints) {
+      ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
+      ctx.fillRect(this.pos.x, this.pos.y, 3, 3);
+    } else {
+      ctx.fillStyle = `rgb(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
+      ctx.beginPath();
+      ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   kill(width: number, height: number) {
@@ -133,21 +135,18 @@ class Particle {
   }
 }
 
-interface ParticleTextEffectProps {
-  words?: string[];
-}
-
-export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] }: ParticleTextEffectProps) {
+export function ParticleTextEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const particlesRef = useRef<Particle[]>([]);
-  const frameCountRef = useRef(0);
-  const wordIndexRef = useRef(0);
+  const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isRightClick: false });
+  const initializedRef = useRef(false);
 
-  const pixelSteps = 6; // Better density for legibility
+  const pixelSteps = 4;
+  const drawAsPoints = true;
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
-    const randomX = Math.random() * 1000;
+    const randomX = Math.random() * 1200;
     const randomY = Math.random() * 300;
 
     const direction = {
@@ -167,38 +166,30 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     };
   };
 
-  const nextWord = (word: string, canvas: HTMLCanvasElement) => {
+  const createTextParticles = (word: string, canvas: HTMLCanvasElement) => {
     // Create off-screen canvas for text rendering
     const offscreenCanvas = document.createElement("canvas");
     offscreenCanvas.width = canvas.width;
     offscreenCanvas.height = canvas.height;
     const offscreenCtx = offscreenCanvas.getContext("2d")!;
 
-    // Draw text with better contrast and legibility
+    // Draw text with better styling
     offscreenCtx.fillStyle = "white";
-    const fontSize = Math.min(120, canvas.width / 8);
-    offscreenCtx.font = `900 ${fontSize}px "Inter", "Arial", sans-serif`;
+    offscreenCtx.font = "bold 120px Inter, Arial, sans-serif";
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
-    
-    // Add stroke for better definition
-    offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-    offscreenCtx.lineWidth = 6;
-    offscreenCtx.strokeText(word, canvas.width / 2, canvas.height / 2);
     offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2);
 
     const imageData = offscreenCtx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
 
-    // Enhanced color palette for better contrast
+    // Use cyan/blue gradient colors for VIBE HOSTING
     const colors = [
-      { r: 99, g: 150, b: 255 },   // Bright Blue
-      { r: 167, g: 89, b: 255 },   // Bright Purple
-      { r: 59, g: 130, b: 246 },   // Sky Blue
-      { r: 147, g: 51, b: 234 },   // Violet
-      { r: 236, g: 72, b: 153 },   // Pink
+      { r: 0, g: 255, b: 255 },    // Cyan
+      { r: 100, g: 200, b: 255 },  // Light blue
+      { r: 50, g: 150, b: 255 },   // Medium blue
+      { r: 0, g: 100, b: 255 },    // Blue
     ];
-    const newColor = colors[Math.floor(Math.random() * colors.length)];
 
     const particles = particlesRef.current;
     let particleIndex = 0;
@@ -219,7 +210,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
       const pixelIndex = coordIndex;
       const alpha = pixels[pixelIndex + 3];
 
-      if (alpha > 0) {
+      if (alpha > 128) {
         const x = (pixelIndex / 4) % canvas.width;
         const y = Math.floor(pixelIndex / 4 / canvas.width);
 
@@ -236,13 +227,17 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
           particle.pos.x = randomPos.x;
           particle.pos.y = randomPos.y;
 
-          particle.maxSpeed = Math.random() * 3 + 2.5;
-          particle.maxForce = particle.maxSpeed * 0.06;
-          particle.particleSize = Math.random() * 2 + 2.5; // Consistent thin particles
-          particle.colorBlendRate = Math.random() * 0.025 + 0.015;
+          particle.maxSpeed = Math.random() * 4 + 2;
+          particle.maxForce = particle.maxSpeed * 0.05;
+          particle.particleSize = Math.random() * 4 + 3;
+          particle.colorBlendRate = Math.random() * 0.02 + 0.005;
 
           particles.push(particle);
         }
+
+        // Set color from gradient
+        const colorIndex = Math.floor(Math.random() * colors.length);
+        const selectedColor = colors[colorIndex];
 
         // Set color transition
         particle.startColor = {
@@ -250,7 +245,7 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
           g: particle.startColor.g + (particle.targetColor.g - particle.startColor.g) * particle.colorWeight,
           b: particle.startColor.b + (particle.targetColor.b - particle.startColor.b) * particle.colorWeight,
         };
-        particle.targetColor = newColor;
+        particle.targetColor = selectedColor;
         particle.colorWeight = 0;
 
         particle.target.x = x;
@@ -271,33 +266,39 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
 
-    // Clear background completely
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Clear background
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw particles
     for (let i = particles.length - 1; i >= 0; i--) {
       const particle = particles[i];
       particle.move();
-      particle.draw(ctx);
+      particle.draw(ctx, drawAsPoints);
 
       // Remove dead particles that are out of bounds
       if (particle.isKilled) {
         if (
-          particle.pos.x < 0 ||
-          particle.pos.x > canvas.width ||
-          particle.pos.y < 0 ||
-          particle.pos.y > canvas.height
+          particle.pos.x < -50 ||
+          particle.pos.x > canvas.width + 50 ||
+          particle.pos.y < -50 ||
+          particle.pos.y > canvas.height + 50
         ) {
           particles.splice(i, 1);
         }
       }
     }
 
-    // Faster word transitions  
-    frameCountRef.current++;
-    if (frameCountRef.current % 180 === 0) { // Faster transitions (was 250)
-      wordIndexRef.current = (wordIndexRef.current + 1) % words.length;
-      nextWord(words[wordIndexRef.current], canvas);
+    // Handle mouse interaction for destroying particles
+    if (mouseRef.current.isPressed && mouseRef.current.isRightClick) {
+      particles.forEach((particle) => {
+        const distance = Math.sqrt(
+          Math.pow(particle.pos.x - mouseRef.current.x, 2) + Math.pow(particle.pos.y - mouseRef.current.y, 2)
+        );
+        if (distance < 75) {
+          particle.kill(canvas.width, canvas.height);
+        }
+      });
     }
 
     animationRef.current = requestAnimationFrame(animate);
@@ -305,46 +306,80 @@ export function ParticleTextEffect({ words = ["INTRODUCING", "VIBE", "HOSTING"] 
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || initializedRef.current) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = 250; // Slightly taller for better text spacing
-
-    // Initialize with first word
-    nextWord(words[0], canvas);
-
-    // Handle resize
-    const handleResize = () => {
-      if (canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = 250;
-        nextWord(words[wordIndexRef.current], canvas);
+    // Set canvas size
+    const resizeCanvas = () => {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.min(rect.width * window.devicePixelRatio, 1200);
+      canvas.height = Math.min(rect.height * window.devicePixelRatio, 300);
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Initialize with "VIBE HOSTING" - only once
+    createTextParticles("VIBE HOSTING", canvas);
+    initializedRef.current = true;
 
     // Start animation
     animate();
+
+    // Mouse event handlers
+    const handleMouseDown = (e: MouseEvent) => {
+      mouseRef.current.isPressed = true;
+      mouseRef.current.isRightClick = e.button === 2;
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = (e.clientX - rect.left) * window.devicePixelRatio;
+      mouseRef.current.y = (e.clientY - rect.top) * window.devicePixelRatio;
+    };
+
+    const handleMouseUp = () => {
+      mouseRef.current.isPressed = false;
+      mouseRef.current.isRightClick = false;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = (e.clientX - rect.left) * window.devicePixelRatio;
+      mouseRef.current.y = (e.clientY - rect.top) * window.devicePixelRatio;
+    };
+
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("contextmenu", handleContextMenu);
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", resizeCanvas);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("contextmenu", handleContextMenu);
     };
   }, []);
 
   return (
-    <div className="flex items-center justify-center w-full relative">
+    <div className="relative w-full h-48 flex items-center justify-center overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="w-full h-auto relative z-10"
-        style={{ 
-          width: "100%", 
-          height: "250px"
-        }}
+        className="absolute inset-0 w-full h-full"
+        style={{ width: "100%", height: "100%" }}
       />
+      <h1 className="text-6xl md:text-8xl font-bold text-white/10 backdrop-blur-sm pointer-events-none">
+        VIBE HOSTING
+      </h1>
     </div>
   );
 }
