@@ -3,25 +3,23 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertAgentSchema, insertWorkflowSchema, insertAgentLogSchema } from "@shared/schema";
 import { z } from "zod";
-import authRoutes from "./auth/auth-routes";
-import session from "express-session";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup Replit Authentication
+  await setupAuth(app);
 
-  // Session configuration
-  app.use(session({
-    secret: process.env.SESSION_SECRET || "dev-secret-change-in-production",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    },
-  }));
-
-  // Authentication routes
-  app.use("/api", authRoutes);
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
 
   // Agent routes
   app.get("/api/agents", async (req, res) => {

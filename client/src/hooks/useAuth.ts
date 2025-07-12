@@ -1,42 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 
-export interface AuthUser {
-  id: string;
-  username: string;
-  name: string;
-  email?: string;
-  avatar?: string;
-  provider: "azure" | "github";
-  accessToken: string;
-}
-
 export function useAuth() {
-  const { data: user, isLoading, error } = useQuery<AuthUser>({
+  const { data: user, isLoading, error } = useQuery({
     queryKey: ["/api/auth/user"],
     retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    staleTime: Infinity, // Don't refetch unless explicitly requested
+    enabled: true,
+    throwOnError: false, // Don't throw on 401 errors
   });
 
+  // If we get a 401, user is not authenticated (this is expected)
+  const isUnauthenticated = error && (String(error).includes('401') || String(error).includes('Not authenticated'));
+  
   return {
-    user,
-    isLoading,
-    isAuthenticated: !!user,
-    error,
+    user: isUnauthenticated ? null : user,
+    isLoading: isLoading && !isUnauthenticated,
+    isAuthenticated: !!user && !isUnauthenticated,
   };
-}
-
-export function useLogout() {
-  const logout = async () => {
-    try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
-  return logout;
 }

@@ -6,43 +6,40 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Bot, Zap, Shield, Cloud, GitBranch, Activity, Users, Globe, Menu, X, Brain, Cpu, Target, TrendingUp, CheckCircle2, Workflow } from "lucide-react";
 import careerateLogo from "@assets/CareerateLogo.png";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LandingRedesigned() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, isAuthenticated, isLoading } = useAuth();
   const { scrollY } = useScroll();
 
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
   const navbarOpacity = useTransform(scrollY, [0, 100], [0.9, 0.98]);
 
-  // Check auth status
-  useEffect(() => {
-    // Mock auth check - replace with actual auth logic
-    const checkAuth = () => {
-      // This would be your actual auth check
-      setIsLoggedIn(false);
-    };
-    checkAuth();
-  }, []);
-
   const handleNavigation = () => {
-    if (isLoggedIn) {
+    if (isAuthenticated) {
       // Navigate to dashboard
       window.location.href = '/dashboard';
     } else {
-      // Navigate to landing
-      window.location.href = '/';
+      // Navigate to login
+      window.location.href = '/api/login';
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
-      {/* Floating Navigation Bar */}
+      {/* Floating Navigation Bar - Apple Liquid Glass Style */}
       <header className="fixed top-4 left-4 right-4 z-50">
         <motion.nav 
-          className="backdrop-blur-xl bg-black/10 border border-white/20 rounded-2xl shadow-2xl shadow-black/20"
-          style={{ opacity: navbarOpacity }}
+          className="backdrop-blur-3xl bg-white/[0.03] border border-white/[0.08] rounded-3xl shadow-2xl shadow-black/40 hover:bg-white/[0.05] transition-all duration-500"
+          style={{ 
+            opacity: navbarOpacity,
+            backdropFilter: 'blur(40px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(40px) saturate(200%)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.3)'
+          }}
         >
           <div className="max-w-7xl mx-auto px-6 py-3">
             <div className="flex items-center justify-between">
@@ -54,25 +51,26 @@ export default function LandingRedesigned() {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center space-x-1">
-                <div className="flex items-center space-x-1 bg-white/5 rounded-xl p-1 backdrop-blur-sm">
-                  <a href="#features" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                <div className="flex items-center space-x-1 bg-white/[0.03] rounded-2xl p-1 backdrop-blur-sm border border-white/[0.06]">
+                  <a href="#features" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
                     Features
                   </a>
-                  <a href="#pricing" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                  <a href="#pricing" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
                     Pricing
                   </a>
-                  <a href="#about" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                  <a href="#about" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
                     About
                   </a>
-                  <a href="#contact" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+                  <a href="#contact" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
                     Contact
                   </a>
                 </div>
                 <Button 
                   onClick={handleNavigation}
-                  className="ml-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 font-medium"
+                  disabled={isLoading}
+                  className="ml-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 font-medium disabled:opacity-50"
                 >
-                  {isLoggedIn ? 'Dashboard' : 'Get Started'}
+                  {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
                 </Button>
               </div>
 
@@ -100,7 +98,12 @@ export default function LandingRedesigned() {
           exit={{ opacity: 0, y: -20 }}
           className="fixed top-24 left-4 right-4 z-40 md:hidden"
         >
-          <div className="backdrop-blur-xl bg-black/20 border border-white/20 rounded-2xl shadow-2xl shadow-black/20 px-6 py-6 space-y-2">
+          <div className="backdrop-blur-3xl bg-white/[0.04] border border-white/[0.08] rounded-3xl shadow-2xl shadow-black/40 px-6 py-6 space-y-2" style={{
+            backdropFilter: 'blur(40px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(40px) saturate(200%)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 100%)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.3)'
+          }}>
             <a href="#features" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
               Features
             </a>
@@ -116,9 +119,10 @@ export default function LandingRedesigned() {
             <div className="pt-2">
               <Button 
                 onClick={handleNavigation}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl font-medium"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl font-medium disabled:opacity-50"
               >
-                {isLoggedIn ? 'Dashboard' : 'Get Started'}
+                {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
               </Button>
             </div>
           </div>
@@ -378,6 +382,10 @@ export default function LandingRedesigned() {
               © 2025 CAREERATE. The future of autonomous DevOps.
               <br />
               <span className="text-purple-400">Powered by A2A Protocol • Built for Vibe Coding</span>
+              <br />
+              <span className="text-blue-400 flex items-center justify-center md:justify-end gap-1 mt-2">
+                Made with <span className="text-blue-500 text-lg">💙</span> in Seattle in 2025
+              </span>
             </div>
           </div>
         </div>

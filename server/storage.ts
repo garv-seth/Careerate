@@ -1,10 +1,11 @@
-import { users, agents, workflows, cloudResources, agentLogs, type User, type InsertUser, type Agent, type InsertAgent, type Workflow, type InsertWorkflow, type CloudResource, type InsertCloudResource, type AgentLog, type InsertAgentLog } from "@shared/schema";
+import { users, agents, workflows, cloudResources, agentLogs, type User, type InsertUser, type UpsertUser, type Agent, type InsertAgent, type Workflow, type InsertWorkflow, type CloudResource, type InsertCloudResource, type AgentLog, type InsertAgentLog } from "@shared/schema";
 
 export interface IStorage {
   // Users
-  getUser(id: number): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  upsertUser(user: UpsertUser): Promise<User>;
 
   // Agents
   getAllAgents(): Promise<Agent[]>;
@@ -32,12 +33,11 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<number, User>;
+  private users: Map<string, User>;
   private agents: Map<number, Agent>;
   private workflows: Map<number, Workflow>;
   private cloudResources: Map<number, CloudResource>;
   private agentLogs: AgentLog[];
-  private currentUserId: number;
   private currentAgentId: number;
   private currentWorkflowId: number;
   private currentCloudResourceId: number;
@@ -49,7 +49,7 @@ export class MemStorage implements IStorage {
     this.workflows = new Map();
     this.cloudResources = new Map();
     this.agentLogs = [];
-    this.currentUserId = 1;
+
     this.currentAgentId = 1;
     this.currentWorkflowId = 1;
     this.currentCloudResourceId = 1;
@@ -156,7 +156,7 @@ export class MemStorage implements IStorage {
   }
 
   // Users
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);
   }
 
@@ -167,9 +167,33 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const user: User = { 
+      id: insertUser.id,
+      email: insertUser.email ?? null,
+      firstName: insertUser.firstName ?? null,
+      lastName: insertUser.lastName ?? null,
+      profileImageUrl: insertUser.profileImageUrl ?? null,
+      username: insertUser.username ?? null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.users.set(user.id, user);
+    return user;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const existingUser = this.users.get(userData.id);
+    const user: User = {
+      id: userData.id,
+      email: userData.email ?? existingUser?.email ?? null,
+      firstName: userData.firstName ?? existingUser?.firstName ?? null,
+      lastName: userData.lastName ?? existingUser?.lastName ?? null,
+      profileImageUrl: userData.profileImageUrl ?? existingUser?.profileImageUrl ?? null,
+      username: userData.username ?? existingUser?.username ?? null,
+      updatedAt: new Date(),
+      createdAt: existingUser?.createdAt ?? new Date()
+    };
+    this.users.set(userData.id, user);
     return user;
   }
 

@@ -9,13 +9,19 @@ CAREERATE is the world's first truly autonomous DevOps platform featuring "inter
 Preferred communication style: Simple, everyday language.
 UI Requirements: 
 - Professional, sleek, and futuristic design inspired by StarSling.dev
-- Particle text effect for "INTRODUCING" hero section (not "interacting vibe coding")
-- Translucent frosted glass UI with smooth Framer Motion animations
-- Hamburger sidebar menu navigation (not traditional navbar)
-- Logo integration from attached assets (IMG_3575_1752232705773.png)
-- Footer that appears/disappears with scrolling
-- Clean, not too colorful or tacky design
-- Performance-focused with smooth animations for all interactions
+- Particle text effect showing "CAREERATE" (responsive across all devices)
+- Apple liquid glass navigation bar (translucent, reactive, stays fixed on scroll)
+- Glass morphism UI with advanced blur effects and smooth Framer Motion animations
+- Hamburger sidebar menu navigation for mobile
+- Logo integration from attached assets
+- Footer with "Made with 💙 in Seattle in 2025" text
+- Clean, performance-focused design with smooth animations for all interactions
+
+Authentication Requirements:
+- Single sign-on with multiple provider integrations
+- Persistent authentication state (users stay logged in)
+- Seamless workflow integration with cloud platforms
+- Proper state management to avoid repeated logins
 
 Platform Focus:
 - Beyond competition (StarSling YC W25, Monk.io) through A2A protocol
@@ -46,7 +52,8 @@ Platform Focus:
 - **ORM**: Drizzle ORM with type-safe queries
 - **Schema Management**: Drizzle Kit for migrations
 - **Connection**: Neon Database serverless driver
-- **Development**: In-memory storage fallback for development
+- **Authentication**: Replit Auth with session storage and user management
+- **Storage**: DatabaseStorage for production, MemStorage for development fallback
 
 ## Key Components
 
@@ -71,10 +78,11 @@ The application implements an autonomous agent registry with five core agent typ
 - **Health Monitoring**: System health scores and endpoint monitoring
 
 ### Glass UI Design System
-- Custom glass morphism components with transparency effects
-- Dark theme optimized for DevOps workflows
-- Responsive design with mobile-first approach
-- Consistent color theming with CSS custom properties
+- Apple liquid glass navigation with advanced blur effects and reactive transparency
+- Custom glass morphism components with `backdrop-blur-3xl` and gradient overlays
+- Dark theme optimized for DevOps workflows with responsive particle text
+- Mobile-first responsive design with proper cross-device compatibility
+- Consistent color theming with CSS custom properties and smooth animations
 
 ## Data Flow
 

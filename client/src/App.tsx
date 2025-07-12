@@ -9,15 +9,9 @@ import LandingRedesigned from "@/pages/landing-redesigned";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
-      </div>
-    );
-  }
+  // Temporarily show landing page for all users to fix loading issues
+  // TODO: Re-enable authentication after fixing the request loop
+  const isAuthenticated = false;
 
   return (
     <Switch>

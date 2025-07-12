@@ -135,7 +135,11 @@ class Particle {
   }
 }
 
-export function ParticleTextEffect() {
+interface ParticleTextEffectProps {
+  words: string[];
+}
+
+export function ParticleTextEffect({ words }: ParticleTextEffectProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const particlesRef = useRef<Particle[]>([]);
@@ -173,9 +177,10 @@ export function ParticleTextEffect() {
     offscreenCanvas.height = canvas.height;
     const offscreenCtx = offscreenCanvas.getContext("2d")!;
 
-    // Draw text with better styling
+    // Draw text with better styling - responsive font size
     offscreenCtx.fillStyle = "white";
-    offscreenCtx.font = "bold 120px Inter, Arial, sans-serif";
+    const fontSize = Math.min(canvas.width / 8, 120);
+    offscreenCtx.font = `bold ${fontSize}px Inter, Arial, sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2);
@@ -183,12 +188,12 @@ export function ParticleTextEffect() {
     const imageData = offscreenCtx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
 
-    // Use cyan/blue gradient colors for VIBE HOSTING
+    // Use purple/blue gradient colors for CAREERATE
     const colors = [
-      { r: 0, g: 255, b: 255 },    // Cyan
-      { r: 100, g: 200, b: 255 },  // Light blue
-      { r: 50, g: 150, b: 255 },   // Medium blue
-      { r: 0, g: 100, b: 255 },    // Blue
+      { r: 147, g: 51, b: 234 },   // Purple
+      { r: 99, g: 102, b: 241 },   // Indigo
+      { r: 59, g: 130, b: 246 },   // Blue
+      { r: 168, g: 85, b: 247 },   // Violet
     ];
 
     const particles = particlesRef.current;
@@ -308,11 +313,14 @@ export function ParticleTextEffect() {
     const canvas = canvasRef.current;
     if (!canvas || initializedRef.current) return;
 
-    // Set canvas size
+    // Set canvas size with better mobile responsiveness
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect();
-      canvas.width = Math.min(rect.width * window.devicePixelRatio, 1200);
-      canvas.height = Math.min(rect.height * window.devicePixelRatio, 300);
+      const isMobile = window.innerWidth < 768;
+      const maxWidth = isMobile ? 600 : 1200;
+      const maxHeight = isMobile ? 200 : 300;
+      canvas.width = Math.min(rect.width * window.devicePixelRatio, maxWidth);
+      canvas.height = Math.min(rect.height * window.devicePixelRatio, maxHeight);
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -322,8 +330,9 @@ export function ParticleTextEffect() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Initialize with "VIBE HOSTING" - only once
-    createTextParticles("VIBE HOSTING", canvas);
+    // Initialize with the first word from props - only once
+    const word = words && words.length > 0 ? words[0] : "CAREERATE";
+    createTextParticles(word, canvas);
     initializedRef.current = true;
 
     // Start animation
@@ -377,8 +386,8 @@ export function ParticleTextEffect() {
         className="absolute inset-0 w-full h-full"
         style={{ width: "100%", height: "100%" }}
       />
-      <h1 className="text-6xl md:text-8xl font-bold text-white/10 backdrop-blur-sm pointer-events-none">
-        VIBE HOSTING
+      <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white/10 backdrop-blur-sm pointer-events-none">
+        {words && words.length > 0 ? words[0] : "CAREERATE"}
       </h1>
     </div>
   );
