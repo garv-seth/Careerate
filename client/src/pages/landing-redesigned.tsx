@@ -142,7 +142,7 @@ export default function LandingRedesigned() {
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="mb-8"
           >
-            <ParticleTextEffect words={["INTRODUCING", "VIBE", "HOSTING"]} />
+            <ParticleTextEffect words={["CAREERATE"]} />
           </motion.div>
 
           {/* Subtitle */}
