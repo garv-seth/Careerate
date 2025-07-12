@@ -5,19 +5,19 @@ export function useAuth() {
     queryKey: ["/api/auth/user"],
     retry: false,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchInterval: false,
-    staleTime: Infinity, // Don't refetch unless explicitly requested
-    enabled: true,
-    throwOnError: false, // Don't throw on 401 errors
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    throwOnError: false,
   });
 
-  // If we get a 401, user is not authenticated (this is expected)
-  const isUnauthenticated = error && (String(error).includes('401') || String(error).includes('Not authenticated'));
+  const isAuthenticated = !!user && !error;
   
   return {
-    user: isUnauthenticated ? null : user,
-    isLoading: isLoading && !isUnauthenticated,
-    isAuthenticated: !!user && !isUnauthenticated,
+    user: isAuthenticated ? user : null,
+    isLoading,
+    isAuthenticated,
   };
 }
