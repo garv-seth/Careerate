@@ -1,22 +1,40 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 export function useAuth() {
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ["/api/auth/user"],
-    retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    refetchInterval: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    gcTime: Infinity,
-    throwOnError: false,
-  });
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const isAuthenticated = !!user && !error;
-  
+  useEffect(() => {
+    // Single auth check on mount
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/user', {
+          credentials: 'include',
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+          setIsAuthenticated(true);
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.log('Auth check failed:', error);
+        setUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []); // Only run once on mount
+
   return {
-    user: isAuthenticated ? user : null,
+    user,
     isLoading,
     isAuthenticated,
   };

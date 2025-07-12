@@ -29,7 +29,8 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  const { user } = useAuth();
+  // Temporarily use mock user to fix auth loop
+  const user = { firstName: "User", email: "user@example.com" };
   const [activeAgent, setActiveAgent] = useState<string | null>(null);
   const [repositoryUrl, setRepositoryUrl] = useState("");
   const { toast } = useToast();
@@ -41,21 +42,25 @@ export default function Home() {
   // Fetch agents data
   const { data: agents = [], isLoading: agentsLoading } = useQuery({
     queryKey: ["/api/agents"],
+    staleTime: 30000, // 30 seconds
   });
 
   // Fetch workflows data  
   const { data: workflows = [], isLoading: workflowsLoading } = useQuery({
     queryKey: ["/api/workflows"],
+    staleTime: 30000,
   });
 
   // Fetch cloud resources
   const { data: cloudResources = [], isLoading: cloudLoading } = useQuery({
     queryKey: ["/api/cloud-resources"],
+    staleTime: 30000,
   });
 
   // Fetch deployment plans
   const { data: deploymentPlans = [], isLoading: plansLoading } = useQuery({
     queryKey: ["/api/deploy/plans"],
+    staleTime: 30000,
   });
 
   // Repository analysis mutation
