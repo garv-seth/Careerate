@@ -106,9 +106,11 @@ export default function LandingRedesigned() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="mb-8"
           >
-            <MorphingText 
-              texts={["Introducing", "Vibe Hosting"]} 
-              className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent"
+            <MorphingText
+              texts={["Introducing", "Vibe Hosting", "Agent DevOps", "Autonomous Infrastructure"]}
+              className="text-6xl md:text-8xl font-black text-white mb-4"
+              morphTime={3000}
+              cooldownTime={1000}
             />
           </motion.div>
 
