@@ -79,14 +79,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Orchestration API
-  app.post("/api/deploy/analyze", async (req, res) => {
+  app.post("/api/deploy/analyze", isAuthenticated, async (req, res) => {
     try {
       const { repositoryUrl } = req.body;
       if (!repositoryUrl) {
         return res.status(400).json({ message: "Repository URL is required" });
       }
       
+      // Log analysis start
+      console.log(`[AI-ORCHESTRATOR] Starting analysis for repository: ${repositoryUrl}`);
+      
       const analysis = await aiOrchestrator.analyzeRepository(repositoryUrl);
+      
+      // Log analysis completion
+      console.log(`[AI-ORCHESTRATOR] Analysis completed for repository: ${repositoryUrl}`);
+      
       res.json(analysis);
     } catch (error) {
       console.error("Repository analysis failed:", error);
@@ -94,14 +101,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/deploy/plan", async (req, res) => {
+  app.post("/api/deploy/plan", isAuthenticated, async (req, res) => {
     try {
       const { repositoryUrl } = req.body;
       if (!repositoryUrl) {
         return res.status(400).json({ message: "Repository URL is required" });
       }
       
+      // Log deployment plan creation
+      console.log(`[AI-ORCHESTRATOR] Creating deployment plan for repository: ${repositoryUrl}`);
+      
       const planId = await aiOrchestrator.createDeploymentPlan(repositoryUrl);
+      
+      // Log deployment plan completion
+      console.log(`[AI-ORCHESTRATOR] Deployment plan created with ID: ${planId}`);
+      
       res.json({ planId, message: "Deployment plan created successfully" });
     } catch (error) {
       console.error("Deployment plan creation failed:", error);
@@ -162,41 +176,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GitHub Integration API
+  // Real GitHub Integration API
   app.post("/api/integrations/github/repos", async (req, res) => {
     try {
-      // Mock GitHub repos for now
-      const repos = [
-        {
-          id: 1,
-          name: "my-web-app",
-          full_name: "user/my-web-app",
-          html_url: "https://github.com/user/my-web-app",
-          description: "A modern web application",
-          language: "JavaScript",
-          updated_at: new Date().toISOString()
-        },
-        {
-          id: 2,
-          name: "api-service",
-          full_name: "user/api-service",
-          html_url: "https://github.com/user/api-service",
-          description: "RESTful API service",
-          language: "TypeScript",
-          updated_at: new Date().toISOString()
+      const { access_token } = req.body;
+      if (!access_token) {
+        return res.status(400).json({ message: "GitHub access token required" });
+      }
+      
+      const response = await fetch('https://api.github.com/user/repos', {
+        headers: {
+          'Authorization': `token ${access_token}`,
+          'Accept': 'application/vnd.github.v3+json'
         }
-      ];
+      });
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      
+      const repos = await response.json();
       res.json(repos);
     } catch (error) {
+      console.error("GitHub API error:", error);
       res.status(500).json({ message: "Failed to fetch GitHub repositories" });
     }
   });
 
-  // Agent routes
+  // Agent routes with real functionality
   app.get("/api/agents", async (req, res) => {
     try {
       const agents = await storage.getAllAgents();
-      res.json(agents);
+      // Add real-time agent status from registry
+      const agentStatuses = agentRegistry.getAgents();
+      const enhancedAgents = agents.map(agent => {
+        const registryAgent = agentStatuses.find(a => a.name === agent.name);
+        return {
+          ...agent,
+          status: registryAgent?.status || agent.status,
+          capabilities: registryAgent?.capabilities || [],
+          taskId: registryAgent?.taskId || null
+        };
+      });
+      res.json(enhancedAgents);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch agents" });
     }

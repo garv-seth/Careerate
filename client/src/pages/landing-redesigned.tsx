@@ -107,22 +107,14 @@ export default function LandingRedesigned() {
             className="mb-8"
           >
             <MorphingText
-              texts={["Introducing", "Vibe Hosting", "Agent DevOps", "Autonomous Infrastructure"]}
+              texts={["Introducing Vibe Hosting", "AI-Powered DevOps", "Autonomous Infrastructure", "Multi-Cloud Platform", "Real-Time Monitoring"]}
               className="text-6xl md:text-8xl font-black text-white mb-4"
               morphTime={3000}
               cooldownTime={1000}
             />
           </motion.div>
 
-          {/* Simple Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-2xl md:text-3xl text-gray-300 font-light mb-12"
-          >
-            Agentic DevOps & SRE
-          </motion.p>
+
 
           {/* CTA Button */}
           <motion.div

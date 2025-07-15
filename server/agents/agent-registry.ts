@@ -295,6 +295,15 @@ export class A2AProtocol extends EventEmitter {
   getAgent(id: string): Agent | undefined {
     return this.agents.get(id);
   }
+
+  updateAgentStatus(agentName: string, status: "active" | "building" | "queued" | "waiting" | "standby"): void {
+    for (const [id, agent] of this.agents.entries()) {
+      if (agent.name.toLowerCase().includes(agentName.toLowerCase())) {
+        agent.status = status;
+        break;
+      }
+    }
+  }
 }
 
 export const agentRegistry = new A2AProtocol();

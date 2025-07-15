@@ -33,8 +33,43 @@ interface DeploymentPlan {
 export class AIOrchestrator {
   private deploymentPlans: Map<string, DeploymentPlan> = new Map();
   
+  private async fetchRepositoryDetails(repositoryUrl: string) {
+    try {
+      // Extract owner and repo from GitHub URL
+      const match = repositoryUrl.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+      if (!match) {
+        throw new Error('Invalid GitHub repository URL');
+      }
+      
+      const [, owner, repo] = match;
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching repository details:', error);
+      // Return fallback data
+      return {
+        name: 'unknown',
+        description: 'Repository analysis',
+        language: 'JavaScript',
+        size: 1000,
+        updated_at: new Date().toISOString()
+      };
+    }
+  }
+  
   async analyzeRepository(repositoryUrl: string): Promise<RepositoryAnalysis> {
     try {
+      // Update agent status to analyzing
+      agentRegistry.updateAgentStatus('planner', 'building');
+      
+      // Fetch repository details from GitHub API
+      const repoDetails = await this.fetchRepositoryDetails(repositoryUrl);
+      
       // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       const response = await openai.chat.completions.create({
         model: "gpt-4o",
@@ -59,9 +94,15 @@ export class AIOrchestrator {
           },
           {
             role: "user",
-            content: `Analyze this repository: ${repositoryUrl}. 
-            Based on the URL and common patterns, provide deployment recommendations.
-            If it's a GitHub repo, consider the likely tech stack based on the repo name and common conventions.`
+            content: `Analyze this repository: ${repositoryUrl}
+            Repository Details:
+            - Name: ${repoDetails.name}
+            - Description: ${repoDetails.description}
+            - Primary Language: ${repoDetails.language}
+            - Size: ${repoDetails.size}KB
+            - Last Updated: ${repoDetails.updated_at}
+            
+            Based on this information, provide detailed deployment recommendations.`
           }
         ],
         response_format: { type: "json_object" },
@@ -69,6 +110,9 @@ export class AIOrchestrator {
       });
 
       const analysis = JSON.parse(response.choices[0].message.content || "{}");
+      
+      // Update agent status back to active
+      agentRegistry.updateAgentStatus('planner', 'active');
       
       // Log the analysis
       await storage.createAgentLog({

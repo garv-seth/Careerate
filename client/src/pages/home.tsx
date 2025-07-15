@@ -8,6 +8,7 @@ import GlassCard from "@/components/ui/glass-card";
 import { GlassButton } from "@/components/ui/glass-button";
 import { GradientText, AnimatedText } from "@/components/ui/animated-text";
 import { useState, useEffect } from "react";
+import careerateLogo from "@assets/CareerateLogo.png";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -28,7 +29,9 @@ import {
   AlertTriangle,
   Clock,
   PlayCircle,
-  LogOut
+  LogOut,
+  Menu,
+  X
 } from "lucide-react";
 
 export default function Home() {
@@ -190,35 +193,68 @@ export default function Home() {
       {/* Header */}
       <div className="border-b border-white/10 backdrop-blur-xl bg-black/10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div>
-            <GradientText 
-              text="CAREERATE Dashboard"
-              className="text-2xl font-bold"
-              gradient="from-blue-400 via-cyan-500 to-teal-400"
-            />
-            <p className="text-gray-300">
-              Welcome back, {user?.firstName || user?.email || 'User'}
-            </p>
+          <div className="flex items-center space-x-4">
+            <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
+            <div>
+              <GradientText 
+                text="Dashboard"
+                className="text-2xl font-bold"
+                gradient="from-blue-400 via-cyan-500 to-teal-400"
+              />
+              <p className="text-gray-300">
+                Welcome back, {user?.firstName || user?.email || 'User'}
+              </p>
+            </div>
           </div>
-          <Button 
+          <GlassButton 
             onClick={handleLogout}
             variant="outline"
             className="text-gray-300 border-gray-600 hover:bg-gray-800"
           >
             <LogOut className="h-4 w-4 mr-2" />
             Logout
-          </Button>
+          </GlassButton>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="bg-black/20 backdrop-blur-xl border-white/10">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Overview</TabsTrigger>
-            <TabsTrigger value="agents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">AI Agents</TabsTrigger>
-            <TabsTrigger value="cloud" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Cloud Resources</TabsTrigger>
-            <TabsTrigger value="workflows" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Workflows</TabsTrigger>
-            <TabsTrigger value="integrations" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Integrations</TabsTrigger>
+          <TabsList className="bg-black/20 backdrop-blur-xl border-white/10 p-1 rounded-xl">
+            <TabsTrigger 
+              value="overview" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:shadow-lg transition-all duration-300 rounded-lg px-6 py-3"
+            >
+              <Bot className="h-4 w-4 mr-2" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="agents" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:shadow-lg transition-all duration-300 rounded-lg px-6 py-3"
+            >
+              <Users className="h-4 w-4 mr-2" />
+              AI Agents
+            </TabsTrigger>
+            <TabsTrigger 
+              value="cloud" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:shadow-lg transition-all duration-300 rounded-lg px-6 py-3"
+            >
+              <Cloud className="h-4 w-4 mr-2" />
+              Cloud Resources
+            </TabsTrigger>
+            <TabsTrigger 
+              value="workflows" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:shadow-lg transition-all duration-300 rounded-lg px-6 py-3"
+            >
+              <PlayCircle className="h-4 w-4 mr-2" />
+              Workflows
+            </TabsTrigger>
+            <TabsTrigger 
+              value="integrations" 
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:shadow-lg transition-all duration-300 rounded-lg px-6 py-3"
+            >
+              <GitBranch className="h-4 w-4 mr-2" />
+              Integrations
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -596,18 +632,53 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              {/* Gmail Integration */}
+              {/* AWS Integration */}
               <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Globe className="h-5 w-5 text-teal-400" />
-                    <AnimatedText text="Gmail" />
+                    <Cloud className="h-5 w-5 text-orange-400" />
+                    <AnimatedText text="AWS" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-300 mb-4">Automated deployment notifications and alerts</p>
-                  <GlassButton className="w-full">
-                    Connect Gmail
+                  <p className="text-gray-300 mb-4">Amazon Web Services cloud infrastructure</p>
+                  <Badge className="bg-green-500 text-white mb-4">Connected</Badge>
+                  <GlassButton className="w-full" variant="outline">
+                    Configure AWS
+                  </GlassButton>
+                </CardContent>
+              </Card>
+
+              {/* Azure Integration */}
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Globe className="h-5 w-5 text-blue-400" />
+                    <AnimatedText text="Azure" />
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 mb-4">Microsoft Azure cloud platform</p>
+                  <Badge className="bg-green-500 text-white mb-4">Connected</Badge>
+                  <GlassButton className="w-full" variant="outline">
+                    Configure Azure
+                  </GlassButton>
+                </CardContent>
+              </Card>
+
+              {/* GCP Integration */}
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-yellow-400" />
+                    <AnimatedText text="Google Cloud" />
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 mb-4">Google Cloud Platform services</p>
+                  <Badge className="bg-green-500 text-white mb-4">Connected</Badge>
+                  <GlassButton className="w-full" variant="outline">
+                    Configure GCP
                   </GlassButton>
                 </CardContent>
               </Card>
