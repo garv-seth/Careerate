@@ -29,8 +29,7 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  // Temporarily use mock user to fix auth loop
-  const user = { firstName: "User", email: "user@example.com" };
+  const { user } = useAuth();
   const [activeAgent, setActiveAgent] = useState<string | null>(null);
   const [repositoryUrl, setRepositoryUrl] = useState("");
   const { toast } = useToast();
