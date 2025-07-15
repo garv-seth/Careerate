@@ -1,34 +1,19 @@
-import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import GlassCard from "@/components/ui/glass-card";
-import { 
-  AnimatedText, 
-  GlitchText, 
-  TypewriterText, 
-  GradientText, 
-  FloatingText 
-} from "@/components/ui/animated-text";
-import { ArrowRight, Bot, Zap, Shield, Cloud, GitBranch, Activity, Users, Globe, Menu, X, Brain, Cpu, Target, TrendingUp, CheckCircle2, Workflow } from "lucide-react";
+import { MorphingText } from "@/components/ui/morphing-text";
+import { Menu, X } from "lucide-react";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function LandingRedesigned() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuth();
-  const { scrollY } = useScroll();
-
-  const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
-  const navbarOpacity = useTransform(scrollY, [0, 100], [0.9, 0.98]);
 
   const handleNavigation = () => {
     if (isAuthenticated) {
-      // Navigate to dashboard
       window.location.href = '/dashboard';
     } else {
-      // Navigate to login
       window.location.href = '/api/login';
     }
   };
@@ -36,381 +21,136 @@ export default function LandingRedesigned() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
-      {/* Floating Navigation Bar - Apple Liquid Glass Style */}
-      <header className="fixed top-4 left-4 right-4 z-50">
-        <motion.nav 
-          className="backdrop-blur-3xl bg-white/[0.03] border border-white/[0.08] rounded-3xl shadow-2xl shadow-black/40 hover:bg-white/[0.05] transition-all duration-500"
-          style={{ 
-            opacity: navbarOpacity,
-            backdropFilter: 'blur(40px) saturate(200%)',
-            WebkitBackdropFilter: 'blur(40px) saturate(200%)',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.3)'
-          }}
-        >
-          <div className="max-w-7xl mx-auto px-6 py-3">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <div className="flex items-center space-x-3">
-                <img src={careerateLogo} alt="CAREERATE" className="w-8 h-8 rounded-lg" />
-                <span className="text-lg font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
-              </div>
-
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-1">
-                <div className="flex items-center space-x-1 bg-white/[0.03] rounded-2xl p-1 backdrop-blur-sm border border-white/[0.06]">
-                  <a href="#features" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
-                    Features
-                  </a>
-                  <a href="#pricing" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
-                    Pricing
-                  </a>
-                  <a href="#about" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
-                    About
-                  </a>
-                  <a href="#contact" className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all duration-300 hover:backdrop-blur-md">
-                    Contact
-                  </a>
-                </div>
-                <Button 
-                  onClick={handleNavigation}
-                  disabled={isLoading}
-                  className="ml-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-2.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 font-medium disabled:opacity-50"
-                >
-                  {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
-                </Button>
-              </div>
-
-              {/* Mobile menu button */}
-              <div className="md:hidden">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="text-white hover:bg-white/10 rounded-xl"
-                >
-                  {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </Button>
-              </div>
+      {/* Fixed Navigation Bar */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
+        <nav className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <img src={careerateLogo} alt="CAREERATE" className="w-8 h-8 rounded-lg" />
+              <span className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
             </div>
-          </div>
-        </motion.nav>
-      </header>
 
-      {/* Mobile Navigation Menu */}
-      {mobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="fixed top-24 left-4 right-4 z-40 md:hidden"
-        >
-          <div className="backdrop-blur-3xl bg-white/[0.04] border border-white/[0.08] rounded-3xl shadow-2xl shadow-black/40 px-6 py-6 space-y-2" style={{
-            backdropFilter: 'blur(40px) saturate(200%)',
-            WebkitBackdropFilter: 'blur(40px) saturate(200%)',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 100%)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.3)'
-          }}>
-            <a href="#features" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
-              Features
-            </a>
-            <a href="#pricing" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
-              Pricing
-            </a>
-            <a href="#about" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
-              About
-            </a>
-            <a href="#contact" className="block text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200 py-3 px-4 rounded-xl">
-              Contact
-            </a>
-            <div className="pt-2">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-gray-300 hover:text-white transition-colors">
+                Features
+              </a>
+              <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">
+                Pricing
+              </a>
+              <a href="#about" className="text-gray-300 hover:text-white transition-colors">
+                About
+              </a>
               <Button 
                 onClick={handleNavigation}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl font-medium disabled:opacity-50"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50"
               >
                 {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
               </Button>
             </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-white hover:bg-white/10"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
           </div>
-        </motion.div>
-      )}
+        </nav>
 
-      {/* Hero Section - Full Height with Top Padding */}
-      <section className="relative min-h-screen flex items-center justify-center pt-24">
-        <motion.div 
-          className="absolute inset-0 opacity-30"
-          style={{ y: backgroundY }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10" />
-        </motion.div>
-
-        <div className="relative z-10 text-center max-w-6xl mx-auto px-4">
-          {/* Dynamic Text - Main Hero Element */}
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            className="mb-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden bg-slate-950/95 backdrop-blur-xl border-b border-white/10 px-6 py-4"
           >
-            <div className="text-center">
-              <h1 className="text-4xl md:text-6xl lg:text-8xl font-black mb-4">
-                <GlitchText 
-                  text="Introducing" 
-                  className="text-2xl md:text-3xl lg:text-4xl text-gray-400 font-light block mb-2"
-                />
-                <FloatingText 
-                  text="Vibe Hosting"
-                  className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent"
-                />
-              </h1>
-              <div className="text-lg md:text-xl lg:text-2xl text-gray-300 font-light">
-                <TypewriterText 
-                  text="Where AI agents orchestrate your infrastructure with precision and intelligence"
-                  speed={50}
-                  className="text-gray-400"
-                />
-              </div>
+            <div className="space-y-4">
+              <a href="#features" className="block text-gray-300 hover:text-white transition-colors py-2">
+                Features
+              </a>
+              <a href="#pricing" className="block text-gray-300 hover:text-white transition-colors py-2">
+                Pricing
+              </a>
+              <a href="#about" className="block text-gray-300 hover:text-white transition-colors py-2">
+                About
+              </a>
+              <Button 
+                onClick={handleNavigation}
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white px-6 py-3 rounded-lg transition-all duration-300 shadow-lg disabled:opacity-50"
+              >
+                {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
+              </Button>
             </div>
           </motion.div>
+        )}
+      </header>
 
-          {/* Subtitle */}
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center pt-20">
+        <div className="text-center max-w-4xl mx-auto px-6">
+
+          {/* Main Hero Text with Morphing Effect */}
           <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="mb-8"
+          >
+            <MorphingText 
+              texts={["Introducing", "Vibe Hosting"]} 
+              className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent"
+            />
+          </motion.div>
+
+          {/* Simple Subtitle */}
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="space-y-4"
+            className="text-2xl md:text-3xl text-gray-300 font-light mb-12"
           >
-            <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed">
-              Next-Generation Autonomous DevOps Platform
-            </p>
+            Agentic DevOps & SRE
+          </motion.p>
 
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Where AI agents orchestrate your infrastructure with precision and intelligence
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/80 to-indigo-950/80">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-
-        <div className="max-w-7xl mx-auto">
+          {/* CTA Button */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8 }}
           >
-            <Badge className="mb-6 bg-gradient-to-r from-purple-500/30 to-blue-500/30 text-purple-200 border-purple-400/40">
-              <Cpu className="w-4 h-4 mr-2" />
-              Advanced A2A Agent Architecture
-            </Badge>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
-              Autonomous DevOps <br/>
-              <span className="text-blue-400">Ecosystem</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Five specialized AI agents working in perfect harmony through our proprietary A2A communication protocol. 
-              Each agent handles specific aspects of your infrastructure, from planning to monitoring.
-            </p>
+            <Button 
+              onClick={handleNavigation}
+              disabled={isLoading}
+              size="lg" 
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-12 py-4 text-xl rounded-xl transition-all duration-300 shadow-2xl hover:shadow-purple-500/25 hover:scale-105 disabled:opacity-50"
+            >
+              {isLoading ? 'Loading...' : isAuthenticated ? 'Go to Dashboard' : 'Get Started'}
+            </Button>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Bot className="h-8 w-8" />,
-                title: "Planner Agent",
-                description: "Analyzes your codebase with advanced AI reasoning. Creates optimal deployment strategies that account for dependencies, performance requirements, and scaling patterns.",
-                status: "Next-Gen Intelligence",
-                color: "blue"
-              },
-              {
-                icon: <Shield className="h-8 w-8" />,
-                title: "Builder Agent", 
-                description: "Compiles, optimizes, and containerizes your applications. Handles multi-stage builds, dependency resolution, and performance optimization automatically.",
-                status: "Zero Configuration",
-                color: "purple"
-              },
-              {
-                icon: <Zap className="h-8 w-8" />,
-                title: "Tester Agent",
-                description: "Runs comprehensive testing suites including unit, integration, and security tests. Validates deployments with chaos engineering principles.",
-                status: "Autonomous Validation", 
-                color: "green"
-              },
-              {
-                icon: <Cloud className="h-8 w-8" />,
-                title: "Deployer Agent",
-                description: "Orchestrates multi-cloud deployments with intelligent resource allocation. Manages blue-green deployments, canary releases, and rollback strategies.",
-                status: "Multi-Cloud Native",
-                color: "orange"
-              },
-              {
-                icon: <Activity className="h-8 w-8" />,
-                title: "Monitor Agent", 
-                description: "Provides real-time observability with predictive analytics. Implements auto-healing, anomaly detection, and proactive incident response.",
-                status: "Self-Healing",
-                color: "red"
-              },
-              {
-                icon: <Workflow className="h-8 w-8" />,
-                title: "A2A Protocol",
-                description: "Advanced Agent-to-Agent communication protocol enabling seamless coordination, task delegation, and collaborative problem-solving between all agents.",
-                status: "Revolutionary",
-                color: "yellow"
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="group"
-              >
-                <Card className="bg-black/40 border border-white/10 hover:border-white/20 transition-all duration-500 h-full backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-blue-500/10">
-                  <CardContent className="p-6">
-                    <div className={`text-${feature.color}-400 mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      {feature.icon}
-                    </div>
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                      <Badge className={`text-xs bg-${feature.color}-500/20 text-${feature.color}-300 border-${feature.color}-400/30`}>
-                        {feature.status}
-                      </Badge>
-                    </div>
-                    <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Competition Section */}
-      <section id="competition" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <Badge className="mb-6 bg-gradient-to-r from-red-500/30 to-yellow-500/30 text-red-200 border-red-400/40">
-              <Target className="w-4 h-4 mr-2" />
-              Competitive Analysis • Why We Win
-            </Badge>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
-              Beyond the Competition
-            </h2>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              While StarSling and Monk.io offer basic automation, CAREERATE delivers true autonomous intelligence with multi-agent A2A communication.
-            </p>
-          </motion.div>
-
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {[
-              {
-                name: "StarSling (YC S25)",
-                description: "AI-powered Internal Developer Portal",
-                features: ["Unified dashboard", "One-click autofix", "Tool integration"],
-                limitations: ["Single-agent approach", "Manual oversight required", "Limited automation"],
-                color: "gray"
-              },
-              {
-                name: "Monk.io", 
-                description: "Autonomous AI DevOps platform",
-                features: ["VS Code integration", "Multi-cloud support", "Token-based pricing"],
-                limitations: ["Basic AI reasoning", "Human intervention needed", "Limited agent collaboration"],
-                color: "blue"
-              },
-              {
-                name: "CAREERATE",
-                description: "Truly Autonomous Multi-Agent DevOps",
-                features: ["5 specialized AI agents", "A2A communication protocol", "Vibe coding integration", "Complete autonomy"],
-                limitations: [""],
-                color: "purple"
-              }
-            ].map((platform, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                className={`relative ${index === 2 ? 'lg:scale-105' : ''}`}
-              >
-                <Card className={`${index === 2 ? 'bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-purple-400/30' : 'bg-black/40 border-white/10'} backdrop-blur-sm h-full`}>
-                  <CardContent className="p-6">
-                    {index === 2 && (
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold">
-                          <CheckCircle2 className="w-3 h-3 mr-1" />
-                          WINNER
-                        </Badge>
-                      </div>
-                    )}
-                    <h3 className="text-xl font-bold mb-2">{platform.name}</h3>
-                    <p className="text-gray-400 mb-4">{platform.description}</p>
-
-                    <div className="space-y-3">
-                      <div>
-                        <h4 className="text-green-400 font-semibold mb-2">✓ Features</h4>
-                        <ul className="space-y-1">
-                          {platform.features.map((feature, i) => (
-                            <li key={i} className="text-sm text-gray-300 flex items-center">
-                              <CheckCircle2 className="w-3 h-3 mr-2 text-green-400" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {platform.limitations[0] && (
-                        <div>
-                          <h4 className="text-red-400 font-semibold mb-2">✗ Limitations</h4>
-                          <ul className="space-y-1">
-                            {platform.limitations.map((limitation, i) => (
-                              <li key={i} className="text-sm text-gray-400">
-                                • {limitation}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-12 px-6 bg-gradient-to-br from-slate-950 to-black">
+      <footer className="border-t border-white/10 py-8 px-6 bg-slate-950/50">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <img src={careerateLogo} alt="CAREERATE" className="w-8 h-8 rounded-lg" />
-              <span className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
+              <img src={careerateLogo} alt="CAREERATE" className="w-6 h-6 rounded-lg" />
+              <span className="text-lg font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
             </div>
             <div className="text-gray-400 text-sm text-center md:text-right">
               © 2025 CAREERATE. The future of autonomous DevOps.
-              <br />
-              <span className="text-purple-400">Powered by A2A Protocol • Built for Vibe Coding</span>
-              <br />
-              <span className="text-blue-400 flex items-center justify-center md:justify-end gap-1 mt-2">
-                Made with <span className="text-blue-500 text-lg">💙</span> in Seattle in 2025
-              </span>
             </div>
           </div>
         </div>
