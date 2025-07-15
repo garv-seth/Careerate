@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GlassCard from "@/components/ui/glass-card";
+import { GlassButton } from "@/components/ui/glass-button";
+import { GradientText, AnimatedText } from "@/components/ui/animated-text";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -183,12 +186,16 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 text-white">
       {/* Header */}
-      <div className="border-b border-white/10 backdrop-blur-xl bg-white/5">
+      <div className="border-b border-white/10 backdrop-blur-xl bg-black/10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold">CAREERATE Dashboard</h1>
+            <GradientText 
+              text="CAREERATE Dashboard"
+              className="text-2xl font-bold"
+              gradient="from-blue-400 via-cyan-500 to-teal-400"
+            />
             <p className="text-gray-300">
               Welcome back, {user?.firstName || user?.email || 'User'}
             </p>
@@ -206,18 +213,18 @@ export default function Home() {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="bg-white/10 backdrop-blur-md">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="agents">AI Agents</TabsTrigger>
-            <TabsTrigger value="cloud">Cloud Resources</TabsTrigger>
-            <TabsTrigger value="workflows">Workflows</TabsTrigger>
-            <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          <TabsList className="bg-black/20 backdrop-blur-xl border-white/10">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Overview</TabsTrigger>
+            <TabsTrigger value="agents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">AI Agents</TabsTrigger>
+            <TabsTrigger value="cloud" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Cloud Resources</TabsTrigger>
+            <TabsTrigger value="workflows" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Workflows</TabsTrigger>
+            <TabsTrigger value="integrations" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300">Integrations</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -229,7 +236,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -241,19 +248,19 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-300 text-sm">Active Workflows</p>
                       <p className="text-2xl font-bold">{workflows.filter((w: any) => w.status === 'running').length}</p>
                     </div>
-                    <Activity className="h-8 w-8 text-purple-400" />
+                    <Activity className="h-8 w-8 text-blue-400" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -267,7 +274,7 @@ export default function Home() {
             </div>
 
             {/* Recent Activity */}
-            <Card className="bg-white/10 backdrop-blur-md border-white/20">
+            <Card className="bg-black/20 backdrop-blur-xl border-white/10">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Activity className="h-5 w-5" />
@@ -276,23 +283,23 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-black/10 rounded-lg">
                     <div className="flex items-center gap-3">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
                       <span>Deployment completed for Project Alpha</span>
                     </div>
                     <span className="text-gray-400 text-sm">2 minutes ago</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-black/10 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Bot className="h-4 w-4 text-blue-400" />
                       <span>Builder Agent started processing new repository</span>
                     </div>
                     <span className="text-gray-400 text-sm">5 minutes ago</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-black/10 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <Cloud className="h-4 w-4 text-purple-400" />
+                      <Cloud className="h-4 w-4 text-cyan-400" />
                       <span>AWS resources scaled automatically</span>
                     </div>
                     <span className="text-gray-400 text-sm">10 minutes ago</span>
@@ -310,7 +317,7 @@ export default function Home() {
                 </div>
               ) : (
                 agents.map((agent: any) => (
-                  <Card key={agent.id} className="bg-white/10 backdrop-blur-md border-white/20">
+                  <Card key={agent.id} className="bg-black/20 backdrop-blur-xl border-white/10">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="flex items-center gap-2">
@@ -349,7 +356,7 @@ export default function Home() {
           <TabsContent value="cloud" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* AWS */}
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Cloud className="h-5 w-5 text-orange-400" />
@@ -389,7 +396,7 @@ export default function Home() {
               </Card>
 
               {/* GCP */}
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Cloud className="h-5 w-5 text-blue-400" />
@@ -429,7 +436,7 @@ export default function Home() {
               </Card>
 
               {/* Azure */}
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Cloud className="h-5 w-5 text-cyan-400" />
@@ -477,7 +484,7 @@ export default function Home() {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
                 </div>
               ) : workflows.length === 0 ? (
-                <Card className="bg-white/10 backdrop-blur-md border-white/20">
+                <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                   <CardContent className="p-8 text-center">
                     <PlayCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold mb-2">No Active Workflows</h3>
@@ -489,7 +496,7 @@ export default function Home() {
                 </Card>
               ) : (
                 workflows.map((workflow: any) => (
-                  <Card key={workflow.id} className="bg-white/10 backdrop-blur-md border-white/20">
+                  <Card key={workflow.id} className="bg-black/20 backdrop-blur-xl border-white/10">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -522,13 +529,23 @@ export default function Home() {
           </TabsContent>
 
           <TabsContent value="integrations" className="space-y-6">
+            {/* Hero Glass Card for Repository */}
+            <div className="flex justify-center mb-8">
+              <GlassCard 
+                title="Vibe Repository"
+                description="Analyze and deploy GitHub repositories with AI-powered automation. Experience next-generation hosting with intelligent infrastructure management."
+                icon={GitBranch}
+                className="w-full max-w-md"
+              />
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* GitHub Integration */}
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <GitBranch className="h-5 w-5" />
-                    GitHub
+                    <GitBranch className="h-5 w-5 text-cyan-400" />
+                    <AnimatedText text="GitHub" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -539,59 +556,59 @@ export default function Home() {
                       placeholder="https://github.com/user/repo"
                       value={repositoryUrl}
                       onChange={(e) => setRepositoryUrl(e.target.value)}
-                      className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400"
+                      className="w-full px-3 py-2 bg-black/20 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none"
                     />
                     <div className="grid grid-cols-2 gap-2">
-                      <Button 
+                      <GlassButton 
                         onClick={handleAnalyzeRepository}
                         disabled={analyzeMutation.isPending}
                         size="sm"
                         variant="outline"
                       >
                         {analyzeMutation.isPending ? "Analyzing..." : "Analyze"}
-                      </Button>
-                      <Button 
+                      </GlassButton>
+                      <GlassButton 
                         onClick={handleDeployRepository}
                         disabled={deployMutation.isPending}
                         size="sm"
                       >
                         {deployMutation.isPending ? "Deploying..." : "Deploy"}
-                      </Button>
+                      </GlassButton>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* OpenAI Integration */}
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Bot className="h-5 w-5" />
-                    OpenAI
+                    <Bot className="h-5 w-5 text-blue-400" />
+                    <AnimatedText text="OpenAI" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 mb-4">AI-powered code analysis and optimization</p>
                   <Badge className="bg-green-500 text-white mb-4">Connected</Badge>
-                  <Button className="w-full" variant="outline">
+                  <GlassButton className="w-full" variant="outline">
                     Configure
-                  </Button>
+                  </GlassButton>
                 </CardContent>
               </Card>
 
               {/* Gmail Integration */}
-              <Card className="bg-white/10 backdrop-blur-md border-white/20">
+              <Card className="bg-black/20 backdrop-blur-xl border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Globe className="h-5 w-5" />
-                    Gmail
+                    <Globe className="h-5 w-5 text-teal-400" />
+                    <AnimatedText text="Gmail" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 mb-4">Automated deployment notifications and alerts</p>
-                  <Button className="w-full">
+                  <GlassButton className="w-full">
                     Connect Gmail
-                  </Button>
+                  </GlassButton>
                 </CardContent>
               </Card>
             </div>

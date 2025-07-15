@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ParticleTextEffect } from "@/components/ui/particle-text-effect";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import GlassCard from "@/components/ui/glass-card";
+import { 
+  AnimatedText, 
+  GlitchText, 
+  TypewriterText, 
+  GradientText, 
+  FloatingText 
+} from "@/components/ui/animated-text";
 import { ArrowRight, Bot, Zap, Shield, Cloud, GitBranch, Activity, Users, Globe, Menu, X, Brain, Cpu, Target, TrendingUp, CheckCircle2, Workflow } from "lucide-react";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -139,14 +146,32 @@ export default function LandingRedesigned() {
         </motion.div>
 
         <div className="relative z-10 text-center max-w-6xl mx-auto px-4">
-          {/* Particle Text Effect - Main Hero Element */}
+          {/* Dynamic Text - Main Hero Element */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="mb-8"
           >
-            <ParticleTextEffect words={["CAREERATE"]} />
+            <div className="text-center">
+              <h1 className="text-4xl md:text-6xl lg:text-8xl font-black mb-4">
+                <GlitchText 
+                  text="Introducing" 
+                  className="text-2xl md:text-3xl lg:text-4xl text-gray-400 font-light block mb-2"
+                />
+                <FloatingText 
+                  text="Vibe Hosting"
+                  className="bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent"
+                />
+              </h1>
+              <div className="text-lg md:text-xl lg:text-2xl text-gray-300 font-light">
+                <TypewriterText 
+                  text="Where AI agents orchestrate your infrastructure with precision and intelligence"
+                  speed={50}
+                  className="text-gray-400"
+                />
+              </div>
+            </div>
           </motion.div>
 
           {/* Subtitle */}
