@@ -141,7 +141,7 @@ export default function Landing() {
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
       {/* Floating Navigation Overlay - Always Visible */}
-      <header className="floating-navbar" style={{ position: 'fixed', zIndex: 9999 }}>
+      <header className="floating-navbar">
         <nav className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-3">
             <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
