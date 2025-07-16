@@ -35,7 +35,8 @@ import {
   BarChart3,
   Clock,
   ChevronDown,
-  Github
+  Github,
+  AlertTriangle
 } from "lucide-react";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -88,7 +89,7 @@ export default function Landing() {
       setMobileMenuOpen(false);
       
       // Update active section based on scroll position
-      const sections = ["hero", "competitive", "agents", "features", "integrations", "pricing"];
+      const sections = ["hero", "devops-comparison", "agents", "features", "integrations", "pricing"];
       const scrollPosition = window.scrollY + 100;
       
       for (const section of sections) {
@@ -133,11 +134,11 @@ export default function Landing() {
   ];
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white overflow-hidden">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
       
-      {/* Fixed Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
-        <nav className="flex items-center justify-between max-w-7xl mx-auto">
+      {/* Floating Navigation Overlay */}
+      <header className="floating-navbar">
+        <nav className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-3">
             <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
             <div>
@@ -148,25 +149,25 @@ export default function Landing() {
           
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-8">
-            <a href="#competitive" className={`transition-colors ${activeSection === 'competitive' ? 'text-blue-300' : 'text-gray-300 hover:text-white'}`}>
-              Why CAREERATE
+            <a href="#devops-comparison" className={`transition-colors ${activeSection === 'devops-comparison' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
+              DevOps Evolution
             </a>
-            <a href="#agents" className={`transition-colors ${activeSection === 'agents' ? 'text-blue-300' : 'text-gray-300 hover:text-white'}`}>
+            <a href="#agents" className={`transition-colors ${activeSection === 'agents' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
               AI Agents
             </a>
-            <a href="#features" className={`transition-colors ${activeSection === 'features' ? 'text-blue-300' : 'text-gray-300 hover:text-white'}`}>
+            <a href="#features" className={`transition-colors ${activeSection === 'features' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
               Features
             </a>
-            <a href="#integrations" className={`transition-colors ${activeSection === 'integrations' ? 'text-blue-300' : 'text-gray-300 hover:text-white'}`}>
+            <a href="#integrations" className={`transition-colors ${activeSection === 'integrations' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
               Integrations
             </a>
-            <a href="#pricing" className={`transition-colors ${activeSection === 'pricing' ? 'text-blue-300' : 'text-gray-300 hover:text-white'}`}>
+            <a href="#pricing" className={`transition-colors ${activeSection === 'pricing' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
               Pricing
             </a>
             <Button 
               onClick={handleStartTrial}
               disabled={isLoading}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white border-0"
+              className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white border-0 backdrop-blur-sm"
             >
               {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Start Free Trial'}
             </Button>
@@ -192,7 +193,7 @@ export default function Landing() {
             className="lg:hidden mt-4 bg-black/90 backdrop-blur-sm rounded-2xl border border-white/10 p-4"
           >
             <div className="flex flex-col space-y-4">
-              <a href="#competitive" className="hover:text-blue-300 transition-colors py-2">Why CAREERATE</a>
+              <a href="#devops-comparison" className="hover:text-blue-300 transition-colors py-2">DevOps Evolution</a>
               <a href="#agents" className="hover:text-blue-300 transition-colors py-2">AI Agents</a>
               <a href="#features" className="hover:text-blue-300 transition-colors py-2">Features</a>
               <a href="#integrations" className="hover:text-blue-300 transition-colors py-2">Integrations</a>
@@ -352,9 +353,9 @@ export default function Landing() {
         </motion.div>
       </motion.section>
 
-      {/* Competitive Advantage Section */}
-      <section id="competitive" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-400 to-transparent"></div>
+      {/* DevOps Evolution Section */}
+      <section id="devops-comparison" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -364,45 +365,52 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <Badge className="mb-6 bg-gradient-to-r from-red-500/30 to-yellow-500/30 text-red-200 border-red-400/40">
-              <Target className="w-4 h-4 mr-2" />
-              Competitive Analysis • Why We Lead
+            <Badge className="mb-6 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 text-blue-200 border-blue-400/40">
+              <Zap className="w-4 h-4 mr-2" />
+              DevOps Evolution • From Manual to Autonomous
             </Badge>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
-              Beyond StarSling & Monk.io
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
+              The DevOps Revolution
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              While others offer basic automation, CAREERATE delivers true autonomous intelligence with multi-agent A2A communication.
+              Traditional DevOps practices are being transformed by autonomous AI agents. 
+              See how CAREERATE moves beyond legacy approaches to deliver true operational intelligence.
             </p>
           </motion.div>
 
           <div className="grid lg:grid-cols-3 gap-8">
             {[
               {
-                name: "StarSling (YC W25)",
-                description: "AI-powered Internal Developer Portal",
-                features: ["Unified dashboard", "One-click autofix", "Tool integration", "Basic AI assistance"],
-                limitations: ["Single-agent approach", "Manual oversight required", "Limited automation", "Human intervention needed"],
-                score: "6/10",
-                color: "gray"
+                name: "Traditional DevOps",
+                description: "Manual processes with basic tooling",
+                approach: "Human-Driven Operations",
+                features: ["Manual deployment scripts", "Reactive monitoring", "Human incident response", "Static configurations", "Manual scaling decisions"],
+                challenges: ["High operational overhead", "Prone to human error", "Slow incident resolution", "Limited scalability", "24/7 human attention required"],
+                efficiency: "30%",
+                color: "red",
+                icon: <Server className="w-8 h-8" />
               },
               {
-                name: "Monk.io", 
-                description: "Autonomous AI DevOps platform",
-                features: ["VS Code integration", "Multi-cloud support", "Token-based pricing", "Basic automation"],
-                limitations: ["Basic AI reasoning", "Human intervention needed", "Limited agent collaboration", "No true autonomy"],
-                score: "7/10",
-                color: "blue"
+                name: "Modern DevOps", 
+                description: "Automated CI/CD with monitoring",
+                approach: "Tool-Assisted Operations",
+                features: ["Automated CI/CD pipelines", "Infrastructure as Code", "Monitoring dashboards", "Alert management", "Container orchestration"],
+                challenges: ["Still requires human intervention", "Alert fatigue", "Complex tool chains", "Manual optimization", "Reactive problem solving"],
+                efficiency: "65%",
+                color: "yellow",
+                icon: <Layers className="w-8 h-8" />
               },
               {
-                name: "CAREERATE",
-                description: "Truly Autonomous Multi-Agent DevOps",
-                features: ["5 specialized AI agents", "A2A communication protocol", "Complete autonomy", "Self-healing infrastructure", "Predictive optimization"],
-                limitations: ["None - Revolutionary technology"],
-                score: "10/10",
-                color: "purple"
+                name: "Autonomous DevOps",
+                description: "AI-driven autonomous operations",
+                approach: "Agent-Powered Intelligence",
+                features: ["Self-healing infrastructure", "Predictive scaling", "Autonomous deployment", "Intelligent monitoring", "Multi-agent collaboration", "Proactive optimization"],
+                challenges: ["Requires advanced AI training", "Initial setup complexity"],
+                efficiency: "95%",
+                color: "green",
+                icon: <Bot className="w-8 h-8" />
               }
-            ].map((platform, index) => (
+            ].map((approach, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 50 }}
@@ -411,35 +419,51 @@ export default function Landing() {
                 viewport={{ once: true }}
                 className={`relative ${index === 2 ? 'lg:scale-105' : ''}`}
               >
-                <Card className={`${index === 2 ? 'bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-purple-400/30' : 'bg-black/40 border-white/10'} backdrop-blur-sm h-full`}>
+                <Card className={`${index === 2 ? 'bg-gradient-to-br from-green-900/40 to-blue-900/40 border-green-400/30' : index === 1 ? 'bg-gradient-to-br from-yellow-900/20 to-orange-900/20 border-yellow-400/20' : 'bg-gradient-to-br from-red-900/20 to-gray-900/20 border-red-400/20'} backdrop-blur-sm h-full`}>
                   <CardContent className="p-6">
                     {index === 2 && (
                       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold">
+                        <Badge className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold">
                           <Star className="w-3 h-3 mr-1" />
-                          WINNER
+                          FUTURE OF DEVOPS
                         </Badge>
                       </div>
                     )}
-                    <h3 className="text-xl font-bold mb-2">{platform.name}</h3>
-                    <p className="text-gray-400 mb-4">{platform.description}</p>
+                    
+                    <div className="flex items-center mb-4">
+                      <div className={`${index === 2 ? 'text-green-400' : index === 1 ? 'text-yellow-400' : 'text-red-400'} mr-3`}>
+                        {approach.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold">{approach.name}</h3>
+                        <p className="text-sm text-gray-400">{approach.approach}</p>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-300 mb-4">{approach.description}</p>
                     
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium">Overall Score</span>
-                        <span className={`font-bold ${index === 2 ? 'text-green-400' : 'text-yellow-400'}`}>
-                          {platform.score}
+                        <span className="text-sm font-medium">Operational Efficiency</span>
+                        <span className={`font-bold ${index === 2 ? 'text-green-400' : index === 1 ? 'text-yellow-400' : 'text-red-400'}`}>
+                          {approach.efficiency}
                         </span>
+                      </div>
+                      <div className="w-full bg-gray-700/50 rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full ${index === 2 ? 'bg-gradient-to-r from-green-500 to-blue-500' : index === 1 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' : 'bg-gradient-to-r from-red-500 to-gray-500'}`}
+                          style={{ width: approach.efficiency }}
+                        ></div>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
                       <div>
-                        <h4 className="text-green-400 font-semibold mb-2">✓ Features</h4>
+                        <h4 className="text-green-400 font-semibold mb-2">✓ Capabilities</h4>
                         <ul className="space-y-1">
-                          {platform.features.map((feature, i) => (
-                            <li key={i} className="text-sm text-gray-300 flex items-center">
-                              <CheckCircle2 className="w-3 h-3 mr-2 text-green-400 flex-shrink-0" />
+                          {approach.features.map((feature, i) => (
+                            <li key={i} className="text-sm text-gray-300 flex items-start">
+                              <CheckCircle2 className="w-3 h-3 mr-2 text-green-400 flex-shrink-0 mt-0.5" />
                               {feature}
                             </li>
                           ))}
@@ -447,11 +471,12 @@ export default function Landing() {
                       </div>
                       
                       <div>
-                        <h4 className="text-red-400 font-semibold mb-2">✗ Limitations</h4>
+                        <h4 className="text-orange-400 font-semibold mb-2">⚠ Challenges</h4>
                         <ul className="space-y-1">
-                          {platform.limitations.map((limitation, i) => (
-                            <li key={i} className="text-sm text-gray-400">
-                              • {limitation}
+                          {approach.challenges.map((challenge, i) => (
+                            <li key={i} className="text-sm text-gray-400 flex items-start">
+                              <AlertTriangle className="w-3 h-3 mr-2 text-orange-400 flex-shrink-0 mt-0.5" />
+                              {challenge}
                             </li>
                           ))}
                         </ul>
@@ -462,6 +487,19 @@ export default function Landing() {
               </motion.div>
             ))}
           </div>
+
+          {/* Subtle competitor mention */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mt-16"
+          >
+            <p className="text-sm text-gray-500 max-w-2xl mx-auto">
+              While some platforms offer basic automation, CAREERATE represents the first truly autonomous DevOps solution with multi-agent intelligence—going beyond traditional tooling to deliver self-managing infrastructure.
+            </p>
+          </motion.div>
         </div>
       </section>
 
