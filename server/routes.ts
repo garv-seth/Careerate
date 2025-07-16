@@ -6,10 +6,14 @@ import { z } from "zod";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { aiOrchestrator } from "./agents/ai-orchestrator";
 import { infrastructureOrchestrator } from "./infrastructure/cloud-providers";
+import authRoutes from "./auth/auth-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup Replit Authentication
   await setupAuth(app);
+
+  // OAuth Authentication routes
+  app.use('/api', authRoutes);
 
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {

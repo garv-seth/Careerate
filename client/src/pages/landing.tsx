@@ -60,12 +60,19 @@ export default function Landing() {
     window.location.href = `/api/auth/${provider}`;
   };
 
-  const handleNavigation = () => {
+  const handleStartTrial = () => {
     if (isAuthenticated) {
       window.location.href = '/dashboard';
     } else {
-      window.location.href = '/api/login';
+      // Start with GitHub as it's most common for developers
+      handleOAuthLogin('github');
     }
+  };
+
+  const handleWatchDemo = () => {
+    // Open YouTube demo in picture-in-picture mode
+    const videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Placeholder - replace with actual demo video
+    window.open(videoUrl, '_blank', 'width=800,height=600');
   };
 
   // Close mobile menu when scrolling
@@ -99,19 +106,19 @@ export default function Landing() {
 
   const testimonials = [
     {
-      quote: "CAREERATE's A2A protocol revolutionized our deployment pipeline. True autonomous infrastructure.",
+      quote: "CAREERATE's vibe hosting approach completely transformed our deployment workflow. The agent coordination is seamless.",
       author: "Sarah Chen",
       role: "CTO, TechFlow Inc",
       avatar: "🚀"
     },
     {
-      quote: "Beyond anything StarSling or Monk.io offers. The agent collaboration is unprecedented.",
+      quote: "The autonomous DevOps agents work incredibly well together. Our deployments are faster and more reliable than ever.",
       author: "Marcus Rodriguez", 
       role: "DevOps Lead, CloudScale",
       avatar: "⚡"
     },
     {
-      quote: "Reduced our infrastructure costs by 78% while improving reliability. Game changer.",
+      quote: "Reduced our infrastructure costs by 78% while improving reliability. The SRE agents are game-changing.",
       author: "Emily Watson",
       role: "Engineering Director, DataCorp",
       avatar: "🎯"
@@ -150,11 +157,11 @@ export default function Landing() {
               Pricing
             </a>
             <Button 
-              onClick={handleNavigation}
+              onClick={handleStartTrial}
               disabled={isLoading}
               className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white border-0"
             >
-              {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
+              {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Start Free Trial'}
             </Button>
           </div>
 
@@ -184,11 +191,11 @@ export default function Landing() {
               <a href="#integrations" className="hover:text-blue-300 transition-colors py-2">Integrations</a>
               <a href="#pricing" className="hover:text-blue-300 transition-colors py-2">Pricing</a>
               <Button 
-                onClick={handleNavigation}
+                onClick={handleStartTrial}
                 disabled={isLoading}
                 className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white mt-4"
               >
-                {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Get Started'}
+                {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Start Free Trial'}
               </Button>
             </div>
           </motion.div>
@@ -212,33 +219,31 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <Badge className="mb-6 bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-blue-200 border-blue-400/40 backdrop-blur-sm">
+            <Badge className="mb-6 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 text-blue-200 border-blue-400/40 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 mr-2" />
-              Introducing A2A Protocol • Next-Gen Autonomous DevOps • 2025
+              Introducing Vibe Hosting • 2025
             </Badge>
             
             <motion.h1 
-              className="text-5xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent"
+              className="text-5xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
             >
-              AUTONOMOUS
+              INTRODUCING
               <br />
-              <span className="text-4xl md:text-6xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                DEVOPS PLATFORM
+              <span className="text-4xl md:text-6xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                VIBE HOSTING
               </span>
             </motion.h1>
             
             <motion.p 
-              className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              The world's first truly autonomous DevOps platform powered by 
-              <span className="text-blue-300 font-semibold"> 5 specialized AI agents</span> that communicate through our proprietary 
-              <span className="text-purple-300 font-semibold"> A2A protocol</span>. Deploy, scale, and monitor without human intervention.
+              with DevOps and SRE Agents
             </motion.p>
             
             <motion.div 
@@ -248,16 +253,16 @@ export default function Landing() {
               transition={{ delay: 0.8, duration: 0.6 }}
             >
               <Button 
-                onClick={handleNavigation}
+                onClick={handleStartTrial}
                 disabled={isLoading}
                 size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg group"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 text-lg group"
               >
                 <Rocket className="mr-2 h-5 w-5 group-hover:animate-pulse" />
                 {isLoading ? 'Loading...' : isAuthenticated ? 'Go to Dashboard' : 'Start Free Trial'}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg backdrop-blur-sm">
+              <Button onClick={handleWatchDemo} variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg backdrop-blur-sm">
                 <Brain className="mr-2 h-5 w-5" />
                 Watch Demo
               </Button>
@@ -857,18 +862,18 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button 
-                onClick={handleNavigation}
+                onClick={handleStartTrial}
                 disabled={isLoading}
                 size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-4 text-lg group"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-10 py-4 text-lg group"
               >
                 <Rocket className="mr-2 h-5 w-5 group-hover:animate-pulse" />
                 {isLoading ? 'Loading...' : isAuthenticated ? 'Go to Dashboard' : 'Start Free Trial'}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-10 py-4 text-lg backdrop-blur-sm">
+              <Button onClick={handleWatchDemo} variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-10 py-4 text-lg backdrop-blur-sm">
                 <Brain className="mr-2 h-5 w-5" />
-                Book Demo
+                Watch Demo
               </Button>
             </div>
           </motion.div>
