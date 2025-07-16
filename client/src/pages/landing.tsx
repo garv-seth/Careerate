@@ -34,9 +34,9 @@ import {
   Lock,
   BarChart3,
   Clock,
-  ChevronDown
+  ChevronDown,
+  Github
 } from "lucide-react";
-import { Cloud, Github } from "lucide-react";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
