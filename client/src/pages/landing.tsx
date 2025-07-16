@@ -57,7 +57,7 @@ export default function Landing() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.2], ["0%", "10%"]);
 
-  
+
 
   const handleOAuthLogin = (provider: string) => {
     window.location.href = `/api/auth/${provider}`;
