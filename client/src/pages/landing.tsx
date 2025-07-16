@@ -36,7 +36,7 @@ import {
   Clock,
   ChevronDown
 } from "lucide-react";
-import { SiAws, SiMicrosoft, SiGoogle, SiGithub, SiTerraform, SiKubernetes, SiDocker } from "react-icons/si";
+import { SiAmazonaws, SiMicrosoft, SiGoogle, SiGithub, SiTerraform, SiKubernetes, SiDocker } from "react-icons/si";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -301,7 +301,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-orange-400/40 text-orange-300 hover:bg-orange-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <SiAws className="h-4 w-4" />
+                <SiAmazonaws className="h-4 w-4" />
                 AWS
               </Button>
               <Button
@@ -689,7 +689,7 @@ export default function Landing() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
             {[
-              { icon: <SiAws className="h-8 w-8" />, name: "AWS", color: "text-orange-400" },
+              { icon: <SiAmazonaws className="h-8 w-8" />, name: "AWS", color: "text-orange-400" },
               { icon: <SiGoogle className="h-8 w-8" />, name: "GCP", color: "text-blue-400" },
               { icon: <SiMicrosoft className="h-8 w-8" />, name: "Azure", color: "text-blue-300" },
               { icon: <SiGithub className="h-8 w-8" />, name: "GitHub", color: "text-white" },
