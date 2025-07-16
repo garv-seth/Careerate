@@ -36,7 +36,7 @@ import {
   Clock,
   ChevronDown
 } from "lucide-react";
-import { SiAmazonwebservices, SiMicrosoftazure, SiGooglecloud, SiGithub, SiTerraform, SiKubernetes, SiDocker } from "react-icons/si";
+import { Cloud, Github } from "lucide-react";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -293,7 +293,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-blue-400/40 text-blue-300 hover:bg-blue-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <SiMicrosoftazure className="h-4 w-4" />
+                <Cloud className="h-4 w-4" />
                 Azure
               </Button>
               <Button
@@ -301,7 +301,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-orange-400/40 text-orange-300 hover:bg-orange-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <SiAmazonwebservices className="h-4 w-4" />
+                <Cloud className="h-4 w-4" />
                 AWS
               </Button>
               <Button
@@ -309,7 +309,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-green-400/40 text-green-300 hover:bg-green-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <SiGooglecloud className="h-4 w-4" />
+                <Cloud className="h-4 w-4" />
                 GCP
               </Button>
               <Button
@@ -317,7 +317,7 @@ export default function Landing() {
                 variant="outline"
                 className="flex items-center gap-2 border-purple-400/40 text-purple-300 hover:bg-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
               >
-                <SiGithub className="h-4 w-4" />
+                <Github className="h-4 w-4" />
                 GitHub
               </Button>
             </motion.div>
@@ -689,13 +689,13 @@ export default function Landing() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
             {[
-              { icon: <SiAmazonwebservices className="h-8 w-8" />, name: "AWS", color: "text-orange-400" },
-              { icon: <SiGooglecloud className="h-8 w-8" />, name: "GCP", color: "text-blue-400" },
-              { icon: <SiMicrosoftazure className="h-8 w-8" />, name: "Azure", color: "text-blue-300" },
-              { icon: <SiGithub className="h-8 w-8" />, name: "GitHub", color: "text-white" },
-              { icon: <SiKubernetes className="h-8 w-8" />, name: "Kubernetes", color: "text-blue-500" },
-              { icon: <SiTerraform className="h-8 w-8" />, name: "Terraform", color: "text-purple-400" },
-              { icon: <SiDocker className="h-8 w-8" />, name: "Docker", color: "text-blue-400" },
+              { icon: <Cloud className="h-8 w-8" />, name: "AWS", color: "text-orange-400" },
+              { icon: <Cloud className="h-8 w-8" />, name: "GCP", color: "text-blue-400" },
+              { icon: <Cloud className="h-8 w-8" />, name: "Azure", color: "text-blue-300" },
+              { icon: <Github className="h-8 w-8" />, name: "GitHub", color: "text-white" },
+              { icon: <Layers className="h-8 w-8" />, name: "Kubernetes", color: "text-blue-500" },
+              { icon: <Code className="h-8 w-8" />, name: "Terraform", color: "text-purple-400" },
+              { icon: <Server className="h-8 w-8" />, name: "Docker", color: "text-blue-400" },
               { icon: <Monitor className="h-8 w-8" />, name: "Datadog", color: "text-purple-500" }
             ].map((integration, index) => (
               <motion.div
