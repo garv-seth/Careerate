@@ -136,8 +136,8 @@ export default function Landing() {
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
       
-      {/* Floating Navigation Overlay */}
-      <header className="floating-navbar">
+      {/* Floating Navigation Overlay - Always Visible */}
+      <header className="floating-navbar" style={{ position: 'fixed', zIndex: 9999 }}>
         <nav className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-3">
             <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
@@ -213,8 +213,8 @@ export default function Landing() {
       {/* Hero Section */}
       <motion.section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center pt-20"
-        style={{ y: heroY, opacity: heroOpacity }}
+        className="relative min-h-screen flex items-center justify-center pt-32"
+        style={{ y: heroY, opacity: heroOpacity, paddingTop: '120px' }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
         
@@ -354,7 +354,7 @@ export default function Landing() {
       </motion.section>
 
       {/* DevOps Evolution Section */}
-      <section id="devops-comparison" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90">
+      <section id="devops-comparison" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90" style={{ paddingTop: '8rem' }}>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto">
@@ -504,7 +504,7 @@ export default function Landing() {
       </section>
 
       {/* AI Agents Section */}
-      <section id="agents" className="py-32 px-6 bg-gradient-to-br from-indigo-950/70 to-purple-950/70">
+      <section id="agents" className="py-32 px-6 bg-gradient-to-br from-indigo-950/70 to-purple-950/70" style={{ paddingTop: '8rem' }}>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto">
@@ -650,7 +650,7 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-32 px-6 bg-gradient-to-br from-slate-950/80 to-indigo-950/80">
+      <section id="features" className="py-32 px-6 bg-gradient-to-br from-slate-950/80 to-indigo-950/80" style={{ paddingTop: '8rem' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -720,7 +720,7 @@ export default function Landing() {
       </section>
 
       {/* Integrations Section */}
-      <section id="integrations" className="py-32 px-6 bg-gradient-to-br from-indigo-950/60 to-slate-950/60">
+      <section id="integrations" className="py-32 px-6 bg-gradient-to-br from-indigo-950/60 to-slate-950/60" style={{ paddingTop: '8rem' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -766,7 +766,7 @@ export default function Landing() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-32 px-6 bg-gradient-to-br from-slate-950/90 to-purple-950/90">
+      <section className="py-32 px-6 bg-gradient-to-br from-slate-950/90 to-purple-950/90" style={{ paddingTop: '8rem' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -803,7 +803,7 @@ export default function Landing() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-32 px-6 bg-gradient-to-br from-indigo-950/80 to-slate-950/80">
+      <section id="pricing" className="py-32 px-6 bg-gradient-to-br from-indigo-950/80 to-slate-950/80" style={{ paddingTop: '8rem' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
