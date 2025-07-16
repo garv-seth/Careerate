@@ -37,7 +37,7 @@ import {
   Github,
   AlertTriangle
 } from "lucide-react";
-import { SiMicrosoft } from "react-icons/si";
+
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -215,7 +215,7 @@ export default function Landing() {
       <motion.section 
         id="hero"
         className="relative min-h-screen flex items-center justify-center"
-        style={{ y: heroY, opacity: heroOpacity, paddingTop: '120px' }}
+        style={{ y: heroY, opacity: heroOpacity, paddingTop: '80px' }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
 
