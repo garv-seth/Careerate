@@ -21,9 +21,9 @@ export default function LandingRedesigned() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
-      {/* Fixed Navigation Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
-        <nav className="max-w-7xl mx-auto px-6 py-4">
+      {/* Floating Navigation Bar */}
+      <header className="fixed top-4 left-4 right-4 z-50">
+        <nav className="max-w-7xl mx-auto backdrop-blur-xl bg-slate-950/20 border border-white/20 rounded-2xl px-6 py-4 shadow-2xl"
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3">
@@ -71,7 +71,7 @@ export default function LandingRedesigned() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-slate-950/95 backdrop-blur-xl border-b border-white/10 px-6 py-4"
+            className="md:hidden mt-4 bg-slate-950/90 backdrop-blur-xl border border-white/20 rounded-xl px-6 py-4 shadow-xl"
           >
             <div className="space-y-4">
               <a href="#features" className="block text-gray-300 hover:text-white transition-colors py-2">
@@ -96,7 +96,7 @@ export default function LandingRedesigned() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20">
+      <section className="relative min-h-screen flex items-center justify-center pt-4">
         <div className="text-center max-w-4xl mx-auto px-6">
 
           {/* Main Hero Text with Morphing Effect */}
