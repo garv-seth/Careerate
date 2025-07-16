@@ -15,12 +15,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // OAuth Authentication routes
   app.use('/api', authRoutes);
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // Simple demo login route for development
+  app.get('/api/login', async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      // Create a demo user for development
+      const demoUser = {
+        id: 'demo-user-123',
+        username: 'demo-user',
+        name: 'Demo Developer',
+        email: 'demo@careerate.dev',
+        provider: 'demo'
+      };
+      
+      // Store user session
+      req.session = req.session || {};
+      (req.session as any).user = demoUser;
+      (req.session as any).isAuthenticated = true;
+      
+      // Upsert demo user to storage
+      await storage.upsertUser({
+        id: demoUser.id,
+        firstName: 'Demo',
+        lastName: 'Developer',
+        email: demoUser.email,
+        profileImageUrl: null
+      });
+      
+      res.redirect('/dashboard');
+    } catch (error) {
+      console.error('Demo login error:', error);
+      res.status(500).json({ error: 'Demo login failed' });
+    }
+  });
+
+  // Logout route
+  app.post('/api/logout', async (req, res) => {
+    try {
+      req.session?.destroy((err) => {
+        if (err) {
+          console.error('Logout error:', err);
+          return res.status(500).json({ error: 'Failed to logout' });
+        }
+        res.json({ message: 'Logged out successfully' });
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      res.status(500).json({ error: 'Failed to logout' });
+    }
+  });
+
+  // Auth routes
+  app.get('/api/auth/user', async (req: any, res) => {
+    try {
+      const session = req.session as any;
+      if (session?.isAuthenticated && session?.user) {
+        res.json(session.user);
+      } else {
+        res.status(401).json({ error: "Not authenticated" });
+      }
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });

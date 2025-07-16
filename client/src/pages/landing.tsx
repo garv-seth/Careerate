@@ -64,8 +64,15 @@ export default function Landing() {
     if (isAuthenticated) {
       window.location.href = '/dashboard';
     } else {
-      // Start with GitHub as it's most common for developers
-      handleOAuthLogin('github');
+      // For demo purposes, simulate authentication by setting localStorage
+      localStorage.setItem('demo_auth', 'true');
+      localStorage.setItem('demo_user', JSON.stringify({
+        id: 'demo-user-123',
+        username: 'demo-user',
+        name: 'Demo Developer',
+        email: 'demo@careerate.dev'
+      }));
+      window.location.href = '/dashboard';
     }
   };
 

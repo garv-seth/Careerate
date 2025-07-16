@@ -6,9 +6,22 @@ export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Single auth check on mount
+    // Check for demo authentication first
     const checkAuth = async () => {
       try {
+        // Check localStorage for demo auth
+        const demoAuth = localStorage.getItem('demo_auth');
+        const demoUser = localStorage.getItem('demo_user');
+        
+        if (demoAuth === 'true' && demoUser) {
+          const userData = JSON.parse(demoUser);
+          setUser(userData);
+          setIsAuthenticated(true);
+          setIsLoading(false);
+          return;
+        }
+
+        // Fallback to server auth check
         const response = await fetch('/api/auth/user', {
           credentials: 'include',
         });
@@ -33,9 +46,36 @@ export function useAuth() {
     checkAuth();
   }, []); // Only run once on mount
 
+  const logout = async () => {
+    try {
+      // Clear demo auth from localStorage
+      localStorage.removeItem('demo_auth');
+      localStorage.removeItem('demo_user');
+      
+      // Also try to logout from server
+      await fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      
+      setUser(null);
+      setIsAuthenticated(false);
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Force logout on frontend even if backend fails
+      localStorage.removeItem('demo_auth');
+      localStorage.removeItem('demo_user');
+      setUser(null);
+      setIsAuthenticated(false);
+      window.location.href = '/';
+    }
+  };
+
   return {
     user,
     isLoading,
     isAuthenticated,
+    logout,
   };
 }

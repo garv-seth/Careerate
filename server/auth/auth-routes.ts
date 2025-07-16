@@ -48,11 +48,15 @@ router.get("/auth/azure/callback", async (req, res) => {
 // GitHub OAuth Routes
 router.get("/auth/github", (req, res) => {
   const clientId = process.env.GITHUB_CLIENT_ID;
-  const redirectUri = process.env.GITHUB_REDIRECT_URI;
   
-  if (!clientId || !redirectUri) {
+  if (!clientId) {
     return res.status(500).json({ error: "GitHub authentication not configured" });
   }
+
+  // Use the current domain for redirect URI
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  const host = req.headers.host;
+  const redirectUri = `${protocol}://${host}/api/auth/github/callback`;
 
   const authUrl = `https://github.com/login/oauth/authorize?` +
     `client_id=${clientId}&` +
