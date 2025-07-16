@@ -1,4 +1,3 @@
-
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -38,6 +37,7 @@ import {
   Github,
   AlertTriangle
 } from "lucide-react";
+import { SiMicrosoft } from "react-icons/si";
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -46,7 +46,7 @@ export default function Landing() {
   const [activeSection, setActiveSection] = useState("hero");
   const { user, isAuthenticated, isLoading } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -56,6 +56,10 @@ export default function Landing() {
   const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-50%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.2], ["0%", "10%"]);
+
+  const handleNavigation = (path: string) => {
+    window.location.href = path;
+  };
 
   const handleOAuthLogin = (provider: string) => {
     window.location.href = `/api/auth/${provider}`;
@@ -87,11 +91,11 @@ export default function Landing() {
   useEffect(() => {
     const handleScroll = () => {
       setMobileMenuOpen(false);
-      
+
       // Update active section based on scroll position
       const sections = ["hero", "devops-comparison", "agents", "features", "integrations", "pricing"];
       const scrollPosition = window.scrollY + 100;
-      
+
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element && scrollPosition >= element.offsetTop && scrollPosition < element.offsetTop + element.offsetHeight) {
@@ -100,7 +104,7 @@ export default function Landing() {
         }
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -135,7 +139,7 @@ export default function Landing() {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-      
+
       {/* Floating Navigation Overlay - Always Visible */}
       <header className="floating-navbar" style={{ position: 'fixed', zIndex: 9999 }}>
         <nav className="flex items-center justify-between px-6 py-4">
@@ -146,7 +150,7 @@ export default function Landing() {
               <p className="text-xs text-blue-300">autonomous devops platform</p>
             </div>
           </div>
-          
+
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-8">
             <a href="#devops-comparison" className={`transition-colors ${activeSection === 'devops-comparison' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
@@ -217,7 +221,7 @@ export default function Landing() {
         style={{ y: heroY, opacity: heroOpacity, paddingTop: '120px' }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
-        
+
         <motion.div 
           className="relative z-20 text-center max-w-6xl mx-auto px-6"
           style={{ y: contentY }}
@@ -231,7 +235,7 @@ export default function Landing() {
               <Sparkles className="w-4 h-4 mr-2" />
               Introducing Vibe Hosting • 2025
             </Badge>
-            
+
             <motion.h1 
               className="text-5xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent"
               initial={{ scale: 0.9 }}
@@ -244,7 +248,7 @@ export default function Landing() {
                 VIBE HOSTING
               </span>
             </motion.h1>
-            
+
             <motion.p 
               className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
@@ -253,7 +257,7 @@ export default function Landing() {
             >
               with DevOps and SRE Agents
             </motion.p>
-            
+
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
               initial={{ opacity: 0, y: 20 }}
@@ -356,7 +360,7 @@ export default function Landing() {
       {/* DevOps Evolution Section */}
       <section id="devops-comparison" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90" style={{ paddingTop: '8rem' }}>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
-        
+
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -429,7 +433,7 @@ export default function Landing() {
                         </Badge>
                       </div>
                     )}
-                    
+
                     <div className="flex items-center mb-4">
                       <div className={`${index === 2 ? 'text-green-400' : index === 1 ? 'text-yellow-400' : 'text-red-400'} mr-3`}>
                         {approach.icon}
@@ -439,9 +443,9 @@ export default function Landing() {
                         <p className="text-sm text-gray-400">{approach.approach}</p>
                       </div>
                     </div>
-                    
+
                     <p className="text-gray-300 mb-4">{approach.description}</p>
-                    
+
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium">Operational Efficiency</span>
@@ -456,7 +460,7 @@ export default function Landing() {
                         ></div>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div>
                         <h4 className="text-green-400 font-semibold mb-2">✓ Capabilities</h4>
@@ -469,7 +473,7 @@ export default function Landing() {
                           ))}
                         </ul>
                       </div>
-                      
+
                       <div>
                         <h4 className="text-orange-400 font-semibold mb-2">⚠ Challenges</h4>
                         <ul className="space-y-1">
@@ -506,7 +510,7 @@ export default function Landing() {
       {/* AI Agents Section */}
       <section id="agents" className="py-32 px-6 bg-gradient-to-br from-indigo-950/70 to-purple-950/70" style={{ paddingTop: '8rem' }}>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent"></div>
-        
+
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -596,7 +600,7 @@ export default function Landing() {
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">{agent.title}</h3>
                     <p className="text-gray-300 leading-relaxed mb-4">{agent.description}</p>
-                    
+
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-400">Status</span>
@@ -941,7 +945,7 @@ export default function Landing() {
                 Made with 💙 in Seattle in 2025
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-gray-400">
@@ -951,7 +955,7 @@ export default function Landing() {
                 <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
@@ -961,7 +965,7 @@ export default function Landing() {
                 <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-gray-400">
@@ -972,7 +976,7 @@ export default function Landing() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-white/10 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="text-gray-400 text-sm">
