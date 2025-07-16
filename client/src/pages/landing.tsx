@@ -19,8 +19,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-
+    <>
       {/* Floating Navigation Bar - True Overlay */}
       <header className="fixed top-4 left-4 right-4 z-[9999] pointer-events-none">
         <nav className="max-w-7xl mx-auto backdrop-blur-xl bg-slate-950/20 border border-white/20 rounded-2xl px-6 py-4 shadow-2xl pointer-events-auto">
@@ -95,7 +94,9 @@ export default function Landing() {
         )}
       </header>
 
-      {/* Hero Section */}
+      {/* Main Page Content */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
+        {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center">
         <div className="text-center max-w-4xl mx-auto px-6">
 
@@ -133,6 +134,8 @@ export default function Landing() {
         </div>
       </section>
 
+      </div>
+
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 px-6 bg-slate-950/50">
         <div className="max-w-7xl mx-auto">
@@ -147,6 +150,6 @@ export default function Landing() {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
