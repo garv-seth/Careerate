@@ -23,7 +23,7 @@ export default function LandingRedesigned() {
 
       {/* Floating Navigation Bar */}
       <header className="fixed top-4 left-4 right-4 z-50">
-        <nav className="max-w-7xl mx-auto backdrop-blur-xl bg-slate-950/20 border border-white/20 rounded-2xl px-6 py-4 shadow-2xl"
+        <nav className="max-w-7xl mx-auto backdrop-blur-xl bg-slate-950/20 border border-white/20 rounded-2xl px-6 py-4 shadow-2xl">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-3">
