@@ -68,7 +68,7 @@ html {
   top: 16px !important;
   left: 16px !important;
   right: 16px !important;
-  z-index: 9999 !important;
+  z-index: 99999 !important;
   backdrop-filter: blur(24px) !important;
   -webkit-backdrop-filter: blur(24px) !important;
   background: linear-gradient(
@@ -107,7 +107,14 @@ html {
 /* Ensure navbar stays on top of all content */
 .floating-navbar * {
   position: relative !important;
-  z-index: 10000 !important;
+  z-index: 100000 !important;
+}
+
+/* Force navbar to always be visible */
+.floating-navbar {
+  visibility: visible !important;
+  display: block !important;
+  opacity: 1 !important;
 }
 
 /* Ensure body content doesn't interfere with fixed navbar */
