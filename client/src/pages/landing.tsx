@@ -145,7 +145,6 @@ export default function Landing() {
             <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
             <div>
               <span className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
-              <p className="text-xs text-blue-300">autonomous devops platform</p>
             </div>
           </div>
 

@@ -1,3 +1,6 @@
+The navbar is updated to be fixed at the top, and related styling adjusted.
+```
+```replit_final_file
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,7 +31,7 @@
   --glass-light: hsla(0, 0%, 100%, 0.1);
   --glass-medium: hsla(0, 0%, 100%, 0.2);
   --glass-dark: hsla(0, 0%, 0%, 0.2);
-  
+
   /* Enhanced Glass Effects */
   --glass-bg-light: hsla(255, 255, 255, 0.05);
   --glass-bg-medium: hsla(255, 255, 255, 0.1);
@@ -63,6 +66,17 @@ html {
 }
 
 /* Floating Navbar Styles */
+.floating-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .floating-navbar {
   position: fixed !important;
   top: 16px !important;
