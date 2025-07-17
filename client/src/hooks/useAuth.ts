@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 
 export function useAuth() {
   const [user, setUser] = useState(null);
@@ -72,10 +72,59 @@ export function useAuth() {
     }
   };
 
+  const login = () => {
+    // Demo login for development
+    const demoUser = {
+      id: 'demo-user-123',
+      username: 'demo-user',
+      name: 'Demo Developer', 
+      email: 'demo@careerate.dev',
+      provider: 'demo'
+    };
+    
+    localStorage.setItem('demo_auth', 'true');
+    localStorage.setItem('demo_user', JSON.stringify(demoUser));
+    setUser(demoUser);
+    setIsAuthenticated(true);
+    window.location.href = '/dashboard';
+  };
+
   return {
     user,
     isLoading,
     isAuthenticated,
     logout,
+    login,
   };
+}
+
+// Create Auth Context
+interface AuthContextType {
+  user: any;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  logout: () => void;
+  login: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// AuthProvider component
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const auth = useAuth();
+  
+  return (
+    <AuthContext.Provider value={auth}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+// Hook to use auth context
+export function useAuthContext() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuthContext must be used within an AuthProvider');
+  }
+  return context;
 }
