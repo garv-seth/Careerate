@@ -63,42 +63,34 @@ html {
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
-/* Floating Navbar Styles */
-.floating-navbar {
+/* Fixed Navbar Styles */
+.fixed-navbar {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 99999 !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  background: linear-gradient(162deg, rgba(15, 14, 12, 0.4) 0%, rgba(15, 14, 12, 0.59) 82%) !important;
-  width: 100% !important;
-  border-radius: 0 !important;
+  z-index: 9999 !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   transform: translateZ(0) !important;
-  will-change: transform !important;
+  will-change: transform, background-color !important;
   pointer-events: auto !important;
 }
 
-.floating-navbar:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.7) 50%,
-    rgba(0, 0, 0, 0.6) 100%
-  ) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  box-shadow: 
-    0 12px 48px 0 rgba(0, 0, 0, 0.7),
-    0 8px 24px 0 rgba(59, 130, 246, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+/* Ensure all content is properly spaced below fixed navbar */
+.page-content {
+  padding-top: 4rem; /* 64px to account for navbar height */
 }
 
-/* Ensure navbar stays on top of all content */
-.floating-navbar * {
-  position: relative !important;
-  z-index: 100000 !important;
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure sections are properly positioned for anchor links */
+section[id] {
+  scroll-margin-top: 4rem;
 }
 
 /* Force navbar to always be visible */

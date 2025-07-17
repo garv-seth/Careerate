@@ -1,60 +1,39 @@
+import { Router, Route, Switch } from "wouter"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { queryClient } from "@/lib/queryClient"
+import { AuthProvider } from "@/hooks/useAuth"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/toaster"
+import { NavBar } from "@/components/ui/tubelight-navbar"
 
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { NavBar } from "@/components/ui/tubelight-navbar";
-import { TubelightFooter } from "@/components/ui/tubelight-footer";
-import { useAuth } from "@/hooks/useAuth";
-import Home from "@/pages/home";
-import Landing from "@/pages/landing";
-import Dashboard from "@/pages/dashboard";
-import NotFound from "@/pages/not-found";
-
-function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      {/* Global Navigation */}
-      <NavBar />
-      <TubelightFooter />
-      
-      {/* Page Content */}
-      <Switch>
-        <Route path="/" exact>
-          {isAuthenticated ? <Dashboard /> : <Landing />}
-        </Route>
-        <Route path="/dashboard">
-          {isAuthenticated ? <Dashboard /> : <Landing />}
-        </Route>
-        <Route path="/home">
-          {isAuthenticated ? <Home /> : <Landing />}
-        </Route>
-        <Route component={NotFound} />
-      </Switch>
-    </>
-  );
-}
+import Landing from "@/pages/landing"
+import LandingNew from "@/pages/landing-new"
+import LandingRedesigned from "@/pages/landing-redesigned"
+import Home from "@/pages/home"
+import Dashboard from "@/pages/dashboard"
+import NotFound from "@/pages/not-found"
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <AuthProvider>
+          <NavBar />
+          <Router>
+            <Switch>
+              <Route path="/" component={LandingNew} />
+              <Route path="/landing" component={Landing} />
+              <Route path="/landing-redesigned" component={LandingRedesigned} />
+              <Route path="/home" component={Home} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route component={NotFound} />
+            </Switch>
+          </Router>
+          <Toaster />
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
-  );
+  )
 }
 
-export default App;
+export default App
