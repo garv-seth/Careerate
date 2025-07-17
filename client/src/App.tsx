@@ -1,8 +1,11 @@
+
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { NavBar } from "@/components/ui/tubelight-navbar";
+import { TubelightFooter } from "@/components/ui/tubelight-footer";
 import { useAuth } from "@/hooks/useAuth";
 import Home from "@/pages/home";
 import Landing from "@/pages/landing";
@@ -21,18 +24,25 @@ function Router() {
   }
 
   return (
-    <Switch>
-      <Route path="/" exact>
-        {isAuthenticated ? <Dashboard /> : <Landing />}
-      </Route>
-      <Route path="/dashboard">
-        {isAuthenticated ? <Dashboard /> : <Landing />}
-      </Route>
-      <Route path="/home">
-        {isAuthenticated ? <Home /> : <Landing />}
-      </Route>
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      {/* Global Navigation */}
+      <NavBar />
+      <TubelightFooter />
+      
+      {/* Page Content */}
+      <Switch>
+        <Route path="/" exact>
+          {isAuthenticated ? <Dashboard /> : <Landing />}
+        </Route>
+        <Route path="/dashboard">
+          {isAuthenticated ? <Dashboard /> : <Landing />}
+        </Route>
+        <Route path="/home">
+          {isAuthenticated ? <Home /> : <Landing />}
+        </Route>
+        <Route component={NotFound} />
+      </Switch>
+    </>
   );
 }
 

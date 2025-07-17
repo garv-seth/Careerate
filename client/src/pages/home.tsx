@@ -190,32 +190,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 text-white">
-      {/* Header */}
-      <div className="border-b border-white/10 backdrop-blur-xl bg-black/10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
-            <div>
-              <GradientText 
-                text="Dashboard"
-                className="text-2xl font-bold"
-                gradient="from-blue-400 via-cyan-500 to-teal-400"
-              />
-              <p className="text-gray-300">
-                Welcome back, {user?.firstName || user?.email || 'User'}
-              </p>
-            </div>
-          </div>
-          <GlassButton 
-            onClick={handleLogout}
-            variant="outline"
-            className="text-gray-300 border-gray-600 hover:bg-gray-800"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </GlassButton>
-        </div>
-      </div>
+      {/* Content with top padding for fixed navbar */}
+      <div className="pt-20 pb-20"></div>
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="space-y-6">

@@ -71,32 +71,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
-                  CAREERATE Dashboard
-                </h1>
-                <p className="text-sm text-gray-400">Welcome back, {user?.name || user?.username || 'Developer'}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
-              <Button onClick={logout} variant="outline" size="sm" className="border-red-400/40 text-red-300 hover:bg-red-500/20">
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Content with top padding for fixed navbar */}
+      <div className="pt-20"></div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Overview Stats */}

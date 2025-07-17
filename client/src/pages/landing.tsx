@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { NavBar } from "@/components/ui/tubelight-navbar";
+
 import { 
   ArrowRight, 
   Bot, 
@@ -102,14 +102,7 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { name: 'Home', url: '#hero', icon: Home },
-    { name: 'DevOps', url: '#devops-comparison', icon: Zap },
-    { name: 'Agents', url: '#agents', icon: Bot },
-    { name: 'Features', url: '#features', icon: Cpu },
-    { name: 'Pricing', url: '#pricing', icon: Star },
-    { name: 'Dashboard', url: isAuthenticated ? '/dashboard' : '#hero', icon: Settings }
-  ];
+  
 
   const stats = [
     { value: "99.9%", label: "Uptime SLA", icon: <Activity className="w-4 h-4" /> },
@@ -142,14 +135,13 @@ export default function Landing() {
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
-      {/* New Tubelight Navigation */}
-      <NavBar items={navItems} />
+      
 
       {/* Hero Section */}
       <motion.section 
         id="hero"
         className="relative min-h-screen flex items-center justify-center"
-        style={{ y: heroY, opacity: heroOpacity, paddingTop: '80px' }}
+        style={{ y: heroY, opacity: heroOpacity, paddingTop: '120px', paddingBottom: '100px' }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
 
