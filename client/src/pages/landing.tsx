@@ -83,6 +83,15 @@ export default function Landing() {
     window.open(videoUrl, '_blank', 'width=800,height=600');
   };
 
+  // Define navigation items for footer
+  const navItems = [
+    { name: 'Home', url: '#hero', icon: Home },
+    { name: 'DevOps', url: '#devops-comparison', icon: Zap },
+    { name: 'Agents', url: '#agents', icon: Bot },
+    { name: 'Features', url: '#features', icon: Cpu },
+    { name: 'Pricing', url: '#pricing', icon: Star }
+  ];
+
   // Update active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
