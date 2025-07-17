@@ -1,8 +1,10 @@
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { NavBar } from "@/components/ui/tubelight-navbar";
 import { 
   ArrowRight, 
   Bot, 
@@ -14,8 +16,6 @@ import {
   Activity, 
   Users, 
   Globe, 
-  Menu, 
-  X, 
   Sparkles, 
   Rocket, 
   Brain, 
@@ -33,16 +33,16 @@ import {
   Lock,
   BarChart3,
   Clock,
-  ChevronDown,
   Github,
-  AlertTriangle
+  AlertTriangle,
+  Home,
+  Settings
 } from "lucide-react";
 
 import careerateLogo from "@assets/CareerateLogo.png";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Landing() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const { user, isAuthenticated, isLoading } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,8 +56,6 @@ export default function Landing() {
   const heroY = useTransform(scrollYProgress, [0, 0.3], ["0%", "-50%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.2], ["0%", "10%"]);
-
-
 
   const handleOAuthLogin = (provider: string) => {
     window.location.href = `/api/auth/${provider}`;
@@ -85,12 +83,9 @@ export default function Landing() {
     window.open(videoUrl, '_blank', 'width=800,height=600');
   };
 
-  // Close mobile menu when scrolling
+  // Update active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      setMobileMenuOpen(false);
-
-      // Update active section based on scroll position
       const sections = ["hero", "devops-comparison", "agents", "features", "integrations", "pricing"];
       const scrollPosition = window.scrollY + 100;
 
@@ -106,6 +101,15 @@ export default function Landing() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const navItems = [
+    { name: 'Home', url: '#hero', icon: Home },
+    { name: 'DevOps', url: '#devops-comparison', icon: Zap },
+    { name: 'Agents', url: '#agents', icon: Bot },
+    { name: 'Features', url: '#features', icon: Cpu },
+    { name: 'Pricing', url: '#pricing', icon: Star },
+    { name: 'Dashboard', url: isAuthenticated ? '/dashboard' : '#hero', icon: Settings }
+  ];
 
   const stats = [
     { value: "99.9%", label: "Uptime SLA", icon: <Activity className="w-4 h-4" /> },
@@ -138,78 +142,8 @@ export default function Landing() {
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
 
-      {/* Floating Navigation Overlay - Always Visible */}
-      <header className="floating-navbar">
-        <nav className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center space-x-3">
-            <img src={careerateLogo} alt="CAREERATE" className="w-10 h-10 rounded-lg" />
-            <div>
-              <span className="text-xl font-bold bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">CAREERATE</span>
-            </div>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-8">
-            <a href="#devops-comparison" className={`transition-colors ${activeSection === 'devops-comparison' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
-              DevOps Evolution
-            </a>
-            <a href="#agents" className={`transition-colors ${activeSection === 'agents' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
-              AI Agents
-            </a>
-            <a href="#features" className={`transition-colors ${activeSection === 'features' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
-              Features
-            </a>
-            <a href="#integrations" className={`transition-colors ${activeSection === 'integrations' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
-              Integrations
-            </a>
-            <a href="#pricing" className={`transition-colors ${activeSection === 'pricing' ? 'text-blue-300' : 'text-white/80 hover:text-white'}`}>
-              Pricing
-            </a>
-            <Button 
-              onClick={handleStartTrial}
-              disabled={isLoading}
-              className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white border-0 backdrop-blur-sm"
-            >
-              {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Start Free Trial'}
-            </Button>
-          </div>
-
-          {/* Mobile Hamburger Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
-        </nav>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden mt-4 bg-black/90 backdrop-blur-sm rounded-2xl border border-white/10 p-4"
-          >
-            <div className="flex flex-col space-y-4">
-              <a href="#devops-comparison" className="hover:text-blue-300 transition-colors py-2">DevOps Evolution</a>
-              <a href="#agents" className="hover:text-blue-300 transition-colors py-2">AI Agents</a>
-              <a href="#features" className="hover:text-blue-300 transition-colors py-2">Features</a>
-              <a href="#integrations" className="hover:text-blue-300 transition-colors py-2">Integrations</a>
-              <a href="#pricing" className="hover:text-blue-300 transition-colors py-2">Pricing</a>
-              <Button 
-                onClick={handleStartTrial}
-                disabled={isLoading}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white mt-4"
-              >
-                {isLoading ? 'Loading...' : isAuthenticated ? 'Dashboard' : 'Start Free Trial'}
-              </Button>
-            </div>
-          </motion.div>
-        )}
-      </header>
+      {/* New Tubelight Navigation */}
+      <NavBar items={navItems} />
 
       {/* Hero Section */}
       <motion.section 
@@ -926,8 +860,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 py-12 px-6 bg-gradient-to-br from-slate-950 to-black">
+      {/* Updated Footer with Tubelight Design */}
+      <footer className="relative border-t border-white/10 py-12 px-6 bg-gradient-to-br from-slate-950 to-black">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -971,6 +905,36 @@ export default function Landing() {
                 <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
               </ul>
+            </div>
+          </div>
+
+          {/* Footer Navigation with Tubelight Design */}
+          <div className="flex justify-center mb-8">
+            <div className="flex items-center gap-2 bg-black/40 border border-white/20 backdrop-blur-xl py-2 px-2 rounded-full">
+              {navItems.slice(0, 5).map((item, index) => {
+                const Icon = item.icon
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      if (item.url.startsWith('#')) {
+                        const element = document.getElementById(item.url.substring(1))
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' })
+                        }
+                      } else {
+                        window.location.href = item.url
+                      }
+                    }}
+                    className="relative cursor-pointer text-xs font-medium px-4 py-2 rounded-full transition-colors text-white/70 hover:text-blue-300"
+                  >
+                    <span className="hidden sm:inline">{item.name}</span>
+                    <span className="sm:hidden">
+                      <Icon size={16} strokeWidth={2.5} />
+                    </span>
+                  </button>
+                )
+              })}
             </div>
           </div>
 
