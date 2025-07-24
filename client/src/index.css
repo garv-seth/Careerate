@@ -73,6 +73,191 @@ html {
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Horizon Hero Section Styles */
+.hero-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Arial', sans-serif;
+}
+
+.hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.side-menu {
+  position: fixed;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.menu-icon span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: white;
+  font-size: 12px;
+  letter-spacing: 4px;
+  opacity: 0.7;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  color: white;
+}
+
+.hero-title {
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 100;
+  letter-spacing: 0.2em;
+  margin: 0;
+  line-height: 0.9;
+  opacity: 0.9;
+}
+
+.title-char {
+  display: inline-block;
+  transform: translateY(200px);
+  opacity: 0;
+}
+
+.hero-subtitle {
+  margin-top: 40px;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.subtitle-line {
+  margin: 0;
+  transform: translateY(50px);
+  opacity: 0;
+}
+
+.scroll-progress {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+
+.scroll-text {
+  font-size: 10px;
+  letter-spacing: 2px;
+  opacity: 0.6;
+}
+
+.progress-track {
+  width: 2px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  transition: width 0.3s ease;
+}
+
+.section-counter {
+  font-size: 12px;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.scroll-sections {
+  position: relative;
+  z-index: 5;
+}
+
+.content-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 0 20px;
+}
+
+.cosmos-style {
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+.cosmos-content {
+  max-width: 800px;
+}
+
+.cosmos-subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .side-menu {
+    left: 20px;
+  }
+  
+  .scroll-progress {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .hero-title {
+    font-size: clamp(3rem, 12vw, 8rem);
+  }
+  
+  .hero-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    margin-top: 20px;
+  }
+}
   transform: translateZ(0) !important;
   will-change: transform, background-color !important;
   pointer-events: auto !important;
