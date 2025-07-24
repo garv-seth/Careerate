@@ -29,7 +29,7 @@ export const ThreeHero = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
-  const totalSections = 3;
+  const totalSections = 5;
 
   // Device motion values
   const motionX = useMotionValue(0);
@@ -516,9 +516,11 @@ export const ThreeHero = () => {
       
       // Camera positions for each section
       const cameraPositions = [
-        { x: 0, y: 30, z: 100 },     // Hero
-        { x: 0, y: 60, z: -100 },    // Features
-        { x: 0, y: 80, z: -300 }     // Agents
+        { x: 0, y: 30, z: 100 },     // CAREERATE
+        { x: 20, y: 50, z: 50 },     // 5 AI AGENTS
+        { x: -20, y: 70, z: 0 },     // VIBE HOSTING
+        { x: 0, y: 90, z: -50 },     // REAL-TIME WORKFLOW
+        { x: 0, y: 110, z: -100 }    // READY TO DEPLOY
       ];
       
       const currentPos = cameraPositions[newSection] || cameraPositions[0];
@@ -569,34 +571,44 @@ export const ThreeHero = () => {
   const sectionTitles = [
     { 
       title: "CAREERATE", 
-      subtitle: "Next-generation autonomous DevOps platform",
-      description: "Where AI agents orchestrate your infrastructure with precision and grace"
+      subtitle: "Agentic DevOps Platform",
+      description: "Where AI agents think, communicate, and deploy with vibe hosting principles"
     },
     { 
-      title: "AUTONOMOUS", 
-      subtitle: "Self-healing infrastructure powered by AI",
-      description: "Five specialized agents working in perfect harmony"
+      title: "5 AI AGENTS", 
+      subtitle: "Working in Harmony",
+      description: "Planner • Builder • Tester • Deployer • Monitor agents collaborate through A2A protocols"
     },
     { 
-      title: "INFINITE", 
-      subtitle: "Limitless possibilities across all cloud providers",
-      description: "Deploy anywhere, scale everywhere, monitor everything"
+      title: "VIBE HOSTING", 
+      subtitle: "Beyond Traditional DevOps",
+      description: "Embrace the vibes, accept exponentials, forget infrastructure complexity"
+    },
+    {
+      title: "REAL-TIME WORKFLOW",
+      subtitle: "Visual Agent Communication", 
+      description: "Watch agents collaborate, delegate tasks, and heal issues autonomously"
+    },
+    {
+      title: "READY TO DEPLOY?",
+      subtitle: "Start Your Agentic Journey",
+      description: "Experience the future of DevOps with intelligent agents and vibe hosting"
     }
   ];
 
   const currentContent = sectionTitles[currentSection] || sectionTitles[0];
 
   return (
-    <div ref={containerRef} className="relative h-screen w-full overflow-hidden">
-      {/* Three.js Canvas */}
+    <div ref={containerRef} className="relative w-full overflow-hidden" style={{ height: '500vh' }}>
+      {/* Three.js Canvas - Fixed position */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-0"
+        className="fixed inset-0 z-0"
         style={{ background: 'radial-gradient(ellipse at center, #0f172a 0%, #000000 100%)' }}
       />
       
-      {/* Overlay Content */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center px-6">
+      {/* Content that changes on scroll */}
+      <div className="sticky top-0 h-screen z-10 flex flex-col justify-center items-center text-center px-6">
         <motion.div
           ref={heroContentRef}
           className="max-w-6xl mx-auto"
@@ -608,7 +620,13 @@ export const ThreeHero = () => {
           {/* Main Title */}
           <motion.h1
             ref={titleRef}
-            className="text-6xl md:text-8xl lg:text-9xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
+            className={`text-6xl md:text-8xl lg:text-9xl font-bold mb-6 ${
+              currentSection === 0 ? 'text-white' : 
+              currentSection === 1 ? 'bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent' :
+              currentSection === 2 ? 'bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent' :
+              currentSection === 3 ? 'bg-gradient-to-r from-cyan-300 to-cyan-500 bg-clip-text text-transparent' :
+              'bg-gradient-to-r from-green-300 to-green-500 bg-clip-text text-transparent'
+            }`}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
@@ -700,28 +718,7 @@ export const ThreeHero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        ref={scrollIndicatorRef}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
-        style={{
-          x: smoothMotionX,
-          y: smoothMotionY,
-        }}
-      >
-        <div className="flex flex-col items-center space-y-4">
-          <div className="text-sm text-gray-400 font-medium">
-            {String(currentSection + 1).padStart(2, '0')} / {String(totalSections).padStart(2, '0')}
-          </div>
-          <div className="w-1 h-12 bg-gradient-to-b from-blue-500 to-transparent rounded-full opacity-60">
-            <div 
-              className="w-full bg-blue-400 rounded-full transition-all duration-300"
-              style={{ height: `${((scrollProgress * totalSections) % 1) * 100}%` }}
-            />
-          </div>
-          <div className="text-xs text-gray-500">Scroll to explore</div>
-        </div>
-      </motion.div>
+
 
       {/* Glass overlay for depth */}
       <div className="absolute inset-0 z-5 bg-gradient-to-b from-transparent via-black/10 to-black/30 pointer-events-none" />
