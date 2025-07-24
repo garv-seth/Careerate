@@ -47,10 +47,11 @@ export default function Landing() {
           
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-8">
-            <a href="#features" className="hover:text-blue-300 transition-colors">Features</a>
+            <a href="#overview" className="hover:text-blue-300 transition-colors">Platform</a>
             <a href="#agents" className="hover:text-blue-300 transition-colors">Agents</a>
             <a href="#workflow" className="hover:text-blue-300 transition-colors">Workflow</a>
-            <a href="#competition" className="hover:text-blue-300 transition-colors">Why CAREERATE</a>
+            <a href="#features" className="hover:text-blue-300 transition-colors">Features</a>
+            <a href="#competition" className="hover:text-blue-300 transition-colors">Compare</a>
             <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
               Get Started
             </Button>
@@ -76,10 +77,11 @@ export default function Landing() {
             className="lg:hidden mt-4 bg-black/90 backdrop-blur-sm rounded-2xl border border-white/10 p-4"
           >
             <div className="flex flex-col space-y-4">
-              <a href="#features" className="hover:text-blue-300 transition-colors py-2">Features</a>
+              <a href="#overview" className="hover:text-blue-300 transition-colors py-2">Platform</a>
               <a href="#agents" className="hover:text-blue-300 transition-colors py-2">Agents</a>
               <a href="#workflow" className="hover:text-blue-300 transition-colors py-2">Workflow</a>
-              <a href="#competition" className="hover:text-blue-300 transition-colors py-2">Why CAREERATE</a>
+              <a href="#features" className="hover:text-blue-300 transition-colors py-2">Features</a>
+              <a href="#competition" className="hover:text-blue-300 transition-colors py-2">Compare</a>
               <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 mt-4">
                 Get Started
               </Button>
@@ -88,122 +90,12 @@ export default function Landing() {
         )}
       </header>
 
-      {/* Dynamic Horizon Hero Section */}
+      {/* Dynamic Horizon Hero Section - Single Hero */}
       <motion.section 
         className="relative h-screen flex items-center justify-center"
         style={{ y: horizonY, opacity: horizonOpacity }}
       >
         <ThreeHero />
-        
-        {/* Hero Content with Dynamic Movement */}
-        <motion.div 
-          className="relative z-20 text-center max-w-6xl mx-auto px-6"
-          style={{ y: contentY }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            <Badge className="mb-6 bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-blue-200 border-blue-400/40 backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 mr-2" />
-              2025 • Next-Generation Autonomous DevOps • A2A Protocol
-            </Badge>
-            
-            <motion.h1 
-              className="text-5xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent"
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            >
-              INTERACTING
-              <br />
-              <span className="text-4xl md:text-6xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                VIBE HOSTING
-              </span>
-            </motion.h1>
-            
-            <motion.p 
-              className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              The world's first truly autonomous DevOps platform. Deploy, scale, and monitor with 
-              <span className="text-blue-300 font-semibold"> AI agents that think, communicate, and act</span> independently. 
-              Experience the future of <span className="text-purple-300 font-semibold">vibe coding</span> meets autonomous infrastructure.
-            </motion.p>
-            
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-            >
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg group">
-                <Rocket className="mr-2 h-5 w-5 group-hover:animate-pulse" />
-                Launch Your Autonomous Stack
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg backdrop-blur-sm">
-                <Brain className="mr-2 h-5 w-5" />
-                See Agents in Action
-              </Button>
-            </motion.div>
-
-            {/* Cloud Provider OAuth Integrations */}
-            <motion.div 
-              className="flex flex-wrap justify-center gap-4 mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.8 }}
-            >
-              <Button
-                onClick={() => handleOAuthLogin('azure')}
-                variant="outline"
-                className="flex items-center gap-2 border-blue-400/40 text-blue-300 hover:bg-blue-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-              >
-                <Cloud className="h-4 w-4" />
-                Azure Integration
-              </Button>
-              <Button
-                onClick={() => handleOAuthLogin('aws')}
-                variant="outline"
-                className="flex items-center gap-2 border-orange-400/40 text-orange-300 hover:bg-orange-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-              >
-                <Cloud className="h-4 w-4" />
-                AWS Integration
-              </Button>
-              <Button
-                onClick={() => handleOAuthLogin('gcp')}
-                variant="outline"
-                className="flex items-center gap-2 border-green-400/40 text-green-300 hover:bg-green-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-              >
-                <Cloud className="h-4 w-4" />
-                GCP Integration
-              </Button>
-              <Button
-                onClick={() => handleOAuthLogin('github')}
-                variant="outline"
-                className="flex items-center gap-2 border-purple-400/40 text-purple-300 hover:bg-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-105"
-              >
-                <Github className="h-4 w-4" />
-                GitHub Integration
-              </Button>
-            </motion.div>
-
-            {/* Competitive Advantage Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.5, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-400/30 rounded-full text-green-300 text-sm"
-            >
-              <Zap className="w-4 h-4" />
-              Beyond StarSling & Monk.io • True Multi-Agent A2A Communication
-            </motion.div>
-          </motion.div>
-        </motion.div>
 
         {/* Enhanced Scroll Indicator */}
         <motion.div
@@ -221,6 +113,410 @@ export default function Landing() {
           <p className="text-xs text-white/60 mt-2 text-center">Scroll to explore</p>
         </motion.div>
       </motion.section>
+
+      {/* Platform Overview Section */}
+      <section id="overview" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/95 to-indigo-950/95 backdrop-blur-sm">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <Badge className="mb-6 bg-gradient-to-r from-purple-500/30 to-blue-500/30 text-purple-200 border-purple-400/40">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Platform Overview • Autonomous Architecture
+            </Badge>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
+              Truly Autonomous DevOps
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Experience the future where AI agents handle everything from deployment to monitoring, communicating with each other through advanced A2A protocols.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                icon: Bot,
+                title: "5 Specialized AI Agents",
+                description: "Planner, Builder, Tester, Deployer, and Monitor agents work in perfect harmony",
+                features: ["Repository Analysis", "Template Rendering", "Automated Testing", "Infrastructure Deployment", "Health Monitoring"],
+                color: "blue"
+              },
+              {
+                icon: MessageSquare,
+                title: "A2A Communication Protocol",
+                description: "Agent-to-Agent communication creates seamless workflows without human intervention",
+                features: ["Inter-agent Task Delegation", "Real-time Status Updates", "Autonomous Decision Making", "Error Recovery", "Load Balancing"],
+                color: "purple"
+              },
+              {
+                icon: Cloud,
+                title: "Multi-Cloud Infrastructure",
+                description: "Deploy across AWS, Azure, GCP with intelligent resource optimization",
+                features: ["Cost Optimization", "Auto-scaling", "Multi-region Deployment", "Disaster Recovery", "Performance Monitoring"],
+                color: "cyan"
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <Card className="bg-white/5 border-white/10 backdrop-blur-sm h-full hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                  <CardContent className="p-8">
+                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${
+                      feature.color === 'blue' ? 'from-blue-500 to-blue-600' :
+                      feature.color === 'purple' ? 'from-purple-500 to-purple-600' :
+                      'from-cyan-500 to-cyan-600'
+                    } flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                      <feature.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
+                    <p className="text-gray-300 mb-6 leading-relaxed">{feature.description}</p>
+                    <ul className="space-y-2">
+                      {feature.features.map((feat, i) => (
+                        <li key={i} className="flex items-center text-sm text-gray-400">
+                          <CheckCircle2 className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
+                          {feat}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Agent Showcase Section */}
+      <section id="agents" className="py-32 px-6 relative bg-gradient-to-br from-indigo-950/95 to-purple-950/95 backdrop-blur-sm">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <Badge className="mb-6 bg-gradient-to-r from-green-500/30 to-purple-500/30 text-green-200 border-green-400/40">
+              <Bot className="w-4 h-4 mr-2" />
+              AI Agents • Autonomous Intelligence
+            </Badge>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">
+              Meet Your AI Team
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Five specialized agents that think, communicate, and act independently to manage your entire DevOps lifecycle.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-5 gap-6">
+            {[
+              {
+                name: "Planner Agent",
+                icon: Brain,
+                description: "Analyzes repositories and creates deployment strategies",
+                capabilities: ["Repository Analysis", "Dependency Mapping", "Architecture Planning", "Risk Assessment"],
+                color: "blue",
+                status: "Planning next deployment"
+              },
+              {
+                name: "Builder Agent",
+                icon: Cpu,
+                description: "Renders templates and compiles assets",
+                capabilities: ["Template Processing", "Asset Compilation", "Build Optimization", "Package Management"],
+                color: "green",
+                status: "Building application v2.1.3"
+              },
+              {
+                name: "Tester Agent", 
+                icon: Shield,
+                description: "Runs automated tests and validates deployments",
+                capabilities: ["Unit Testing", "Integration Testing", "Security Scanning", "Performance Testing"],
+                color: "yellow",
+                status: "Running test suite (98% pass)"
+              },
+              {
+                name: "Deployer Agent",
+                icon: Rocket,
+                description: "Orchestrates infrastructure deployment",
+                capabilities: ["Cloud Deployment", "Container Management", "Load Balancing", "Rollback Management"],
+                color: "purple",
+                status: "Deploying to production"
+              },
+              {
+                name: "Monitor Agent",
+                icon: Activity,
+                description: "Monitors health and auto-heals issues",
+                capabilities: ["Health Monitoring", "Auto-healing", "Alert Management", "Performance Optimization"],
+                color: "red",
+                status: "All systems healthy ✓"
+              }
+            ].map((agent, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <Card className="bg-white/5 border-white/10 backdrop-blur-sm h-full hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                  <CardContent className="p-6 text-center">
+                    <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-r ${
+                      agent.color === 'blue' ? 'from-blue-500 to-blue-600' :
+                      agent.color === 'green' ? 'from-green-500 to-green-600' :
+                      agent.color === 'yellow' ? 'from-yellow-500 to-yellow-600' :
+                      agent.color === 'purple' ? 'from-purple-500 to-purple-600' :
+                      'from-red-500 to-red-600'
+                    } flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                      <agent.icon className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">{agent.name}</h3>
+                    <p className="text-gray-300 text-sm mb-4 leading-relaxed">{agent.description}</p>
+                    <div className="space-y-1 mb-4">
+                      {agent.capabilities.map((cap, i) => (
+                        <div key={i} className="text-xs text-gray-400 flex items-center justify-center">
+                          <div className={`w-1 h-1 rounded-full mr-2 ${
+                            agent.color === 'blue' ? 'bg-blue-400' :
+                            agent.color === 'green' ? 'bg-green-400' :
+                            agent.color === 'yellow' ? 'bg-yellow-400' :
+                            agent.color === 'purple' ? 'bg-purple-400' :
+                            'bg-red-400'
+                          }`} />
+                          {cap}
+                        </div>
+                      ))}
+                    </div>
+                    <div className={`text-xs px-3 py-1 rounded-full ${
+                      agent.color === 'blue' ? 'bg-blue-500/20 text-blue-300' :
+                      agent.color === 'green' ? 'bg-green-500/20 text-green-300' :
+                      agent.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-300' :
+                      agent.color === 'purple' ? 'bg-purple-500/20 text-purple-300' :
+                      'bg-red-500/20 text-red-300'
+                    }`}>
+                      {agent.status}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Workflow Visualization Section */}
+      <section id="workflow" className="py-32 px-6 relative bg-gradient-to-br from-purple-950/95 to-slate-950/95 backdrop-blur-sm">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <Badge className="mb-6 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 text-cyan-200 border-cyan-400/40">
+              <Workflow className="w-4 h-4 mr-2" />
+              Visual Workflows • Real-time Coordination
+            </Badge>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent">
+              Watch Agents Collaborate
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Real-time visualization of agent-to-agent communication and task orchestration in our advanced workflow engine.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-white/5 border-white/10 backdrop-blur-sm p-8">
+                <h3 className="text-3xl font-bold text-white mb-6">Interactive Workflow Editor</h3>
+                <div className="space-y-4 mb-6">
+                  {[
+                    "Drag-and-drop workflow creation",
+                    "Real-time agent status tracking",
+                    "Visual task delegation flows",
+                    "Error handling and recovery paths",
+                    "Performance metrics and optimization"
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-center text-gray-300">
+                      <CheckCircle2 className="h-5 w-5 text-green-400 mr-3 flex-shrink-0" />
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+                <Button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700">
+                  <Workflow className="mr-2 h-4 w-4" />
+                  Try Workflow Editor
+                </Button>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm"
+            >
+              <div className="text-center mb-4">
+                <h4 className="text-lg font-semibold text-white">Live Agent Activity</h4>
+                <p className="text-sm text-gray-400">Real-time A2A communication</p>
+              </div>
+              <div className="space-y-3">
+                {[
+                  { agent: "Planner", action: "Analyzed repository structure", time: "2s ago", status: "complete" },
+                  { agent: "Builder", action: "Compiling assets...", time: "Now", status: "active" },
+                  { agent: "Tester", action: "Running security scan", time: "5s ago", status: "active" },
+                  { agent: "Monitor", action: "Health check passed", time: "10s ago", status: "complete" }
+                ].map((activity, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full mr-3 ${
+                        activity.status === 'active' ? 'bg-blue-400 animate-pulse' : 'bg-green-400'
+                      }`} />
+                      <div>
+                        <p className="text-sm font-medium text-white">{activity.agent}</p>
+                        <p className="text-xs text-gray-400">{activity.action}</p>
+                      </div>
+                    </div>
+                    <span className="text-xs text-gray-500">{activity.time}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Advanced Features Section */}
+      <section id="features" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-purple-950/90 backdrop-blur-sm">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent"></div>
+        
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <Badge className="mb-6 bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-200 border-yellow-400/40">
+              <Star className="w-4 h-4 mr-2" />
+              Advanced Features • Production-Ready
+            </Badge>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-yellow-300 bg-clip-text text-transparent">
+              Enterprise-Grade DevOps
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Built for scale with enterprise security, compliance, and performance features that adapt to your team's needs.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-4 gap-6 mb-16">
+            {[
+              {
+                icon: Shield,
+                title: "Security First",
+                description: "End-to-end encryption, SOC2 compliance, and zero-trust architecture",
+                highlights: ["Zero-trust security", "SOC2 Type II", "End-to-end encryption", "Audit logs"]
+              },
+              {
+                icon: TrendingUp,
+                title: "Auto-Scaling",
+                description: "Intelligent resource management that scales with your traffic patterns", 
+                highlights: ["Predictive scaling", "Cost optimization", "Load balancing", "Multi-region"]
+              },
+              {
+                icon: Globe,
+                title: "Global CDN",
+                description: "Edge deployment across 200+ locations for sub-50ms response times",
+                highlights: ["200+ edge locations", "Smart routing", "Edge caching", "DDoS protection"]
+              },
+              {
+                icon: Users,
+                title: "Team Management",
+                description: "Advanced collaboration tools with role-based access control",
+                highlights: ["RBAC permissions", "Team workflows", "Audit trails", "SSO integration"]
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <Card className="bg-white/5 border-white/10 backdrop-blur-sm h-full hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                  <CardContent className="p-6">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <feature.icon className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                    <p className="text-gray-300 text-sm mb-4 leading-relaxed">{feature.description}</p>
+                    <ul className="space-y-1">
+                      {feature.highlights.map((highlight, i) => (
+                        <li key={i} className="flex items-center text-xs text-gray-400">
+                          <div className="w-1 h-1 rounded-full bg-yellow-400 mr-2" />
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Performance Metrics */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="grid lg:grid-cols-4 gap-8 text-center"
+          >
+            {[
+              { metric: "99.99%", label: "Uptime SLA", sublabel: "Enterprise guarantee" },
+              { metric: "<50ms", label: "Response Time", sublabel: "Global average" },
+              { metric: "200+", label: "Edge Locations", sublabel: "Worldwide coverage" },
+              { metric: "24/7", label: "Expert Support", sublabel: "Always available" }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+              >
+                <div className="text-4xl font-bold text-yellow-400 mb-2">{stat.metric}</div>
+                <div className="text-white font-semibold mb-1">{stat.label}</div>
+                <div className="text-xs text-gray-400">{stat.sublabel}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
       {/* Competition Comparison Section with Horizon Line */}
       <section id="competition" className="py-32 px-6 relative bg-gradient-to-br from-slate-950/90 to-indigo-950/90 backdrop-blur-sm">
