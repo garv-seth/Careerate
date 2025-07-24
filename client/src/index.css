@@ -258,10 +258,6 @@ html {
     margin-top: 20px;
   }
 }
-  transform: translateZ(0) !important;
-  will-change: transform, background-color !important;
-  pointer-events: auto !important;
-}
 
 /* Ensure all content is properly spaced below fixed navbar */
 .page-content {
