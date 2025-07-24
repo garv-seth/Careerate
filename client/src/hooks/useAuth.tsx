@@ -1,7 +1,16 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 
+// User type definition
+type User = {
+  id: string;
+  username: string;
+  name: string;
+  email: string;
+  provider: string;
+} | null;
+
 export function useAuth() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -100,7 +109,7 @@ export function useAuth() {
 
 // Create Auth Context
 interface AuthContextType {
-  user: any;
+  user: User;
   isLoading: boolean;
   isAuthenticated: boolean;
   logout: () => void;
