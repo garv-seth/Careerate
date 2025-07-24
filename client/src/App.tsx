@@ -4,7 +4,7 @@ import { queryClient } from "@/lib/queryClient"
 import { AuthProvider } from "@/hooks/useAuth"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/toaster"
-import { NavBar } from "@/components/ui/tubelight-navbar"
+import { Layout } from "@/components/layout/Layout"
 
 import Landing from "@/pages/landing"
 import LandingNew from "@/pages/landing-new"
@@ -18,17 +18,18 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AuthProvider>
-          <NavBar />
-          <Router>
-            <Switch>
-              <Route path="/" component={LandingNew} />
-              <Route path="/landing" component={Landing} />
-              <Route path="/landing-redesigned" component={LandingRedesigned} />
-              <Route path="/home" component={Home} />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route component={NotFound} />
-            </Switch>
-          </Router>
+          <Layout>
+            <Router>
+              <Switch>
+                <Route path="/" component={LandingNew} />
+                <Route path="/landing" component={Landing} />
+                <Route path="/landing-redesigned" component={LandingRedesigned} />
+                <Route path="/home" component={Home} />
+                <Route path="/dashboard" component={Dashboard} />
+                <Route component={NotFound} />
+              </Switch>
+            </Router>
+          </Layout>
           <Toaster />
         </AuthProvider>
       </TooltipProvider>

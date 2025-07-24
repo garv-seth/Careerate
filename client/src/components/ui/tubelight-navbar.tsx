@@ -98,9 +98,7 @@ export function NavBar({ className }: NavBarProps) {
     }
   }
 
-  if (!isAuthenticated) {
-    return null // Don't show navbar on landing page
-  }
+  // Always show navbar with different items based on authentication status
 
   return (
     <div className={cn(

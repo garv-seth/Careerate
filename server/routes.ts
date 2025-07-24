@@ -6,6 +6,7 @@ import { z } from "zod";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { aiOrchestrator } from "./agents/ai-orchestrator";
 import { infrastructureOrchestrator } from "./infrastructure/cloud-providers";
+import { agentRegistry } from "./agents/agent-registry";
 import authRoutes from "./auth/auth-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -265,8 +266,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const agents = await storage.getAllAgents();
       // Add real-time agent status from registry
       const agentStatuses = agentRegistry.getAgents();
-      const enhancedAgents = agents.map(agent => {
-        const registryAgent = agentStatuses.find(a => a.name === agent.name);
+      const enhancedAgents = agents.map((agent: any) => {
+        const registryAgent = agentStatuses.find((a: any) => a.name === agent.name);
         return {
           ...agent,
           status: registryAgent?.status || agent.status,

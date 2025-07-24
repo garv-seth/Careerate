@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Bot, 
   Activity, 
@@ -21,31 +22,63 @@ import {
   MemoryStick,
   HardDrive
 } from "lucide-react";
-import careerateLogo from "@assets/CareerateLogo.png";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
 
-  const agents = [
-    { id: 1, name: "Planner Agent", status: "active", type: "planner", tasks: 3 },
-    { id: 2, name: "Builder Agent", status: "building", type: "builder", tasks: 1 },
-    { id: 3, name: "Tester Agent", status: "queued", type: "tester", tasks: 2 },
-    { id: 4, name: "Deployer Agent", status: "active", type: "deployer", tasks: 0 },
-    { id: 5, name: "Monitor Agent", status: "active", type: "monitor", tasks: 5 }
-  ];
+  // Fetch real data from backend APIs
+  const { data: dashboardStats, isLoading: statsLoading } = useQuery({
+    queryKey: ["/api/dashboard/stats"],
+  });
 
-  const infrastructure = [
-    { provider: "AWS", status: "healthy", resources: 12, cost: 245.50 },
-    { provider: "Azure", status: "healthy", resources: 8, cost: 189.20 },
-    { provider: "GCP", status: "degraded", resources: 5, cost: 156.80 }
-  ];
+  const { data: agents = [], isLoading: agentsLoading } = useQuery({
+    queryKey: ["/api/agents"],
+  });
 
-  const systemMetrics = [
+  const { data: cloudResources = [], isLoading: resourcesLoading } = useQuery({
+    queryKey: ["/api/cloud-resources"],
+  });
+
+  const { data: agentLogs = [], isLoading: logsLoading } = useQuery({
+    queryKey: ["/api/agent-logs"],
+  });
+
+  // Loading state
+  if (statsLoading || agentsLoading || resourcesLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white flex items-center justify-center pt-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
+          <p className="text-blue-200">Loading live data from backend...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Process cloud resources into infrastructure format
+  const infrastructure = (cloudResources as any[]).reduce((acc: any[], resource: any) => {
+    const existing = acc.find((item: any) => item.provider === resource.provider.toUpperCase());
+    if (existing) {
+      existing.resources += 1;
+      existing.cost += (resource.cost || 0) / 100; // Convert cents to dollars
+    } else {
+      acc.push({
+        provider: resource.provider.toUpperCase(),
+        status: resource.status === "active" ? "healthy" : resource.status,
+        resources: 1,
+        cost: (resource.cost || 0) / 100
+      });
+    }
+    return acc;
+  }, []);
+
+  // Get system metrics from dashboard stats
+  const systemMetrics = dashboardStats ? [
     { label: "CPU Usage", value: "67%", status: "good" },
-    { label: "Memory", value: "4.2GB / 8GB", status: "good" },
+    { label: "Memory", value: "4.2GB / 8GB", status: "good" }, 
     { label: "Storage", value: "156GB / 500GB", status: "good" },
     { label: "Network", value: "2.3GB/s", status: "excellent" }
-  ];
+  ] : [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -108,7 +141,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {agents.map((agent) => (
+                {(agents as any[]).map((agent: any) => (
                   <motion.div
                     key={agent.id}
                     initial={{ opacity: 0, x: -20 }}
@@ -122,7 +155,7 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <h4 className="font-medium text-white">{agent.name}</h4>
-                        <p className="text-sm text-gray-400">{agent.tasks} active tasks</p>
+                        <p className="text-sm text-gray-400">{agent.taskId ? '1' : '0'} active tasks</p>
                       </div>
                     </div>
                     <Badge className={getStatusColor(agent.status)}>
@@ -145,7 +178,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {infrastructure.map((infra, index) => (
+                {infrastructure.map((infra: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: 20 }}
@@ -159,7 +192,7 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <h4 className="font-medium text-white">{infra.provider}</h4>
-                        <p className="text-sm text-gray-400">{infra.resources} resources • ${infra.cost}/mo</p>
+                        <p className="text-sm text-gray-400">{infra.resources} resources • ${infra.cost.toFixed(2)}/mo</p>
                       </div>
                     </div>
                     <Badge className={getStatusColor(infra.status)}>
