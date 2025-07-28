@@ -78,13 +78,17 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3
       with:
         app-name: 'Careerate'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_4004fc0a217047bba5da69daba16e439 }}
         images: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}'
 
     - name: Post-deployment health check
