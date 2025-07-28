@@ -109,8 +109,6 @@ export default function LandingRedesigned() {
             <MorphingText
               texts={["Introducing Vibe Hosting", "AI-Powered DevOps", "Autonomous Infrastructure", "Multi-Cloud Platform", "Real-Time Monitoring"]}
               className="text-6xl md:text-8xl font-black text-white mb-4"
-              morphTime={3000}
-              cooldownTime={1000}
             />
           </motion.div>
 

@@ -7,6 +7,9 @@ type User = {
   name: string;
   email: string;
   provider: string;
+  tier?: string;
+  tokensRemaining?: number;
+  usagePercentage?: number;
 } | null;
 
 export function useAuth() {

@@ -12,7 +12,7 @@ function useDimensions(ref: React.RefObject<HTMLElement | SVGElement>): Dimensio
   const [dimensions, setDimensions] = useState<Dimensions>({ width: 0, height: 0 });
 
   useEffect(() => {
-    let timeoutId: number;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     const updateDimensions = () => {
       if (ref.current) {

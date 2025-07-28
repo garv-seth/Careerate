@@ -165,10 +165,9 @@ export class AIOrchestrator {
       
       // Log the analysis
       await storage.createAgentLog({
-        agentId: 1, // Planner agent
-        level: "info",
-        message: `Repository analysis completed for ${repositoryUrl}`,
-        metadata: { analysis, repositoryUrl }
+        fromAgent: 'planner',
+        toAgent: 'system',
+        message: `Repository analysis completed for ${repositoryUrl}. Analysis: ${JSON.stringify(analysis)}`,
       });
 
       return analysis as RepositoryAnalysis;
@@ -177,10 +176,9 @@ export class AIOrchestrator {
       
       // Log the error
       await storage.createAgentLog({
-        agentId: 1,
-        level: "error", 
-        message: `Repository analysis failed for ${repositoryUrl}`,
-        metadata: { error: error instanceof Error ? error.message : String(error) }
+        fromAgent: 'planner',
+        toAgent: 'system',
+        message: `Repository analysis failed for ${repositoryUrl}. Error: ${error instanceof Error ? error.message : String(error)}`,
       });
 
       // Return a fallback analysis
@@ -257,23 +255,18 @@ export class AIOrchestrator {
       
       // Create workflow record
       await storage.createWorkflow({
-        name: `Deploy ${repositoryUrl}`,
-        description: `Automated deployment for ${analysis.technology} application`,
+        name: `Deploy ${repositoryUrl.split('/').pop()}`,
+        projectName: repositoryUrl.split('/').pop() || 'New Project',
         status: 'pending',
-        steps: JSON.stringify([...planDetails.buildSteps, ...planDetails.deploymentSteps]),
-        metadata: JSON.stringify({ 
-          repositoryUrl, 
-          analysis, 
-          estimatedDuration: planDetails.estimatedDuration 
-        })
+        nodes: [],
+        connections: [],
       });
 
       // Log plan creation
       await storage.createAgentLog({
-        agentId: 1,
-        level: "info",
-        message: `Deployment plan created for ${repositoryUrl}`,
-        metadata: { planId, repositoryUrl, estimatedDuration: planDetails.estimatedDuration }
+        fromAgent: 'planner',
+        toAgent: 'builder',
+        message: `Deployment plan created for ${repositoryUrl}. Plan ID: ${planId}`,
       });
 
       return planId;
@@ -295,10 +288,9 @@ export class AIOrchestrator {
 
       // Log deployment start
       await storage.createAgentLog({
-        agentId: 2, // Builder agent
-        level: "info",
+        fromAgent: 'builder',
+        toAgent: 'tester',
         message: `Starting deployment execution for plan ${planId}`,
-        metadata: { planId, repositoryUrl: plan.repositoryUrl }
       });
 
       // Simulate deployment execution with the agent system
@@ -309,10 +301,9 @@ export class AIOrchestrator {
 
       // Log completion
       await storage.createAgentLog({
-        agentId: 4, // Deployer agent
-        level: "info",
+        fromAgent: 'deployer',
+        toAgent: 'monitor',
         message: `Deployment completed successfully for plan ${planId}`,
-        metadata: { planId, repositoryUrl: plan.repositoryUrl }
       });
 
     } catch (error) {
@@ -320,10 +311,9 @@ export class AIOrchestrator {
       this.deploymentPlans.set(planId, plan);
       
       await storage.createAgentLog({
-        agentId: 4,
-        level: "error",
-        message: `Deployment failed for plan ${planId}`,
-        metadata: { planId, error: error instanceof Error ? error.message : String(error) }
+        fromAgent: 'deployer',
+        toAgent: 'system',
+        message: `Deployment failed for plan ${planId}. Error: ${error instanceof Error ? error.message : String(error)}`,
       });
       
       throw error;
@@ -338,26 +328,21 @@ export class AIOrchestrator {
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing time
       
       await storage.createAgentLog({
-        agentId: agents.indexOf(agentType) + 1,
-        level: "info",
+        fromAgent: agentType,
+        toAgent: agents[agents.indexOf(agentType) + 1] || 'system',
         message: `${agentType} agent completed processing for ${plan.repositoryUrl}`,
-        metadata: { 
-          planId: plan.id, 
-          agentType, 
-          step: `${agentType}_processing_complete` 
-        }
       });
     }
 
     // Create cloud resources
     if (plan.infrastructure) {
       await storage.createCloudResource({
-        name: `${plan.repositoryUrl.split('/').pop()}-deployment`,
         provider: plan.infrastructure.provider,
-        type: "application",
+        resourceType: "application",
         status: "running",
         region: "us-east-1",
         metadata: JSON.stringify({
+          name: `${plan.repositoryUrl.split('/').pop()}-deployment`,
           services: plan.infrastructure.services,
           estimatedCost: plan.infrastructure.estimatedCost,
           repositoryUrl: plan.repositoryUrl
@@ -416,14 +401,9 @@ export class AIOrchestrator {
       
       // Log optimization analysis
       await storage.createAgentLog({
-        agentId: 5, // Monitor agent
-        level: "info",
-        message: "Infrastructure optimization analysis completed",
-        metadata: { 
-          optimizations, 
-          resourceCount: cloudResources.length,
-          estimatedSavings: optimizations.totalEstimatedSavings 
-        }
+        fromAgent: 'monitor',
+        toAgent: 'system',
+        message: `Infrastructure optimization analysis completed. Savings: ${optimizations.totalEstimatedSavings}`,
       });
 
       return optimizations;

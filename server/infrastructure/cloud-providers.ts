@@ -72,9 +72,9 @@ export interface ProviderStatus {
 export class AWSProvider implements CloudProvider {
   name = "aws";
   region: string;
-  private ec2Client: aws.EC2Client;
-  private eksClient: any; // AWS EKS client
-  private lambdaClient: any; // AWS Lambda client
+  private ec2Client: aws.EC2Client | null;
+  private eksClient: any | null; // AWS EKS client
+  private lambdaClient: any | null; // AWS Lambda client
   private isConfigured: boolean;
 
   constructor(region: string = env.AWS_REGION) {
@@ -89,14 +89,19 @@ export class AWSProvider implements CloudProvider {
           secretAccessKey: env.AWS_SECRET_ACCESS_KEY!
         }
       });
+      this.eksClient = null; // Initialize when needed
+      this.lambdaClient = null; // Initialize when needed
     } else {
+      this.ec2Client = null;
+      this.eksClient = null;
+      this.lambdaClient = null;
       console.warn("⚠️  AWS credentials not configured - AWS integrations disabled");
     }
   }
 
   async authenticate(): Promise<void> {
-    if (!this.isConfigured) {
-      throw new Error("AWS credentials not configured");
+    if (!this.isConfigured || !this.ec2Client) {
+      throw new Error("AWS credentials not configured or client not initialized");
     }
     
     try {
@@ -109,6 +114,9 @@ export class AWSProvider implements CloudProvider {
   }
 
   async createVPC(config: VPCConfig): Promise<VPCResult> {
+    if (!this.ec2Client) {
+      throw new Error("AWS client not initialized");
+    }
     try {
       // Create VPC
       const vpcResponse = await this.ec2Client.send(new aws.CreateVpcCommand({

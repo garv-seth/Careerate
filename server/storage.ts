@@ -174,6 +174,11 @@ export class MemStorage implements IStorage {
       lastName: insertUser.lastName ?? null,
       profileImageUrl: insertUser.profileImageUrl ?? null,
       username: insertUser.username ?? null,
+      tier: 'free',
+      monthlyTokenUsage: 0,
+      lastTokenReset: new Date(),
+      stripeCustomerId: null,
+      subscriptionStatus: null,
       createdAt: new Date(),
       updatedAt: new Date()
     };

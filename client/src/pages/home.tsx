@@ -12,6 +12,14 @@ import careerateLogo from "@assets/CareerateLogo.png";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Agent,
+  CloudResource,
+  Workflow,
+  AnalysisResult,
+  DeploymentPlan,
+  OptimizationResult,
+} from "@/lib/api-types";
 import { 
   Cloud, 
   Bot, 
@@ -45,19 +53,19 @@ export default function Home() {
   };
 
   // Fetch agents data
-  const { data: agents = [], isLoading: agentsLoading } = useQuery({
+  const { data: agents = [], isLoading: agentsLoading } = useQuery<Agent[]>({
     queryKey: ["/api/agents"],
     staleTime: 30000, // 30 seconds
   });
 
   // Fetch workflows data  
-  const { data: workflows = [], isLoading: workflowsLoading } = useQuery({
+  const { data: workflows = [], isLoading: workflowsLoading } = useQuery<Workflow[]>({
     queryKey: ["/api/workflows"],
     staleTime: 30000,
   });
 
   // Fetch cloud resources
-  const { data: cloudResources = [], isLoading: cloudLoading } = useQuery({
+  const { data: cloudResources = [], isLoading: cloudLoading } = useQuery<CloudResource[]>({
     queryKey: ["/api/cloud-resources"],
     staleTime: 30000,
   });
@@ -70,11 +78,11 @@ export default function Home() {
 
   // Repository analysis mutation
   const analyzeMutation = useMutation({
-    mutationFn: async (repoUrl: string) => {
-      return await apiRequest("/api/deploy/analyze", {
-        method: "POST",
-        body: { repositoryUrl: repoUrl }
+    mutationFn: async (repoUrl: string): Promise<AnalysisResult> => {
+      const res = await apiRequest("POST", "/api/deploy/analyze", {
+        repositoryUrl: repoUrl,
       });
+      return res.json();
     },
     onSuccess: (analysis) => {
       toast({
@@ -93,11 +101,11 @@ export default function Home() {
 
   // Deployment plan creation mutation
   const deployMutation = useMutation({
-    mutationFn: async (repoUrl: string) => {
-      return await apiRequest("/api/deploy/plan", {
-        method: "POST",
-        body: { repositoryUrl: repoUrl }
+    mutationFn: async (repoUrl: string): Promise<DeploymentPlan> => {
+      const res = await apiRequest("POST", "/api/deploy/plan", {
+        repositoryUrl: repoUrl,
       });
+      return res.json();
     },
     onSuccess: (result) => {
       toast({
@@ -118,10 +126,9 @@ export default function Home() {
 
   // Infrastructure optimization mutation
   const optimizeMutation = useMutation({
-    mutationFn: async () => {
-      return await apiRequest("/api/infrastructure/optimize", {
-        method: "POST"
-      });
+    mutationFn: async (): Promise<OptimizationResult> => {
+      const res = await apiRequest("POST", "/api/infrastructure/optimize");
+      return res.json();
     },
     onSuccess: (optimizations) => {
       toast({
@@ -241,7 +248,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-300 text-sm">Active Agents</p>
-                      <p className="text-2xl font-bold">{agents.filter((a: any) => a.status === 'active').length}</p>
+                      <p className="text-2xl font-bold">{agents.filter((a) => a.status === 'active').length}</p>
                     </div>
                     <Bot className="h-8 w-8 text-blue-400" />
                   </div>
@@ -265,7 +272,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-300 text-sm">Active Workflows</p>
-                      <p className="text-2xl font-bold">{workflows.filter((w: any) => w.status === 'running').length}</p>
+                      <p className="text-2xl font-bold">{workflows.filter((w) => w.status === 'running').length}</p>
                     </div>
                     <Activity className="h-8 w-8 text-blue-400" />
                   </div>
@@ -328,7 +335,7 @@ export default function Home() {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
                 </div>
               ) : (
-                agents.map((agent: any) => (
+                agents.map((agent) => (
                   <Card key={agent.id} className="bg-black/20 backdrop-blur-xl border-white/10">
                     <CardHeader>
                       <div className="flex items-center justify-between">
@@ -507,7 +514,7 @@ export default function Home() {
                   </CardContent>
                 </Card>
               ) : (
-                workflows.map((workflow: any) => (
+                workflows.map((workflow) => (
                   <Card key={workflow.id} className="bg-black/20 backdrop-blur-xl border-white/10">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">

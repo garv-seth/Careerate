@@ -2,12 +2,13 @@ import { z } from "zod";
 
 const environmentSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-  PORT: z.string().transform(Number).default(5000),
+  PORT: z.string().transform(Number).default("5000"),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   
   // AI/ML Configuration - Azure AI Foundry (preferred) or OpenAI
   AZURE_OPENAI_ENDPOINT: z.string().optional(),
   AZURE_OPENAI_API_KEY: z.string().optional(),
+  AZURE_OPENAI_DEPLOYMENT_NAME: z.string().optional(),
   AZURE_FOUNDRY_PHI4_DEPLOYMENT: z.string().optional(),
   AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
@@ -49,10 +50,6 @@ const environmentSchema = z.object({
       ? "" // Will cause validation error in production if not set
       : "development-session-secret-min-32-chars-long"
   ),
-  
-  // GitHub Integration (optional)
-  GITHUB_CLIENT_ID: z.string().optional(),
-  GITHUB_CLIENT_SECRET: z.string().optional(),
 });
 
 export type Environment = z.infer<typeof environmentSchema>;

@@ -94,7 +94,6 @@ export const ThreeHero = () => {
       // Additional mobile optimizations
       if (isMobile) {
         refs.renderer.shadowMap.enabled = false;
-        refs.renderer.physicallyBasedShading = false;
       }
 
       // Create scene elements
@@ -337,7 +336,9 @@ export const ThreeHero = () => {
         mountain.position.z = layer.distance;
         mountain.position.y = -80;
         mountain.userData = { baseZ: layer.distance, index };
-        refs.scene.add(mountain);
+        if (refs.scene) {
+          refs.scene.add(mountain);
+        }
         refs.mountains.push(mountain);
       });
     };
@@ -396,18 +397,18 @@ export const ThreeHero = () => {
 
       // Update stars
       refs.stars.forEach((starField) => {
-        if (starField.material.uniforms) {
+        if (starField.material instanceof THREE.ShaderMaterial && starField.material.uniforms.time) {
           starField.material.uniforms.time.value = time;
         }
       });
 
       // Update nebula
-      if (refs.nebula && refs.nebula.material.uniforms) {
+      if (refs.nebula?.material instanceof THREE.ShaderMaterial && refs.nebula.material.uniforms.time) {
         refs.nebula.material.uniforms.time.value = time;
       }
 
       // Update atmosphere
-      if (refs.atmosphere && refs.atmosphere.material.uniforms) {
+      if (refs.atmosphere?.material instanceof THREE.ShaderMaterial && refs.atmosphere.material.uniforms.time) {
         refs.atmosphere.material.uniforms.time.value = time;
       }
 
@@ -549,7 +550,7 @@ export const ThreeHero = () => {
         opacity: 0,
         duration: 1.5,
         stagger: 0.2,
-        ease: [0.22, 1, 0.36, 1]
+        ease: "power4.out"
       });
     }
 
@@ -559,7 +560,7 @@ export const ThreeHero = () => {
         opacity: 0,
         y: 50,
         duration: 1,
-        ease: [0.22, 1, 0.36, 1]
+        ease: "power4.out"
       }, "-=0.5");
     }
 
