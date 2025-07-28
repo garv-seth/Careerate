@@ -43,6 +43,26 @@ const environmentSchema = z.object({
   AZURE_CLIENT_SECRET: z.string().optional(),
   AZURE_TENANT_ID: z.string().optional(),
   AZURE_SUBSCRIPTION_ID: z.string().optional(),
+
+  // Additional AI and Service Keys
+  ANTHROPIC_API_KEY: z.string().optional(),
+  BROWSERBASE_API_KEY: z.string().optional(),
+  DATADOG_API_KEY: z.string().optional(),
+  DATADOG_APP_KEY: z.string().optional(),
+  FIRECRAWL_API_KEY: z.string().optional(),
+
+  // Firebase Configuration
+  FIREBASE_API_KEY: z.string().optional(),
+  FIREBASE_AUTH_DOMAIN: z.string().optional(),
+  FIREBASE_PROJECT_ID: z.string().optional(),
+
+  // Gmail Configuration (likely for Google OAuth or email)
+  GMAIL_CLIENT_ID: z.string().optional(),
+  GMAIL_CLIENT_SECRET: z.string().optional(),
+
+  // Other redirects and secrets
+  AZURE_REDIRECT_URI: z.string().optional(),
+  GITHUB_REDIRECT_URI: z.string().optional(),
   
   // Application Configuration
   SESSION_SECRET: z.string().min(32, "SESSION_SECRET must be at least 32 characters").default(
