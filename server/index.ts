@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { env } from "./config/environment";
+import { testDatabaseConnection } from "./db";
 
 const app = express();
 app.use(express.json());
@@ -37,34 +39,69 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  try {
+    console.log(`🚀 Starting Careerate platform in ${env.NODE_ENV} mode...`);
+    
+    // Test database connection before starting server
+    console.log("🔌 Testing database connection...");
+    await testDatabaseConnection();
+    
+    const server = await registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const status = err.status || err.statusCode || 500;
+      const message = err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
-  });
+      console.error(`❌ Express error (${status}):`, message);
+      res.status(status).json({ message });
+      
+      // Don't throw in production to keep server running
+      if (env.NODE_ENV !== 'production') {
+        throw err;
+      }
+    });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+    // Setup Vite in development or serve static files in production
+    if (env.NODE_ENV === "development") {
+      console.log("🔧 Setting up Vite development server...");
+      await setupVite(app, server);
+    } else {
+      console.log("📦 Serving static files from dist/public...");
+      serveStatic(app);
+    }
+
+    // Use Azure's assigned port or default to 5000 for local development
+    const port = env.PORT;
+    server.listen(port, "0.0.0.0", () => {
+      console.log(`✅ Careerate platform is running on port ${port}`);
+      console.log(`🌐 Health check: http://localhost:${port}/health`);
+      console.log(`🔍 API docs: http://localhost:${port}/api/health`);
+      
+      if (env.NODE_ENV === 'development') {
+        console.log(`🎯 Dashboard: http://localhost:${port}/dashboard`);
+      }
+    });
+
+    // Graceful shutdown handling
+    process.on('SIGTERM', () => {
+      console.log('🛑 SIGTERM received, shutting down gracefully...');
+      server.close(() => {
+        console.log('✅ Server closed successfully');
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', () => {
+      console.log('🛑 SIGINT received, shutting down gracefully...');
+      server.close(() => {
+        console.log('✅ Server closed successfully');
+        process.exit(0);
+      });
+    });
+
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    console.error('💡 Check your environment variables and database connection');
+    process.exit(1);
   }
-
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
 })();

@@ -21,6 +21,11 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   username: varchar("username", { length: 50 }).unique(), // Keep for backwards compatibility
+  tier: varchar("tier", { length: 20 }).notNull().default("free"), // free, pro, enterprise
+  monthlyTokenUsage: integer("monthly_token_usage").default(0),
+  lastTokenReset: timestamp("last_token_reset").defaultNow(),
+  stripeCustomerId: varchar("stripe_customer_id"),
+  subscriptionStatus: varchar("subscription_status"), // active, canceled, past_due
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

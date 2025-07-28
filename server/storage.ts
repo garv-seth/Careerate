@@ -190,11 +190,55 @@ export class MemStorage implements IStorage {
       lastName: userData.lastName ?? existingUser?.lastName ?? null,
       profileImageUrl: userData.profileImageUrl ?? existingUser?.profileImageUrl ?? null,
       username: userData.username ?? existingUser?.username ?? null,
+      tier: existingUser?.tier ?? 'free', // Default to free tier for new users
+      monthlyTokenUsage: existingUser?.monthlyTokenUsage ?? 0,
+      lastTokenReset: existingUser?.lastTokenReset ?? new Date(),
+      stripeCustomerId: existingUser?.stripeCustomerId ?? null,
+      subscriptionStatus: existingUser?.subscriptionStatus ?? null,
       updatedAt: new Date(),
       createdAt: existingUser?.createdAt ?? new Date()
     };
     this.users.set(userData.id, user);
     return user;
+  }
+
+  // User tier and token management methods
+  async updateUserTokenUsage(userId: string, tokensUsed: number): Promise<number> {
+    const user = this.users.get(userId);
+    if (!user) throw new Error("User not found");
+
+    // Reset monthly usage if it's a new month
+    const now = new Date();
+    const lastReset = new Date(user.lastTokenReset || now);
+    const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
+
+    const newUsage = isNewMonth ? tokensUsed : (user.monthlyTokenUsage || 0) + tokensUsed;
+    const resetDate = isNewMonth ? now : lastReset;
+
+    const updatedUser: User = {
+      ...user,
+      monthlyTokenUsage: newUsage,
+      lastTokenReset: resetDate,
+      updatedAt: now
+    };
+
+    this.users.set(userId, updatedUser);
+    return newUsage;
+  }
+
+  async updateUserTier(userId: string, tier: 'free' | 'pro' | 'enterprise', stripeCustomerId?: string): Promise<User | undefined> {
+    const user = this.users.get(userId);
+    if (!user) return undefined;
+
+    const updatedUser: User = {
+      ...user,
+      tier,
+      stripeCustomerId: stripeCustomerId || user.stripeCustomerId,
+      updatedAt: new Date()
+    };
+
+    this.users.set(userId, updatedUser);
+    return updatedUser;
   }
 
   // Agents

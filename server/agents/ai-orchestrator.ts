@@ -1,10 +1,48 @@
 import OpenAI from "openai";
 import { storage } from "../storage";
 import { agentRegistry } from "./agent-registry";
+import { env } from "../config/environment";
 
-const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY 
-});
+// Azure OpenAI configuration for economical yet powerful models
+const getAzureOpenAIClient = () => {
+  if (env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY) {
+    console.log("🔵 Using Azure OpenAI for AI orchestration");
+    return new OpenAI({
+      apiKey: env.AZURE_OPENAI_API_KEY,
+      baseURL: `${env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
+      defaultQuery: { 'api-version': '2024-02-15-preview' },
+      defaultHeaders: {
+        'api-key': env.AZURE_OPENAI_API_KEY,
+      },
+    });
+  } else if (env.OPENAI_API_KEY) {
+    console.log("🟢 Using OpenAI API for AI orchestration");
+    return new OpenAI({ 
+      apiKey: env.OPENAI_API_KEY 
+    });
+  } else {
+    throw new Error("No AI provider configured. Set either Azure OpenAI or OpenAI credentials.");
+  }
+};
+
+const openai = getAzureOpenAIClient();
+
+// Model configuration optimized for Azure AI Foundry
+const MODEL_CONFIG = {
+  // Phi-4 Reasoning: Most cost-effective yet powerful model for all complex tasks
+  pro: env.AZURE_FOUNDRY_PHI4_DEPLOYMENT || "phi-4-reasoning", // $0.022/1M tokens - incredible value
+  
+  // Ministral-3B: Ultra-cheap for free tier and simple tasks
+  free: env.AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT || "ministral-3b", // $0.004/1M tokens - cheapest option
+  
+  // Unified model selection based on user tier
+  getModel: (userTier: 'free' | 'pro' | 'enterprise', taskComplexity: 'simple' | 'complex' = 'complex') => {
+    if (userTier === 'free' || taskComplexity === 'simple') {
+      return MODEL_CONFIG.free;
+    }
+    return MODEL_CONFIG.pro; // Phi-4 for all paying users
+  }
+};
 
 interface RepositoryAnalysis {
   technology: string;
@@ -62,7 +100,7 @@ export class AIOrchestrator {
     }
   }
   
-  async analyzeRepository(repositoryUrl: string): Promise<RepositoryAnalysis> {
+  async analyzeRepository(repositoryUrl: string, userTier: 'free' | 'pro' | 'enterprise' = 'free'): Promise<RepositoryAnalysis> {
     try {
       // Update agent status to analyzing
       agentRegistry.updateAgentStatus('planner', 'building');
@@ -70,15 +108,25 @@ export class AIOrchestrator {
       // Fetch repository details from GitHub API
       const repoDetails = await this.fetchRepositoryDetails(repositoryUrl);
       
-      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      // Select model based on user tier - Phi-4 for Pro users, Ministral-3B for Free
+      const modelToUse = MODEL_CONFIG.getModel(userTier, 'complex');
+      console.log(`🧠 Using ${modelToUse} for ${userTier} user repository analysis`);
+      
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: modelToUse,
         messages: [
           {
             role: "system",
-            content: `You are an expert DevOps AI agent that analyzes code repositories and recommends optimal deployment strategies. 
+            content: `You are an expert DevOps AI agent powered by advanced reasoning capabilities. Analyze code repositories and provide optimal deployment strategies.
+            
+            ${userTier === 'free' ? 
+              '⚠️ FREE TIER: Provide basic analysis with clear upgrade prompts. Mention limitations and benefits of Pro tier.' : 
+              '🚀 PRO TIER: Provide comprehensive analysis with advanced insights, detailed optimization recommendations, and multi-cloud strategies.'
+            }
+            
             Analyze the repository and provide recommendations for cloud infrastructure, build processes, and deployment strategies.
             Consider cost optimization, scalability, and security best practices.
+            
             Respond with JSON in this format:
             {
               "technology": "string",
@@ -89,7 +137,8 @@ export class AIOrchestrator {
                 "provider": "aws|gcp|azure",
                 "services": ["array of cloud services"],
                 "estimatedCost": number
-              }
+              },
+              "tierUpgradePrompt": ${userTier === 'free' ? '"Upgrade to Pro for advanced insights, multi-cloud analysis, and priority support!"' : 'null'}
             }`
           },
           {
@@ -149,13 +198,16 @@ export class AIOrchestrator {
     }
   }
 
-  async createDeploymentPlan(repositoryUrl: string): Promise<string> {
+  async createDeploymentPlan(repositoryUrl: string, userTier: 'free' | 'pro' | 'enterprise' = 'free'): Promise<string> {
     try {
-      const analysis = await this.analyzeRepository(repositoryUrl);
+      const analysis = await this.analyzeRepository(repositoryUrl, userTier);
       
-      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      // Use Phi-4 for Pro users, Ministral-3B for Free users
+      const modelToUse = MODEL_CONFIG.getModel(userTier, 'complex');
+      console.log(`📋 Using ${modelToUse} for ${userTier} user deployment planning`);
+      
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: modelToUse,
         messages: [
           {
             role: "system",
@@ -322,13 +374,16 @@ export class AIOrchestrator {
     return Array.from(this.deploymentPlans.values());
   }
 
-  async optimizeInfrastructure(): Promise<any> {
+  async optimizeInfrastructure(userTier: 'free' | 'pro' | 'enterprise' = 'free'): Promise<any> {
     try {
       const cloudResources = await storage.getAllCloudResources();
       
-      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      // Use Phi-4 for Pro users for advanced optimization, Ministral-3B for basic optimization
+      const modelToUse = MODEL_CONFIG.getModel(userTier, 'complex'); 
+      console.log(`⚡ Using ${modelToUse} for ${userTier} user infrastructure optimization`);
+      
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: modelToUse,
         messages: [
           {
             role: "system",

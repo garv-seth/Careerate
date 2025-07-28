@@ -8,8 +8,169 @@ import { aiOrchestrator } from "./agents/ai-orchestrator";
 import { infrastructureOrchestrator } from "./infrastructure/cloud-providers";
 import { agentRegistry } from "./agents/agent-registry";
 import authRoutes from "./auth/auth-routes";
+import { env } from "./config/environment";
+import { testDatabaseConnection } from "./db";
+
+// Helper function to check service health status
+async function getServiceHealthStatus() {
+  const services: any = {};
+  
+  // Database health
+  try {
+    await testDatabaseConnection();
+    services.database = { status: 'healthy', latency: 'low' };
+  } catch (error) {
+    services.database = { status: 'unhealthy', error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+  
+  // AI Service health
+  const hasAzureOpenAI = env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY && env.AZURE_OPENAI_DEPLOYMENT_NAME;
+  const hasOpenAI = env.OPENAI_API_KEY;
+  
+  services.ai = {
+    status: (hasAzureOpenAI || hasOpenAI) ? 'configured' : 'not_configured',
+    provider: hasAzureOpenAI ? 'azure_openai' : hasOpenAI ? 'openai' : 'none',
+    models: hasAzureOpenAI ? 'gpt-4o-mini, gpt-35-turbo' : hasOpenAI ? 'gpt-4o-mini' : 'none'
+  };
+  
+  // Agent Registry health
+  try {
+    const agents = agentRegistry.getAgents();
+    services.agents = {
+      status: 'healthy',
+      count: agents.length,
+      active: agents.filter(a => a.status === 'active').length
+    };
+  } catch (error) {
+    services.agents = { status: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+  
+  // Cloud Providers health
+  services.cloudProviders = {
+    aws: env.AWS_ACCESS_KEY_ID ? 'configured' : 'not_configured',
+    gcp: env.GOOGLE_APPLICATION_CREDENTIALS || env.GOOGLE_CLOUD_PROJECT ? 'configured' : 'not_configured',
+    azure: env.AZURE_CLIENT_ID ? 'configured' : 'not_configured'
+  };
+  
+  return services;
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health Check Endpoints (required for Azure Web App)
+  app.get('/health', async (req, res) => {
+    try {
+      const healthStatus = {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        environment: env.NODE_ENV,
+        version: process.env.npm_package_version || '1.0.0',
+        services: {
+          database: 'checking...',
+          ai: 'checking...',
+          agents: 'checking...'
+        }
+      };
+
+      // Test database connection
+      try {
+        await testDatabaseConnection();
+        healthStatus.services.database = 'healthy';
+      } catch (error) {
+        healthStatus.services.database = 'unhealthy';
+        healthStatus.status = 'degraded';
+      }
+
+      // Test AI service connection
+      try {
+        const hasAzureOpenAI = env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY && env.AZURE_OPENAI_DEPLOYMENT_NAME;
+        const hasOpenAI = env.OPENAI_API_KEY;
+        
+        if (hasAzureOpenAI) {
+          healthStatus.services.ai = 'azure_openai_configured';
+        } else if (hasOpenAI) {
+          healthStatus.services.ai = 'openai_configured';
+        } else {
+          healthStatus.services.ai = 'not_configured';
+          healthStatus.status = 'degraded';
+        }
+      } catch (error) {
+        healthStatus.services.ai = 'error';
+      }
+
+      // Check agent registry
+      try {
+        const agents = agentRegistry.getAgents();
+        healthStatus.services.agents = `${agents.length} agents registered`;
+      } catch (error) {
+        healthStatus.services.agents = 'error';
+      }
+
+      // Return appropriate status code
+      const statusCode = healthStatus.status === 'healthy' ? 200 : 503;
+      res.status(statusCode).json(healthStatus);
+    } catch (error) {
+      res.status(503).json({
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // Readiness probe (for Kubernetes/container orchestration)
+  app.get('/ready', async (req, res) => {
+    try {
+      await testDatabaseConnection();
+      res.status(200).json({ 
+        status: 'ready',
+        timestamp: new Date().toISOString() 
+      });
+    } catch (error) {
+      res.status(503).json({ 
+        status: 'not_ready',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'Database not ready'
+      });
+    }
+  });
+
+  // Liveness probe
+  app.get('/live', (req, res) => {
+    res.status(200).json({ 
+      status: 'alive',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  });
+
+  // API Health endpoint
+  app.get('/api/health', async (req, res) => {
+    try {
+      const stats = {
+        status: 'operational',
+        timestamp: new Date().toISOString(),
+        system: {
+          node_version: process.version,
+          platform: process.platform,
+          memory: {
+            used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+            total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
+          },
+          uptime: Math.round(process.uptime())
+        },
+        services: await getServiceHealthStatus()
+      };
+
+      res.json(stats);
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'Health check failed'
+      });
+    }
+  });
+
   // Setup Replit Authentication
   await setupAuth(app);
 

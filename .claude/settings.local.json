@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(az login:*)",
+      "Bash(az account:*)",
+      "Bash(az group show:*)",
+      "Bash(az:*)"
+    ],
+    "deny": []
+  }
+}

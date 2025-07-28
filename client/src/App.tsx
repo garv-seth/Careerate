@@ -11,6 +11,7 @@ import LandingNew from "@/pages/landing-new"
 import LandingRedesigned from "@/pages/landing-redesigned"
 import Home from "@/pages/home"
 import Dashboard from "@/pages/dashboard"
+import Pricing from "@/pages/pricing"
 import NotFound from "@/pages/not-found"
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/landing-redesigned" component={LandingRedesigned} />
                 <Route path="/home" component={Home} />
                 <Route path="/dashboard" component={Dashboard} />
+                <Route path="/pricing" component={Pricing} />
                 <Route component={NotFound} />
               </Switch>
             </Router>
