@@ -30,13 +30,10 @@ AZURE_OPENAI_SETUP.md
 README.md
 LICENSE
 .github
-replit.md
 DEBIAN.md
 AZURE_SENTINEL.md
 CLAUDE.md
 DEPLOYMENT_INSTRUCTIONS.md
-.replit
-replit.nix
 
 # Temp files
 *.bak

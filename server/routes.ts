@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertAgentSchema, insertWorkflowSchema, insertAgentLogSchema } from "@shared/schema";
 import { z } from "zod";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth } from "../auth/azure-b2c-auth";
 import { aiOrchestrator } from "./agents/ai-orchestrator";
 import { infrastructureOrchestrator } from "./infrastructure/cloud-providers";
 import { agentRegistry } from "./agents/agent-registry";
@@ -171,8 +171,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Setup Replit Authentication
-  await setupAuth(app);
+  // Setup Azure B2C Authentication
+  setupAuth(app);
 
   // OAuth Authentication routes
   app.use('/api', authRoutes);
@@ -227,17 +227,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Auth routes
-  app.get('/api/auth/user', async (req: any, res) => {
-    try {
-      const session = req.session as any;
-      if (session?.isAuthenticated && session?.user) {
-        res.json(session.user);
-      } else {
-        res.status(401).json({ error: "Not authenticated" });
-      }
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+  app.get('/api/auth/user', (req, res) => {
+    if (req.session && req.session.isAuthenticated) {
+      res.json({
+        isAuthenticated: true,
+        user: req.session.user,
+      });
+    } else {
+      res.json({
+        isAuthenticated: false,
+        user: null,
+      });
+    }
+  });
+
+  app.get("/api/auth/logout", (req, res, next) => {
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/");
+      });
+    } else {
+      res.redirect("/");
     }
   });
 
@@ -297,7 +310,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Orchestration API
-  app.post("/api/deploy/analyze", isAuthenticated, async (req, res) => {
+  app.post("/api/deploy/analyze", async (req, res) => {
     try {
       const { repositoryUrl } = req.body;
       if (!repositoryUrl) {
@@ -319,7 +332,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/deploy/plan", isAuthenticated, async (req, res) => {
+  app.post("/api/deploy/plan", async (req, res) => {
     try {
       const { repositoryUrl } = req.body;
       if (!repositoryUrl) {

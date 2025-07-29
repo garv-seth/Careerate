@@ -3,7 +3,8 @@ import { z } from "zod";
 const environmentSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.string().transform(Number).default("5000"),
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  COSMOSDB_CONNECTION_STRING_CENTRALUS: z.string().min(1, "COSMOSDB_CONNECTION_STRING_CENTRALUS is required"),
+  COSMOSDB_KEY: z.string().min(32, "COSMOSDB_KEY must be at least 32 characters"),
   
   // AI/ML Configuration - Azure AI Foundry (preferred) or OpenAI
   AZURE_OPENAI_ENDPOINT: z.string().optional(),
@@ -65,11 +66,7 @@ const environmentSchema = z.object({
   GITHUB_REDIRECT_URI: z.string().optional(),
   
   // Application Configuration
-  SESSION_SECRET: z.string().min(32, "SESSION_SECRET must be at least 32 characters").default(
-    process.env.NODE_ENV === "production" 
-      ? "" // Will cause validation error in production if not set
-      : "development-session-secret-min-32-chars-long"
-  ),
+  SESSION_SECRET: z.string().min(32, "SESSION_SECRET must be at least 32 characters"),
 });
 
 export type Environment = z.infer<typeof environmentSchema>;
@@ -77,7 +74,12 @@ export type Environment = z.infer<typeof environmentSchema>;
 let env: Environment;
 
 try {
-  env = environmentSchema.parse(process.env);
+  const rawEnv = {
+    ...process.env,
+    DATABASE_URL: process.env.COSMOSDB_CONNECTION_STRING_CENTRALUS,
+    SESSION_SECRET: process.env.COSMOSDB_KEY,
+  };
+  env = environmentSchema.parse(rawEnv);
 } catch (error) {
   if (error instanceof z.ZodError) {
     console.error("❌ Environment validation failed:");
