@@ -124,7 +124,7 @@ export function WorkflowEditor() {
   });
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    (params: Connection) => setEdges((eds: Edge[]) => addEdge(params, eds)),
     [setEdges]
   );
 
@@ -141,7 +141,7 @@ export function WorkflowEditor() {
         color: "gray",
       },
     };
-    setNodes((nds) => nds.concat(newNode));
+    setNodes((nds: Node[]) => nds.concat(newNode));
   };
 
   const saveWorkflow = () => {

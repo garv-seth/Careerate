@@ -302,9 +302,9 @@ const ParticleWave: React.FC<ParticleWaveProps> = ({ className = '' }) => {
         if (particles.geometry) particles.geometry.dispose();
         if (particles.material) {
           if (Array.isArray(particles.material)) {
-            particles.material.forEach(material => material.dispose());
+            particles.material.forEach((material: THREE.Material) => material.dispose());
           } else {
-            particles.material.dispose();
+            (particles.material as THREE.Material).dispose();
           }
         }
         renderer.dispose();
