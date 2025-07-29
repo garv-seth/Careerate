@@ -1,45 +1,47 @@
+# Use a single-stage build for simplicity and clarity
+FROM node:20-alpine AS builder
 
-# Use Node.js 20 Alpine as base image
-FROM node:20-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# Set the working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
-
-# Build the application
-FROM base AS builder
-WORKDIR /app
+# Copy package management files and install all dependencies
 COPY package*.json ./
 RUN npm ci
 
-# Copy source code
+# Copy the rest of the application source code
 COPY . .
 
 # Build the application
+# The `build` script in package.json should handle both client and server builds
 RUN npm run build
 
 # Production image
-FROM base AS runner
+FROM node:20-alpine AS runner
+
 WORKDIR /app
 
+# Set production environment
 ENV NODE_ENV=production
 ENV PORT=80
 
+# Create a non-root user for security
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy built application
+# Copy built application and production dependencies
 COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./
-COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
+# Switch to the non-root user
 USER nextjs
 
+# Expose the port the app runs on
 EXPOSE 80
 
-CMD ["npm", "run", "start"]
+# Add a healthcheck to verify the server is running
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost:80/health || exit 1
+
+# Start the application
+CMD ["node", "dist/index.js"]
