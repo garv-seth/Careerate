@@ -4,20 +4,18 @@ import path from "path";
 
 export default defineConfig(async () => {
   return {
-    plugins: [
-      react(),
-    ],
-    optimizeDeps: {
-      exclude: ["@replit/vite-plugin-runtime-error-modal"],
+    plugins: [react()],
+    root: path.resolve(import.meta.dirname, "client"),
+    resolve: {
+      alias: {
+        "@": path.resolve(import.meta.dirname, "client", "src"),
+        "@shared": path.resolve(import.meta.dirname, "shared"),
+        "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      },
     },
     build: {
-      outDir: "dist/public",
+      outDir: path.resolve(import.meta.dirname, "dist/public"),
       emptyOutDir: true,
-      rollupOptions: {
-        output: {
-          // Additional output options if needed
-        },
-      },
     },
     server: {
       host: "0.0.0.0",
