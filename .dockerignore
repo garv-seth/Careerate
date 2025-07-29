@@ -92,4 +92,3 @@ coverage/
 /components.json
 /client/index-test.html
 /client/src/main-test.tsx
-/server/replitAuth.ts
