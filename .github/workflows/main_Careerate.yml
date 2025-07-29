@@ -86,9 +86,9 @@ jobs:
 
     - name: Assign AcrPull role to App Service
       run: |
-        PRINCIPAL_ID=$(az webapp identity show --name Careerate --resource-group Careerate-rg --query principalId --output tsv)
+        PRINCIPAL_ID=$(az webapp identity show --name Careerate --resource-group Careerate --query principalId --output tsv)
         ACR_NAME=$(echo "${{ env.REGISTRY }}" | cut -d'.' -f1)
-        ACR_ID=$(az acr show --name $ACR_NAME --resource-group Careerate-rg --query id --output tsv)
+        ACR_ID=$(az acr show --name $ACR_NAME --resource-group Careerate --query id --output tsv)
         az role assignment create --assignee $PRINCIPAL_ID --scope $ACR_ID --role "AcrPull"
 
     - name: Deploy to Azure Web App
