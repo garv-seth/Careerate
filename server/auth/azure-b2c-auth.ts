@@ -3,19 +3,24 @@ import { Request, Response, NextFunction } from "express";
 import { env } from "../config/environment";
 import { storage } from "../storage";
 
+let setupAzureB2CAuth: (app: any) => void;
+let requireAuth: (req: Request, res: Response, next: NextFunction) => void;
+let checkTokenUsage: (req: Request, res: Response, next: NextFunction) => void;
+let trackTokenUsage: (userId: string, tokensUsed: number) => Promise<void>;
+let SUPPORTED_PROVIDERS: any;
+let USER_TIERS: any;
+
 // Validate required B2C environment variables
 if (!env.AZURE_B2C_CLIENT_ID || !env.AZURE_B2C_CLIENT_SECRET || !env.AZURE_B2C_TENANT_NAME) {
   console.warn("⚠️ Azure B2C environment variables not fully configured. B2C auth will be disabled.");
 
   // Export mock/no-op functions if B2C is not configured
-  module.exports = {
-    setupAzureB2CAuth: () => {},
-    requireAuth: (req: Request, res: Response, next: NextFunction) => next(),
-    checkTokenUsage: (req: Request, res: Response, next: NextFunction) => next(),
-    trackTokenUsage: async (userId: string, tokensUsed: number) => {},
-    SUPPORTED_PROVIDERS: {},
-    USER_TIERS: {},
-  };
+  setupAzureB2CAuth = () => {};
+  requireAuth = (req: Request, res: Response, next: NextFunction) => next();
+  checkTokenUsage = (req: Request, res: Response, next: NextFunction) => next();
+  trackTokenUsage = async (userId: string, tokensUsed: number) => {};
+  SUPPORTED_PROVIDERS = {};
+  USER_TIERS = {};
 
 } else {
   // Azure B2C Configuration is valid, proceed with setup
@@ -40,20 +45,20 @@ if (!env.AZURE_B2C_CLIENT_ID || !env.AZURE_B2C_CLIENT_SECRET || !env.AZURE_B2C_T
 
   const pca = new ConfidentialClientApplication(msalConfig);
 
-  const SUPPORTED_PROVIDERS = {
+  SUPPORTED_PROVIDERS = {
     microsoft: { name: "Microsoft", scope: ["openid", "profile", "email"], icon: "microsoft", enabled: true },
     github: { name: "GitHub", scope: ["openid", "profile", "email"], icon: "github", enabled: !!(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) },
     google: { name: "Google", scope: ["openid", "profile", "email"], icon: "google", enabled: !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) },
     gitlab: { name: "GitLab", scope: ["openid", "profile", "email"], icon: "gitlab", enabled: !!(env.GITLAB_CLIENT_ID && env.GITLAB_CLIENT_SECRET) }
   };
 
-  const USER_TIERS = {
+  USER_TIERS = {
     free: { name: "Free", monthlyTokenLimit: 10000, features: ["Basic analysis", "Simple deployments"], price: 0 },
     pro: { name: "Pro", monthlyTokenLimit: 1000000, features: ["Advanced analysis", "Complex deployments"], price: 29 },
     enterprise: { name: "Enterprise", monthlyTokenLimit: 10000000, features: ["Custom models", "Dedicated support"], price: 299 }
   };
 
-  const setupAzureB2CAuth = (app: any) => {
+  setupAzureB2CAuth = (app: any) => {
     app.get('/auth/login', async (req: Request, res: Response) => {
       if (!env.AZURE_B2C_REDIRECT_URI) return res.status(500).json({ error: "Redirect URI not configured." });
       const authCodeUrlParameters = { scopes: ["openid", "profile", "email"], redirectUri: env.AZURE_B2C_REDIRECT_URI };
@@ -108,12 +113,12 @@ if (!env.AZURE_B2C_CLIENT_ID || !env.AZURE_B2C_CLIENT_SECRET || !env.AZURE_B2C_T
     console.log('✅ Azure B2C authentication configured');
   };
 
-  const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  requireAuth = (req: Request, res: Response, next: NextFunction) => {
     if (!(req.session as any)?.isAuthenticated) return res.status(401).json({ error: 'Authentication required' });
     next();
   };
 
-  const checkTokenUsage = async (req: Request, res: Response, next: NextFunction) => {
+  checkTokenUsage = async (req: Request, res: Response, next: NextFunction) => {
     const session = req.session as any;
     if (!session?.user?.id) return res.status(401).json({ error: 'Authentication required' });
     const user = await storage.getUser(session.user.id);
@@ -124,16 +129,16 @@ if (!env.AZURE_B2C_CLIENT_ID || !env.AZURE_B2C_CLIENT_SECRET || !env.AZURE_B2C_T
     next();
   };
 
-  const trackTokenUsage = async (userId: string, tokensUsed: number) => {
+  trackTokenUsage = async (userId: string, tokensUsed: number) => {
     await storage.updateUserTokenUsage(userId, tokensUsed);
   };
-
-  module.exports = {
-    setupAzureB2CAuth,
-    requireAuth,
-    checkTokenUsage,
-    trackTokenUsage,
-    SUPPORTED_PROVIDERS,
-    USER_TIERS,
-  };
 }
+
+export {
+  setupAzureB2CAuth,
+  requireAuth,
+  checkTokenUsage,
+  trackTokenUsage,
+  SUPPORTED_PROVIDERS,
+  USER_TIERS,
+};

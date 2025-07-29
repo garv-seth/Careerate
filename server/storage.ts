@@ -298,10 +298,12 @@ export class MemStorage implements IStorage {
 
   async createWorkflow(insertWorkflow: InsertWorkflow): Promise<Workflow> {
     const id = this.currentWorkflowId++;
-    const workflow: Workflow = { 
+    const workflow: Workflow = {
       ...insertWorkflow,
       id,
       status: insertWorkflow.status || "draft",
+      nodes: typeof insertWorkflow.nodes === 'string' ? JSON.parse(insertWorkflow.nodes) : insertWorkflow.nodes || [],
+      connections: typeof insertWorkflow.connections === 'string' ? JSON.parse(insertWorkflow.connections) : insertWorkflow.connections || [],
       createdAt: new Date(),
       updatedAt: new Date()
     };

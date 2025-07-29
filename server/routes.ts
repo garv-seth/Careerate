@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertAgentSchema, insertWorkflowSchema, insertAgentLogSchema } from "@shared/schema";
 import { z } from "zod";
-import { setupAuth } from "../auth/azure-b2c-auth";
+import { setupAzureB2CAuth } from "./auth/azure-b2c-auth";
 import { aiOrchestrator } from "./agents/ai-orchestrator";
 import { infrastructureOrchestrator } from "./infrastructure/cloud-providers";
 import { agentRegistry } from "./agents/agent-registry";
@@ -172,7 +172,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Setup Azure B2C Authentication
-  setupAuth(app);
+  setupAzureB2CAuth(app);
 
   // OAuth Authentication routes
   app.use('/api', authRoutes);
