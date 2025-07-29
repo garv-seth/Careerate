@@ -101,22 +101,6 @@ jobs:
         echo "Waiting 60 seconds for role assignment to propagate..."
         sleep 60
 
-    - name: Set Application Settings
-      uses: azure/appservice-settings@v1
-      with:
-        app-name: 'Careerate'
-        app-settings-json: |
-          [
-            { "name": "COSMOSDB_CONNECTION_STRING_CENTRALUS", "value": "${{ secrets.COSMOSDB_CONNECTION_STRING_CENTRALUS }}", "slotSetting": true },
-            { "name": "COSMOSDB_KEY", "value": "${{ secrets.COSMOSDB_KEY }}", "slotSetting": true },
-            { "name": "AZURE_OPENAI_ENDPOINT", "value": "${{ secrets.AZURE_OPENAI_ENDPOINT }}", "slotSetting": true },
-            { "name": "AZURE_OPENAI_API_KEY", "value": "${{ secrets.AZURE_OPENAI_API_KEY }}", "slotSetting": true },
-            { "name": "AZURE_OPENAI_DEPLOYMENT_NAME", "value": "${{ secrets.AZURE_OPENAI_DEPLOYMENT_NAME }}", "slotSetting": true },
-            { "name": "AZURE_B2C_TENANT_NAME", "value": "${{ secrets.AZURE_B2C_TENANT_NAME }}", "slotSetting": true },
-            { "name": "AZURE_B2C_CLIENT_ID", "value": "${{ secrets.AZURE_B2C_CLIENT_ID }}", "slotSetting": true },
-            { "name": "AZURE_B2C_CLIENT_SECRET", "value": "${{ secrets.AZURE_B2C_CLIENT_SECRET }}", "slotSetting": true }
-          ]
-
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3
@@ -124,6 +108,11 @@ jobs:
         app-name: 'Careerate'
         slot-name: 'production'
         images: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main-${{ github.sha }}'
+
+    - name: Restart App Service to force image pull
+      run: |
+        echo "Restarting the App Service to force a new image pull..."
+        az webapp restart --name Careerate --resource-group Careerate
 
     - name: Post-deployment health check
       run: |
