@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { log, serveStatic } from "./utils";
 import { env } from "./config/environment";
 import { testDatabaseConnection } from "./db";
 
@@ -64,6 +64,7 @@ app.use((req, res, next) => {
     // Setup Vite in development or serve static files in production
     if (env.NODE_ENV === "development") {
       console.log("🔧 Setting up Vite development server...");
+      const { setupVite } = await import("./vite");
       await setupVite(app, server);
     } else {
       console.log("📦 Serving static files from dist/public...");

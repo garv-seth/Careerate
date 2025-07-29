@@ -1,57 +1,122 @@
-
-node_modules
-npm-debug.log*
-.npm
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 # Git
 .git
 .gitignore
 
-# Documentation
-*.md
-docs/
+# Node
+node_modules
+npm-debug.log
 
-# Development files
-.replit
-.vscode/
-.idea/
+# Editor
+.vscode
+.idea
 
-# Logs
-logs
-*.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-.nyc_output
-
-# Dependency directories
-node_modules/
-
-# Optional npm cache directory
-.npm
-
-# Build outputs (will be copied from builder stage)
-dist/
-client/dist/
-
-# OS generated files
+# OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# Replit specific
+# Project specific
+dist
+build
+.env
+*.env.local
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore azure deployment and readme files
+AZURE_DEPLOYMENT.md
+AZURE_OPENAI_SETUP.md
+README.md
+LICENSE
+.github
+replit.md
+DEBIAN.md
+AZURE_SENTINEL.md
+CLAUDE.md
+DEPLOYMENT_INSTRUCTIONS.md
+ attached_assets
+.replit
+replit.nix
+*.bak
+*.swp
+*~
+*#
+#*
+# Temp
+*.tmp
+*.temp
+*~
+*#
+#*
+# Log files
+*.log
+
+# Test files
+**/__tests__
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+*.test.tsx
+*.spec.tsx
+*.test.jsx
+*.spec.jsx
+**/jest.config.js
+**/jest.setup.js
+**/playwright.config.ts
+**/playwright-report/
+**/test-results/
+
+# Storybook
+.storybook
+storybook-static
+
+# Cypress
+cypress/
+cypress.json
+
+# Next.js
+.next/
+out/
+coverage/
+.nyc_output/
+*.tgz
+
+# Other
+/appsettings.json
+/test-setting.json
+/set-appsettings.ps1
+/web.config
+/replitAuth.ts
+/drizzle.config.ts
+/postcss.config.js
+/components.json
+/client/index-test.html
+/client/src/main-test.tsx
+/server/replitAuth.ts
+.DS_Store
+README.md
+LICENSE
+.github
+replit.md
+DEBIAN.md
+AZURE_SENTINEL.md
+CLAUDE.md
+DEPLOYMENT_INSTRUCTIONS.md
+attached_assets
+.replit
+replit.nix
+*.bak
+*.swp
+*~
+*#
+#*
+# Temp
+*.tmp
+*.temp
+*~
+*#
+#*
+# Log files
+*.log
