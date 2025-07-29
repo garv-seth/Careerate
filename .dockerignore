@@ -35,20 +35,18 @@ DEBIAN.md
 AZURE_SENTINEL.md
 CLAUDE.md
 DEPLOYMENT_INSTRUCTIONS.md
- attached_assets
 .replit
 replit.nix
+
+# Temp files
 *.bak
 *.swp
-*~
-*#
-#*
-# Temp
 *.tmp
 *.temp
 *~
 *#
 #*
+
 # Log files
 *.log
 
@@ -83,7 +81,7 @@ coverage/
 .nyc_output/
 *.tgz
 
-# Other
+# Other project-specific files to ignore
 /appsettings.json
 /test-setting.json
 /set-appsettings.ps1
@@ -95,28 +93,3 @@ coverage/
 /client/index-test.html
 /client/src/main-test.tsx
 /server/replitAuth.ts
-.DS_Store
-README.md
-LICENSE
-.github
-replit.md
-DEBIAN.md
-AZURE_SENTINEL.md
-CLAUDE.md
-DEPLOYMENT_INSTRUCTIONS.md
-attached_assets
-.replit
-replit.nix
-*.bak
-*.swp
-*~
-*#
-#*
-# Temp
-*.tmp
-*.temp
-*~
-*#
-#*
-# Log files
-*.log
