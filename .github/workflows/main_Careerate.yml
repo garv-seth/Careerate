@@ -89,7 +89,7 @@ jobs:
       with:
         app-name: 'Careerate'
         slot-name: 'production'
-        images: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}'
+        images: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main-${{ github.sha }}'
 
     - name: Post-deployment health check
       run: |
