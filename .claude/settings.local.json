@@ -4,7 +4,18 @@
       "Bash(az login:*)",
       "Bash(az account:*)",
       "Bash(az group show:*)",
-      "Bash(az:*)"
+      "Bash(az:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm ls:*)",
+      "Bash(ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(rm:*)",
+      "Bash(npm ci:*)"
     ],
     "deny": []
   }
