@@ -15,6 +15,8 @@ export function log(message: string, source = "express") {
 
 export function serveStatic(app: Express) {
   const distPath = path.join(process.cwd(), "dist", "public");
+  console.log(`Serving static files from: ${distPath}`);
+  console.log(`Directory exists: ${fs.existsSync(distPath)}`);
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
