@@ -15,6 +15,9 @@ COPY . .
 # The `build` script in package.json should handle both client and server builds
 RUN npm run build
 
+# Verify build output exists
+RUN ls -la dist/ && ls -la dist/public/ || echo "Frontend build missing"
+
 # Production image
 FROM node:20-alpine AS runner
 
