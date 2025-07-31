@@ -3,8 +3,8 @@ import { z } from "zod";
 const environmentSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.string().transform(Number).default("5000"),
-  COSMOSDB_CONNECTION_STRING_CENTRALUS: z.string().min(1, "COSMOSDB_CONNECTION_STRING_CENTRALUS is required"),
-  COSMOSDB_KEY: z.string().min(32, "COSMOSDB_KEY must be at least 32 characters"),
+  COSMOSDB_CONNECTION_STRING_CENTRALUS: z.string().min(1).optional(),
+  COSMOSDB_KEY: z.string().min(32).optional(),
   
   // AI/ML Configuration - Azure AI Foundry (preferred) or OpenAI
   AZURE_OPENAI_ENDPOINT: z.string().optional(),
@@ -66,7 +66,7 @@ const environmentSchema = z.object({
   GITHUB_REDIRECT_URI: z.string().optional(),
   
   // Application Configuration
-  SESSION_SECRET: z.string().min(32, "SESSION_SECRET must be at least 32 characters"),
+  SESSION_SECRET: z.string().min(32).optional(),
 });
 
 export type Environment = z.infer<typeof environmentSchema>;
@@ -77,7 +77,9 @@ try {
   const rawEnv = {
     ...process.env,
     DATABASE_URL: process.env.COSMOSDB_CONNECTION_STRING_CENTRALUS,
-    SESSION_SECRET: process.env.COSMOSDB_KEY,
+    SESSION_SECRET: process.env.SESSION_SECRET || (process.env.NODE_ENV === 'development' ? 'dev-session-secret-min-32-chars-long-for-development' : undefined),
+    COSMOSDB_CONNECTION_STRING_CENTRALUS: process.env.COSMOSDB_CONNECTION_STRING_CENTRALUS,
+    COSMOSDB_KEY: process.env.COSMOSDB_KEY,
   };
   env = environmentSchema.parse(rawEnv);
 } catch (error) {
@@ -101,8 +103,12 @@ const validateProviders = () => {
   const hasOpenAI = env.OPENAI_API_KEY;
   
   if (!hasAzureFoundry && !hasOpenAI) {
-    console.error("❌ No AI provider configured! Set either Azure AI Foundry or OpenAI credentials.");
-    process.exit(1);
+    if (env.NODE_ENV === 'production') {
+      console.error("❌ No AI provider configured! Set either Azure AI Foundry or OpenAI credentials.");
+      process.exit(1);
+    } else {
+      console.warn("⚠️  No AI provider configured - AI features will be disabled in development mode");
+    }
   }
   
   if (hasAzureFoundry) {
