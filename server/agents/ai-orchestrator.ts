@@ -15,6 +15,11 @@ const getAzureOpenAIClient = () => {
         'api-key': env.AZURE_AI_FOUNDRY_KEY,
       },
     });
+  } else if (env.OPENAI_API_KEY) {
+    console.log("🟢 Using OpenAI API for AI orchestration");
+    return new OpenAI({ 
+      apiKey: env.OPENAI_API_KEY 
+    });
   } else if (env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY) {
     console.log("🔵 Using Azure OpenAI for AI orchestration");
     return new OpenAI({
@@ -24,11 +29,6 @@ const getAzureOpenAIClient = () => {
       defaultHeaders: {
         'api-key': env.AZURE_OPENAI_API_KEY,
       },
-    });
-  } else if (env.OPENAI_API_KEY) {
-    console.log("🟢 Using OpenAI API for AI orchestration");
-    return new OpenAI({ 
-      apiKey: env.OPENAI_API_KEY 
     });
   } else {
     throw new Error("No AI provider configured. Set either Azure AI Foundry, Azure OpenAI or OpenAI credentials.");

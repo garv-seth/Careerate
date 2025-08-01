@@ -1,7 +1,11 @@
 import { CosmosClient } from "@azure/cosmos";
 import { env } from "./config/environment";
 
-const client = new CosmosClient(env.COSMOSDB_CONNECTION_STRING_CENTRALUS || "");
+if (!env.COSMOSDB_CONNECTION_STRING_CENTRALUS) {
+  throw new Error("❌ FATAL: COSMOSDB_CONNECTION_STRING_CENTRALUS is not defined. Please check your environment variables.");
+}
+
+const client = new CosmosClient(env.COSMOSDB_CONNECTION_STRING_CENTRALUS);
 
 export const testDatabaseConnection = async () => {
   try {
