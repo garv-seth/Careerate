@@ -9,6 +9,7 @@ import { infrastructureOrchestrator } from "./infrastructure/cloud-providers";
 import { agentRegistry } from "./agents/agent-registry";
 import { env } from "./config/environment";
 import { testDatabaseConnection } from "./db";
+import { vibeRouter } from "./routes/vibe-routes";
 
 // Helper function to check service health status
 async function getServiceHealthStatus() {
@@ -625,6 +626,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // Mount Vibe Hosting routes
+  app.use("/api/vibe", vibeRouter);
 
   const httpServer = createServer(app);
   return httpServer;

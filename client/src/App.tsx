@@ -13,6 +13,7 @@ import Home from "@/pages/home"
 import Dashboard from "@/pages/dashboard"
 import Pricing from "@/pages/pricing"
 import NotFound from "@/pages/not-found"
+import { VibeHosting } from "@/pages/vibe-hosting"
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/home" component={Home} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/pricing" component={Pricing} />
+                <Route path="/vibe" component={VibeHosting} />
                 <Route component={NotFound} />
               </Switch>
             </Router>

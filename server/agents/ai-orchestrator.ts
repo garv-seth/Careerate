@@ -3,9 +3,19 @@ import { storage } from "../storage";
 import { agentRegistry } from "./agent-registry";
 import { env } from "../config/environment";
 
-// Azure OpenAI configuration for economical yet powerful models
+// Azure AI Foundry configuration with phi-4-reasoning
 const getAzureOpenAIClient = () => {
-  if (env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY) {
+  if (env.AZURE_AI_FOUNDRY_ENDPOINT && env.AZURE_AI_FOUNDRY_KEY) {
+    console.log("🚀 Using Azure AI Foundry with phi-4-reasoning for Vibe Hosting");
+    return new OpenAI({
+      apiKey: env.AZURE_AI_FOUNDRY_KEY,
+      baseURL: `${env.AZURE_AI_FOUNDRY_ENDPOINT}/openai/deployments/${env.AZURE_FOUNDRY_PHI4_DEPLOYMENT || 'Careerate-phi-4-reasoning'}`,
+      defaultQuery: { 'api-version': '2024-02-15-preview' },
+      defaultHeaders: {
+        'api-key': env.AZURE_AI_FOUNDRY_KEY,
+      },
+    });
+  } else if (env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY) {
     console.log("🔵 Using Azure OpenAI for AI orchestration");
     return new OpenAI({
       apiKey: env.AZURE_OPENAI_API_KEY,
@@ -21,7 +31,7 @@ const getAzureOpenAIClient = () => {
       apiKey: env.OPENAI_API_KEY 
     });
   } else {
-    throw new Error("No AI provider configured. Set either Azure OpenAI or OpenAI credentials.");
+    throw new Error("No AI provider configured. Set either Azure AI Foundry, Azure OpenAI or OpenAI credentials.");
   }
 };
 
