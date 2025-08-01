@@ -9,7 +9,7 @@ export const vibeRouter = Router();
 vibeRouter.post("/deploy", async (req, res) => {
   try {
     const { command } = req.body;
-    const userId = req.session?.userId || "anonymous";
+    const userId = (req.session as any)?.userId || "anonymous";
     
     if (!command) {
       return res.status(400).json({ error: "Deployment command is required" });

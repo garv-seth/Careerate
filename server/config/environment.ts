@@ -7,11 +7,13 @@ const environmentSchema = z.object({
   COSMOSDB_KEY: z.string().min(32).optional(),
   
   // AI/ML Configuration - Azure AI Foundry (preferred) or OpenAI
+  AZURE_AI_FOUNDRY_ENDPOINT: z.string().optional(),
+  AZURE_AI_FOUNDRY_KEY: z.string().optional(),
+  AZURE_FOUNDRY_PHI4_DEPLOYMENT: z.string().optional(),
+  AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT: z.string().optional(),
   AZURE_OPENAI_ENDPOINT: z.string().optional(),
   AZURE_OPENAI_API_KEY: z.string().optional(),
   AZURE_OPENAI_DEPLOYMENT_NAME: z.string().optional(),
-  AZURE_FOUNDRY_PHI4_DEPLOYMENT: z.string().optional(),
-  AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
   
   // Azure B2C Authentication
@@ -98,13 +100,14 @@ const validateProviders = () => {
   const warnings: string[] = [];
   
   // AI Provider validation - Azure AI Foundry preferred
-  const hasAzureFoundry = env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY && 
+  const hasAzureFoundry = env.AZURE_AI_FOUNDRY_ENDPOINT && env.AZURE_AI_FOUNDRY_KEY && 
                          (env.AZURE_FOUNDRY_PHI4_DEPLOYMENT || env.AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT);
+  const hasAzureOpenAI = env.AZURE_OPENAI_ENDPOINT && env.AZURE_OPENAI_API_KEY;
   const hasOpenAI = env.OPENAI_API_KEY;
   
-  if (!hasAzureFoundry && !hasOpenAI) {
+  if (!hasAzureFoundry && !hasAzureOpenAI && !hasOpenAI) {
     if (env.NODE_ENV === 'production') {
-      console.error("❌ No AI provider configured! Set either Azure AI Foundry or OpenAI credentials.");
+      console.error("❌ No AI provider configured! Set either Azure AI Foundry, Azure OpenAI, or OpenAI credentials.");
       process.exit(1);
     } else {
       console.warn("⚠️  No AI provider configured - AI features will be disabled in development mode");
@@ -112,9 +115,11 @@ const validateProviders = () => {
   }
   
   if (hasAzureFoundry) {
-    console.log("✅ Azure AI Foundry configured - using Phi-4 reasoning and Ministral-3B models");
-    if (env.AZURE_FOUNDRY_PHI4_DEPLOYMENT) console.log("  🧠 Phi-4 reasoning model available for Pro users");
-    if (env.AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT) console.log("  💰 Ministral-3B model available for Free users");
+    console.log("✅ Azure AI Foundry configured - using Phi-4 reasoning model");
+    if (env.AZURE_FOUNDRY_PHI4_DEPLOYMENT) console.log("  🧠 Phi-4 reasoning model available");
+    if (env.AZURE_FOUNDRY_MINISTRAL_DEPLOYMENT) console.log("  💰 Ministral-3B model available");
+  } else if (hasAzureOpenAI) {
+    console.log("✅ Azure OpenAI configured");
   } else if (hasOpenAI) {
     console.log("✅ OpenAI configured - consider Azure AI Foundry for 90% cost savings");
   }

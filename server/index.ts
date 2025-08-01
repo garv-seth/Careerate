@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 // Session configuration
 app.use(
   session({
-    secret: env.SESSION_SECRET,
+    secret: env.SESSION_SECRET || "dev-session-secret-min-32-chars-long-for-development",
     resave: false,
     saveUninitialized: false,
     cookie: {
