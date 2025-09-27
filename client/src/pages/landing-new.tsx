@@ -153,10 +153,10 @@ export default function LandingNew() {
       {/* New Animated Shader Hero */}
       <Hero
         headline={{
-          line1: "Let Ideas Flow.",
-          line2: "Agents Handle The Rest."
+          line1: "Think It.",
+          line2: "Agents Build It."
         }}
-        subtitle="Ship in hours, not months. AI agents handle everything."
+        subtitle="Your vision becomes reality. Autonomous AI agents design, code, test, and deploy—while you focus on what matters most."
         buttons={{
           primary: {
             text: "Start Building Now",
