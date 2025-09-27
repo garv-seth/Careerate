@@ -452,11 +452,8 @@ const Hero: React.FC<HeroProps> = ({
 
 const defaultShaderSource = `#version 300 es
 /*********
-* made by Matthias Hurrle (@atzedent)
-*
-*    To explore strange new worlds, to seek out new life
-*    and new civilizations, to boldly go where no man has
-*    gone before.
+* Enhanced gradient shader for Careerate landing page
+* Smooth dark-to-light transition with matching colors
 */
 precision highp float;
 out vec4 O;
@@ -466,21 +463,45 @@ uniform float time;
 #define T time
 #define R resolution
 #define MN min(R.x,R.y)
-// Returns a pseudo random number for a given point (white noise)
-float rnd(vec2 p) {
-  p=fract(p*vec2(12.9898,78.233));
-  p+=dot(p,p+34.56);
-  return fract(p.x*p.y);
+
+// Smooth noise function
+float noise(vec2 p) {
+  return sin(p.x * 0.1) * sin(p.y * 0.1) * 0.5 + 0.5;
 }
-// Returns a pseudo random number for a given point (value noise)
-float noise(in vec2 p) {
-  vec2 i=floor(p), f=fract(p), u=f*f*(3.-2.*f);
-  float
-  a=rnd(i),
-  b=rnd(i+vec2(1,0)),
-  c=rnd(i+vec2(0,1)),
-  d=rnd(i+1.);
-  return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);
+
+// Gradient function for smooth dark to light transition
+vec3 getGradient(vec2 uv, float time) {
+  // Normalize coordinates
+  vec2 st = uv / R.xy;
+
+  // Create smooth vertical gradient from dark to light
+  float gradientY = smoothstep(0.0, 1.0, 1.0 - st.y);
+
+  // Add subtle horizontal variation
+  float gradientX = smoothstep(0.2, 0.8, st.x);
+
+  // Combine gradients
+  float intensity = gradientY * 0.8 + gradientX * 0.2;
+
+  // Add subtle animation
+  float wave = sin(time * 0.5 + st.x * 2.0) * 0.05;
+  intensity += wave;
+
+  // Color palette - dark to light with orange/amber accents
+  vec3 darkColor = vec3(0.05, 0.05, 0.08);     // Very dark background
+  vec3 midColor = vec3(0.15, 0.12, 0.1);       // Dark brown/orange
+  vec3 lightColor = vec3(0.25, 0.2, 0.15);     // Lighter brown
+  vec3 accentColor = vec3(0.95, 0.45, 0.1);    // Orange accent
+
+  // Mix colors based on intensity
+  vec3 color = mix(darkColor, midColor, smoothstep(0.0, 0.4, intensity));
+  color = mix(color, lightColor, smoothstep(0.4, 0.7, intensity));
+
+  // Add orange highlights in certain areas
+  float highlight = smoothstep(0.6, 0.9, intensity) * (0.5 + 0.5 * sin(time * 0.3));
+  color = mix(color, accentColor * 0.3, highlight * 0.2);
+
+  return color;
 }
 // Returns a pseudo random number for a given point (fractal noise)
 float fbm(vec2 p) {
@@ -503,20 +524,21 @@ float clouds(vec2 p) {
     return t;
 }
 void main(void) {
-    vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);
-    vec3 col=vec3(0);
-    float bg=clouds(vec2(st.x+T*.5,-st.y));
-    uv*=1.-.3*(sin(T*.2)*.5+.5);
-    for (float i=1.; i<12.; i++) {
-        uv+=.1*cos(i*vec2(.1+.01*i, .8)+i*i+T*.5+.1*uv.x);
-        vec2 p=uv;
-        float d=length(p);
-        col+=.00125/d*(cos(sin(i)*vec3(1,2,3))+1.);
-        float b=noise(i+p+bg*1.731);
-        col+=.002*b/length(max(p,vec2(b*p.x*.02,p.y)));
-        col=mix(col,vec3(bg*.25,bg*.137,bg*.05),d);
-    }
-    O=vec4(col,1);
+    vec2 uv = FC;
+
+    // Get the smooth gradient
+    vec3 color = getGradient(uv, T);
+
+    // Add subtle texture overlay
+    vec2 st = uv / R.xy;
+    float texture = noise(st * 10.0 + T * 0.1) * 0.1;
+    color += texture;
+
+    // Add subtle glow effects
+    float glow = smoothstep(0.3, 0.7, 1.0 - st.y) * 0.1;
+    color += vec3(0.95, 0.45, 0.1) * glow * (0.5 + 0.5 * sin(T * 0.2));
+
+    O = vec4(color, 1.0);
 }`;
 
 export default Hero;

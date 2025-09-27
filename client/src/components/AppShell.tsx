@@ -6,8 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { LoginModal } from "@/components/LoginModal";
 import { cn } from "@/lib/utils";
 
-const Logo = () => (
-    <Link href="/" className="flex items-center gap-3 group pl-2">
+const Logo = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
+    <Link href={isAuthenticated ? "/#agent" : "/"} className="flex items-center gap-3 group pl-2">
         <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:scale-110">
             <path d="M20 0L24.4903 15.5097L40 20L24.4903 24.4903L20 40L15.5097 24.4903L0 20L15.5097 15.5097L20 0Z" fill="url(#logo-gradient)"/>
             <defs>
@@ -137,51 +137,72 @@ export function AppShell({ children }: { children: ReactNode }) {
 
     const AuthenticatedNav = () => (
         <>
-            <NavLink href="/#agent" isPageLink>
+            <a
+                href="/#agent"
+                className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
+                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                )}
+            >
                 <Brain className="h-4 w-4 mr-2" />
                 Cara
-            </NavLink>
-            <NavLink href="/#projects" isPageLink>
+            </a>
+            <a
+                href="/#projects"
+                className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
+                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                )}
+            >
                 <GitBranch className="h-4 w-4 mr-2" />
                 Projects
-            </NavLink>
-            <NavLink href="/#overview" isPageLink>
+            </a>
+            <a
+                href="/#overview"
+                className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
+                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                )}
+            >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Overview
-            </NavLink>
+            </a>
         </>
     );
 
     // Dashboard-specific nav that mirrors the tabs: Cara, Projects, Overview
     const DashboardNav = () => (
         <>
-            <Link href="#agent">
-                <a className={cn(
-                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300",
+            <a
+                href="#agent"
+                className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
                     activeDashTab === 'agent' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}>
-                    <Brain className="h-4 w-4 mr-2 inline" />
-                    Cara
-                </a>
-            </Link>
-            <Link href="#projects">
-                <a className={cn(
-                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                )}
+            >
+                <Brain className="h-4 w-4 mr-2" />
+                Cara
+            </a>
+            <a
+                href="#projects"
+                className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
                     activeDashTab === 'projects' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}>
-                    <GitBranch className="h-4 w-4 mr-2 inline" />
-                    Projects
-                </a>
-            </Link>
-            <Link href="#overview">
-                <a className={cn(
-                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                )}
+            >
+                <GitBranch className="h-4 w-4 mr-2" />
+                Projects
+            </a>
+            <a
+                href="#overview"
+                className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
                     activeDashTab === 'overview' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}>
-                    <BarChart3 className="h-4 w-4 mr-2 inline" />
-                    Overview
-                </a>
-            </Link>
+                )}
+            >
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Overview
+            </a>
         </>
     );
 
@@ -189,11 +210,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="flex items-center gap-2">
             {isAuthenticated ? (
                  <div className="flex items-center gap-2">
-                     <Button variant="ghost" size="icon" className="rounded-full">
-                        <Link href="/account"><User className="h-5 w-5 text-foreground/70" /></Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="rounded-full" onClick={() => window.location.href = '/api/logout'}>
-                        <LogOut className="h-5 w-5 text-foreground/70" />
+                     <Link href="/account">
+                        <Button variant="ghost" size="icon" className="rounded-full" title="Account Settings">
+                            <User className="h-5 w-5 text-foreground/70 hover:text-foreground transition-colors" />
+                        </Button>
+                    </Link>
+                    <Button variant="ghost" size="icon" className="rounded-full" onClick={() => window.location.href = '/api/logout'} title="Sign Out">
+                        <LogOut className="h-5 w-5 text-foreground/70 hover:text-foreground transition-colors" />
                     </Button>
                  </div>
             ) : (
@@ -202,7 +225,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                         Sign In
                     </Button>
                     <Button
-                        className="rounded-full text-sm bg-primary/15 text-primary-foreground hover:bg-primary/25"
+                        className="rounded-full text-sm bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25"
                         onClick={() => document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' })}
                         disabled={isLoading}
                     >
@@ -224,7 +247,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                         "w-full flex items-center justify-between p-2 rounded-full glass-pane transition-all duration-300",
                         isScrolled ? "h-14" : "h-16"
                     )}>
-                        <Logo />
+                        <Logo isAuthenticated={isAuthenticated} />
 
                         <div className="hidden md:flex items-center gap-1">
                             {isAuthenticated ? (isOnDashboard ? <DashboardNav /> : <AuthenticatedNav />) : <UnauthenticatedNav />}

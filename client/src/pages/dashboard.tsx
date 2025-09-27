@@ -284,10 +284,10 @@ export default function Dashboard() {
                       </Badge>
                     </div>
 
-                    <Button 
+                    <Button
                       onClick={handleAgentPrompt}
                       disabled={!agentPrompt.trim() || isGenerating}
-                      className="rounded-full bg-primary/15 text-primary-foreground hover:bg-primary/25 transition-all duration-300 hover:scale-105 shadow-lg shadow-primary/10 px-8 w-full sm:w-auto"
+                      className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-lg shadow-orange-500/25 px-8 w-full sm:w-auto font-semibold"
                       size="lg"
                     >
                       {isGenerating ? (
@@ -345,18 +345,69 @@ export default function Dashboard() {
                   </div>
                 ) : recentActivity.length > 0 ? (
                   <div className="space-y-3">
-                    {recentActivity.slice(0, 5).map((activity: any) => (
-                      <div key={activity.id} className="flex items-center space-x-3 p-3 rounded-lg bg-foreground/5">
-                        <div className={`w-2 h-2 ${getActivityColor(activity.type)} rounded-full`}></div>
-                        <div className="flex-1">
-                          <span className="text-foreground/80 text-sm">{activity.title}</span>
-                          {activity.description && (
-                            <div className="text-foreground/60 text-xs mt-1">{activity.description}</div>
-                          )}
+                    {recentActivity.slice(0, 5).map((activity: any) => {
+                      const isClickable = activity.projectId || activity.type === 'code_generated' || activity.type === 'integration_connected';
+                      const handleActivityClick = () => {
+                        if (activity.projectId) {
+                          if (activity.type === 'code_generated') {
+                            window.location.href = `/projects/${activity.projectId}/coding`;
+                          } else if (activity.type === 'project_created') {
+                            setActiveTab('projects');
+                          } else {
+                            window.location.href = `/projects/${activity.projectId}/coding`;
+                          }
+                        } else if (activity.type === 'integration_connected') {
+                          window.location.href = '/integrations';
+                        }
+                      };
+
+                      return (
+                        <div
+                          key={activity.id}
+                          className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
+                            isClickable
+                              ? "bg-foreground/5 hover:bg-foreground/10 cursor-pointer group"
+                              : "bg-foreground/5"
+                          }`}
+                          onClick={isClickable ? handleActivityClick : undefined}
+                        >
+                          <div className={`w-2 h-2 ${getActivityColor(activity.type)} rounded-full ${isClickable ? 'group-hover:scale-125 transition-transform' : ''}`}></div>
+                          <div className="flex-1">
+                            <span className={`text-foreground/80 text-sm ${isClickable ? 'group-hover:text-foreground' : ''}`}>
+                              {activity.title}
+                            </span>
+                            {activity.description && (
+                              <div className="text-foreground/60 text-xs mt-1">{activity.description}</div>
+                            )}
+                          </div>
+                          <div className="flex items-center space-x-2 ml-auto">
+                            <span className="text-foreground/50 text-xs">{formatTimeAgo(activity.createdAt)}</span>
+                            {isClickable && (
+                              <ChevronRight className="h-3 w-3 text-foreground/40 group-hover:text-foreground/70 transition-colors" />
+                            )}
+                          </div>
                         </div>
-                        <span className="text-foreground/50 text-xs ml-auto">{formatTimeAgo(activity.createdAt)}</span>
+                      );
+                    })}
+                    {recentActivity.length > 5 && (
+                      <div className="pt-3 border-t border-foreground/10">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full text-foreground/70 hover:text-foreground hover:bg-foreground/5 rounded-lg"
+                          onClick={() => {
+                            // Navigate to a future activity page or show more in a modal
+                            toast({
+                              title: "Coming Soon",
+                              description: "Full activity history will be available soon.",
+                            });
+                          }}
+                        >
+                          View All Activity ({recentActivity.length} total)
+                          <ChevronRight className="h-3 w-3 ml-1" />
+                        </Button>
                       </div>
-                    ))}
+                    )}
                   </div>
                 ) : (
                   <div className="text-center py-8 text-foreground/60">
@@ -382,9 +433,9 @@ export default function Dashboard() {
                     className="pl-10 w-64 glass-pane rounded-full text-foreground placeholder:text-foreground/50"
                   />
                 </div>
-                <Button 
+                <Button
                   onClick={() => setIsCreateDialogOpen(true)}
-                  className="rounded-full bg-primary/15 text-primary-foreground hover:bg-primary/25 transition-all duration-300 hover:scale-105 shadow-lg shadow-primary/10"
+                  className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-lg shadow-orange-500/25 font-semibold"
                 >
                   <Plus className="mr-2 h-4 w-4" />
                   New Project
@@ -465,9 +516,9 @@ export default function Dashboard() {
                   {searchQuery ? "No projects match your search" : "Start building with AI assistance. Describe your idea and we'll handle the rest."}
                 </p>
                 {!searchQuery && (
-                  <Button 
+                  <Button
                     onClick={() => setActiveTab("agent")}
-                    className="rounded-full bg-primary/15 text-primary-foreground hover:bg-primary/25 transition-all duration-300 hover:scale-105 shadow-lg shadow-primary/10 px-8"
+                    className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-lg shadow-orange-500/25 px-8 font-semibold"
                     size="lg"
                   >
                     <Sparkles className="mr-2 h-5 w-5" />
@@ -676,7 +727,7 @@ export default function Dashboard() {
                 framework
               })}
               disabled={!projectName || !framework || createProjectMutation.isPending}
-              className="rounded-full bg-primary/15 text-primary-foreground hover:bg-primary/25"
+              className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25"
             >
               {createProjectMutation.isPending ? (
                 <>

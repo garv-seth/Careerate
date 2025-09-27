@@ -23,7 +23,9 @@ COPY . .
 ENV CI=true
 ENV NO_COLOR=1
 ENV FORCE_COLOR=0
-# RUN npm run build  # Removed - pre-build locally
+
+# Build the application
+RUN npm run build
 
 # Production image
 FROM base AS runner
