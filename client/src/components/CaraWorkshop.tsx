@@ -1,60 +1,81 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Rnd } from 'react-rnd';
 import Editor from '@monaco-editor/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import {
   Play, Save, Download, Upload, Bot, MessageSquare, Terminal, FileText,
   GitBranch, Settings, Zap, Brain, Code, Database, Server, Sparkles,
   Maximize2, Minimize2, X, ArrowLeft, Cloud, Shield, Activity,
-  Users, Cpu, Layers, Network, Workflow, ChevronDown, ChevronRight
+  Users, Cpu, Layers, Network, Workflow, ChevronDown, ChevronRight,
+  FolderOpen, File, Plus, Search, Globe, Package, ExternalLink,
+  Monitor, Folder, Coffee, Rocket, Bug, Eye, Trash2, Copy, RefreshCw
 } from 'lucide-react';
 
-// A2A Protocol Agent Types with proper hierarchy
+// Enhanced Agent System - Cara as Master Orchestrator
 interface CaraAgent {
   id: string;
   name: string;
   role: 'orchestrator' | 'specialist';
-  type: 'cara' | 'codesmith' | 'debugger' | 'architect' | 'deployer' | 'guardian';
+  type: 'cara' | 'codesmith' | 'debugger' | 'architect' | 'deployer' | 'guardian' | 'researcher';
   status: 'idle' | 'thinking' | 'working' | 'completed' | 'error';
   description: string;
   capabilities: string[];
   avatar: string;
-  level: number; // Hierarchy level (1 = Cara, 2 = specialists)
-  parent?: string; // Parent agent ID
-  children?: string[]; // Child agent IDs
+  level: number;
+  parent?: string;
+  children?: string[];
+  isActive: boolean;
 }
 
-interface A2AMessage {
+// File System Interface
+interface ProjectFile {
   id: string;
-  jsonrpc: '2.0';
-  method: string;
-  params: any;
+  name: string;
+  type: 'file' | 'folder';
+  path: string;
+  content?: string;
+  language?: string;
+  isOpen: boolean;
+  isDirty: boolean;
+  children?: ProjectFile[];
+  size?: number;
+  lastModified?: Date;
+}
+
+// Integration System
+interface Integration {
+  id: string;
+  name: string;
+  type: 'api' | 'database' | 'service' | 'deployment';
+  status: 'connected' | 'disconnected' | 'error';
+  icon: string;
+  config: any;
+  capabilities: string[];
+}
+
+// Chat Message System
+interface ChatMessage {
+  id: string;
+  content: string;
+  sender: 'user' | 'cara' | string; // agent id
   timestamp: Date;
-  from: string;
-  to: string;
-  status: 'pending' | 'completed' | 'error';
+  type: 'message' | 'task_assignment' | 'code_generated' | 'error';
+  metadata?: {
+    files?: string[];
+    agents?: string[];
+    tools?: string[];
+    results?: any[];
+    nextSteps?: string[];
+  };
 }
 
-interface WorkshopPanel {
-  id: string;
-  title: string;
-  type: 'editor' | 'chat' | 'terminal' | 'agents' | 'files' | 'preview';
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-  isMinimized: boolean;
-  isMaximized: boolean;
-  zIndex: number;
-}
-
-// Modern Agent Hierarchy with Cara as Orchestrator
+// Advanced Agent Hierarchy - Cara Delegates Automatically
 const caraAgents: CaraAgent[] = [
   {
     id: 'cara',
@@ -62,11 +83,12 @@ const caraAgents: CaraAgent[] = [
     role: 'orchestrator',
     type: 'cara',
     status: 'idle',
-    description: 'Your AI orchestrator who coordinates all development tasks',
-    capabilities: ['Task Planning', 'Agent Coordination', 'Project Management', 'Resource Allocation'],
+    description: 'Your AI orchestrator who intelligently delegates tasks to specialist agents',
+    capabilities: ['Task Analysis', 'Agent Delegation', 'Project Coordination', 'Resource Management'],
     avatar: '🧠',
     level: 1,
-    children: ['codesmith', 'architect', 'guardian', 'deployer']
+    children: ['codesmith', 'architect', 'guardian', 'deployer', 'researcher'],
+    isActive: true
   },
   {
     id: 'codesmith',
@@ -74,11 +96,12 @@ const caraAgents: CaraAgent[] = [
     role: 'specialist',
     type: 'codesmith',
     status: 'idle',
-    description: 'Expert coder who writes, refactors, and optimizes code',
-    capabilities: ['Code Generation', 'Refactoring', 'Performance Optimization', 'Best Practices'],
+    description: 'Expert coder specializing in implementation and optimization',
+    capabilities: ['Code Generation', 'Refactoring', 'Performance Optimization', 'API Integration'],
     avatar: '⚒️',
     level: 2,
-    parent: 'cara'
+    parent: 'cara',
+    isActive: false
   },
   {
     id: 'architect',
@@ -86,11 +109,12 @@ const caraAgents: CaraAgent[] = [
     role: 'specialist',
     type: 'architect',
     status: 'idle',
-    description: 'System architect who designs scalable solutions',
-    capabilities: ['System Design', 'Architecture Planning', 'Scalability', 'Integration'],
+    description: 'System architect designing scalable solutions and database schemas',
+    capabilities: ['System Design', 'Database Design', 'Scalability Planning', 'Architecture Review'],
     avatar: '🏗️',
     level: 2,
-    parent: 'cara'
+    parent: 'cara',
+    isActive: false
   },
   {
     id: 'guardian',
@@ -98,11 +122,12 @@ const caraAgents: CaraAgent[] = [
     role: 'specialist',
     type: 'guardian',
     status: 'idle',
-    description: 'Security and quality guardian ensuring robust code',
-    capabilities: ['Security Audit', 'Code Review', 'Testing', 'Quality Assurance'],
+    description: 'Security and quality specialist ensuring robust, secure code',
+    capabilities: ['Security Audit', 'Code Review', 'Testing', 'Vulnerability Assessment'],
     avatar: '🛡️',
     level: 2,
-    parent: 'cara'
+    parent: 'cara',
+    isActive: false
   },
   {
     id: 'deployer',
@@ -111,514 +136,790 @@ const caraAgents: CaraAgent[] = [
     type: 'deployer',
     status: 'idle',
     description: 'DevOps specialist handling deployments and infrastructure',
-    capabilities: ['CI/CD', 'Cloud Deployment', 'Infrastructure', 'Monitoring'],
+    capabilities: ['Natural Language Deployment', 'Cloud Setup', 'CI/CD', 'Monitoring'],
     avatar: '🚀',
     level: 2,
-    parent: 'cara'
+    parent: 'cara',
+    isActive: false
+  },
+  {
+    id: 'researcher',
+    name: 'Researcher',
+    role: 'specialist',
+    type: 'researcher',
+    status: 'idle',
+    description: 'Research specialist with internet access and documentation expertise',
+    capabilities: ['Internet Search', 'Documentation Research', 'API Discovery', 'Best Practices'],
+    avatar: '🔍',
+    level: 2,
+    parent: 'cara',
+    isActive: false
   }
 ];
 
-const defaultPanels: WorkshopPanel[] = [
+// Mock project structure - In real app, this comes from backend
+const mockProjectFiles: ProjectFile[] = [
   {
-    id: 'editor',
-    title: 'Code Editor',
-    type: 'editor',
-    position: { x: 320, y: 80 },
-    size: { width: 800, height: 600 },
-    isMinimized: false,
-    isMaximized: false,
-    zIndex: 1
-  },
-  {
-    id: 'cara-chat',
-    title: 'Cara\'s Command Center',
-    type: 'chat',
-    position: { x: 50, y: 80 },
-    size: { width: 350, height: 400 },
-    isMinimized: false,
-    isMaximized: false,
-    zIndex: 2
-  },
-  {
-    id: 'agents',
-    title: 'Agent Swarm',
-    type: 'agents',
-    position: { x: 50, y: 500 },
-    size: { width: 350, height: 300 },
-    isMinimized: false,
-    isMaximized: false,
-    zIndex: 1
-  },
-  {
-    id: 'terminal',
-    title: 'Terminal',
-    type: 'terminal',
-    position: { x: 1150, y: 400 },
-    size: { width: 400, height: 300 },
-    isMinimized: false,
-    isMaximized: false,
-    zIndex: 1
+    id: 'root',
+    name: 'project-root',
+    type: 'folder',
+    path: '/',
+    isOpen: true,
+    isDirty: false,
+    children: [
+      {
+        id: 'src',
+        name: 'src',
+        type: 'folder',
+        path: '/src',
+        isOpen: true,
+        isDirty: false,
+        children: [
+          {
+            id: 'app-tsx',
+            name: 'App.tsx',
+            type: 'file',
+            path: '/src/App.tsx',
+            content: `import React from 'react';\n\nfunction App() {\n  return (\n    <div className="App">\n      <h1>Hello World</h1>\n    </div>\n  );\n}\n\nexport default App;`,
+            language: 'typescript',
+            isOpen: true,
+            isDirty: false,
+            size: 156,
+            lastModified: new Date()
+          },
+          {
+            id: 'index-tsx',
+            name: 'index.tsx',
+            type: 'file',
+            path: '/src/index.tsx',
+            content: `import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(<App />);`,
+            language: 'typescript',
+            isOpen: false,
+            isDirty: false,
+            size: 189,
+            lastModified: new Date()
+          }
+        ]
+      },
+      {
+        id: 'package-json',
+        name: 'package.json',
+        type: 'file',
+        path: '/package.json',
+        content: `{\n  "name": "careerate-project",\n  "version": "1.0.0",\n  "dependencies": {\n    "react": "^18.0.0",\n    "react-dom": "^18.0.0"\n  }\n}`,
+        language: 'json',
+        isOpen: false,
+        isDirty: false,
+        size: 134,
+        lastModified: new Date()
+      }
+    ]
   }
 ];
 
-export default function CaraWorkshop({ projectId }: { projectId: string }) {
-  const [panels, setPanels] = useState<WorkshopPanel[]>(defaultPanels);
+// Available integrations
+const mockIntegrations: Integration[] = [
+  {
+    id: 'github',
+    name: 'GitHub',
+    type: 'service',
+    status: 'connected',
+    icon: '🐙',
+    config: { repo: 'user/repo' },
+    capabilities: ['Version Control', 'Code Hosting', 'Issue Tracking']
+  },
+  {
+    id: 'openai',
+    name: 'OpenAI',
+    type: 'api',
+    status: 'connected',
+    icon: '🤖',
+    config: { model: 'gpt-4' },
+    capabilities: ['AI Code Generation', 'Chat Completion', 'Code Analysis']
+  },
+  {
+    id: 'postgresql',
+    name: 'PostgreSQL',
+    type: 'database',
+    status: 'disconnected',
+    icon: '🐘',
+    config: {},
+    capabilities: ['Relational Database', 'SQL Queries', 'Data Storage']
+  }
+];
+
+// Main Workshop Component - Revolutionary IDE Experience
+export const CaraWorkshop: React.FC = () => {
   const [agents, setAgents] = useState<CaraAgent[]>(caraAgents);
-  const [messages, setMessages] = useState<A2AMessage[]>([]);
-  const [currentPrompt, setCurrentPrompt] = useState('');
-  const [maxZIndex, setMaxZIndex] = useState(10);
-  const [selectedAgent, setSelectedAgent] = useState<string>('cara');
-  const [isAgentPanelExpanded, setIsAgentPanelExpanded] = useState(true);
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
-
-  // A2A Protocol Message Handler
-  const sendA2AMessage = useCallback(async (method: string, params: any, targetAgent: string) => {
-    const message: A2AMessage = {
-      id: `msg_${Date.now()}`,
-      jsonrpc: '2.0',
-      method,
-      params: { ...params, targetAgent },
+  const [files, setFiles] = useState<ProjectFile[]>(mockProjectFiles);
+  const [openTabs, setOpenTabs] = useState<ProjectFile[]>([]);
+  const [activeTab, setActiveTab] = useState<string>('app-tsx');
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      content: "Hello! I'm Cara, your AI orchestrator. I coordinate a team of specialist agents to help you build amazing software. What would you like to create today?",
+      sender: 'cara',
       timestamp: new Date(),
-      from: 'user',
-      to: targetAgent,
-      status: 'pending'
+      type: 'message'
+    }
+  ]);
+  const [chatInput, setChatInput] = useState('');
+  const [isCaraThinking, setIsCaraThinking] = useState(false);
+  const [agentStatuses, setAgentStatuses] = useState<any>(null);
+  const [terminalOutput, setTerminalOutput] = useState<string[]>([
+    'Welcome to Careerate Terminal',
+    '$ npm run dev',
+    'Starting development server...',
+    'Server running on http://localhost:3000'
+  ]);
+  const [integrations, setIntegrations] = useState<Integration[]>(mockIntegrations);
+
+  // Initialize open tabs with main file
+  useEffect(() => {
+    const mainFile = findFileById(files, 'app-tsx');
+    if (mainFile && openTabs.length === 0) {
+      setOpenTabs([mainFile]);
+    }
+  }, [files]);
+
+  // Fetch real agent statuses periodically
+  useEffect(() => {
+    const fetchAgentStatuses = async () => {
+      try {
+        const apiUrl = import.meta.env.DEV ? 'http://localhost:3001' : '';
+        const response = await fetch(`${apiUrl}/api/agents/status`, {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAgentStatuses(data);
+
+          // Update local agent states based on backend
+          if (data.agents) {
+            setAgents(prev => prev.map(agent => {
+              const backendAgent = data.agents.find((a: any) => a.id === agent.id);
+              return backendAgent ? {
+                ...agent,
+                status: backendAgent.status,
+                isActive: backendAgent.status !== 'idle'
+              } : agent;
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch agent statuses:', error);
+      }
     };
 
-    setMessages(prev => [...prev, message]);
+    // Fetch immediately and then every 5 seconds
+    fetchAgentStatuses();
+    const interval = setInterval(fetchAgentStatuses, 5000);
 
-    // Update agent status to thinking
-    setAgents(prev => prev.map(agent =>
-      agent.id === targetAgent
-        ? { ...agent, status: 'thinking' }
-        : agent
-    ));
+    return () => clearInterval(interval);
+  }, []);
+
+  // Helper function to find file by ID
+  const findFileById = (fileList: ProjectFile[], id: string): ProjectFile | null => {
+    for (const file of fileList) {
+      if (file.id === id) return file;
+      if (file.children) {
+        const found = findFileById(file.children, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  // Open file in new tab
+  const openFile = (file: ProjectFile) => {
+    if (file.type === 'folder') return;
+
+    if (!openTabs.find(tab => tab.id === file.id)) {
+      setOpenTabs([...openTabs, file]);
+    }
+    setActiveTab(file.id);
+  };
+
+  // Close tab
+  const closeTab = (fileId: string) => {
+    const newTabs = openTabs.filter(tab => tab.id !== fileId);
+    setOpenTabs(newTabs);
+
+    if (activeTab === fileId && newTabs.length > 0) {
+      setActiveTab(newTabs[0].id);
+    }
+  };
+
+  // Handle generated code files from agents
+  const handleGeneratedCode = (generatedFiles: any[]) => {
+    const newFiles: ProjectFile[] = [];
+
+    generatedFiles.forEach((file: any) => {
+      const fileId = `generated_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const fileName = file.path.split('/').pop() || 'untitled';
+      const language = getLanguageFromPath(file.path);
+
+      const newFile: ProjectFile = {
+        id: fileId,
+        name: fileName,
+        type: 'file',
+        path: file.path,
+        content: file.content,
+        language,
+        isOpen: false,
+        isDirty: true, // Mark as dirty since it's new/generated
+        size: file.content.length,
+        lastModified: new Date()
+      };
+
+      newFiles.push(newFile);
+
+      // Auto-open the first generated file
+      if (newFiles.length === 1) {
+        openFile(newFile);
+      }
+    });
+
+    // Add to terminal output
+    setTerminalOutput(prev => [
+      ...prev,
+      `🪄 Generated ${newFiles.length} file(s):`,
+      ...newFiles.map(f => `   • ${f.path}`)
+    ]);
+
+    // TODO: Integrate with actual file system
+    console.log('📁 Would add generated files to project:', newFiles);
+  };
+
+  // Get programming language from file path
+  const getLanguageFromPath = (path: string): string => {
+    const ext = path.split('.').pop()?.toLowerCase();
+    const langMap: { [key: string]: string } = {
+      'js': 'javascript',
+      'jsx': 'javascript',
+      'ts': 'typescript',
+      'tsx': 'typescript',
+      'py': 'python',
+      'java': 'java',
+      'go': 'go',
+      'rs': 'rust',
+      'html': 'html',
+      'css': 'css',
+      'scss': 'scss',
+      'json': 'json',
+      'md': 'markdown',
+      'yml': 'yaml',
+      'yaml': 'yaml'
+    };
+    return langMap[ext || ''] || 'plaintext';
+  };
+
+  // Handle Cara chat - REAL agent system communication
+  const handleCaraChat = async () => {
+    if (!chatInput.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      content: chatInput,
+      sender: 'user',
+      timestamp: new Date(),
+      type: 'message'
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+    const currentInput = chatInput;
+    setChatInput('');
+    setIsCaraThinking(true);
 
     try {
-      // Real A2A Protocol API call
-      const response = await fetch('/api/agents/message', {
+      // Call the REAL backend API
+      const apiUrl = import.meta.env.DEV ? 'http://localhost:3001' : '';
+      const response = await fetch(`${apiUrl}/api/agents/cara/chat`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(message)
+        credentials: 'include', // Include session cookies
+        body: JSON.stringify({
+          message: currentInput,
+          projectId: null, // TODO: Get from context when available
+          context: {
+            currentFiles: openTabs.map(tab => ({ path: tab.path, content: tab.content })),
+            activeIntegrations: integrations.filter(i => i.status === 'connected').map(i => i.id)
+          }
+        })
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const result = await response.json();
 
-      // Update message status and agent status
-      setMessages(prev => prev.map(msg =>
-        msg.id === message.id
-          ? { ...msg, status: 'completed' }
-          : msg
-      ));
-
-      setAgents(prev => prev.map(agent =>
-        agent.id === targetAgent
-          ? { ...agent, status: 'completed' }
-          : agent
-      ));
-
-      return result.result;
-    } catch (error) {
-      console.error('A2A Message Error:', error);
-
-      // Update status to error
-      setMessages(prev => prev.map(msg =>
-        msg.id === message.id
-          ? { ...msg, status: 'error' }
-          : msg
-      ));
-
-      setAgents(prev => prev.map(agent =>
-        agent.id === targetAgent
-          ? { ...agent, status: 'error' }
-          : agent
-      ));
-
-      throw error;
-    }
-  }, []);
-
-  // Handle Cara's orchestration
-  const handleCaraTask = async (prompt: string) => {
-    try {
-      // Clear the prompt input
-      setCurrentPrompt('');
-
-      // Add user message to chat
-      const userMessage = {
-        id: `user_${Date.now()}`,
-        role: 'user' as const,
-        content: prompt,
-        timestamp: new Date()
-      };
-      setChatMessages(prev => [...prev, userMessage]);
-
-      // Cara analyzes the task and delegates to appropriate specialists
-      const caraResponse = await sendA2AMessage('task.analyze', { prompt }, 'cara');
-
-      // Add Cara's response to chat
-      const caraMessage = {
-        id: `cara_${Date.now()}`,
-        role: 'assistant' as const,
-        content: caraResponse.message,
-        timestamp: new Date(),
-        agentId: 'cara'
-      };
-      setChatMessages(prev => [...prev, caraMessage]);
-
-      // Based on the analysis, execute the plan
-      if (caraResponse.analysis) {
-        const { taskType, assignedAgents, subtasks } = caraResponse.analysis;
-
-        // Execute subtasks with assigned agents
-        for (const subtask of subtasks || []) {
-          try {
-            const agentResponse = await sendA2AMessage(
-              getMethodForAgent(subtask.agent),
-              { prompt: subtask.task, context: prompt },
-              subtask.agent
-            );
-
-            // Add agent response to chat
-            const agentMessage = {
-              id: `${subtask.agent}_${Date.now()}`,
-              role: 'assistant' as const,
-              content: agentResponse.message,
-              timestamp: new Date(),
-              agentId: subtask.agent
-            };
-            setChatMessages(prev => [...prev, agentMessage]);
-
-          } catch (error) {
-            console.error(`Error with agent ${subtask.agent}:`, error);
+      if (result.success) {
+        const caraResponse: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          content: result.response.message,
+          sender: 'cara',
+          timestamp: new Date(result.timestamp),
+          type: 'task_assignment',
+          metadata: {
+            agents: result.response.agents_used,
+            results: result.response.results,
+            nextSteps: result.response.next_steps
           }
+        };
+
+        setChatMessages(prev => [...prev, caraResponse]);
+
+        // Update agents based on real backend response
+        setAgents(prev => prev.map(agent => ({
+          ...agent,
+          isActive: agent.id === 'cara' || result.response.agents_used?.includes(agent.id) || false,
+          status: agent.id === 'cara' ? 'completed' :
+                  result.response.agents_used?.includes(agent.id) ? 'working' : 'idle'
+        })));
+
+        // Handle code generation results
+        if (result.response.results) {
+          result.response.results.forEach((agentResult: any) => {
+            if (agentResult.type === 'code_generation' && agentResult.files) {
+              console.log('📁 Generated files:', agentResult.files);
+              handleGeneratedCode(agentResult.files);
+            }
+          });
         }
+
+      } else {
+        throw new Error(result.error || 'Unknown error occurred');
       }
 
     } catch (error) {
-      console.error('Error in handleCaraTask:', error);
+      console.error('❌ Cara chat error:', error);
 
-      // Add error message to chat
-      const errorMessage = {
-        id: `error_${Date.now()}`,
-        role: 'assistant' as const,
-        content: 'Sorry, I encountered an error while processing your request. Please try again.',
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 2).toString(),
+        content: `❌ Sorry, I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again or check the console for details.`,
+        sender: 'cara',
         timestamp: new Date(),
-        agentId: 'cara'
+        type: 'error'
       };
+
       setChatMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsCaraThinking(false);
     }
   };
 
-  // Map agent to appropriate method
-  const getMethodForAgent = (agentId: string): string => {
-    switch (agentId) {
-      case 'codesmith': return 'code.generate';
-      case 'architect': return 'system.design';
-      case 'guardian': return 'security.audit';
-      case 'deployer': return 'deploy.setup';
-      default: return 'task.analyze';
-    }
-  };
-
-  const analyzeTaskType = (prompt: string): string => {
-    const lower = prompt.toLowerCase();
-    if (lower.includes('code') || lower.includes('function') || lower.includes('component')) return 'code';
-    if (lower.includes('architecture') || lower.includes('design') || lower.includes('system')) return 'architecture';
-    if (lower.includes('security') || lower.includes('audit') || lower.includes('vulnerability')) return 'security';
-    if (lower.includes('deploy') || lower.includes('hosting') || lower.includes('ci/cd')) return 'deploy';
-    return 'multi';
-  };
-
-  const bringToFront = (panelId: string) => {
-    const newZIndex = maxZIndex + 1;
-    setMaxZIndex(newZIndex);
-    setPanels(prev => prev.map(panel =>
-      panel.id === panelId
-        ? { ...panel, zIndex: newZIndex }
-        : panel
-    ));
-  };
-
-  const toggleMinimize = (panelId: string) => {
-    setPanels(prev => prev.map(panel =>
-      panel.id === panelId
-        ? { ...panel, isMinimized: !panel.isMinimized }
-        : panel
-    ));
-  };
-
-  const closePanel = (panelId: string) => {
-    setPanels(prev => prev.filter(panel => panel.id !== panelId));
-  };
-
-  const renderPanelContent = (panel: WorkshopPanel) => {
-    switch (panel.type) {
-      case 'editor':
-        return (
-          <div className="h-full flex flex-col">
-            <Tabs defaultValue="App.tsx" className="h-full">
-              <TabsList className="w-full justify-start bg-background/50">
-                <TabsTrigger value="App.tsx">App.tsx</TabsTrigger>
-                <TabsTrigger value="index.tsx">index.tsx</TabsTrigger>
-                <TabsTrigger value="package.json">package.json</TabsTrigger>
-              </TabsList>
-              <TabsContent value="App.tsx" className="h-full mt-2">
-                <Editor
-                  height="100%"
-                  defaultLanguage="typescript"
-                  defaultValue="import React from 'react';\n\nexport default function App() {\n  return (\n    <div>Hello Vibe Coding</div>\n  );\n}"
-                  theme="vs-dark"
-                  options={{
-                    fontSize: 14,
-                    minimap: { enabled: false },
-                    scrollBeyondLastLine: false,
-                    automaticLayout: true
-                  }}
-                />
-              </TabsContent>
-            </Tabs>
-          </div>
-        );
-
-      case 'chat':
-        return (
-          <div className="h-full flex flex-col">
-            <div className="flex items-center gap-2 mb-4">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback>🧠</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-foreground">Cara</p>
-                <p className="text-xs text-foreground/60">AI Orchestrator</p>
-              </div>
-              <Badge className="ml-auto bg-green-500/20 text-green-400">Active</Badge>
-            </div>
-
-            <ScrollArea className="flex-1 mb-4">
-              <div className="space-y-3">
-                {chatMessages.length === 0 ? (
-                  <div className="bg-primary/10 rounded-lg p-3">
-                    <p className="text-sm text-foreground">
-                      Hello! I'm Cara, your AI orchestrator. I coordinate a team of specialist agents to help you build amazing software. What would you like to create today?
-                    </p>
-                  </div>
-                ) : (
-                  chatMessages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`rounded-lg p-3 ${
-                        msg.role === 'user'
-                          ? 'bg-blue-500/10 ml-4'
-                          : 'bg-primary/10 mr-4'
-                      }`}
-                    >
-                      {msg.role === 'assistant' && msg.agentId && (
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs font-semibold text-primary">
-                            {agents.find(a => a.id === msg.agentId)?.name || 'Agent'}
-                          </span>
-                          <span className="text-xs text-foreground/60">
-                            {msg.timestamp.toLocaleTimeString()}
-                          </span>
-                        </div>
-                      )}
-                      <p className="text-sm text-foreground whitespace-pre-wrap">
-                        {msg.content}
-                      </p>
-                    </div>
-                  ))
-                )}
-              </div>
-            </ScrollArea>
-
-            <div className="space-y-2">
-              <Textarea
-                placeholder="Describe what you want to build..."
-                value={currentPrompt}
-                onChange={(e) => setCurrentPrompt(e.target.value)}
-                className="min-h-[80px] resize-none"
-              />
-              <Button
-                onClick={() => handleCaraTask(currentPrompt)}
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
-                disabled={!currentPrompt.trim()}
-              >
-                <Sparkles className="h-4 w-4 mr-2" />
-                Let Cara Handle It
-              </Button>
-            </div>
-          </div>
-        );
-
-      case 'agents':
-        return (
-          <div className="h-full">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-foreground">Agent Swarm</h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsAgentPanelExpanded(!isAgentPanelExpanded)}
-              >
-                {isAgentPanelExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-              </Button>
-            </div>
-
-            {isAgentPanelExpanded && (
-              <ScrollArea className="h-[calc(100%-3rem)]">
-                <div className="space-y-3">
-                  {agents.map((agent) => (
-                    <Card
-                      key={agent.id}
-                      className={`cursor-pointer transition-all duration-200 hover:scale-105 ${
-                        agent.id === selectedAgent ? 'ring-2 ring-primary' : ''
-                      } ${agent.level === 1 ? 'bg-gradient-to-r from-orange-500/10 to-amber-500/10' : 'bg-card/50'}`}
-                      onClick={() => setSelectedAgent(agent.id)}
-                    >
-                      <CardContent className="p-3">
-                        <div className="flex items-center gap-3">
-                          <div className="text-2xl">{agent.avatar}</div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className="font-semibold text-sm text-foreground">{agent.name}</p>
-                              {agent.role === 'orchestrator' && (
-                                <Badge className="bg-amber-500/20 text-amber-400 text-xs">Orchestrator</Badge>
-                              )}
-                            </div>
-                            <p className="text-xs text-foreground/60 mt-1">{agent.description}</p>
-                          </div>
-                          <div className={`w-2 h-2 rounded-full ${
-                            agent.status === 'idle' ? 'bg-gray-400' :
-                            agent.status === 'thinking' ? 'bg-yellow-400 animate-pulse' :
-                            agent.status === 'working' ? 'bg-blue-400 animate-pulse' :
-                            agent.status === 'completed' ? 'bg-green-400' : 'bg-red-400'
-                          }`} />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </ScrollArea>
+  // File Explorer Component
+  const FileExplorer = () => {
+    const renderFileTree = (fileList: ProjectFile[], level = 0) => {
+      return fileList.map(file => (
+        <div key={file.id} style={{ paddingLeft: `${level * 16}px` }}>
+          <div
+            className={`flex items-center py-1 px-2 hover:bg-muted/50 cursor-pointer rounded text-sm ${
+              activeTab === file.id ? 'bg-primary/10 text-primary' : 'text-foreground/80'
+            }`}
+            onClick={() => file.type === 'file' ? openFile(file) : null}
+          >
+            {file.type === 'folder' ? (
+              <>
+                <FolderOpen className="h-4 w-4 mr-2 text-blue-400" />
+                <span className="font-medium">{file.name}</span>
+                <Badge variant="secondary" className="ml-auto text-xs">
+                  {file.children?.length || 0}
+                </Badge>
+              </>
+            ) : (
+              <>
+                <File className="h-4 w-4 mr-2 text-gray-400" />
+                <span>{file.name}</span>
+                {file.isDirty && <div className="w-2 h-2 bg-orange-400 rounded-full ml-auto" />}
+              </>
             )}
           </div>
-        );
+          {file.children && renderFileTree(file.children, level + 1)}
+        </div>
+      ));
+    };
 
-      case 'terminal':
-        return (
-          <div className="h-full bg-black/90 text-green-400 p-4 font-mono text-sm">
-            <div className="mb-2">Welcome to Cara's Workshop Terminal</div>
-            <div className="mb-2">$ npm run dev</div>
-            <div className="text-green-300">✓ Development server running on http://localhost:3000</div>
-            <div className="mt-4">
-              <span className="text-amber-400">cara@workshop:~/project$</span>
-              <span className="animate-pulse ml-1">_</span>
+    return (
+      <div className="h-full">
+        <div className="p-4 border-b border-border">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-sm">Project Files</h3>
+            <div className="flex gap-1">
+              <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
+                <Plus className="h-3 w-3" />
+              </Button>
+              <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
+                <Search className="h-3 w-3" />
+              </Button>
             </div>
           </div>
-        );
-
-      default:
-        return <div className="h-full flex items-center justify-center text-foreground/60">Panel content</div>;
-    }
+          <Input
+            placeholder="Search files..."
+            className="h-8 text-xs"
+          />
+        </div>
+        <ScrollArea className="flex-1">
+          <div className="p-2">
+            {renderFileTree(files)}
+          </div>
+        </ScrollArea>
+      </div>
+    );
   };
 
-  return (
-    <div className="h-screen w-full relative overflow-hidden bg-background/95">
-      {/* Header */}
-      <div className="h-16 bg-background/80 backdrop-blur-sm border-b border-border flex items-center px-6 relative z-50">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="text-2xl">🧠</div>
-            <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
-                Cara's Workshop
-              </h1>
-              <p className="text-xs text-foreground/60">AI-Powered Development Environment</p>
-            </div>
+  // Cara Chat Component
+  const CaraChat = () => (
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b border-border">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-8 w-8">
+            <AvatarFallback className="bg-primary/10">🧠</AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="font-semibold text-sm">Cara's Command Center</h3>
+            <p className="text-xs text-muted-foreground">AI Orchestrator - Delegates Automatically</p>
           </div>
-        </div>
-
-        <div className="ml-auto flex items-center gap-2">
-          <Badge className="bg-green-500/20 text-green-400">
-            <Activity className="h-3 w-3 mr-1" />
-            Live
-          </Badge>
-          <Badge className="bg-blue-500/20 text-blue-400">
-            <Users className="h-3 w-3 mr-1" />
-            {agents.filter(a => a.status !== 'idle').length} Agents Active
+          <Badge className="ml-auto" variant={isCaraThinking ? "secondary" : "default"}>
+            {isCaraThinking ? "Thinking..." : agentStatuses?.agents?.find((a: any) => a.id === 'cara')?.status || "Ready"}
           </Badge>
         </div>
       </div>
 
-      {/* Draggable Panels */}
-      <div className="h-[calc(100vh-4rem)] relative">
-        {panels.map((panel) => (
-          <Rnd
-            key={panel.id}
-            size={panel.isMinimized ? { width: 300, height: 40 } : panel.size}
-            position={panel.position}
-            onDragStop={(e, d) => {
-              setPanels(prev => prev.map(p =>
-                p.id === panel.id
-                  ? { ...p, position: { x: d.x, y: d.y } }
-                  : p
-              ));
-            }}
-            onResizeStop={(e, direction, ref, delta, position) => {
-              setPanels(prev => prev.map(p =>
-                p.id === panel.id
-                  ? {
-                      ...p,
-                      size: { width: ref.offsetWidth, height: ref.offsetHeight },
-                      position
-                    }
-                  : p
-              ));
-            }}
-            style={{ zIndex: panel.zIndex }}
-            onMouseDown={() => bringToFront(panel.id)}
-            className="glass-pane rounded-xl overflow-hidden"
-            dragHandleClassName="panel-header"
-            enableResizing={!panel.isMinimized}
-          >
-            <Card className="h-full bg-transparent border-none shadow-none">
-              <CardHeader className="panel-header cursor-move p-3 bg-background/60 backdrop-blur-sm">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-foreground">{panel.title}</CardTitle>
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6"
-                      onClick={() => toggleMinimize(panel.id)}
-                    >
-                      {panel.isMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6"
-                      onClick={() => closePanel(panel.id)}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-4">
+          {chatMessages.map(message => (
+            <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-[80%] p-3 rounded-lg ${
+                message.sender === 'user'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted'
+              }`}>
+                <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+                {message.metadata?.nextSteps && (
+                  <div className="mt-2 text-xs opacity-80">
+                    <strong>Next Steps:</strong>
+                    <ul className="list-disc list-inside mt-1">
+                      {message.metadata.nextSteps.map((step: string, idx: number) => (
+                        <li key={idx}>{step}</li>
+                      ))}
+                    </ul>
                   </div>
+                )}
+                <div className="text-xs opacity-70 mt-1">
+                  {message.timestamp.toLocaleTimeString()}
                 </div>
-              </CardHeader>
-              {!panel.isMinimized && (
-                <CardContent className="p-4 h-[calc(100%-4rem)]">
-                  {renderPanelContent(panel)}
-                </CardContent>
-              )}
-            </Card>
-          </Rnd>
+              </div>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+
+      <div className="p-4 border-t border-border">
+        <div className="flex gap-2">
+          <Input
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            placeholder="Describe what you want to build..."
+            className="flex-1"
+            onKeyPress={(e) => e.key === 'Enter' && handleCaraChat()}
+          />
+          <Button onClick={handleCaraChat} disabled={isCaraThinking}>
+            <Sparkles className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Active Agents Panel
+  const ActiveAgents = () => (
+    <div className="p-4">
+      <h3 className="font-semibold text-sm mb-3">Active Agents</h3>
+      <div className="space-y-2">
+        {agents.filter(agent => agent.isActive).map(agent => (
+          <div key={agent.id} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
+            <span className="text-lg">{agent.avatar}</span>
+            <div className="flex-1">
+              <div className="font-medium text-sm">{agent.name}</div>
+              <div className="text-xs text-muted-foreground">{agent.description}</div>
+            </div>
+            <Badge variant={agent.status === 'working' ? 'default' : agent.status === 'completed' ? 'outline' : 'secondary'}>
+              {agent.status === 'thinking' ? '🤔' : agent.status === 'working' ? '⚡' : agent.status === 'completed' ? '✅' : '💤'} {agent.status}
+            </Badge>
+          </div>
         ))}
       </div>
     </div>
   );
-}
+
+  // Terminal Component
+  const Terminal = () => (
+    <div className="flex flex-col h-full bg-black text-green-400 font-mono">
+      <div className="p-2 border-b border-gray-700 bg-gray-900">
+        <div className="flex items-center gap-2">
+          <Terminal className="h-4 w-4" />
+          <span className="text-sm font-medium">Terminal</span>
+          <div className="flex gap-1 ml-auto">
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-1">
+          {terminalOutput.map((line, index) => (
+            <div key={index} className="text-sm">{line}</div>
+          ))}
+          <div className="flex items-center">
+            <span className="text-blue-400">$</span>
+            <span className="ml-2 bg-green-400 w-2 h-4 animate-pulse"></span>
+          </div>
+        </div>
+      </ScrollArea>
+    </div>
+  );
+
+  return (
+    <div className="h-screen w-screen flex flex-col bg-background overflow-hidden relative">
+      {/* WSL Background Pattern - PRESERVED AS REQUESTED */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            radial-gradient(circle at 25% 25%, #00ff00 2px, transparent 2px),
+            radial-gradient(circle at 75% 75%, #00ff00 1px, transparent 1px),
+            linear-gradient(45deg, transparent 24%, rgba(0,255,0,0.05) 25%, rgba(0,255,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,255,0,0.05) 75%, rgba(0,255,0,0.05) 76%, transparent 77%)
+          `,
+          backgroundSize: '50px 50px, 25px 25px, 20px 20px',
+          backgroundPosition: '0 0, 10px 10px, 0 0'
+        }} />
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(0,255,0,0.03) 2px,
+              rgba(0,255,0,0.03) 4px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 2px,
+              rgba(0,255,0,0.03) 2px,
+              rgba(0,255,0,0.03) 4px
+            )
+          `
+        }} />
+      </div>
+      {/* Top Action Bar */}
+      <div className="h-12 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex items-center justify-between h-full px-4">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Projects
+            </Button>
+            <Separator orientation="vertical" className="h-6" />
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="bg-green-500/10 text-green-500">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
+                Live
+              </Badge>
+              <span className="text-sm font-medium">Vibe Coding Session</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="outline" className="h-8">
+              <Save className="h-4 w-4 mr-2" />
+              Save
+            </Button>
+            <Button size="sm" variant="outline" className="h-8">
+              <Play className="h-4 w-4 mr-2" />
+              Run
+            </Button>
+            <Button size="sm" className="h-8 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600">
+              <Rocket className="h-4 w-4 mr-2" />
+              Deploy
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main IDE Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        <ResizablePanelGroup direction="horizontal">
+          {/* Left Sidebar - Cara Chat & Agents */}
+          <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+            <div className="h-full border-r border-border">
+              <Tabs defaultValue="cara" className="h-full flex flex-col">
+                <TabsList className="grid w-full grid-cols-2 rounded-none border-b">
+                  <TabsTrigger value="cara">Cara</TabsTrigger>
+                  <TabsTrigger value="agents">Agents</TabsTrigger>
+                </TabsList>
+                <TabsContent value="cara" className="flex-1 mt-0">
+                  <CaraChat />
+                </TabsContent>
+                <TabsContent value="agents" className="flex-1 mt-0">
+                  <ActiveAgents />
+                </TabsContent>
+              </Tabs>
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle />
+
+          {/* Center - Code Editor */}
+          <ResizablePanel defaultSize={50}>
+            <div className="h-full flex flex-col">
+              {/* File Tabs */}
+              <div className="border-b border-border bg-muted/20">
+                <div className="flex items-center overflow-x-auto">
+                  {openTabs.map(tab => (
+                    <div
+                      key={tab.id}
+                      className={`flex items-center gap-2 px-4 py-2 border-r border-border cursor-pointer min-w-0 ${
+                        activeTab === tab.id ? 'bg-background' : 'hover:bg-muted/50'
+                      }`}
+                      onClick={() => setActiveTab(tab.id)}
+                    >
+                      <File className="h-4 w-4 shrink-0" />
+                      <span className="text-sm truncate">{tab.name}</span>
+                      {tab.isDirty && <div className="w-2 h-2 bg-orange-400 rounded-full shrink-0" />}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          closeTab(tab.id);
+                        }}
+                        className="ml-1 p-1 hover:bg-muted rounded shrink-0"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Editor */}
+              <div className="flex-1 relative">
+                {openTabs.find(tab => tab.id === activeTab) ? (
+                  <Editor
+                    height="100%"
+                    defaultLanguage={openTabs.find(tab => tab.id === activeTab)?.language || 'typescript'}
+                    value={openTabs.find(tab => tab.id === activeTab)?.content || ''}
+                    theme="vs-dark"
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 14,
+                      lineNumbers: 'on',
+                      roundedSelection: false,
+                      scrollBeyondLastLine: false,
+                      automaticLayout: true,
+                    }}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    <div className="text-center">
+                      <Code className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>No file selected</p>
+                      <p className="text-sm">Open a file from the explorer to start coding</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle />
+
+          {/* Right Sidebar - File Explorer */}
+          <ResizablePanel defaultSize={25} minSize={15} maxSize={35}>
+            <div className="h-full border-l border-border">
+              <Tabs defaultValue="files" className="h-full flex flex-col">
+                <TabsList className="grid w-full grid-cols-3 rounded-none border-b">
+                  <TabsTrigger value="files">Files</TabsTrigger>
+                  <TabsTrigger value="integrations">APIs</TabsTrigger>
+                  <TabsTrigger value="deploy">Deploy</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="files" className="flex-1 mt-0">
+                  <FileExplorer />
+                </TabsContent>
+
+                <TabsContent value="integrations" className="flex-1 mt-0 p-4">
+                  <div>
+                    <h3 className="font-semibold text-sm mb-3">Integrations</h3>
+                    <div className="space-y-2">
+                      {integrations.map(integration => (
+                        <div key={integration.id} className="flex items-center gap-3 p-2 rounded-lg border">
+                          <span className="text-lg">{integration.icon}</span>
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">{integration.name}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {integration.capabilities.join(', ')}
+                            </div>
+                          </div>
+                          <Badge variant={integration.status === 'connected' ? 'default' : 'secondary'}>
+                            {integration.status}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="deploy" className="flex-1 mt-0 p-4">
+                  <div>
+                    <h3 className="font-semibold text-sm mb-3">Natural Language Deployment</h3>
+                    <div className="space-y-4">
+                      <div className="p-3 rounded-lg border-dashed border-2 border-primary/30 bg-primary/5">
+                        <div className="text-center">
+                          <Rocket className="h-8 w-8 mx-auto text-primary mb-2" />
+                          <p className="text-sm font-medium">Ready to Deploy</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Just describe how you want to deploy
+                          </p>
+                        </div>
+                      </div>
+
+                      <Button
+                        className="w-full"
+                        size="sm"
+                        onClick={() => setChatInput("Deploy this project to production with automatic scaling and monitoring")}
+                      >
+                        <Rocket className="h-4 w-4 mr-2" />
+                        Deploy to Production
+                      </Button>
+
+                      <div className="text-xs text-muted-foreground">
+                        <p>Previous deployments:</p>
+                        <div className="mt-1 space-y-1">
+                          <div className="flex justify-between">
+                            <span>Production</span>
+                            <Badge variant="outline" className="text-xs">Live</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+
+      {/* Bottom Terminal */}
+      <div className="h-48 border-t border-border">
+        <Terminal />
+      </div>
+    </div>
+  );
+};
+
+export default CaraWorkshop;
