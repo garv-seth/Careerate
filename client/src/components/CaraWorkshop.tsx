@@ -263,6 +263,18 @@ export const CaraWorkshop: React.FC = () => {
       type: 'message'
     }
   ]);
+
+  // Memory management: limit chat messages to prevent memory bloat
+  const MAX_CHAT_MESSAGES = 50;
+  const addChatMessage = useCallback((message: ChatMessage) => {
+    setChatMessages(prev => {
+      const newMessages = [...prev, message];
+      // Keep only the last MAX_CHAT_MESSAGES
+      return newMessages.length > MAX_CHAT_MESSAGES
+        ? newMessages.slice(-MAX_CHAT_MESSAGES)
+        : newMessages;
+    });
+  }, []);
   const [chatInput, setChatInput] = useState('');
   const [isCaraThinking, setIsCaraThinking] = useState(false);
   const [agentStatuses, setAgentStatuses] = useState<any>(null);
@@ -272,6 +284,17 @@ export const CaraWorkshop: React.FC = () => {
     'Starting development server...',
     'Server running on http://localhost:3000'
   ]);
+
+  // Memory management: limit terminal output to prevent memory bloat
+  const MAX_TERMINAL_LINES = 1000;
+  const addTerminalLine = useCallback((line: string) => {
+    setTerminalOutput(prev => {
+      const newLines = [...prev, line];
+      return newLines.length > MAX_TERMINAL_LINES
+        ? newLines.slice(-MAX_TERMINAL_LINES)
+        : newLines;
+    });
+  }, []);
   const [integrations, setIntegrations] = useState<Integration[]>(mockIntegrations);
 
   // Initialize open tabs with main file
@@ -282,40 +305,61 @@ export const CaraWorkshop: React.FC = () => {
     }
   }, [files]);
 
-  // Fetch real agent statuses periodically
+  // Fetch real agent statuses periodically with memory management
   useEffect(() => {
+    let mounted = true;
+    let interval: NodeJS.Timeout;
+
     const fetchAgentStatuses = async () => {
+      if (!mounted) return;
+
       try {
         const apiUrl = import.meta.env.DEV ? 'http://localhost:3001' : '';
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
         const response = await fetch(`${apiUrl}/api/agents/status`, {
-          credentials: 'include'
+          credentials: 'include',
+          signal: controller.signal
         });
+
+        clearTimeout(timeoutId);
+
+        if (!mounted) return;
+
         if (response.ok) {
           const data = await response.json();
-          setAgentStatuses(data);
+          if (mounted) {
+            setAgentStatuses(data);
 
-          // Update local agent states based on backend
-          if (data.agents) {
-            setAgents(prev => prev.map(agent => {
-              const backendAgent = data.agents.find((a: any) => a.id === agent.id);
-              return backendAgent ? {
-                ...agent,
-                status: backendAgent.status,
-                isActive: backendAgent.status !== 'idle'
-              } : agent;
-            }));
+            // Update local agent states based on backend
+            if (data.agents) {
+              setAgents(prev => prev.map(agent => {
+                const backendAgent = data.agents.find((a: any) => a.id === agent.id);
+                return backendAgent ? {
+                  ...agent,
+                  status: backendAgent.status,
+                  isActive: backendAgent.status !== 'idle'
+                } : agent;
+              }));
+            }
           }
         }
       } catch (error) {
-        console.error('Failed to fetch agent statuses:', error);
+        if (mounted && error.name !== 'AbortError') {
+          console.error('Failed to fetch agent statuses:', error);
+        }
       }
     };
 
-    // Fetch immediately and then every 5 seconds
+    // Fetch immediately and then every 15 seconds (reduced frequency to prevent memory bloat)
     fetchAgentStatuses();
-    const interval = setInterval(fetchAgentStatuses, 5000);
+    interval = setInterval(fetchAgentStatuses, 15000);
 
-    return () => clearInterval(interval);
+    return () => {
+      mounted = false;
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   // Helper function to find file by ID
@@ -330,15 +374,22 @@ export const CaraWorkshop: React.FC = () => {
     return null;
   };
 
-  // Open file in new tab
-  const openFile = (file: ProjectFile) => {
+  // Open file in new tab with memory management
+  const MAX_OPEN_TABS = 10;
+  const openFile = useCallback((file: ProjectFile) => {
     if (file.type === 'folder') return;
 
     if (!openTabs.find(tab => tab.id === file.id)) {
-      setOpenTabs([...openTabs, file]);
+      setOpenTabs(prev => {
+        const newTabs = [...prev, file];
+        // If exceeding max tabs, close the oldest tab (first one)
+        return newTabs.length > MAX_OPEN_TABS
+          ? newTabs.slice(-MAX_OPEN_TABS)
+          : newTabs;
+      });
     }
     setActiveTab(file.id);
-  };
+  }, [openTabs]);
 
   // Close tab
   const closeTab = (fileId: string) => {
@@ -426,7 +477,7 @@ export const CaraWorkshop: React.FC = () => {
       type: 'message'
     };
 
-    setChatMessages(prev => [...prev, userMessage]);
+    addChatMessage(userMessage);
     const currentInput = chatInput;
     setChatInput('');
     setIsCaraThinking(true);
@@ -470,7 +521,7 @@ export const CaraWorkshop: React.FC = () => {
           }
         };
 
-        setChatMessages(prev => [...prev, caraResponse]);
+        addChatMessage(caraResponse);
 
         // Update agents based on real backend response
         setAgents(prev => prev.map(agent => ({
@@ -505,7 +556,7 @@ export const CaraWorkshop: React.FC = () => {
         type: 'error'
       };
 
-      setChatMessages(prev => [...prev, errorMessage]);
+      addChatMessage(errorMessage);
     } finally {
       setIsCaraThinking(false);
     }
@@ -805,10 +856,11 @@ export const CaraWorkshop: React.FC = () => {
                 </div>
               </div>
 
-              {/* Editor */}
+              {/* Editor with memory optimization */}
               <div className="flex-1 relative">
                 {openTabs.find(tab => tab.id === activeTab) ? (
                   <Editor
+                    key={activeTab} // Force remount when tab changes to prevent memory leaks
                     height="100%"
                     defaultLanguage={openTabs.find(tab => tab.id === activeTab)?.language || 'typescript'}
                     value={openTabs.find(tab => tab.id === activeTab)?.content || ''}
@@ -820,6 +872,21 @@ export const CaraWorkshop: React.FC = () => {
                       roundedSelection: false,
                       scrollBeyondLastLine: false,
                       automaticLayout: true,
+                      // Memory optimization options
+                      wordWrap: 'bounded',
+                      wordWrapColumn: 120,
+                      maxTokenizationLineLength: 20000,
+                      scrollbar: {
+                        vertical: 'visible',
+                        horizontal: 'visible',
+                        verticalScrollbarSize: 8,
+                        horizontalScrollbarSize: 8
+                      }
+                    }}
+                    onMount={(editor, monaco) => {
+                      // Configure Monaco for better memory management
+                      monaco.editor.setModelLanguage(editor.getModel()!,
+                        openTabs.find(tab => tab.id === activeTab)?.language || 'typescript');
                     }}
                   />
                 ) : (

@@ -176,14 +176,24 @@ export default function LandingNew() {
         }}
       />
 
+      {/* Smooth transition gradient overlay */}
+      <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-[#090806] via-[#090806]/80 to-transparent z-5"></div>
+
       {/* Structured content area */}
       <div className="relative z-10">
         <AppShell className="bg-transparent">
           <main className="relative pt-16">
-            <Features />
-            <Pricing />
-            <Docs />
-            <CTA />
+            {/* Transition section with gradient background */}
+            <div className="relative -mt-32 pt-32 bg-gradient-to-b from-transparent via-[#090806]/50 to-[#090806]">
+              <Features />
+            </div>
+
+            {/* Rest of content with solid background */}
+            <div className="bg-[#090806]">
+              <Pricing />
+              <Docs />
+              <CTA />
+            </div>
           </main>
         </AppShell>
       </div>
