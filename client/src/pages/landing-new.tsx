@@ -149,16 +149,9 @@ export default function LandingNew() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#090806] text-foreground">
-      {/* 21st.dev-inspired animated gradient background */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,140,66,0.32),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(255,154,62,0.16),_transparent_50%),linear-gradient(180deg,_#080605_0%,_#0f0a08_45%,_#140d0a_100%)] animate-[background-pan_18s_linear_infinite]" />
-        <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ backgroundImage: "url('https://storage.googleapis.com/21st-assets/noise.png')" }} />
-      </div>
-
-      {/* New Animated Shader Hero */}
+    <div className="relative min-h-screen overflow-hidden bg-black text-foreground">
+      {/* WebGL Animated Shader Hero - Full Screen */}
       <Hero
-        className="relative"
         headline={{
           line1: "Think It.",
           line2: "Agents Build It."
@@ -176,26 +169,18 @@ export default function LandingNew() {
         }}
       />
 
-      {/* Smooth transition gradient overlay */}
-      <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-[#090806] via-[#090806]/80 to-transparent z-5"></div>
-
-      {/* Structured content area */}
+      {/* Structured content area positioned below the full-screen hero */}
       <div className="relative z-10">
-        <AppShell className="bg-transparent">
-          <main className="relative pt-16">
-            {/* Transition section with gradient background */}
-            <div className="relative -mt-32 pt-32 bg-gradient-to-b from-transparent via-[#090806]/50 to-[#090806]">
+        <div className="bg-[#090806]">
+          <AppShell className="bg-transparent">
+            <main className="relative">
               <Features />
-            </div>
-
-            {/* Rest of content with solid background */}
-            <div className="bg-[#090806]">
               <Pricing />
               <Docs />
               <CTA />
-            </div>
-          </main>
-        </AppShell>
+            </main>
+          </AppShell>
+        </div>
       </div>
     </div>
   );
