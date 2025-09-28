@@ -17,6 +17,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('monaco-editor')) return 'vendor-monaco';
+            if (id.includes('@radix-ui')) return 'vendor-radix';
+            if (id.includes('react')) return 'vendor-react';
+            if (id.includes('recharts')) return 'vendor-charts';
+            return 'vendor';
+          }
+        },
+      },
+    },
   },
   server: {
     fs: {
@@ -27,5 +41,15 @@ export default defineConfig({
       port: 5000,
       host: "0.0.0.0",
     },
+  },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'monaco-editor',
+    ],
+    exclude: [
+      // keep heavy libs out if they break pre-bundling
+    ],
   },
 });
