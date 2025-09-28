@@ -336,7 +336,7 @@ const Hero: React.FC<HeroProps> = ({
   const canvasRef = useShaderBackground();
 
   return (
-    <div className={`relative w-full h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 ${className}`}>
+    <div className={`relative w-full min-h-[90vh] overflow-hidden bg-transparent ${className}`}>
       <style jsx>{`
         @keyframes fade-in-down {
           from {
@@ -399,8 +399,8 @@ const Hero: React.FC<HeroProps> = ({
 
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-contain touch-none"
-        style={{ background: 'black' }}
+        className="absolute inset-0 w-full h-full object-cover touch-none opacity-70 mix-blend-screen"
+        style={{ background: 'transparent' }}
       />
 
       {/* Hero Content Overlay */}

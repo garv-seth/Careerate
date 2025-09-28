@@ -149,9 +149,16 @@ export default function LandingNew() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen overflow-hidden bg-[#090806] text-foreground">
+      {/* 21st.dev-inspired animated gradient background */}
+      <div className="absolute inset-0" aria-hidden="true">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,140,66,0.32),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(255,154,62,0.16),_transparent_50%),linear-gradient(180deg,_#080605_0%,_#0f0a08_45%,_#140d0a_100%)] animate-[background-pan_18s_linear_infinite]" />
+        <div className="absolute inset-0 opacity-40 mix-blend-screen" style={{ backgroundImage: "url('https://storage.googleapis.com/21st-assets/noise.png')" }} />
+      </div>
+
       {/* New Animated Shader Hero */}
       <Hero
+        className="relative"
         headline={{
           line1: "Think It.",
           line2: "Agents Build It."
@@ -169,31 +176,16 @@ export default function LandingNew() {
         }}
       />
 
-      {/* Professional Dynamic Background Transition */}
-      <div className="relative">
-        {/* Subtle gradient transition overlay */}
-        <div className="absolute inset-x-0 top-0 h-32 z-20">
-          <div className="w-full h-full bg-gradient-to-b from-transparent via-orange-500/5 to-background"></div>
-        </div>
-
-        {/* Dynamic Background Content Section */}
-        <div className="relative">
-          {/* Subtle animated background orbs */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-20 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl animate-pulse-subtle"></div>
-            <div className="absolute top-40 right-1/3 w-80 h-80 bg-amber-500/4 rounded-full blur-3xl animate-pulse-subtle" style={{animationDelay: '2s'}}></div>
-            <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-orange-600/3 rounded-full blur-3xl animate-pulse-subtle" style={{animationDelay: '4s'}}></div>
-          </div>
-
-          <AppShell>
-            <main className="relative z-10 pt-16">
-              <Features />
-              <Pricing />
-              <Docs />
-              <CTA />
-            </main>
-          </AppShell>
-        </div>
+      {/* Structured content area */}
+      <div className="relative z-10">
+        <AppShell className="bg-transparent">
+          <main className="relative pt-16">
+            <Features />
+            <Pricing />
+            <Docs />
+            <CTA />
+          </main>
+        </AppShell>
       </div>
     </div>
   );

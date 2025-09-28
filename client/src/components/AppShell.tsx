@@ -102,7 +102,7 @@ const NavLink = ({ href, children, isPageLink = false }: { href: string; childre
 };
 
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, className }: { children: ReactNode; className?: string }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const { isAuthenticated, isLoading } = useAuth();
@@ -236,8 +236,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
     );
 
+    const rootBackground = className ? className : "bg-background";
+
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className={cn("min-h-screen text-foreground", rootBackground)}>
             <header className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out",
                 isScrolled ? "pt-2" : "pt-4 md:pt-6"
