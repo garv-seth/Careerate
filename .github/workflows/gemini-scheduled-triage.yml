@@ -35,13 +35,7 @@ jobs:
       issues: 'read'
       pull-requests: 'read'
     env:
-      HAS_GEMINI_AUTH: ${{
-        secrets.GEMINI_API_KEY != '' ||
-        vars.GOOGLE_GENAI_USE_VERTEXAI == 'true' ||
-        vars.GOOGLE_GENAI_USE_VERTEXAI == '1' ||
-        vars.GOOGLE_GENAI_USE_GCA == 'true' ||
-        vars.GOOGLE_GENAI_USE_GCA == '1'
-      }}
+      HAS_GEMINI_AUTH: ${{ secrets.GEMINI_API_KEY != '' || vars.GOOGLE_GENAI_USE_VERTEXAI == 'true' || vars.GOOGLE_GENAI_USE_VERTEXAI == '1' || vars.GOOGLE_GENAI_USE_GCA == 'true' || vars.GOOGLE_GENAI_USE_GCA == '1' }}
     outputs:
       available_labels: '${{ steps.get_labels.outputs.available_labels }}'
       triaged_issues: '${{ env.TRIAGED_ISSUES }}'
@@ -125,10 +119,6 @@ jobs:
               ]
             }
           prompt: |-
-      - name: 'Skip Gemini issue analysis (missing credentials)'
-        if: env.HAS_GEMINI_AUTH != 'true'
-        run: |-
-          echo 'Skipping Gemini issue analysis because no Gemini authentication method is configured.'
             ## Role
 
             You are a highly efficient Issue Triage Engineer. Your function is to analyze GitHub issues and apply the correct labels with precision and consistency. You operate autonomously and produce only the specified JSON output. Your task is to triage and label a list of GitHub issues.
@@ -147,15 +137,15 @@ jobs:
 
             3. **Strict JSON Output:** The final output **MUST** be a single, syntactically correct JSON array. No other text, explanation, markdown formatting, or conversational filler is permitted in the final output file.
 
-            4. **Variable Handling:** Reference all shell variables as `"${VAR}"` (with quotes and braces) to prevent word splitting and globbing issues.
+            4. **Variable Handling:** Reference all shell variables as "${VAR}" (with quotes and braces) to prevent word splitting and globbing issues.
 
             ## Input Data Description
 
             You will work with the following environment variables:
 
-                - **`AVAILABLE_LABELS`**: Contains a single, comma-separated string of all available label names (e.g., `"kind/bug,priority/p1,docs"`).
+                - **`AVAILABLE_LABELS`**: Contains a single, comma-separated string of all available label names (e.g., "kind/bug,priority/p1,docs").
 
-                - **`ISSUES_TO_TRIAGE`**: Contains a string of a JSON array, where each object has `"number"`, `"title"`, and `"body"` keys.
+                - **`ISSUES_TO_TRIAGE`**: Contains a string of a JSON array, where each object has "number", "title", and "body" keys.
 
                 - **`GITHUB_ENV`**: Contains the file path where your final JSON output must be written.
 
@@ -168,7 +158,9 @@ jobs:
             First, retrieve all necessary information from the environment by executing the following shell commands. You will use the resulting shell variables in the subsequent steps.
 
             1. `Run: LABELS_DATA=$(echo "${AVAILABLE_LABELS}")`
+
             2. `Run: ISSUES_DATA=$(echo "${ISSUES_TO_TRIAGE}")`
+
             3. `Run: OUTPUT_PATH=$(echo "${GITHUB_ENV}")`
 
             ## Step 2: Parse Inputs
@@ -233,6 +225,11 @@ jobs:
               }
             ]
             ```
+
+      - name: 'Skip Gemini issue analysis (missing credentials)'
+        if: env.HAS_GEMINI_AUTH != 'true'
+        run: |-
+          echo 'Skipping Gemini issue analysis because no Gemini authentication method is configured.'
 
   label:
     runs-on: 'ubuntu-latest'

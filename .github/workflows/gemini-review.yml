@@ -26,13 +26,7 @@ jobs:
       issues: 'write'
       pull-requests: 'write'
     env:
-      HAS_GEMINI_AUTH: ${{
-        secrets.GEMINI_API_KEY != '' ||
-        vars.GOOGLE_GENAI_USE_VERTEXAI == 'true' ||
-        vars.GOOGLE_GENAI_USE_VERTEXAI == '1' ||
-        vars.GOOGLE_GENAI_USE_GCA == 'true' ||
-        vars.GOOGLE_GENAI_USE_GCA == '1'
-      }}
+      HAS_GEMINI_AUTH: ${{ secrets.GEMINI_API_KEY != '' || vars.GOOGLE_GENAI_USE_VERTEXAI == 'true' || vars.GOOGLE_GENAI_USE_VERTEXAI == '1' || vars.GOOGLE_GENAI_USE_GCA == 'true' || vars.GOOGLE_GENAI_USE_GCA == '1' }}
     steps:
       - name: 'Mint identity token'
         id: 'mint_identity_token'

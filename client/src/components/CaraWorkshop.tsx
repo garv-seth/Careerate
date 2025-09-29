@@ -264,8 +264,8 @@ export const CaraWorkshop: React.FC = () => {
     }
   ]);
 
-  // Memory management: limit chat messages to prevent memory bloat
-  const MAX_CHAT_MESSAGES = 50;
+  // Memory management: much more aggressive limits to prevent memory bloat
+  const MAX_CHAT_MESSAGES = 20; // Reduced from 50
   const addChatMessage = useCallback((message: ChatMessage) => {
     setChatMessages(prev => {
       const newMessages = [...prev, message];
@@ -285,8 +285,8 @@ export const CaraWorkshop: React.FC = () => {
     'Server running on http://localhost:3000'
   ]);
 
-  // Memory management: limit terminal output to prevent memory bloat
-  const MAX_TERMINAL_LINES = 1000;
+  // Memory management: much more aggressive limits to prevent memory bloat
+  const MAX_TERMINAL_LINES = 100; // Reduced from 1000
   const addTerminalLine = useCallback((line: string) => {
     setTerminalOutput(prev => {
       const newLines = [...prev, line];
@@ -352,9 +352,9 @@ export const CaraWorkshop: React.FC = () => {
       }
     };
 
-    // Fetch immediately and then every 15 seconds (reduced frequency to prevent memory bloat)
+    // Fetch immediately and then every 30 seconds (further reduced frequency to prevent memory bloat)
     fetchAgentStatuses();
-    interval = setInterval(fetchAgentStatuses, 15000);
+    interval = setInterval(fetchAgentStatuses, 30000);
 
     return () => {
       mounted = false;
@@ -374,8 +374,8 @@ export const CaraWorkshop: React.FC = () => {
     return null;
   };
 
-  // Open file in new tab with memory management
-  const MAX_OPEN_TABS = 10;
+  // Open file in new tab with aggressive memory management
+  const MAX_OPEN_TABS = 5; // Reduced from 10
   const openFile = useCallback((file: ProjectFile) => {
     if (file.type === 'folder') return;
 
@@ -848,6 +848,8 @@ export const CaraWorkshop: React.FC = () => {
                           closeTab(tab.id);
                         }}
                         className="ml-1 p-1 hover:bg-muted rounded shrink-0"
+                        aria-label={`Close ${tab.name} tab`}
+                        title={`Close ${tab.name}`}
                       >
                         <X className="h-3 w-3" />
                       </button>
