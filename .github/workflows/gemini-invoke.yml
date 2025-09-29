@@ -24,6 +24,14 @@ jobs:
       id-token: 'write'
       issues: 'write'
       pull-requests: 'write'
+    env:
+      HAS_GEMINI_AUTH: ${{
+        secrets.GEMINI_API_KEY != '' ||
+        vars.GOOGLE_GENAI_USE_VERTEXAI == 'true' ||
+        vars.GOOGLE_GENAI_USE_VERTEXAI == '1' ||
+        vars.GOOGLE_GENAI_USE_GCA == 'true' ||
+        vars.GOOGLE_GENAI_USE_GCA == '1'
+      }}
     steps:
       - name: 'Mint identity token'
         id: 'mint_identity_token'
@@ -39,6 +47,7 @@ jobs:
 
       - name: 'Run Gemini CLI'
         id: 'run_gemini'
+        if: env.HAS_GEMINI_AUTH == 'true'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         env:
           TITLE: '${{ github.event.pull_request.title || github.event.issue.title }}'
@@ -188,7 +197,10 @@ jobs:
                   Please review this plan. To approve, comment `/approve` on this issue. To reject, comment `/deny`.
                   ```
 
-            3. **Post the Plan**: Use `mcp__github__add_issue_comment` to post your plan.
+      - name: 'Skip Gemini invoke (missing credentials)'
+        if: env.HAS_GEMINI_AUTH != 'true'
+        run: |-
+          echo 'Skipping Gemini invocation because no Gemini authentication method is configured.'
 
             ### B. Await Human Approval
 

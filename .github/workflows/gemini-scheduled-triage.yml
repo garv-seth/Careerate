@@ -34,6 +34,14 @@ jobs:
       id-token: 'write'
       issues: 'read'
       pull-requests: 'read'
+    env:
+      HAS_GEMINI_AUTH: ${{
+        secrets.GEMINI_API_KEY != '' ||
+        vars.GOOGLE_GENAI_USE_VERTEXAI == 'true' ||
+        vars.GOOGLE_GENAI_USE_VERTEXAI == '1' ||
+        vars.GOOGLE_GENAI_USE_GCA == 'true' ||
+        vars.GOOGLE_GENAI_USE_GCA == '1'
+      }}
     outputs:
       available_labels: '${{ steps.get_labels.outputs.available_labels }}'
       triaged_issues: '${{ env.TRIAGED_ISSUES }}'
@@ -84,7 +92,7 @@ jobs:
       - name: 'Run Gemini Issue Analysis'
         id: 'gemini_issue_analysis'
         if: |-
-          ${{ steps.find_issues.outputs.issues_to_triage != '[]' }}
+          ${{ steps.find_issues.outputs.issues_to_triage != '[]' && env.HAS_GEMINI_AUTH == 'true' }}
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         env:
           GITHUB_TOKEN: '' # Do not pass any auth token here since this runs on untrusted inputs
@@ -117,6 +125,10 @@ jobs:
               ]
             }
           prompt: |-
+      - name: 'Skip Gemini issue analysis (missing credentials)'
+        if: env.HAS_GEMINI_AUTH != 'true'
+        run: |-
+          echo 'Skipping Gemini issue analysis because no Gemini authentication method is configured.'
             ## Role
 
             You are a highly efficient Issue Triage Engineer. Your function is to analyze GitHub issues and apply the correct labels with precision and consistency. You operate autonomously and produce only the specified JSON output. Your task is to triage and label a list of GitHub issues.
