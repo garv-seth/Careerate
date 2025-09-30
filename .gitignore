@@ -6,3 +6,27 @@ vite.config.ts.*
 *.tar.gz
 .gemini/
 gha-creds-*.json
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Test files and build artifacts
+builds/
+test-*.ts
+test-*.js
+test-*.log
+*.log
+deployment-*.log
+build-output.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+*.bak
