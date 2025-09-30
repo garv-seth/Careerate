@@ -1,185 +1,185 @@
-# Careerate - AI-Powered Development Platform
+# Careerate - Natural Language Deployment Platform
 
-## Overview
+## Mission
+Make deployment and DevOps accessible to everyone through natural language and autonomous agents.
 
-Careerate is a full-stack web application that combines AI-powered code generation with intelligent hosting and project management. The platform allows users to describe applications in natural language, generates complete code using AI, and provides comprehensive project management capabilities.
+## What We Actually Do (v1.0 - MVP)
 
-## Architecture
+### Core Features (100% Functional)
+1. **Natural Language Deployment**: Describe your app in plain English, we deploy it to Azure Container Apps
+2. **GitHub Integration**: Connect your repo, we build and deploy automatically
+3. **Health Monitoring Agent**: Autonomous agent monitors your app 24/7, restarts on failure
+4. **Simple Dashboard**: View deployments, logs, and health status
+
+### What We DON'T Do (Yet)
+- Multi-cloud (Azure only for now)
+- Complex microservices (monoliths only)
+- Custom CI/CD pipelines (we use our standard flow)
+- Enterprise migration tooling (coming later)
+
+## Architecture (Simplified)
 
 ### Frontend
-- **Framework**: React 18 with TypeScript
-- **Routing**: Wouter for lightweight client-side routing
-- **State Management**: TanStack Query (React Query) for server state management
-- **UI Components**: shadcn/ui components based on Radix UI
-- **Styling**: Tailwind CSS with dark/light mode support
-- **Build Tool**: Vite
+- React 18 + TypeScript
+- shadcn/ui components
+- Vite build
+- Focus: Simple, clean deployment UI
 
 ### Backend
-- **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Authentication**: Azure B2C
-- **Session Management**: PostgreSQL session store
-- **AI Integration**: OpenAI API for code generation
+- Express.js + TypeScript
+- PostgreSQL (Neon) for data
+- Azure Container Apps for deployment
+- OpenAI for natural language processing
+
+### Deployment Flow
+1. User describes app or connects GitHub repo
+2. We analyze code, detect framework
+3. Build Docker image
+4. Deploy to Azure Container Apps
+5. Monitor with health check agent
+6. Auto-restart on failure
 
 ### Infrastructure
-- **Database**: Neon PostgreSQL (serverless)
-- **Authentication**: Azure B2C tenant
-- **Storage**: Azure Blob Storage
-- **Hosting**: Azure Container Apps
-- **CI/CD**: GitHub Actions with Azure Container Registry
+- Hosting: Azure Container Apps (primary platform)
+- Registry: Azure Container Registry (for Docker images)
+- Database: Neon PostgreSQL (user data)
+- Auth: Azure B2C
+- Monitoring: Built-in health checks + Azure Application Insights
 
-## Environment Variables
+## Key Files
 
-The application uses Azure Key Vault for secret management. Key environment variables include:
+### Core Services
+- `server/services/deploymentManager.ts` - Real Azure deployment (NO MOCKS)
+- `server/services/healthMonitor.ts` - Autonomous monitoring agent
+- `server/services/githubIntegration.ts` - Repo connection & webhook handling
+- `server/services/ai.ts` - Natural language processing for deployment intents
 
-- `DATABASE_URL`: Neon PostgreSQL connection string
-- `AZURE_CLIENT_ID`: Azure B2C client ID
-- `AZURE_CLIENT_SECRET`: Azure B2C client secret
-- `AZURE_TENANT_ID`: Azure tenant ID
-- `B2C_TENANT_NAME`: Azure B2C tenant name
-- `B2C_SIGNUP_SIGNIN_POLICY_NAME`: B2C policy name
-- `SESSION_SECRET`: Session encryption secret
-- `OPENAI_API_KEY`: OpenAI API key
-- `STRIPE_SECRET_KEY`: Stripe payment processing
-- `SENDGRID_API_KEY`: Email service
-- `TWILIO_ACCOUNT_SID`: SMS service
+### API Routes
+- `/api/hosting/intent` - Parse natural language deployment request
+- `/api/hosting/deploy` - Execute deployment to Azure
+- `/api/hosting/deployments/:id` - Get deployment status
+- `/api/monitoring/health/:deploymentId` - Health check status
 
-## Database Schema
+### Frontend
+- `client/src/pages/vibe-coding.tsx` - Main deployment interface
+- `client/src/components/DeploymentInfo.tsx` - Deployment status display
+- `client/src/pages/dashboard.tsx` - User dashboard
 
-### Core Tables
-- **users**: User account information
-- **projects**: User projects and metadata
-- **code_generations**: AI-generated code history
-- **integrations**: Third-party service connections
-- **integration_secrets**: Encrypted integration credentials
+## Environment Variables (Required)
 
-### Advanced Features
-- **ai_agents**: Autonomous AI agents
-- **deployments**: Deployment tracking
-- **performance_metrics**: Application performance data
-- **security_scans**: Security analysis results
-- **collaboration**: Team collaboration features
-
-## Development
-
-### Setup
 ```bash
+# Database
+DATABASE_URL=postgresql://...
+
+# Azure (Critical for deployment)
+AZURE_SUBSCRIPTION_ID=
+AZURE_TENANT_ID=
+AZURE_CLIENT_ID=
+AZURE_CLIENT_SECRET=
+AZURE_CONTAINER_REGISTRY=careerateacr.azurecr.io
+
+# Authentication
+B2C_TENANT_NAME=careerate
+B2C_SIGNUP_SIGNIN_POLICY_NAME=B2C_1_signup_signin
+SESSION_SECRET=
+
+# AI
+OPENAI_API_KEY=
+
+# GitHub Integration
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+# Stripe (Billing)
+STRIPE_SECRET_KEY=
+```
+
+## Development Workflow
+
+```bash
+# Install dependencies
 npm install
+
+# Run development server
 npm run dev
-```
 
-### Database Operations
-```bash
-npm run db:push  # Push schema changes
-```
-
-### Type Checking
-```bash
-npm run check
-```
-
-### Build
-```bash
+# Build for production
 npm run build
-npm start
+
+# Deploy to Azure (manual for now)
+docker build -t careerateacr.azurecr.io/careerate:latest .
+docker push careerateacr.azurecr.io/careerate:latest
+az containerapp update --name careerate-web --resource-group Careerate --image careerateacr.azurecr.io/careerate:latest
 ```
 
-## Deployment
+## Target Audience
 
-The application deploys to Azure Container Apps using GitHub Actions:
+1. **Indie Developers** - Building side projects, need production hosting
+2. **Small Startups** - No DevOps engineer, need reliable deployment
+3. **Non-Technical Founders** - Have an app idea, need it deployed
 
-1. **Build**: GitHub Actions builds the Docker image
-2. **Registry**: Pushes to Azure Container Registry (careerateacr)
-3. **Deploy**: Deploys to Azure Container Apps environment
+## Competitive Positioning
 
-### Azure Resources
-- **Resource Group**: Careerate
-- **Container Registry**: careerateacr
-- **Container Apps Environment**: careerate-agents-env
-- **Key Vault**: CareeerateSecretsVault
-- **Storage Account**: careeratestorage
+| Feature | Careerate | Replit | Vercel | Traditional DevOps |
+|---------|-----------|--------|--------|-------------------|
+| Natural Language Deploy | ✅ | ✅ (limited) | ❌ | ❌ |
+| Production Cloud Deploy | ✅ | ❌ (sandbox) | ✅ (frontend only) | ✅ |
+| Backend + Database | ✅ | ✅ | ⚠️ (limited) | ✅ |
+| Auto-Monitoring | ✅ | ❌ | ⚠️ (basic) | ✅ |
+| GitHub Integration | ✅ | ✅ | ✅ | ✅ |
+| Price (monthly) | $49 | $20 | $20 | $5,000-10,000 |
 
-## AI Services
+## Pricing Model
 
-### Code Generation
-- **Provider**: OpenAI GPT models
-- **Capabilities**: Full-stack application generation
-- **Output**: Structured code with file organization
-- **Features**: Code improvement, testing, optimization
+- **Free Beta**: First 100 users, 90 days free
+- **Indie**: $49/month - 3 apps, monitoring, GitHub integration
+- **Pro**: $149/month - 10 apps, priority support
+- **Enterprise**: $499/month - Unlimited, white-label, SLA
 
-### Integration Framework
-- **Repository Connections**: GitHub, GitLab integration
-- **API Connectors**: RESTful API management
-- **Cloud Providers**: AWS, Azure, GCP integration
-- **Communication**: Slack, email, SMS notifications
+Target: 1,000 paying users = $49K-149K MRR by month 6
 
-## Security
+## Current Status
 
-- **Authentication**: Azure B2C with OAuth2 flow
-- **Session Management**: Secure PostgreSQL-backed sessions
-- **Secret Management**: Azure Key Vault integration
-- **Encryption**: Master key for sensitive data
-- **HTTPS**: Enforced in production
+**What Works:**
+- ✅ User authentication (Azure B2C)
+- ✅ Project management (CRUD)
+- ✅ Code generation (OpenAI)
+- ✅ Subscription billing (Stripe)
 
-## Monitoring & Analytics
+**What We're Building (This Sprint):**
+- 🔨 Real Azure Container Apps deployment
+- 🔨 Health monitoring agent (autonomous)
+- 🔨 GitHub webhook integration
+- 🔨 End-to-end deployment flow
 
-- **Application Insights**: Performance and error tracking
-- **Usage Analytics**: User behavior tracking
-- **Health Checks**: Service availability monitoring
-- **Rate Limiting**: API usage controls
+**What's Removed (Scope Cut):**
+- ❌ Multi-agent orchestration (over-engineered)
+- ❌ Enterprise migration tools (future product)
+- ❌ Multi-cloud support (Azure only for MVP)
+- ❌ Custom AI training (unnecessary complexity)
 
-## Development Guidelines
+## Success Metrics
 
-### Code Style
-- TypeScript for type safety
-- ESLint and Prettier for code formatting
-- Component-based architecture
-- Separation of concerns
+**Month 1 (Launch):**
+- 100 beta signups
+- 20 successful deployments
+- 0 critical bugs
 
-### Database
-- Use Drizzle ORM for all database operations
-- Implement proper migrations
-- Follow foreign key relationships
-- Use transactions for complex operations
+**Month 3 (PMF Search):**
+- 500 total users
+- 100 paying users ($4,900 MRR)
+- 90% deployment success rate
+- <5 minute average deployment time
 
-### API Design
-- RESTful endpoints
-- Consistent error handling
-- Proper HTTP status codes
-- Request/response validation with Zod
+**Month 6 (Growth):**
+- 2,000 total users
+- 500 paying users ($24,500 MRR)
+- 95% deployment success rate
+- Customer testimonials & case studies
 
-### Authentication
-- All API routes require authentication
-- Use `isAuthenticated` middleware
-- Proper session management
-- Secure logout flow
+## Notes for Claude Code
 
-## Claude Code Integration
-
-This project is optimized for development with Claude Code:
-
-- **Context Files**: This claude.md file provides project context
-- **Type Safety**: Full TypeScript implementation
-- **Clear Architecture**: Modular design with clear separation
-- **Documentation**: Comprehensive inline documentation
-- **Error Handling**: Consistent error patterns
-
-### Working with Claude Code
-- Use this file for understanding project structure
-- Refer to schema.ts for database operations
-- Check routes.ts for API endpoints
-- Review component structure in client/src
-
-## Troubleshooting
-
-### Common Issues
-1. **Database Connection**: Verify DATABASE_URL in Azure Key Vault
-2. **Authentication**: Check Azure B2C configuration
-3. **Build Errors**: Run `npm run check` for type issues
-4. **Environment Variables**: Ensure all secrets are in Key Vault
-
-### Debugging
-- Check application logs in Azure Container Apps
-- Use browser dev tools for frontend issues
-- Monitor API responses for backend problems
-- Verify database connections with proper error logging
+- Focus on ONE user journey: "Deploy my app" → working production URL with monitoring
+- Every feature must be 100% functional, no mocks or simulations
+- When in doubt, simplify - MVP first, features later
+- Test the full deployment flow before considering anything "done"
