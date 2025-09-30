@@ -1,128 +1,224 @@
-import { cn } from "@/lib/utils"
+import React from 'react';
+import { cn } from '@/lib/utils';
 
-const styles = `
-@keyframes hero-orb {
-  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
-  50% { transform: translate3d(40px, -20px, 0) scale(1.05); opacity: 0.9; }
-  100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
-}
-@keyframes hero-orb-delayed {
-  0% { transform: translate3d(0, 0, 0) scale(0.95); opacity: 0.5; }
-  50% { transform: translate3d(-30px, 30px, 0) scale(1.08); opacity: 0.85; }
-  100% { transform: translate3d(0, 0, 0) scale(0.95); opacity: 0.5; }
-}
-.animate-hero-orb { animation: hero-orb 18s ease-in-out infinite; }
-.animate-hero-orb-delayed { animation: hero-orb-delayed 22s ease-in-out infinite; }
-`
+export function IlluminatedHero() {
+    return (
+        <div className="relative w-full flex h-screen flex-wrap items-center justify-center overflow-hidden bg-background text-[calc(var(--size)*0.022)] text-foreground [--factor:min(1000px,100vh)] [--size:min(var(--factor),100vw)]">
+            <div className="bg absolute h-full w-full max-w-[44em]">
+                <div className="shadow-bgt absolute size-full translate-[0_-70%] scale-[1.2] animate-[onloadbgt_1s_ease-in-out_forwards] rounded-[100em] opacity-60" />
+                <div className="shadow-bgb absolute size-full translate-[0_-70%] scale-[1.2] animate-[onloadbgb_1s_ease-in-out_forwards] rounded-[100em] opacity-60" />
+            </div>
 
-interface IlluminatedHeroProps {
-  headline: string
-  highlight: string
-  description: string
-  primaryCta?: { label: string; href: string }
-  secondaryCta?: { label: string; href: string }
-  className?: string
-}
+            <div className="text-center text-4xl md:text-6xl font-semibold text-foreground" aria-hidden="true">
+                Introducing
+                <br />
+                <span
+                    className={cn(
+                        'relative inline-block',
+                        'before:absolute before:animate-[onloadopacity_1s_ease-out_forwards] before:opacity-0 before:content-[attr(data-text)]',
+                        'before:bg-gradient-to-b before:from-[hsl(var(--foreground))] before:to-[hsl(var(--primary))] before:bg-clip-text before:text-transparent',
+                        'filter-[url(#glow-4)]',
+                    )}
+                    data-text="Careerate AI Platform"
+                >
+                    Careerate AI Platform
+                </span>
+                <br />
+                Your Orchestrated Guild of Agents
+                <br />
+            </div>
 
-const gradientStops = [
-  "from-orange-500/90 via-amber-400/60 to-yellow-300/40",
-  "from-amber-500/80 via-orange-400/40 to-orange-500/80",
-]
+            <p className="absolute top-0 bottom-0 m-auto h-fit max-w-[28em] translate-y-[12em] bg-gradient-to-t from-muted-foreground to-foreground/80 bg-clip-text text-center font-semibold text-transparent">
+                Experience a new way to build with AI. Cara coordinates{' '}
+                <span className="relative inline-block font-black text-primary">
+                    specialized agents
+                </span>{' '}
+                that strategize, architect, and deploy your projects. Human + AI collaboration that scales with your ambition.
+            </p>
 
-export default function IlluminatedHero({
-  headline,
-  highlight,
-  description,
-  primaryCta,
-  secondaryCta,
-  className,
-}: IlluminatedHeroProps) {
-  return (
-    <div
-      className={cn(
-        "relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background text-foreground",
-        className,
-      )}
-    >
-      <style>{styles}</style>
-      {/* DO NOT REMOVE: Illuminated hero background for brand experience */}
-      <div className="pointer-events-none absolute inset-0 select-none" aria-hidden>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,153,0,0.25),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(255,214,94,0.18),transparent_50%),radial-gradient(circle_at_50%_80%,rgba(255,98,0,0.22),transparent_60%)]" />
-        <div className="absolute -left-32 -top-32 h-[36rem] w-[36rem] animate-hero-orb rounded-full bg-gradient-to-br from-orange-500/40 via-amber-400/30 to-orange-500/10 blur-[120px]" />
-        <div className="absolute bottom-[-18rem] right-[-18rem] h-[40rem] w-[40rem] animate-hero-orb-delayed rounded-full bg-gradient-to-tr from-amber-500/30 via-orange-400/20 to-yellow-300/10 blur-[140px]" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background via-background/40 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/60 to-transparent" />
-      </div>
-
-      <div className="relative z-10 flex w-full max-w-5xl flex-col items-center gap-10 px-6 text-center md:gap-14">
-        <div className="inline-flex items-center gap-2 rounded-full border border-amber-200/20 bg-orange-500/10 px-5 py-2 text-xs font-medium uppercase tracking-[0.4em] text-amber-200 shadow-[0_0_25px_rgba(251,191,36,0.25)]">
-          Cara orchestrated
-        </div>
-
-        <div className="space-y-6">
-          <h1 className="text-balance text-4xl font-semibold leading-tight text-foreground md:text-6xl lg:text-7xl">
-            {headline}
-          </h1>
-          <p className="text-balance text-3xl font-light text-amber-200/90 md:text-4xl">
-            {highlight}
-          </p>
-          <p className="mx-auto max-w-3xl text-base text-muted-foreground/90 md:text-lg">
-            {description}
-          </p>
-        </div>
-
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          {primaryCta && (
-            <a
-              href={primaryCta.href}
-              className="group inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-amber-400 px-10 py-4 text-sm font-semibold text-black shadow-lg shadow-orange-500/30 transition-transform duration-300 ease-out hover:scale-[1.02] hover:shadow-orange-400/40"
+            <svg
+                className="absolute -z-1 h-0 w-0"
+                width="1440px"
+                height="300px"
+                viewBox="0 0 1440 300"
+                xmlns="http://www.w3.org/2000/svg"
             >
-              {primaryCta.label}
-            </a>
-          )}
-          {secondaryCta && (
-            <a
-              href={secondaryCta.href}
-              className="inline-flex items-center justify-center rounded-full border border-amber-200/30 bg-orange-500/5 px-8 py-4 text-sm font-semibold text-amber-100 transition-colors hover:border-amber-200/50 hover:bg-orange-500/15"
-            >
-              {secondaryCta.label}
-            </a>
-          )}
+                <defs>
+                    <filter
+                        id="glow-4"
+                        colorInterpolationFilters="sRGB"
+                        x="-50%"
+                        y="-200%"
+                        width="200%"
+                        height="500%"
+                    >
+                        <feGaussianBlur
+                            in="SourceGraphic"
+                            data-target-blur="4"
+                            stdDeviation="4"
+                            result="blur4"
+                        />
+                        <feGaussianBlur
+                            in="SourceGraphic"
+                            data-target-blur="19"
+                            stdDeviation="19"
+                            result="blur19"
+                        />
+                        <feGaussianBlur
+                            in="SourceGraphic"
+                            data-target-blur="9"
+                            stdDeviation="9"
+                            result="blur9"
+                        />
+                        <feGaussianBlur
+                            in="SourceGraphic"
+                            data-target-blur="30"
+                            stdDeviation="30"
+                            result="blur30"
+                        />
+                        <feColorMatrix
+                            in="blur4"
+                            result="color-0-blur"
+                            type="matrix"
+                            values="1 0 0 0 0
+                      0 0.9803921568627451 0 0 0
+                      0 0 0.9647058823529412 0 0
+                      0 0 0 0.8 0"
+                        />
+                        <feOffset
+                            in="color-0-blur"
+                            result="layer-0-offsetted"
+                            dx="0"
+                            dy="0"
+                            data-target-offset-y="0"
+                        />
+                        <feColorMatrix
+                            in="blur19"
+                            result="color-1-blur"
+                            type="matrix"
+                            values="0.8156862745098039 0 0 0 0
+                      0 0.49411764705882355 0 0 0
+                      0 0 0.2627450980392157 0 0
+                      0 0 0 1 0"
+                        />
+                        <feOffset
+                            in="color-1-blur"
+                            result="layer-1-offsetted"
+                            dx="0"
+                            dy="2"
+                            data-target-offset-y="2"
+                        />
+                        <feColorMatrix
+                            in="blur9"
+                            result="color-2-blur"
+                            type="matrix"
+                            values="1 0 0 0 0
+                      0 0.6666666666666666 0 0 0
+                      0 0 0.36470588235294116 0 0
+                      0 0 0 0.65 0"
+                        />
+                        <feOffset
+                            in="color-2-blur"
+                            result="layer-2-offsetted"
+                            dx="0"
+                            dy="2"
+                            data-target-offset-y="2"
+                        />
+                        <feColorMatrix
+                            in="blur30"
+                            result="color-3-blur"
+                            type="matrix"
+                            values="1 0 0 0 0
+                      0 0.611764705882353 0 0 0
+                      0 0 0.39215686274509803 0 0
+                      0 0 0 1 0"
+                        />
+                        <feOffset
+                            in="color-3-blur"
+                            result="layer-3-offsetted"
+                            dx="0"
+                            dy="2"
+                            data-target-offset-y="2"
+                        />
+                        <feColorMatrix
+                            in="blur30"
+                            result="color-4-blur"
+                            type="matrix"
+                            values="0.4549019607843137 0 0 0 0
+                      0 0.16470588235294117 0 0 0
+                      0 0 0 0 0
+                      0 0 0 1 0"
+                        />
+                        <feOffset
+                            in="color-4-blur"
+                            result="layer-4-offsetted"
+                            dx="0"
+                            dy="16"
+                            data-target-offset-y="16"
+                        />
+                        <feColorMatrix
+                            in="blur30"
+                            result="color-5-blur"
+                            type="matrix"
+                            values="0.4235294117647059 0 0 0 0
+                      0 0.19607843137254902 0 0 0
+                      0 0 0.11372549019607843 0 0
+                      0 0 0 1 0"
+                        />
+                        <feOffset
+                            in="color-5-blur"
+                            result="layer-5-offsetted"
+                            dx="0"
+                            dy="64"
+                            data-target-offset-y="64"
+                        />
+                        <feColorMatrix
+                            in="blur30"
+                            result="color-6-blur"
+                            type="matrix"
+                            values="0.21176470588235294 0 0 0 0
+                      0 0.10980392156862745 0 0 0
+                      0 0 0.07450980392156863 0 0
+                      0 0 0 1 0"
+                        />
+                        <feOffset
+                            in="color-6-blur"
+                            result="layer-6-offsetted"
+                            dx="0"
+                            dy="64"
+                            data-target-offset-y="64"
+                        />
+                        <feColorMatrix
+                            in="blur30"
+                            result="color-7-blur"
+                            type="matrix"
+                            values="0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 0.68 0"
+                        />
+                        <feOffset
+                            in="color-7-blur"
+                            result="layer-7-offsetted"
+                            dx="0"
+                            dy="64"
+                            data-target-offset-y="64"
+                        />
+                        <feMerge>
+                            <feMergeNode in="layer-0-offsetted" />
+                            <feMergeNode in="layer-1-offsetted" />
+                            <feMergeNode in="layer-2-offsetted" />
+                            <feMergeNode in="layer-3-offsetted" />
+                            <feMergeNode in="layer-4-offsetted" />
+                            <feMergeNode in="layer-5-offsetted" />
+                            <feMergeNode in="layer-6-offsetted" />
+                            <feMergeNode in="layer-7-offsetted" />
+                            <feMergeNode in="layer-0-offsetted" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+            </svg>
         </div>
-
-        <div className="mt-8 grid w-full max-w-4xl gap-4 rounded-3xl border border-orange-500/10 bg-orange-500/5 p-6 shadow-[0_0_35px_rgba(253,186,116,0.25)] backdrop-blur">
-          <p className="text-xs uppercase tracking-[0.35em] text-orange-200/70">
-            orchestrated agent guild
-          </p>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[
-              {
-                label: "Architect & Guardian",
-                text: "Balance innovation and resilience with automated design reviews and security guards.",
-              },
-              {
-                label: "CodeSmith",
-                text: "Generative builders craft and refactor modules with production-ready polish.",
-              },
-              {
-                label: "Deployer",
-                text: "CI/CD shepherd ensures releases ship safely across cloud regions.",
-              },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className={cn(
-                  "rounded-2xl border border-orange-500/20 bg-gradient-to-br p-5 text-left shadow-lg",
-                  gradientStops[0],
-                )}
-              >
-                <p className="text-sm font-semibold text-foreground/90">{item.label}</p>
-                <p className="mt-2 text-sm text-foreground/70">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+    );
 }

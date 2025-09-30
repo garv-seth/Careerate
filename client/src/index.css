@@ -130,4 +130,57 @@
       background-position: 0% 0%, 0% 100%, 100% 100%;
     }
   }
+
+  /* 21st.dev Illuminated Hero Animations */
+  @keyframes onloadopacity {
+    24% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes onloadbgt {
+    0% {
+      translate: 0 -70%;
+      opacity: 0.3;
+    }
+    100% {
+      translate: 0 -64%;
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes onloadbgb {
+    0% {
+      translate: 0 70%;
+      opacity: 0.3;
+    }
+    100% {
+      translate: 0 64%;
+      opacity: 0.8;
+    }
+  }
+
+  /* Glowing shadow styles for illuminated text */
+  .shadow-bgt {
+    background: radial-gradient(
+      circle at center,
+      hsl(var(--primary)) 0%,
+      hsl(var(--secondary)) 50%,
+      transparent 100%
+    );
+    filter: blur(100px);
+  }
+
+  .shadow-bgb {
+    background: radial-gradient(
+      circle at center,
+      hsl(var(--secondary)) 0%,
+      hsl(var(--primary)) 50%,
+      transparent 100%
+    );
+    filter: blur(100px);
+  }
 }
