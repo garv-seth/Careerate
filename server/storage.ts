@@ -1,6 +1,6 @@
-import { 
-  users, 
-  projects, 
+import {
+  users,
+  projects,
   codeGenerations,
   integrations,
   integrationSecrets,
@@ -11,11 +11,14 @@ import {
   webhookConfigurations,
   apiRateLimits,
   apiUsageAnalytics,
-  type User, 
-  type UpsertUser, 
-  type Project, 
-  type InsertProject, 
-  type CodeGeneration, 
+  deployments,
+  healthChecks,
+  incidents,
+  type User,
+  type UpsertUser,
+  type Project,
+  type InsertProject,
+  type CodeGeneration,
   type InsertCodeGeneration,
   type Integration,
   type InsertIntegration,
@@ -42,7 +45,13 @@ import {
   type AgentTask,
   type InsertAgentTask,
   type AgentCommunication,
-  type InsertAgentCommunication
+  type InsertAgentCommunication,
+  type Deployment,
+  type InsertDeployment,
+  type HealthCheck,
+  type InsertHealthCheck,
+  type Incident,
+  type InsertIncident
 } from "@shared/schema";
 
 // Recent Activity Type
@@ -442,7 +451,7 @@ export interface IStorage {
   createIntegrationHealthCheck(healthCheck: InsertIntegrationHealthCheck): Promise<IntegrationHealthCheck>;
   getIntegrationHealthCheck(id: string): Promise<IntegrationHealthCheck | undefined>;
   getIntegrationHealthChecks(integrationId: string): Promise<IntegrationHealthCheck[]>;
-  getLatestHealthCheck(integrationId: string): Promise<IntegrationHealthCheck | undefined>;
+  getLatestIntegrationHealthCheck(integrationId: string): Promise<IntegrationHealthCheck | undefined>;
   updateIntegrationHealthCheck(id: string, updates: Partial<IntegrationHealthCheck>): Promise<IntegrationHealthCheck | undefined>;
   getHealthyIntegrations(): Promise<Integration[]>;
   getUnhealthyIntegrations(): Promise<Integration[]>;
@@ -2036,7 +2045,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(integrationHealthChecks.checkedAt));
   }
 
-  async getLatestHealthCheck(integrationId: string): Promise<IntegrationHealthCheck | undefined> {
+  async getLatestIntegrationHealthCheck(integrationId: string): Promise<IntegrationHealthCheck | undefined> {
     const [healthCheck] = await db.select().from(integrationHealthChecks)
       .where(eq(integrationHealthChecks.integrationId, integrationId))
       .orderBy(desc(integrationHealthChecks.checkedAt))
@@ -2936,6 +2945,123 @@ export class DatabaseStorage implements IStorage {
     return activities
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice(0, limit);
+  }
+
+  // =====================================================
+  // DEPLOYMENT OPERATIONS
+  // =====================================================
+
+  async createDeployment(deployment: InsertDeployment) {
+    const [result] = await db.insert(deployments).values(deployment).returning();
+    return result;
+  }
+
+  async updateDeployment(id: string, updates: Partial<InsertDeployment>) {
+    const [result] = await db
+      .update(deployments)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(deployments.id, id))
+      .returning();
+    return result;
+  }
+
+  async getDeployment(id: string) {
+    return db.query.deployments.findFirst({
+      where: eq(deployments.id, id)
+    });
+  }
+
+  async getDeploymentsByProject(projectId: string) {
+    return db.query.deployments.findMany({
+      where: eq(deployments.projectId, projectId),
+      orderBy: desc(deployments.createdAt)
+    });
+  }
+
+  async getActiveDeployments() {
+    return db.query.deployments.findMany({
+      where: inArray(deployments.status, ['deployed', 'running'])
+    });
+  }
+
+  // =====================================================
+  // HEALTH CHECK OPERATIONS
+  // =====================================================
+
+  async createHealthCheck(check: InsertHealthCheck) {
+    const [result] = await db.insert(healthChecks).values(check).returning();
+    return result;
+  }
+
+  async updateHealthCheck(id: string, updates: Partial<InsertHealthCheck>) {
+    const [result] = await db
+      .update(healthChecks)
+      .set(updates)
+      .where(eq(healthChecks.id, id))
+      .returning();
+    return result;
+  }
+
+  async getHealthChecksByDeployment(deploymentId: string) {
+    return db.query.healthChecks.findMany({
+      where: eq(healthChecks.deploymentId, deploymentId),
+      orderBy: desc(healthChecks.lastCheck),
+      limit: 10
+    });
+  }
+
+  async getLatestHealthCheck(deploymentId: string) {
+    return db.query.healthChecks.findFirst({
+      where: eq(healthChecks.deploymentId, deploymentId),
+      orderBy: desc(healthChecks.lastCheck)
+    });
+  }
+
+  // =====================================================
+  // INCIDENT OPERATIONS
+  // =====================================================
+
+  async createIncident(incident: InsertIncident) {
+    const [result] = await db.insert(incidents).values(incident).returning();
+    return result;
+  }
+
+  async updateIncident(id: string, updates: Partial<InsertIncident>) {
+    const [result] = await db
+      .update(incidents)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(incidents.id, id))
+      .returning();
+    return result;
+  }
+
+  async getIncident(id: string) {
+    return db.query.incidents.findFirst({
+      where: eq(incidents.id, id)
+    });
+  }
+
+  async getIncidentsByProject(projectId: string, limit: number = 20) {
+    return db.query.incidents.findMany({
+      where: eq(incidents.projectId, projectId),
+      orderBy: desc(incidents.createdAt),
+      limit
+    });
+  }
+
+  async getActiveIncidents(projectId?: string) {
+    const conditions = [
+      inArray(incidents.status, ['detected', 'investigating'])
+    ];
+
+    if (projectId) {
+      conditions.push(eq(incidents.projectId, projectId));
+    }
+
+    return db.query.incidents.findMany({
+      where: and(...conditions),
+      orderBy: desc(incidents.createdAt)
+    });
   }
 }
 

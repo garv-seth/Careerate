@@ -4,6 +4,7 @@ dotenv.config();
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { healthMonitor } from "./services/healthMonitor";
 
 const app = express();
 
@@ -117,6 +118,13 @@ app.get('/api/health', (req, res) => {
       console.log(`🚀 Careerate server running on port ${port}`);
       console.log(`🔗 Production URL: https://gocareerate.com`);
       console.log(`🔗 Direct URL: https://careerate-web.politetree-6f564ad5.westus2.azurecontainerapps.io`);
+
+      // Start health monitoring agent for all active deployments
+      healthMonitor.start().then(() => {
+        console.log(`🏥 Health Monitor started - monitoring active deployments`);
+      }).catch((error) => {
+        console.error(`⚠️ Failed to start Health Monitor:`, error);
+      });
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

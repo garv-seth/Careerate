@@ -1148,3 +1148,137 @@ export type DiscountUsage = typeof discountUsage.$inferSelect;
 export type InsertDiscountUsage = z.infer<typeof insertDiscountUsageSchema>;
 
 */
+
+// =====================================================
+// DEPLOYMENT & MONITORING TABLES
+// =====================================================
+
+export const deployments = pgTable("deployments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  agentId: varchar("agent_id"),
+  version: text("version"),
+  strategy: text("strategy"),
+  status: text("status").notNull().default("pending"),
+  environment: text("environment").default("production"),
+  deploymentUrl: text("deployment_url"),
+  rollbackVersion: text("rollback_version"),
+  metadata: jsonb("metadata").default({}),
+  deployedAt: timestamp("deployed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  environmentId: varchar("environment_id"),
+  containerId: text("container_id"),
+  processId: text("process_id"),
+  port: integer("port"),
+  healthCheckUrl: text("health_check_url"),
+  healthStatus: text("health_status"),
+  lastHealthCheck: timestamp("last_health_check"),
+  deploymentLogs: text("deployment_logs"),
+  errorLogs: text("error_logs"),
+  buildLogs: text("build_logs"),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+});
+
+export const healthChecks = pgTable("health_checks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  deploymentId: varchar("deployment_id").notNull().references(() => deployments.id, { onDelete: "cascade" }),
+  checkType: text("check_type"),
+  endpoint: text("endpoint"),
+  expectedResponse: text("expected_response"),
+  timeout: integer("timeout"),
+  interval: integer("interval"),
+  retries: integer("retries"),
+  status: text("status").notNull(),
+  lastCheck: timestamp("last_check"),
+  lastSuccessful: timestamp("last_successful"),
+  failureCount: integer("failure_count").default(0),
+  responseTime: integer("response_time"),
+  errorMessage: text("error_message"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const incidents = pgTable("incidents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  agentId: varchar("agent_id"),
+  title: text("title").notNull(),
+  description: text("description"),
+  severity: text("severity").notNull().default("warning"),
+  status: text("status").notNull().default("detected"),
+  category: text("category"),
+  detectionMethod: text("detection_method"),
+  resolution: text("resolution"),
+  resolvedBy: text("resolved_by"),
+  metadata: jsonb("metadata").default({}),
+  resolvedAt: timestamp("resolved_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Insert schemas for deployment tables
+export const insertDeploymentSchema = createInsertSchema(deployments).pick({
+  projectId: true,
+  agentId: true,
+  version: true,
+  strategy: true,
+  status: true,
+  environment: true,
+  deploymentUrl: true,
+  rollbackVersion: true,
+  metadata: true,
+  deployedAt: true,
+  environmentId: true,
+  containerId: true,
+  processId: true,
+  port: true,
+  healthCheckUrl: true,
+  healthStatus: true,
+  lastHealthCheck: true,
+  deploymentLogs: true,
+  errorLogs: true,
+  buildLogs: true,
+  startedAt: true,
+  completedAt: true,
+});
+
+export const insertHealthCheckSchema = createInsertSchema(healthChecks).pick({
+  deploymentId: true,
+  checkType: true,
+  endpoint: true,
+  expectedResponse: true,
+  timeout: true,
+  interval: true,
+  retries: true,
+  status: true,
+  lastCheck: true,
+  lastSuccessful: true,
+  failureCount: true,
+  responseTime: true,
+  errorMessage: true,
+  metadata: true,
+});
+
+export const insertIncidentSchema = createInsertSchema(incidents).pick({
+  projectId: true,
+  agentId: true,
+  title: true,
+  description: true,
+  severity: true,
+  status: true,
+  category: true,
+  detectionMethod: true,
+  resolution: true,
+  resolvedBy: true,
+  metadata: true,
+  resolvedAt: true,
+});
+
+// Type exports for deployment tables
+export type Deployment = typeof deployments.$inferSelect;
+export type InsertDeployment = z.infer<typeof insertDeploymentSchema>;
+export type HealthCheck = typeof healthChecks.$inferSelect;
+export type InsertHealthCheck = z.infer<typeof insertHealthCheckSchema>;
+export type Incident = typeof incidents.$inferSelect;
+export type InsertIncident = z.infer<typeof insertIncidentSchema>;

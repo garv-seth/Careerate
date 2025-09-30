@@ -42,6 +42,8 @@ import { encryptionService, secretsManager } from "./services/encryptionService"
 import { collaborationServer } from "./services/collaborationServer";
 import agentsRouter from "./src/routes/agents.js";
 import { subscriptionService } from "./services/subscriptionService"; // Subscription management service
+import { azureContainerApps } from "./services/azureContainerApps";
+import { healthMonitor } from "./services/healthMonitor";
 import { 
   projectCreationMiddleware,
   aiGenerationMiddleware,
@@ -3415,69 +3417,146 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Deploy Application (Azure-first path; will expand to MultiCloud)
+  // Deploy Application (Azure Container Apps - Production Ready)
   app.post("/api/hosting/deploy", isAuthenticated, async (req, res) => {
     try {
       const userId = getUserId(req);
-      const { projectId, environment, providerDecision, artifactRef, strategy = "blue-green" } = req.body;
+      const { projectId, environment = "production", sourceCode, envVars = {}, port = 3000 } = req.body;
 
-      if (!projectId || !environment || !providerDecision) {
-        return res.status(400).json({ message: "Project ID, environment, and provider decision are required" });
+      if (!projectId) {
+        return res.status(400).json({ message: "Project ID is required" });
       }
 
       // Validate project ownership
       await validateProjectOwnership(projectId, userId);
 
-      // Create deployment record and kick off local deployment manager
-      const result = await deploymentManager.deployProject({
+      // Get project details
+      const project = await storage.getProject(projectId);
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      // Generate unique app name
+      const appName = `careerate-${projectId.slice(0, 8)}-${Date.now()}`;
+
+      // Create deployment record (PENDING status)
+      const deployment = await storage.createDeployment({
         projectId,
-        version: artifactRef || `v-${Date.now()}`,
-        strategy,
+        version: `v-${Date.now()}`,
+        strategy: "rolling",
+        status: "pending",
         environment,
+        port,
+        healthCheckUrl: `https://${appName}.politetree-6f564ad5.westus2.azurecontainerapps.io/health`
       });
 
-      const statusUrl = `/api/hosting/deployments/${result.deploymentId}`;
-      res.status(202).json({
-        deploymentId: result.deploymentId,
-        statusUrl,
-        status: result.status,
-        url: result.url,
-        message: `Deployment started to ${providerDecision.provider} using ${strategy} strategy`
+      // Start async deployment to Azure Container Apps
+      azureContainerApps.deployApp({
+        projectId,
+        appName,
+        sourceCode: sourceCode || project.code || "",
+        envVars,
+        port
+      }).then(async (azureResult) => {
+        // Update deployment with success
+        await storage.updateDeployment(deployment.id, {
+          status: "deployed",
+          deploymentUrl: azureResult.url,
+          healthStatus: "healthy",
+          containerId: azureResult.containerAppName,
+          completedAt: new Date()
+        });
+
+        // Start health monitoring
+        await healthMonitor.addDeployment({
+          deploymentId: deployment.id,
+          projectId,
+          url: azureResult.url,
+          containerAppName: azureResult.containerAppName
+        });
+
+        console.log(`✅ Deployment ${deployment.id} succeeded: ${azureResult.url}`);
+      }).catch(async (error) => {
+        // Update deployment with failure
+        await storage.updateDeployment(deployment.id, {
+          status: "failed",
+          errorLogs: error.message,
+          completedAt: new Date()
+        });
+
+        console.error(`❌ Deployment ${deployment.id} failed:`, error);
       });
-      try { console.log(JSON.stringify({ type: 'event', severity: 'info', module: 'hosting', action: 'deploy', reqId: (res as any).locals?.requestId, projectId, deploymentId: result.deploymentId, strategy })); } catch {}
+
+      // Immediately return 202 Accepted
+      const statusUrl = `/api/hosting/deployments/${deployment.id}`;
+      res.status(202).json({
+        deploymentId: deployment.id,
+        statusUrl,
+        status: "pending",
+        message: `Deployment started to Azure Container Apps in ${environment} environment`,
+        appName
+      });
+
+      try { console.log(JSON.stringify({ type: 'event', severity: 'info', module: 'hosting', action: 'deploy', reqId: (res as any).locals?.requestId, projectId, deploymentId: deployment.id, appName })); } catch {}
     } catch (error) {
       console.error('Deploy application error:', error);
-      res.status(500).json({ message: "Failed to start deployment" });
+      res.status(500).json({ message: "Failed to start deployment", error: error.message });
     }
   });
 
-  // Get Deployment Status
+  // Get Deployment Status (Real Database Integration)
   app.get("/api/hosting/deployments/:deploymentId", isAuthenticated, async (req, res) => {
     try {
       const { deploymentId } = req.params;
-      const status = await deploymentManager.getDeploymentStatus(deploymentId);
+
+      // Get deployment from database
+      const deployment = await storage.getDeployment(deploymentId);
+      if (!deployment) {
+        return res.status(404).json({ message: "Deployment not found" });
+      }
+
+      // Get latest health check
+      const latestHealthCheck = await storage.getLatestHealthCheck(deploymentId);
+
+      // Get all recent health checks
+      const healthChecks = await storage.getHealthChecksByDeployment(deploymentId);
+
       res.json({
         id: deploymentId,
-        status: status.deployment?.status || 'unknown',
-        url: (status.deployment as any)?.deploymentUrl,
+        status: deployment.status,
+        url: deployment.deploymentUrl,
+        healthStatus: deployment.healthStatus,
+        environment: deployment.environment,
+        version: deployment.version,
         metrics: {
-          cpu: 0,
+          cpu: 0, // TODO: Integrate Azure metrics
           memory: 0,
           requests: 0,
-          responseTime: 0,
-          uptime: 0
+          responseTime: latestHealthCheck?.responseTime || 0,
+          uptime: deployment.startedAt
+            ? Math.floor((Date.now() - new Date(deployment.startedAt).getTime()) / 1000)
+            : 0
         },
-        logsUrl: null,
+        logsUrl: null, // TODO: Azure logs integration
         rollbackPlan: {
-          available: true,
-          previousVersion: (status.deployment as any)?.rollbackVersion || null,
+          available: !!deployment.rollbackVersion,
+          previousVersion: deployment.rollbackVersion,
           estimatedTime: "2 minutes"
         },
-        createdAt: (status.deployment as any)?.startedAt || null,
-        completedAt: (status.deployment as any)?.completedAt || null,
-        healthChecks: status.healthChecks || []
+        createdAt: deployment.createdAt,
+        startedAt: deployment.startedAt,
+        completedAt: deployment.completedAt,
+        lastHealthCheck: deployment.lastHealthCheck,
+        errorLogs: deployment.errorLogs,
+        healthChecks: healthChecks.map(hc => ({
+          timestamp: hc.lastCheck,
+          status: hc.status,
+          responseTime: hc.responseTime,
+          errorMessage: hc.errorMessage
+        }))
       });
-      try { console.log(JSON.stringify({ type: 'event', severity: 'info', module: 'hosting', action: 'status', reqId: (res as any).locals?.requestId, deploymentId, status: status.deployment?.status })); } catch {}
+
+      try { console.log(JSON.stringify({ type: 'event', severity: 'info', module: 'hosting', action: 'status', reqId: (res as any).locals?.requestId, deploymentId, status: deployment.status })); } catch {}
     } catch (error) {
       console.error('Get deployment status error:', error);
       res.status(500).json({ message: "Failed to get deployment status" });
