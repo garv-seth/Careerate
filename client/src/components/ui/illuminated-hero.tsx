@@ -1,40 +1,62 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 export function IlluminatedHero() {
     return (
-        <div className="relative w-full flex h-screen flex-wrap items-center justify-center overflow-hidden bg-background text-[calc(var(--size)*0.022)] text-foreground [--factor:min(1000px,100vh)] [--size:min(var(--factor),100vw)]">
+        <div className="relative w-full flex min-h-screen flex-wrap items-center justify-center overflow-hidden bg-black text-[calc(var(--size)*0.022)] text-white [--factor:min(1000px,100vh)] [--size:min(var(--factor),100vw)] py-20">
             <div className="bg absolute h-full w-full max-w-[44em]">
                 <div className="shadow-bgt absolute size-full translate-[0_-70%] scale-[1.2] animate-[onloadbgt_1s_ease-in-out_forwards] rounded-[100em] opacity-60" />
                 <div className="shadow-bgb absolute size-full translate-[0_-70%] scale-[1.2] animate-[onloadbgb_1s_ease-in-out_forwards] rounded-[100em] opacity-60" />
             </div>
 
-            <div className="text-center text-4xl md:text-6xl font-semibold text-foreground" aria-hidden="true">
-                Introducing
-                <br />
-                <span
-                    className={cn(
-                        'relative inline-block',
-                        'before:absolute before:animate-[onloadopacity_1s_ease-out_forwards] before:opacity-0 before:content-[attr(data-text)]',
-                        'before:bg-gradient-to-b before:from-[hsl(var(--foreground))] before:to-[hsl(var(--primary))] before:bg-clip-text before:text-transparent',
-                        'filter-[url(#glow-4)]',
-                    )}
-                    data-text="Careerate AI Platform"
-                >
-                    Careerate AI Platform
-                </span>
-                <br />
-                Your Orchestrated Guild of Agents
-                <br />
-            </div>
+            <div className="relative z-10 max-w-6xl mx-auto px-6">
+                <div className="text-center text-3xl md:text-5xl lg:text-6xl font-semibold text-gray-200 mb-8" aria-label="Think It. Agents Build It.">
+                    <span className="block mb-2">Think It.</span>
+                    <span
+                        className={cn(
+                            'relative inline-block',
+                            'before:absolute before:animate-[onloadopacity_1s_ease-out_forwards] before:opacity-0 before:content-[attr(data-text)]',
+                            'before:bg-gradient-to-b before:from-orange-300 before:via-orange-400 before:to-orange-500 before:bg-clip-text before:text-transparent',
+                            'filter-[url(#glow-4)]',
+                        )}
+                        data-text="Agents Build It."
+                    >
+                        <span className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent font-bold">
+                            Agents Build It.
+                        </span>
+                    </span>
+                    <span className="block mt-2 text-2xl md:text-3xl lg:text-4xl text-gray-300">
+                        Deploy in Minutes, Not Weeks.
+                    </span>
+                </div>
 
-            <p className="absolute top-0 bottom-0 m-auto h-fit max-w-[28em] translate-y-[12em] bg-gradient-to-t from-muted-foreground to-foreground/80 bg-clip-text text-center font-semibold text-transparent">
-                Experience a new way to build with AI. Cara coordinates{' '}
-                <span className="relative inline-block font-black text-primary">
-                    specialized agents
-                </span>{' '}
-                that strategize, architect, and deploy your projects. Human + AI collaboration that scales with your ambition.
-            </p>
+                <p className="max-w-3xl mx-auto text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed mb-10 text-center">
+                    Describe your app in plain English. Our <span className="font-bold text-orange-400">autonomous AI agents</span> handle deployment, monitoring, and auto-recovery—so you can focus on building your vision.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                    <Button
+                        size="lg"
+                        className="px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                        asChild
+                    >
+                        <a href="/dashboard">Start Building Free</a>
+                    </Button>
+                    <Button
+                        size="lg"
+                        variant="outline"
+                        className="px-8 py-6 text-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold border-white/30 hover:border-white/50 transition-all duration-200"
+                        asChild
+                    >
+                        <a href="#features">See How It Works</a>
+                    </Button>
+                </div>
+
+                <p className="text-center text-sm md:text-base text-gray-400">
+                    <span className="font-semibold text-orange-400">$49/month</span> replaces a <span className="line-through text-gray-500">$140,000/year</span> DevOps engineer
+                </p>
+            </div>
 
             <svg
                 className="absolute -z-1 h-0 w-0"
@@ -219,6 +241,59 @@ export function IlluminatedHero() {
                     </filter>
                 </defs>
             </svg>
+
+            <style>{`
+                @keyframes onloadbgt {
+                    from {
+                        opacity: 0.6;
+                        transform: translate(0, -70%) scale(1.2);
+                    }
+                    to {
+                        opacity: 0.8;
+                        transform: translate(0, -50%) scale(1);
+                    }
+                }
+
+                @keyframes onloadbgb {
+                    from {
+                        opacity: 0.6;
+                        transform: translate(0, 70%) scale(1.2);
+                    }
+                    to {
+                        opacity: 0.8;
+                        transform: translate(0, 50%) scale(1);
+                    }
+                }
+
+                @keyframes onloadopacity {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                .shadow-bgt {
+                    background: radial-gradient(
+                        ellipse at center,
+                        #ff6b35 0%,
+                        #ff8c42 25%,
+                        #ffb84d 50%,
+                        transparent 75%
+                    );
+                }
+
+                .shadow-bgb {
+                    background: radial-gradient(
+                        ellipse at center,
+                        #d0421b 0%,
+                        #ff6b35 25%,
+                        #ff8c42 50%,
+                        transparent 75%
+                    );
+                }
+            `}</style>
         </div>
     );
 }

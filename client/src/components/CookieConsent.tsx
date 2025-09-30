@@ -46,7 +46,7 @@ export function CookieConsent() {
               Decline
             </Button>
             <Button
-              className="rounded-full bg-primary/15 text-primary-foreground hover:bg-primary/25"
+              className="rounded-full"
               onClick={() => handleConsent('accepted')}
             >
               Accept

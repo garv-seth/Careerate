@@ -148,40 +148,53 @@ export default function PricingSection() {
   const getPlanFeatures = (planName: string) => {
     const features = {
       starter: [
-        "5 AI generations per month",
-        "3 projects maximum",
-        "Basic Vibe Coding features",
-        "Standard hosting infrastructure",
+        "1 deployed app",
+        "Basic natural language deployment",
         "Community support",
-        "Basic templates"
+        "Standard monitoring",
+        "Perfect for trying out"
+      ],
+      indie: [
+        "3 deployed apps",
+        "Natural language deployment",
+        "Health monitoring agent",
+        "Auto-restart on failure",
+        "GitHub integration",
+        "Email support",
+        "Perfect for side projects"
       ],
       professional: [
-        "Unlimited AI generations",
-        "Unlimited projects",
-        "Full Vibe Coding + Vibe Hosting",
-        "Real-time collaboration",
+        "10 deployed apps",
+        "All Indie features",
+        "Priority deployment queue",
+        "Custom domain setup",
+        "Advanced monitoring dashboard",
+        "Multi-region deployment",
         "Priority support",
-        "Advanced GitHub integration",
-        "Real-time monitoring & alerts",
-        "Custom domains & SSL",
-        "Advanced templates",
-        "API access"
+        "Perfect for startups"
+      ],
+      pro: [
+        "10 deployed apps",
+        "All Indie features",
+        "Priority deployment queue",
+        "Custom domain setup",
+        "Advanced monitoring dashboard",
+        "Multi-region deployment",
+        "Priority support",
+        "Perfect for startups"
       ],
       enterprise: [
-        "Everything in Professional",
-        "White-label solution",
-        "Custom AI model training",
-        "Dedicated infrastructure",
-        "24/7 phone support",
-        "SLA guarantees",
-        "Advanced security features",
-        "Compliance certifications",
+        "Unlimited apps",
+        "All Pro features",
+        "Bring your own cloud account",
+        "White-label option",
+        "Dedicated Slack channel",
+        "99.9% SLA guarantee",
         "Custom integrations",
-        "Team management",
-        "Advanced analytics"
+        "Perfect for agencies"
       ]
     };
-    
+
     return features[planName.toLowerCase()] || [];
   };
 
