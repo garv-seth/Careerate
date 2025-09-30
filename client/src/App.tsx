@@ -20,6 +20,7 @@ import EnterpriseMigration from "@/pages/enterprise-migration";
 import EnterpriseDashboard from "@/pages/enterprise-dashboard";
 import AccountSettings from "@/pages/account-settings";
 import VibeCoding from "@/pages/vibe-coding";
+import Deploy from "@/pages/deploy";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import { CookieConsent } from "@/components/CookieConsent";
@@ -61,6 +62,8 @@ function Router() {
           <Route path="/enterprise" component={EnterpriseDashboard} />
           <Route path="/account" component={AccountSettings} />
           <Route path="/settings" component={AccountSettings} />
+          {/* Deployment Routes */}
+          <Route path="/deploy" component={Deploy} />
           {/* Vibe Coding and Hosting Routes */}
           <Route path="/projects/:id/coding" component={VibeCoding} />
           <Route path="/projects/:id/hosting" component={VibeCoding} />

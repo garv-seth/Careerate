@@ -166,8 +166,6 @@ export class AzureContainerAppsService {
    * Generate appropriate Dockerfile based on project type
    */
   private async generateDockerfile(buildDir: string, spec: DeploymentSpec): Promise<void> {
-    const fs = require('fs').promises;
-    const path = require('path');
 
     // Detect framework from package.json or files
     const framework = await this.detectFramework(buildDir);
@@ -181,10 +179,10 @@ export class AzureContainerAppsService {
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --production || npm install --omit=dev
 COPY . .
 EXPOSE ${spec.port || 3000}
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
 `;
         break;
 
@@ -226,8 +224,6 @@ CMD ["npm", "start"]
    * Detect framework from project files
    */
   private async detectFramework(buildDir: string): Promise<string> {
-    const fs = require('fs').promises;
-    const path = require('path');
 
     try {
       const packageJsonPath = path.join(buildDir, 'package.json');
