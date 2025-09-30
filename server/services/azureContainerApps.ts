@@ -5,9 +5,11 @@
 
 import { ContainerAppsAPIClient } from "@azure/arm-appcontainers";
 import { ContainerRegistryManagementClient } from "@azure/arm-containerregistry";
-import { ClientSecretCredential } from "@azure/identity";
+import { AzureCliCredential } from "@azure/identity";
 import { exec } from "child_process";
 import { promisify } from "util";
+import fs from "fs/promises";
+import path from "path";
 import { storage } from "../storage";
 
 const execAsync = promisify(exec);
@@ -35,25 +37,19 @@ interface DeploymentSpec {
 export class AzureContainerAppsService {
   private client: ContainerAppsAPIClient;
   private registryClient: ContainerRegistryManagementClient;
-  private credential: ClientSecretCredential;
+  private credential: AzureCliCredential;
   private config: AzureConfig;
 
   constructor() {
-    // Get Azure credentials from environment
-    const tenantId = process.env.AZURE_TENANT_ID;
-    const clientId = process.env.AZURE_CLIENT_ID;
-    const clientSecret = process.env.AZURE_CLIENT_SECRET;
+    // Get Azure subscription ID from environment
     const subscriptionId = process.env.AZURE_SUBSCRIPTION_ID;
 
-    if (!tenantId || !clientId || !clientSecret || !subscriptionId) {
-      throw new Error('Missing Azure credentials. Please set AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, and AZURE_SUBSCRIPTION_ID');
+    if (!subscriptionId) {
+      throw new Error('Missing AZURE_SUBSCRIPTION_ID environment variable');
     }
 
-    this.credential = new ClientSecretCredential(
-      tenantId,
-      clientId,
-      clientSecret
-    );
+    // Use Azure CLI credentials (requires 'az login')
+    this.credential = new AzureCliCredential();
 
     this.client = new ContainerAppsAPIClient(this.credential, subscriptionId);
     this.registryClient = new ContainerRegistryManagementClient(this.credential, subscriptionId);
@@ -115,7 +111,6 @@ export class AzureContainerAppsService {
   private async buildAndPushImage(spec: DeploymentSpec): Promise<string> {
     const imageTag = `${spec.appName}-${Date.now()}`;
     const fullImageName = `${this.config.containerRegistry}.azurecr.io/${imageTag}`;
-    const path = require('path');
 
     try {
       // Prepare source code in build directory
@@ -145,9 +140,6 @@ export class AzureContainerAppsService {
    * Prepare source code for building
    */
   private async prepareSourceCode(spec: DeploymentSpec): Promise<string> {
-    const fs = require('fs').promises;
-    const path = require('path');
-
     const buildDir = path.join(process.cwd(), 'builds', spec.projectId);
 
     // Create build directory
@@ -252,95 +244,74 @@ CMD ["npm", "start"]
   }
 
   /**
-   * Create or update Container App in Azure
+   * Create or update Container App in Azure (using Azure CLI)
    */
   private async createOrUpdateContainerApp(spec: DeploymentSpec, imageName: string) {
     const containerAppName = spec.appName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
 
-    const containerAppEnvelope = {
-      location: this.config.location,
-      properties: {
-        managedEnvironmentId: `/subscriptions/${this.config.subscriptionId}/resourceGroups/${this.config.resourceGroupName}/providers/Microsoft.App/managedEnvironments/${this.config.containerAppsEnvironment}`,
-        configuration: {
-          ingress: {
-            external: true,
-            targetPort: spec.port || 3000,
-            transport: 'http',
-            allowInsecure: false
-          },
-          registries: [
-            {
-              server: `${this.config.containerRegistry}.azurecr.io`,
-              username: this.config.containerRegistry,
-              passwordSecretRef: 'registry-password'
+    // Get registry password
+    const registryPassword = await this.getRegistryPassword();
+
+    // Build environment variables string
+    const envVarsStr = Object.entries(spec.envVars || {})
+      .map(([name, value]) => `${name}=${value}`)
+      .join(' ');
+
+    // Create/Update Container App using Azure CLI (more reliable than SDK)
+    console.log('✨ Creating/Updating Container App via Azure CLI...');
+
+    const createCommand = `az containerapp create --name ${containerAppName} --resource-group ${this.config.resourceGroupName} --environment ${this.config.containerAppsEnvironment} --image ${imageName} --target-port ${spec.port || 3000} --ingress external --registry-server ${this.config.containerRegistry}.azurecr.io --registry-username ${this.config.containerRegistry} --registry-password "${registryPassword}" --cpu ${spec.cpu || 0.5} --memory ${spec.memory || '1Gi'} --min-replicas 1 --max-replicas 3 ${envVarsStr ? `--env-vars ${envVarsStr}` : ''}`;
+
+    try {
+      await execAsync(createCommand, {
+        timeout: 600000, // 10 minute timeout
+        maxBuffer: 10 * 1024 * 1024
+      });
+
+      // Get FQDN in a separate command
+      const { stdout } = await execAsync(`az containerapp show --name ${containerAppName} --resource-group ${this.config.resourceGroupName} --query properties.configuration.ingress.fqdn -o tsv`);
+      const fqdn = stdout.trim();
+      console.log(`✅ Container App created/updated: ${fqdn}`);
+
+      // Return a mock container app object with the necessary properties
+      return {
+        name: containerAppName,
+        properties: {
+          provisioningState: 'Succeeded',
+          configuration: {
+            ingress: {
+              fqdn
             }
-          ],
-          secrets: [
-            {
-              name: 'registry-password',
-              value: await this.getRegistryPassword()
-            }
-          ]
-        },
-        template: {
-          containers: [
-            {
-              name: containerAppName,
-              image: imageName,
-              resources: {
-                cpu: spec.cpu || 0.5,
-                memory: spec.memory || '1Gi'
-              },
-              env: Object.entries(spec.envVars || {}).map(([name, value]) => ({
-                name,
-                value
-              }))
-            }
-          ],
-          scale: {
-            minReplicas: 1,
-            maxReplicas: 3,
-            rules: [
-              {
-                name: 'http-scaling',
-                http: {
-                  metadata: {
-                    concurrentRequests: '10'
-                  }
-                }
-              }
-            ]
           }
         }
-      }
-    };
+      };
+    } catch (error: any) {
+      // If creation fails, try update instead
+      console.log('Trying update instead...');
+      const updateCommand = `az containerapp update --name ${containerAppName} --resource-group ${this.config.resourceGroupName} --image ${imageName}`;
 
-    // Check if app exists
-    let containerApp;
-    try {
-      containerApp = await this.client.containerApps.get(
-        this.config.resourceGroupName,
-        containerAppName
-      );
+      await execAsync(updateCommand, {
+        timeout: 600000,
+        maxBuffer: 10 * 1024 * 1024
+      });
 
-      // Update existing app
-      console.log('📝 Updating existing Container App...');
-      containerApp = await this.client.containerApps.beginCreateOrUpdateAndWait(
-        this.config.resourceGroupName,
-        containerAppName,
-        containerAppEnvelope
-      );
-    } catch {
-      // Create new app
-      console.log('✨ Creating new Container App...');
-      containerApp = await this.client.containerApps.beginCreateOrUpdateAndWait(
-        this.config.resourceGroupName,
-        containerAppName,
-        containerAppEnvelope
-      );
+      // Get FQDN in a separate command
+      const { stdout } = await execAsync(`az containerapp show --name ${containerAppName} --resource-group ${this.config.resourceGroupName} --query properties.configuration.ingress.fqdn -o tsv`);
+      const fqdn = stdout.trim();
+      console.log(`✅ Container App updated: ${fqdn}`);
+
+      return {
+        name: containerAppName,
+        properties: {
+          provisioningState: 'Succeeded',
+          configuration: {
+            ingress: {
+              fqdn
+            }
+          }
+        }
+      };
     }
-
-    return containerApp;
   }
 
   /**
