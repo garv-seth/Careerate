@@ -470,20 +470,25 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center space-x-1">
                           <Link href={`/projects/${project.id}/coding`}>
-                            <Button size="sm" variant="ghost" className="text-foreground/70 hover:text-foreground hover:bg-foreground/10 rounded-full" title="Vibe Coding">
+                            <Button size="sm" variant="ghost" className="text-foreground/70 hover:text-foreground hover:bg-foreground/10 rounded-full" title="Code & Deploy">
                               <Code className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Link href={`/projects/${project.id}/hosting`}>
-                            <Button size="sm" variant="ghost" className="text-foreground/70 hover:text-foreground hover:bg-foreground/10 rounded-full" title="Vibe Hosting">
-                              <Rocket className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Link href={`/projects/${project.id}/migration`}>
-                            <Button size="sm" variant="ghost" className="text-foreground/70 hover:text-foreground hover:bg-foreground/10 rounded-full" title="Enterprise Migration">
-                              <Bot className="h-4 w-4" />
-                            </Button>
-                          </Link>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-foreground/70 hover:text-foreground hover:bg-foreground/10 rounded-full"
+                            title="Settings"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              toast({
+                                title: "Coming Soon",
+                                description: "Project settings will be available soon.",
+                              });
+                            }}
+                          >
+                            <Settings className="h-4 w-4" />
+                          </Button>
                         </div>
                       </div>
 

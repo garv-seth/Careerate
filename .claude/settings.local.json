@@ -58,7 +58,8 @@
       "Bash(set AZURE_TENANT_ID=f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df)",
       "Bash(set DATABASE_URL=postgresql://neondb_owner:npg_1mix0VasGQBp@ep-calm-breeze-aeomoglq.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require)",
       "Bash(set B2C_TENANT_NAME=careerate)",
-      "Bash(set B2C_SIGNUP_SIGNIN_POLICY_NAME=B2C_1_signup_signin)"
+      "Bash(set B2C_SIGNUP_SIGNIN_POLICY_NAME=B2C_1_signup_signin)",
+      "Bash(del setup-enterprise.js)"
     ],
     "deny": [],
     "ask": []

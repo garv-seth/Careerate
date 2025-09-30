@@ -14,7 +14,7 @@ import {
   Maximize2, Minimize2, X, ArrowLeft, Cloud, Shield, Activity,
   Users, Cpu, Layers, Network, Workflow, ChevronDown, ChevronRight,
   FolderOpen, File, Plus, Search, Globe, Package, ExternalLink,
-  Monitor, Folder, Coffee, Rocket, Bug, Eye, Trash2, Copy, RefreshCw
+  Monitor, Folder, Coffee, Rocket, Bug, Eye, Trash2, Copy, RefreshCw, Send
 } from 'lucide-react';
 
 // Enhanced Agent System - Cara as Master Orchestrator
@@ -249,11 +249,17 @@ const mockIntegrations: Integration[] = [
 ];
 
 // Main Workshop Component - Revolutionary IDE Experience
-export const CaraWorkshop: React.FC = () => {
+interface CaraWorkshopProps {
+  projectId?: string;
+  initialMode?: 'code' | 'host' | 'both';
+}
+
+export const CaraWorkshop: React.FC<CaraWorkshopProps> = ({ projectId, initialMode = 'both' }) => {
   const [agents, setAgents] = useState<CaraAgent[]>(caraAgents);
   const [files, setFiles] = useState<ProjectFile[]>(mockProjectFiles);
   const [openTabs, setOpenTabs] = useState<ProjectFile[]>([]);
   const [activeTab, setActiveTab] = useState<string>('app-tsx');
+  const [workspaceMode, setWorkspaceMode] = useState<'code' | 'host' | 'both'>(initialMode);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -263,6 +269,33 @@ export const CaraWorkshop: React.FC = () => {
       type: 'message'
     }
   ]);
+
+  // Update Cara's initial message based on workspace mode
+  useEffect(() => {
+    const getContextualMessage = () => {
+      switch (workspaceMode) {
+        case 'code':
+          return "I'm ready to help you code! Describe what you want to build and I'll coordinate the right agents to write, review, and optimize your code.";
+        case 'host':
+          return "I'm here to help you deploy! Tell me how you want to host your application and I'll handle the entire deployment process with our cloud specialists.";
+        case 'both':
+          return "I'm ready for anything! Whether you want to code, deploy, or both - just tell me what you need and I'll coordinate the right team of agents.";
+      }
+    };
+
+    const newMessage: ChatMessage = {
+      id: `mode_${workspaceMode}_${Date.now()}`,
+      content: getContextualMessage(),
+      sender: 'cara',
+      timestamp: new Date(),
+      type: 'message'
+    };
+
+    setChatMessages(prev => {
+      const filtered = prev.filter(msg => !msg.id.startsWith('mode_'));
+      return [newMessage, ...filtered];
+    });
+  }, [workspaceMode]);
 
   // Memory management: much more aggressive limits to prevent memory bloat
   const MAX_CHAT_MESSAGES = 20; // Reduced from 50
@@ -297,7 +330,65 @@ export const CaraWorkshop: React.FC = () => {
   }, []);
   const [integrations, setIntegrations] = useState<Integration[]>(mockIntegrations);
 
-  // Initialize open tabs with main file
+  // Fetch project integrations from API
+  useEffect(() => {
+    const fetchProjectIntegrations = async () => {
+      if (!projectId) return;
+
+      try {
+        const apiUrl = import.meta.env.DEV ? 'http://localhost:3001' : '';
+        const response = await fetch(`${apiUrl}/api/agents/projects/${projectId}/integrations`, {
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.integrations) {
+            setIntegrations(data.integrations);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch project integrations:', error);
+        // Fallback to mock data if API fails
+      }
+    };
+
+    fetchProjectIntegrations();
+  }, [projectId]);
+
+  // Fetch project files from API
+  useEffect(() => {
+    const fetchProjectFiles = async () => {
+      if (!projectId) return;
+
+      try {
+        const apiUrl = import.meta.env.DEV ? 'http://localhost:3001' : '';
+        const response = await fetch(`${apiUrl}/api/agents/projects/${projectId}/files`, {
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.files) {
+            setFiles(data.files);
+
+            // Initialize open tabs with main file
+            const mainFile = findFileById(data.files, 'app-tsx');
+            if (mainFile && openTabs.length === 0) {
+              setOpenTabs([mainFile]);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch project files:', error);
+        // Fallback to mock data if API fails
+      }
+    };
+
+    fetchProjectFiles();
+  }, [projectId]);
+
+  // Initialize open tabs with main file (for mock data fallback)
   useEffect(() => {
     const mainFile = findFileById(files, 'app-tsx');
     if (mainFile && openTabs.length === 0) {
@@ -346,7 +437,7 @@ export const CaraWorkshop: React.FC = () => {
           }
         }
       } catch (error) {
-        if (mounted && error.name !== 'AbortError') {
+        if (mounted && (error as Error).name !== 'AbortError') {
           console.error('Failed to fetch agent statuses:', error);
         }
       }
@@ -531,12 +622,22 @@ export const CaraWorkshop: React.FC = () => {
                   result.response.agents_used?.includes(agent.id) ? 'working' : 'idle'
         })));
 
-        // Handle code generation results
+        // Handle real agent results
         if (result.response.results) {
           result.response.results.forEach((agentResult: any) => {
+            // Update terminal with real agent activity
+            addTerminalLine(`[${new Date().toLocaleTimeString()}] ${agentResult.agent}: ${agentResult.type}`);
+
             if (agentResult.type === 'code_generation' && agentResult.files) {
               console.log('📁 Generated files:', agentResult.files);
               handleGeneratedCode(agentResult.files);
+              addTerminalLine(`✅ Generated ${agentResult.files.length} file(s)`);
+            } else if (agentResult.type === 'task_analysis') {
+              addTerminalLine(`🧠 Task analyzed: ${agentResult.content.taskType} task`);
+              addTerminalLine(`👥 Assigned agents: ${agentResult.content.assignedAgents?.join(', ')}`);
+            } else if (agentResult.type === 'deployment_setup') {
+              addTerminalLine(`🚀 Deployment configured: ${agentResult.content.deploymentStrategy}`);
+              addTerminalLine(`☁️ Provider: ${agentResult.content.infrastructure?.provider || 'cloud'}`);
             }
           });
         }
@@ -674,7 +775,13 @@ export const CaraWorkshop: React.FC = () => {
           <Input
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
-            placeholder="Describe what you want to build..."
+            placeholder={
+              workspaceMode === 'code'
+                ? "Describe what you want to build..."
+                : workspaceMode === 'host'
+                  ? "Describe how you want to deploy..."
+                  : "Tell me what you need - coding, hosting, or both..."
+            }
             className="flex-1"
             onKeyPress={(e) => e.key === 'Enter' && handleCaraChat()}
           />
@@ -776,12 +883,43 @@ export const CaraWorkshop: React.FC = () => {
               Back to Projects
             </Button>
             <Separator orientation="vertical" className="h-6" />
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="bg-green-500/10 text-green-500">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
-                Live
-              </Badge>
-              <span className="text-sm font-medium">Vibe Coding Session</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="bg-green-500/10 text-green-500">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
+                  Live
+                </Badge>
+                <span className="text-sm font-medium">Vibe Session</span>
+              </div>
+              <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
+                <Button
+                  size="sm"
+                  variant={workspaceMode === 'code' ? 'default' : 'ghost'}
+                  onClick={() => setWorkspaceMode('code')}
+                  className="h-6 px-3 text-xs"
+                >
+                  <Code className="h-3 w-3 mr-1" />
+                  Code
+                </Button>
+                <Button
+                  size="sm"
+                  variant={workspaceMode === 'host' ? 'default' : 'ghost'}
+                  onClick={() => setWorkspaceMode('host')}
+                  className="h-6 px-3 text-xs"
+                >
+                  <Rocket className="h-3 w-3 mr-1" />
+                  Host
+                </Button>
+                <Button
+                  size="sm"
+                  variant={workspaceMode === 'both' ? 'default' : 'ghost'}
+                  onClick={() => setWorkspaceMode('both')}
+                  className="h-6 px-3 text-xs"
+                >
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  Both
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -806,12 +944,12 @@ export const CaraWorkshop: React.FC = () => {
       <div className="flex-1 flex overflow-hidden">
         <ResizablePanelGroup direction="horizontal">
           {/* Left Sidebar - Cara Chat & Agents */}
-          <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+          <ResizablePanel defaultSize={28} minSize={22} maxSize={42}>
             <div className="h-full border-r border-border">
               <Tabs defaultValue="cara" className="h-full flex flex-col">
                 <TabsList className="grid w-full grid-cols-2 rounded-none border-b">
                   <TabsTrigger value="cara">Cara</TabsTrigger>
-                  <TabsTrigger value="agents">Agents</TabsTrigger>
+                  <TabsTrigger value="agents" className="px-4">Agents</TabsTrigger>
                 </TabsList>
                 <TabsContent value="cara" className="flex-1 mt-0">
                   <CaraChat />
@@ -825,13 +963,71 @@ export const CaraWorkshop: React.FC = () => {
 
           <ResizableHandle />
 
-          {/* Center - Code Editor */}
+          {/* Center - Code Editor / Deployment Interface */}
           <ResizablePanel defaultSize={50}>
             <div className="h-full flex flex-col">
-              {/* File Tabs */}
-              <div className="border-b border-border bg-muted/20">
-                <div className="flex items-center overflow-x-auto">
-                  {openTabs.map(tab => (
+              {workspaceMode === 'host' ? (
+                // Deployment interface when in host-only mode
+                <div className="flex-1 p-6">
+                  <div className="max-w-2xl mx-auto">
+                    <div className="text-center mb-8">
+                      <Rocket className="h-16 w-16 mx-auto text-primary mb-4" />
+                      <h2 className="text-2xl font-bold mb-2">Natural Language Deployment</h2>
+                      <p className="text-muted-foreground">
+                        Describe how you want to deploy your application and our AI agents will handle everything
+                      </p>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="relative">
+                        <Input
+                          value={chatInput}
+                          onChange={(e) => setChatInput(e.target.value)}
+                          placeholder="Deploy to Azure with auto-scaling and monitoring..."
+                          className="text-lg py-4 pr-16"
+                          onKeyPress={(e) => e.key === 'Enter' && handleCaraChat()}
+                        />
+                        <Button
+                          onClick={handleCaraChat}
+                          disabled={!chatInput.trim() || isCaraThinking}
+                          className="absolute right-2 top-2 h-10 px-4"
+                        >
+                          {isCaraThinking ? (
+                            <Sparkles className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Send className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <Button
+                          variant="outline"
+                          className="h-20 flex-col"
+                          onClick={() => setChatInput("Deploy to Azure with auto-scaling")}
+                        >
+                          <Cloud className="h-6 w-6 mb-2" />
+                          Quick Deploy
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="h-20 flex-col"
+                          onClick={() => setChatInput("Set up staging and production environments")}
+                        >
+                          <Server className="h-6 w-6 mb-2" />
+                          Multi-Environment
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                // Code editor interface
+                <>
+                  {/* File Tabs */}
+                  <div className="border-b border-border bg-muted/20">
+                    <div className="flex items-center overflow-x-auto">
+                      {openTabs.map(tab => (
                     <div
                       key={tab.id}
                       className={`flex items-center gap-2 px-4 py-2 border-r border-border cursor-pointer min-w-0 ${
@@ -874,10 +1070,21 @@ export const CaraWorkshop: React.FC = () => {
                       roundedSelection: false,
                       scrollBeyondLastLine: false,
                       automaticLayout: true,
-                      // Memory optimization options
+                      // Aggressive memory optimization options
                       wordWrap: 'bounded',
-                      wordWrapColumn: 120,
-                      maxTokenizationLineLength: 20000,
+                      wordWrapColumn: 80, // Reduced from 120
+                      maxTokenizationLineLength: 1000, // Significantly reduced from 20000
+                      suggest: {
+                        snippetsPreventQuickSuggestions: true,
+                        showWords: false
+                      },
+                      hover: { enabled: false },
+                      parameterHints: { enabled: false },
+                      codeLens: false,
+                      colorDecorators: false,
+                      folding: false,
+                      foldingHighlight: false,
+                      bracketPairColorization: { enabled: false },
                       scrollbar: {
                         vertical: 'visible',
                         horizontal: 'visible',
@@ -901,20 +1108,34 @@ export const CaraWorkshop: React.FC = () => {
                   </div>
                 )}
               </div>
+                </>
+              )}
             </div>
           </ResizablePanel>
 
           <ResizableHandle />
 
-          {/* Right Sidebar - File Explorer */}
+          {/* Right Sidebar - Conditional based on workspace mode */}
           <ResizablePanel defaultSize={25} minSize={15} maxSize={35}>
             <div className="h-full border-l border-border">
-              <Tabs defaultValue="files" className="h-full flex flex-col">
-                <TabsList className="grid w-full grid-cols-3 rounded-none border-b">
-                  <TabsTrigger value="files">Files</TabsTrigger>
-                  <TabsTrigger value="integrations">APIs</TabsTrigger>
-                  <TabsTrigger value="deploy">Deploy</TabsTrigger>
-                </TabsList>
+              <Tabs defaultValue={workspaceMode === 'host' ? 'deploy' : 'files'} className="h-full flex flex-col">
+                {workspaceMode === 'both' ? (
+                  <TabsList className="grid w-full grid-cols-3 rounded-none border-b">
+                    <TabsTrigger value="files">Files</TabsTrigger>
+                    <TabsTrigger value="integrations">APIs</TabsTrigger>
+                    <TabsTrigger value="deploy">Deploy</TabsTrigger>
+                  </TabsList>
+                ) : workspaceMode === 'code' ? (
+                  <TabsList className="grid w-full grid-cols-2 rounded-none border-b">
+                    <TabsTrigger value="files">Files</TabsTrigger>
+                    <TabsTrigger value="integrations">APIs</TabsTrigger>
+                  </TabsList>
+                ) : (
+                  <TabsList className="grid w-full grid-cols-2 rounded-none border-b">
+                    <TabsTrigger value="deploy">Deploy</TabsTrigger>
+                    <TabsTrigger value="integrations">APIs</TabsTrigger>
+                  </TabsList>
+                )}
 
                 <TabsContent value="files" className="flex-1 mt-0">
                   <FileExplorer />

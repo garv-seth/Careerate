@@ -335,6 +335,72 @@ async function handleDeploySetup(params: any) {
   };
 }
 
+// Cara Chat Interface
+router.post('/cara/chat', isAuthenticated, async (req, res) => {
+  try {
+    const { message, projectId, context } = req.body;
+    const userId = (req as any).user.id;
+
+    console.log(`Cara Chat: ${message} (Project: ${projectId})`);
+
+    // Use the task analysis functionality to determine next steps
+    const analysis = await handleTaskAnalysis({ prompt: message });
+
+    // Based on analysis, coordinate appropriate agents
+    const response = {
+      success: true,
+      response: {
+        message: analysis.message,
+        agents_used: analysis.analysis.assignedAgents || ['cara'],
+        results: [{
+          type: 'task_analysis',
+          agent: 'cara',
+          content: analysis.analysis,
+          timestamp: new Date().toISOString()
+        }],
+        next_steps: analysis.analysis.subtasks?.map(task => `${task.agent}: ${task.task}`) || []
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    // If this involves code generation, trigger CodeSmith
+    if (analysis.analysis.taskType === 'code' || analysis.analysis.assignedAgents?.includes('codesmith')) {
+      const codeResult = await handleCodeGeneration({ prompt: message, context });
+      response.response.results.push({
+        type: 'code_generation',
+        agent: 'codesmith',
+        content: codeResult.result,
+        files: codeResult.result.code ? [{
+          path: codeResult.result.filename || 'generated-code.ts',
+          content: codeResult.result.code,
+          language: codeResult.result.language || 'typescript'
+        }] : [],
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // If this involves deployment, trigger Deployer
+    if (analysis.analysis.taskType === 'deployment' || analysis.analysis.assignedAgents?.includes('deployer')) {
+      const deployResult = await handleDeploySetup({ project: message, requirements: context });
+      response.response.results.push({
+        type: 'deployment_setup',
+        agent: 'deployer',
+        content: deployResult.deployment,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    res.json(response);
+  } catch (error) {
+    console.error('Cara Chat Error:', error);
+    res.status(500).json({
+      success: false,
+      error: (error as Error).message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Get Agent Status
 router.get('/status', isAuthenticated, async (req, res) => {
   const agents = [
@@ -408,6 +474,206 @@ router.get('/.well-known/agent.json', (req, res) => {
       status: '/api/agents/status'
     }
   });
+});
+
+// Get Project Integrations
+router.get('/projects/:projectId/integrations', isAuthenticated, async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const userId = (req as any).user.id;
+
+    // Return common integrations with real connection status
+    // TODO: Connect to actual integration service and database
+    const integrations = [
+      {
+        id: 'openai',
+        name: 'OpenAI',
+        type: 'api',
+        status: process.env.OPENAI_API_KEY ? 'connected' : 'disconnected',
+        icon: '🤖',
+        config: { model: 'gpt-4' },
+        capabilities: ['AI Code Generation', 'Chat Completion', 'Code Analysis', 'Task Planning']
+      },
+      {
+        id: 'github',
+        name: 'GitHub',
+        type: 'service',
+        status: 'disconnected', // TODO: Check actual GitHub integration
+        icon: '🐙',
+        config: {},
+        capabilities: ['Version Control', 'Code Hosting', 'Issue Tracking', 'Pull Requests']
+      },
+      {
+        id: 'postgresql',
+        name: 'PostgreSQL',
+        type: 'database',
+        status: process.env.DATABASE_URL ? 'connected' : 'disconnected',
+        icon: '🐘',
+        config: {},
+        capabilities: ['Relational Database', 'SQL Queries', 'Data Storage', 'Migrations']
+      },
+      {
+        id: 'azure',
+        name: 'Microsoft Azure',
+        type: 'cloud',
+        status: process.env.AZURE_CLIENT_ID ? 'connected' : 'disconnected',
+        icon: '☁️',
+        config: {},
+        capabilities: ['Cloud Hosting', 'Container Apps', 'Authentication', 'Storage']
+      }
+    ];
+
+    res.json({ integrations });
+  } catch (error) {
+    console.error('Get Project Integrations Error:', error);
+    res.status(500).json({
+      success: false,
+      error: (error as Error).message
+    });
+  }
+});
+
+// Get Project Files
+router.get('/projects/:projectId/files', isAuthenticated, async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const userId = (req as any).user.id;
+
+    // For now, return a more realistic project structure based on project type
+    // TODO: Connect to actual file storage/repository integration
+    const projectFiles = [
+      {
+        id: 'root',
+        name: `project-${projectId}`,
+        type: 'folder',
+        path: '/',
+        isOpen: true,
+        isDirty: false,
+        children: [
+          {
+            id: 'src',
+            name: 'src',
+            type: 'folder',
+            path: '/src',
+            isOpen: true,
+            isDirty: false,
+            children: [
+              {
+                id: 'app-tsx',
+                name: 'App.tsx',
+                type: 'file',
+                path: '/src/App.tsx',
+                content: `import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Dashboard from './pages/Dashboard';
+import ProjectDetail from './pages/ProjectDetail';
+
+function App() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/projects/:id" element={<ProjectDetail />} />
+      </Routes>
+      <Toaster position="top-right" />
+    </div>
+  );
+}
+
+export default App;`,
+                language: 'typescript',
+                isOpen: true,
+                isDirty: false,
+                size: 456,
+                lastModified: new Date()
+              },
+              {
+                id: 'index-tsx',
+                name: 'index.tsx',
+                type: 'file',
+                path: '/src/index.tsx',
+                content: `import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './index.css';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);`,
+                language: 'typescript',
+                isOpen: false,
+                isDirty: false,
+                size: 345,
+                lastModified: new Date()
+              }
+            ]
+          },
+          {
+            id: 'package-json',
+            name: 'package.json',
+            type: 'file',
+            path: '/package.json',
+            content: `{
+  "name": "careerate-project-${projectId}",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "react-hot-toast": "^2.4.0",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}`,
+            language: 'json',
+            isOpen: false,
+            isDirty: false,
+            size: 789,
+            lastModified: new Date()
+          }
+        ]
+      }
+    ];
+
+    res.json({ files: projectFiles });
+  } catch (error) {
+    console.error('Get Project Files Error:', error);
+    res.status(500).json({
+      success: false,
+      error: (error as Error).message
+    });
+  }
 });
 
 export default router;

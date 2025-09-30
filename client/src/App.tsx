@@ -16,16 +16,10 @@ import IntegrationsSetup from "@/pages/integrations-setup";
 import BillingDashboard from "@/pages/BillingDashboard";
 import AdminDashboard from "@/pages/AdminDashboard";
 import PaymentPage from "@/pages/payment";
-import LegacyAnalysis from "@/pages/legacy-analysis";
-import MigrationPlanning from "@/pages/migration-planning";
-import ModernizationWorkflows from "@/pages/modernization-workflows";
-import MigrationExecution from "@/pages/migration-execution";
-import MigrationRecommendations from "@/pages/migration-recommendations";
 import EnterpriseMigration from "@/pages/enterprise-migration";
 import EnterpriseDashboard from "@/pages/enterprise-dashboard";
 import AccountSettings from "@/pages/account-settings";
 import VibeCoding from "@/pages/vibe-coding";
-import Deploy from "@/pages/vibe-hosting";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import { CookieConsent } from "@/components/CookieConsent";
@@ -69,7 +63,7 @@ function Router() {
           <Route path="/settings" component={AccountSettings} />
           {/* Vibe Coding and Hosting Routes */}
           <Route path="/projects/:id/coding" component={VibeCoding} />
-          <Route path="/projects/:id/hosting" component={Deploy} />
+          <Route path="/projects/:id/hosting" component={VibeCoding} />
           {/* Enterprise Migration - Unified Dashboard */}
           <Route path="/projects/:id/migration" component={EnterpriseMigration} />
           {/* Legacy migration routes redirect to unified dashboard */}
