@@ -1,0 +1,39 @@
+✅ Azure Container Apps Service initialized: {
+  resourceGroup: 'Careerate',
+  environment: 'careerate-agents-env',
+  registry: 'careerateacr'
+}
+[dotenv@17.2.2] injecting env (13) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+🧪 Starting deployment test...
+
+📦 Deployment spec: {
+  projectId: '76406293-87b7-4a6a-9102-1a1ed13cdc6a',
+  appName: 'careerate-test-1759263285037',
+  files: [ 'index.js', 'package.json', 'Dockerfile' ],
+  port: 3000
+}
+
+🚀 Calling azureContainerApps.deployApp()...
+
+🚀 Starting Azure deployment for project 76406293-87b7-4a6a-9102-1a1ed13cdc6a
+🔨 Building image in Azure Container Registry...
+✅ ACR Build output: 2025/09/30 20:14:48 Downloading source code...
+2025/09/30 20:14:49 Finished downloading source code
+2025/09/30 20:14:49 Using acb_vol_7dfd241e-5fbd-4ba2-a91f-639accd61d31 as the home volume
+2025/09/30 20:14:49 Setting up Docker configuration...
+2025/09/30 20:14:50 Successfully set up Docker configuration
+2025/09/30 20:14:50 Logging in to registry: careerateacr.azurecr.io
+2025/09/30 20:14:50 Successfully logged into careerateacr.azurecr.io
+2025/09/30 20:14:50 Executing step ID: build. Ti
+✅ Image built and pushed: careerateacr.azurecr.io/careerate-test-1759263285037-1759263285038
+✨ Creating/Updating Container App via Azure CLI...
+✅ Container App created/updated: properties.configuration.ingress.fqdn
+✅ Container App deployed: careerate-test-1759263285037
+
+✅ DEPLOYMENT SUCCESSFUL!
+Result: {
+  "url": "https://properties.configuration.ingress.fqdn",
+  "containerAppName": "careerate-test-1759263285037",
+  "fqdn": "properties.configuration.ingress.fqdn",
+  "status": "Succeeded"
+}

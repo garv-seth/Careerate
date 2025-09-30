@@ -1,0 +1,73 @@
+✅ Azure Container Apps Service initialized: {
+  resourceGroup: 'Careerate',
+  environment: 'careerate-agents-env',
+  registry: 'careerateacr'
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 observe env with Radar: https://dotenvx.com/radar
+🧪 Starting deployment test...
+
+📦 Deployment spec: {
+  projectId: '76406293-87b7-4a6a-9102-1a1ed13cdc6a',
+  appName: 'careerate-test-1759262264061',
+  files: [ 'index.js', 'package.json', 'Dockerfile' ],
+  port: 3000
+}
+
+🚀 Calling azureContainerApps.deployApp()...
+
+🚀 Starting Azure deployment for project 76406293-87b7-4a6a-9102-1a1ed13cdc6a
+🔨 Building image in Azure Container Registry...
+✅ ACR Build output: 2025/09/30 19:57:47 Downloading source code...
+2025/09/30 19:57:48 Finished downloading source code
+2025/09/30 19:57:48 Using acb_vol_7fa61740-09ae-488d-813e-c7a74bd8cad0 as the home volume
+2025/09/30 19:57:48 Setting up Docker configuration...
+2025/09/30 19:57:49 Successfully set up Docker configuration
+2025/09/30 19:57:49 Logging in to registry: careerateacr.azurecr.io
+2025/09/30 19:57:49 Successfully logged into careerateacr.azurecr.io
+2025/09/30 19:57:49 Executing step ID: build. Ti
+✅ Image built and pushed: careerateacr.azurecr.io/careerate-test-1759262264061-1759262264061
+Failed to get registry credentials: AuthenticationRequiredError: invalid_client: Error(s): 7000215 - Timestamp: 2025-09-30 19:58:15Z - Description: AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app 'e8b1c661-2139-4583-a4ca-ce0c1cb946b1'. Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500 Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 Timestamp: 2025-09-30 19:58:15Z - Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 - Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500
+    at handleMsalError (C:\Users\Garvs\CareerateV0\node_modules\@azure\identity\src\msal\utils.ts:222:10)
+    at Object.getTokenByClientSecret (C:\Users\Garvs\CareerateV0\node_modules\@azure\identity\dist\esm\msal\nodeFlows\msalClient.js:225:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.withSpan (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-tracing\src\tracingClient.ts:70:22)
+    at async tryGetAccessToken (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\util\tokenCycler.ts:71:26)
+    at async beginRefresh (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\util\tokenCycler.ts:82:35)
+    at async Object.defaultAuthorizeRequest (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\policies\bearerTokenAuthenticationPolicy.ts:141:23)
+    at async Object.sendRequest (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\policies\bearerTokenAuthenticationPolicy.ts:228:7)
+    at async ContainerRegistryManagementClient.sendOperationRequest (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-client\src\serviceClient.ts:206:27)
+    at async AzureContainerAppsService.getRegistryPassword (C:\Users\Garvs\CareerateV0\server\services\azureContainerApps.ts:349:27) {
+  scopes: [ 'https://management.azure.com/.default' ],
+  getTokenOptions: {
+    abortSignal: undefined,
+    tracingOptions: { tracingContext: [TracingContextImpl] },
+    enableCae: true,
+    tenantId: 'f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df'
+  }
+}
+❌ Azure deployment failed: AuthenticationRequiredError: invalid_client: Error(s): 7000215 - Timestamp: 2025-09-30 19:58:15Z - Description: AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app 'e8b1c661-2139-4583-a4ca-ce0c1cb946b1'. Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500 Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 Timestamp: 2025-09-30 19:58:15Z - Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 - Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500
+    at handleMsalError (C:\Users\Garvs\CareerateV0\node_modules\@azure\identity\src\msal\utils.ts:222:10)
+    at Object.getTokenByClientSecret (C:\Users\Garvs\CareerateV0\node_modules\@azure\identity\dist\esm\msal\nodeFlows\msalClient.js:225:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.withSpan (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-tracing\src\tracingClient.ts:70:22)
+    at async tryGetAccessToken (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\util\tokenCycler.ts:71:26)
+    at async beginRefresh (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\util\tokenCycler.ts:82:35)
+    at async Object.defaultAuthorizeRequest (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\policies\bearerTokenAuthenticationPolicy.ts:141:23)
+    at async Object.sendRequest (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-rest-pipeline\src\policies\bearerTokenAuthenticationPolicy.ts:228:7)
+    at async ContainerRegistryManagementClient.sendOperationRequest (C:\Users\Garvs\CareerateV0\node_modules\@azure\core-client\src\serviceClient.ts:206:27)
+    at async AzureContainerAppsService.getRegistryPassword (C:\Users\Garvs\CareerateV0\server\services\azureContainerApps.ts:349:27) {
+  scopes: [ 'https://management.azure.com/.default' ],
+  getTokenOptions: {
+    abortSignal: undefined,
+    tracingOptions: { tracingContext: [TracingContextImpl] },
+    enableCae: true,
+    tenantId: 'f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df'
+  }
+}
+
+❌ DEPLOYMENT FAILED
+Error: Azure deployment failed: invalid_client: Error(s): 7000215 - Timestamp: 2025-09-30 19:58:15Z - Description: AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app 'e8b1c661-2139-4583-a4ca-ce0c1cb946b1'. Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500 Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 Timestamp: 2025-09-30 19:58:15Z - Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 - Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500
+Stack: Error: Azure deployment failed: invalid_client: Error(s): 7000215 - Timestamp: 2025-09-30 19:58:15Z - Description: AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app 'e8b1c661-2139-4583-a4ca-ce0c1cb946b1'. Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500 Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 Timestamp: 2025-09-30 19:58:15Z - Correlation ID: b39eb91e-ca55-4626-a25f-b752eb809b20 - Trace ID: 40b4bead-fef6-43f6-b884-16441a9fb500
+    at AzureContainerAppsService.deployApp (C:\Users\Garvs\CareerateV0\server\services\azureContainerApps.ts:110:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async testDeployment (C:\Users\Garvs\CareerateV0\test-deploy-direct.ts:32:20)
