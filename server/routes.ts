@@ -3454,7 +3454,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       azureContainerApps.deployApp({
         projectId,
         appName,
-        sourceCode: sourceCode || project.code || "",
+        sourceCode: sourceCode || (project.files ? JSON.parse(project.files) : ""),
         envVars,
         port
       }).then(async (azureResult) => {

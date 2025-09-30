@@ -115,26 +115,25 @@ export class AzureContainerAppsService {
   private async buildAndPushImage(spec: DeploymentSpec): Promise<string> {
     const imageTag = `${spec.appName}-${Date.now()}`;
     const fullImageName = `${this.config.containerRegistry}.azurecr.io/${imageTag}`;
+    const path = require('path');
 
     try {
-      // If source code provided, write files and build
+      // Prepare source code in build directory
+      let buildDir = '.';
       if (spec.sourceCode) {
-        await this.prepareSourceCode(spec);
+        buildDir = await this.prepareSourceCode(spec);
       }
 
-      // Login to Azure Container Registry
-      console.log('🔐 Logging into Azure Container Registry...');
-      await execAsync(`az acr login --name ${this.config.containerRegistry}`);
+      // Use Azure Container Registry build (no local Docker needed)
+      console.log('🔨 Building image in Azure Container Registry...');
+      const buildCommand = `az acr build --registry ${this.config.containerRegistry} --image ${imageTag} --timeout 600 ${buildDir}`;
 
-      // Build Docker image
-      console.log('🔨 Building Docker image...');
-      const dockerfilePath = spec.dockerfilePath || './Dockerfile';
-      const buildCommand = `docker build -t ${fullImageName} -f ${dockerfilePath} .`;
-      await execAsync(buildCommand, { timeout: 600000 }); // 10 minute timeout
+      const { stdout } = await execAsync(buildCommand, {
+        timeout: 600000, // 10 minute timeout
+        maxBuffer: 10 * 1024 * 1024 // 10MB buffer for build logs
+      });
 
-      // Push to registry
-      console.log('📤 Pushing image to registry...');
-      await execAsync(`docker push ${fullImageName}`);
+      console.log('✅ ACR Build output:', stdout.substring(0, 500));
 
       return fullImageName;
     } catch (error) {
@@ -145,7 +144,7 @@ export class AzureContainerAppsService {
   /**
    * Prepare source code for building
    */
-  private async prepareSourceCode(spec: DeploymentSpec): Promise<void> {
+  private async prepareSourceCode(spec: DeploymentSpec): Promise<string> {
     const fs = require('fs').promises;
     const path = require('path');
 
@@ -164,9 +163,11 @@ export class AzureContainerAppsService {
     }
 
     // Generate Dockerfile if not provided
-    if (!spec.dockerfilePath) {
+    if (!spec.dockerfilePath && !spec.sourceCode?.['Dockerfile']) {
       await this.generateDockerfile(buildDir, spec);
     }
+
+    return buildDir;
   }
 
   /**
