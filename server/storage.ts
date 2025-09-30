@@ -173,7 +173,7 @@ export interface RecentActivity {
   type InsertAlertNotification
   */
 import { db } from "./db";
-import { eq, desc, and, or, sql } from "drizzle-orm";
+import { eq, desc, and, or, sql, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (required for Replit Auth)

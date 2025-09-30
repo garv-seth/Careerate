@@ -109,11 +109,7 @@ app.get('/api/health', (req, res) => {
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
     const port = parseInt(process.env.PORT || '5000', 10);
-    server.listen({
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    }, () => {
+    server.listen(port, "127.0.0.1", () => {
       log(`serving on port ${port}`);
       console.log(`🚀 Careerate server running on port ${port}`);
       console.log(`🔗 Production URL: https://gocareerate.com`);
