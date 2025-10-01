@@ -404,67 +404,76 @@ Respond in JSON format:
     return results;
   }
 
-  // Execute individual agent task
-  private async executeAgentTask(agentId: string, task: Task, tools: string[]) {
-    // This is where individual agents would be called
-    // For now, returning simulated results based on agent type
+  // Execute individual agent task with REAL AI calls
+  private async executeAgentTask(agentId: string, task: Task, tools: string[]): Promise<any> {
+    try {
+      const systemPrompt = this.buildAgentSystemPrompt(agentId, tools);
+      const userPrompt = `Task: ${task.description}\nContext: ${task.context || 'No additional context'}`;
+
+      const response = await this.openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        max_tokens: 2000,
+        temperature: 0.7,
+        response_format: { type: "json_object" }
+      });
+
+      const result = JSON.parse(response.choices[0].message.content || "{}");
+
+      return {
+        type: agentId,
+        result: result,
+        message: result.message || `Task completed by ${agentId}`,
+        metadata: {
+          agent: agentId,
+          task: task.description,
+          tokens: response.usage?.total_tokens || 0,
+          model: "gpt-4"
+        }
+      };
+    } catch (error) {
+      console.error(`Agent ${agentId} execution failed:`, error);
+      return {
+        type: agentId,
+        error: error instanceof Error ? error.message : String(error),
+        message: `Failed to execute task with ${agentId}`
+      };
+    }
+  }
+
+  private buildAgentSystemPrompt(agentId: string, tools: string[]): string {
+    const basePrompt = `You are ${agentId}, a specialized AI agent. Execute the given task using available tools and return a JSON response.`;
+
+    const toolPrompt = tools.length > 0 ?
+      `Available tools: ${tools.join(', ')}. Use these tools when appropriate.` : '';
 
     switch (agentId) {
       case 'codesmith':
-        return {
-          type: 'code_generation',
-          files: [
-            { path: '/src/components/NewComponent.tsx', content: '// Generated React component...' },
-            { path: '/src/utils/helpers.ts', content: '// Generated utility functions...' }
-          ],
-          message: 'Generated React component with TypeScript support'
-        };
+        return `${basePrompt} ${toolPrompt}
+You generate production-ready code. Return JSON with: { "files": [{"path": "string", "content": "string"}], "dependencies": {}, "message": "string" }`;
 
       case 'architect':
-        return {
-          type: 'system_design',
-          architecture: {
-            components: ['Frontend', 'API', 'Database'],
-            technologies: ['React', 'Node.js', 'PostgreSQL'],
-            patterns: ['MVC', 'Repository Pattern', 'Dependency Injection']
-          },
-          message: 'Created scalable system architecture'
-        };
+        return `${basePrompt} ${toolPrompt}
+You design system architectures. Return JSON with: { "architecture": {"components": [], "technologies": [], "patterns": []}, "message": "string" }`;
 
       case 'guardian':
-        return {
-          type: 'security_review',
-          vulnerabilities: [],
-          recommendations: ['Enable HTTPS', 'Implement rate limiting', 'Add input validation'],
-          message: 'Security review completed - no critical issues found'
-        };
+        return `${basePrompt} ${toolPrompt}
+You perform security analysis. Return JSON with: { "vulnerabilities": [], "recommendations": [], "message": "string" }`;
 
       case 'deployer':
-        return {
-          type: 'deployment',
-          environment: 'production',
-          url: 'https://your-app.careerate.com',
-          services: ['web', 'api', 'database'],
-          message: 'Successfully deployed to production'
-        };
+        return `${basePrompt} ${toolPrompt}
+You handle deployments. Return JSON with: { "deployment": {"environment": "string", "url": "string", "services": []}, "message": "string" }`;
 
       case 'researcher':
-        return {
-          type: 'research',
-          findings: [
-            'Best practices for React 18 development',
-            'Latest TypeScript features and patterns',
-            'Modern deployment strategies'
-          ],
-          sources: ['https://react.dev', 'https://typescriptlang.org'],
-          message: 'Research completed with latest best practices'
-        };
+        return `${basePrompt} ${toolPrompt}
+You research topics and provide insights. Return JSON with: { "findings": [], "sources": [], "message": "string" }`;
 
       default:
-        return {
-          type: 'generic',
-          message: `Task completed by ${agentId}`
-        };
+        return `${basePrompt} ${toolPrompt}
+Return JSON with: { "result": "any", "message": "string" }`;
     }
   }
 

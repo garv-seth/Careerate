@@ -45,7 +45,9 @@ export class AzureContainerAppsService {
     const subscriptionId = process.env.AZURE_SUBSCRIPTION_ID;
 
     if (!subscriptionId) {
-      throw new Error('Missing AZURE_SUBSCRIPTION_ID environment variable');
+      console.warn('⚠️ AZURE_SUBSCRIPTION_ID not found - Azure deployment features will be disabled');
+      // Don't throw error, allow server to start without Azure
+      return;
     }
 
     // Use Azure CLI credentials (requires 'az login')
@@ -391,5 +393,13 @@ CMD ["npm", "start"]
   }
 }
 
-// Singleton instance
-export const azureContainerApps = new AzureContainerAppsService();
+// Singleton instance - only create if Azure is configured
+let azureContainerApps: AzureContainerAppsService | null = null;
+
+try {
+  azureContainerApps = new AzureContainerAppsService();
+} catch (error) {
+  console.warn('⚠️ Azure Container Apps service not initialized:', error instanceof Error ? error.message : String(error));
+}
+
+export { azureContainerApps };
