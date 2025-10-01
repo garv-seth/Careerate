@@ -20,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { AppShell } from "@/components/AppShell";
+import { HeroWave } from "@/components/ui/ai-input-hero";
 
 const appTemplates = [
   {
@@ -217,6 +218,17 @@ export default function Dashboard() {
 
   return (
     <>
+      {/* HeroWave Hero Section */}
+      <HeroWave
+        title="Build with AI."
+        subtitle="The AI Fullstack Engineer. Build prototypes, apps, and websites"
+        placeholder="Describe what you want to create..."
+        buttonText="Generate"
+        onPromptSubmit={(prompt) => {
+          setAgentPrompt(prompt);
+          setActiveTab("agent");
+        }}
+      />
 
       <AppShell>
         {/* Dynamic Background Effects */}
