@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Sparkles, Code, Cloud, Shield, Brain, Globe, Users, Database, Terminal, Activity } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Code, Cloud, Shield, Brain, Globe, Users, Database, Terminal, Activity, GitBranch } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { GradientDots } from "@/components/ui/gradient-dots";
-import Hero from "@/components/ui/animated-shader-hero";
+import CybercoreBackground from "@/components/ui/cybercore-section-hero";
 
 const FeatureCard = ({ icon: Icon, title, description, colorClass }: { icon: React.ElementType, title: string, description: string, colorClass: string }) => (
     <div className="glass-pane rounded-3xl p-6 flex flex-col items-start text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10">
@@ -157,48 +157,69 @@ const Footer = () => (
 
 export default function LandingNew() {
   const handleGetStarted = () => {
-    // Scroll to pricing section
-    document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleWatchDemo = () => {
     // Scroll to features section
     document.querySelector('#features')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-foreground">
-      {/* WebGL Animated Shader Hero - Full Screen */}
-      <Hero
-        headline={{
-          line1: "AI Built It.",
-          line2: "We'll Deploy It for Real."
-        }}
-        subtitle="Your AI prototype got traction. Now make it production-ready with enterprise-grade infrastructure and autonomous agents."
-        buttons={{
-          primary: {
-            text: "Import from GitHub",
-            onClick: handleGetStarted
-          },
-          secondary: {
-            text: "Start Fresh",
-            onClick: handleWatchDemo
-          }
-        }}
-      />
+      {/* Cybercore Grid Background */}
+      <CybercoreBackground beamCount={70} />
 
-      {/* Structured content area positioned below the full-screen hero */}
-      <div className="relative z-10">
-        <div className="bg-[#090806]">
-          <AppShell className="bg-transparent">
-            <main className="relative">
-              <Features />
-              <Pricing />
-              <Docs />
-              <CTA />
-            </main>
-          </AppShell>
-        </div>
+      {/* Content Wrapper */}
+      <div className="content-wrapper relative z-10">
+        <header className="main-header fixed top-6 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-between pl-6 pr-6 py-3 backdrop-blur-sm rounded-full border border-[#333] bg-[#1f1f1f57] gap-x-8">
+          <div className="flex items-center">
+            <div className="text-display font-semibold text-lg text-white">Careerate</div>
+          </div>
+          <nav className="hidden md:flex items-center space-x-6 text-sm">
+            <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a>
+            <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
+            <a href="#docs" className="text-gray-300 hover:text-white transition-colors">Docs</a>
+          </nav>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" className="rounded-full border-[#333] bg-[rgba(31,31,31,0.62)] text-gray-300 hover:border-white/50 hover:text-white">
+              Login
+            </Button>
+            <div className="relative group">
+              <div className="absolute inset-0 -m-2 rounded-full bg-gray-100 opacity-40 filter blur-lg pointer-events-none transition-all duration-300 ease-out group-hover:opacity-60 group-hover:blur-xl group-hover:-m-3"></div>
+              <Button className="relative z-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30">
+                Get Started
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <main className="hero-section flex flex-col items-center justify-center min-h-screen text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]">
+            AI Built It.
+            <br />
+            We'll Deploy It for Real.
+          </h1>
+          <p className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8">
+            Your AI prototype got traction. Now make it production-ready with enterprise-grade infrastructure and autonomous agents.
+          </p>
+          <Button 
+            size="lg" 
+            onClick={handleGetStarted}
+            className="cta-button rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40"
+          >
+            <Sparkles className="mr-2 h-5 w-5" />
+            Import from GitHub
+          </Button>
+        </main>
+      </div>
+
+      {/* Structured content area */}
+      <div className="relative z-10 bg-[#090806]">
+        <AppShell className="bg-transparent">
+          <main className="relative">
+            <Features />
+            <Pricing />
+            <Docs />
+            <CTA />
+          </main>
+        </AppShell>
       </div>
     </div>
   );

@@ -184,3 +184,129 @@
     filter: blur(100px);
   }
 }
+
+/* Cybercore Hero Animations and Styles */
+:root {
+  --bg-color: #000308;
+  --light-color: #f97316;
+  --highlight-color: #fb923c;
+  --glow-color-1: rgba(249, 115, 22, 0.8);
+  --glow-color-2: rgba(251, 146, 60, 0.6);
+  --highlight-glow: rgba(251, 146, 60, 0.7);
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-5%);
+    opacity: 0;
+  }
+}
+
+@keyframes fade {
+  0%, 100% {
+    opacity: 0;
+  }
+  5%, 85% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes floorGlow {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes mainGlow {
+  from {
+    opacity: 0.5;
+    filter: blur(30px);
+  }
+  to {
+    opacity: 0.7;
+    filter: blur(20px);
+  }
+}
+
+@keyframes moveGrid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -100px -50px;
+  }
+}
+
+.scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-color) 0%, #0a0a0f 100%);
+  perspective: 1000px;
+  z-index: 0;
+}
+
+.floor {
+  position: absolute;
+  bottom: -50%;
+  left: -50%;
+  width: 200%;
+  height: 150%;
+  background: 
+    linear-gradient(0deg, transparent 24%, rgba(249, 115, 22, 0.08) 25%, rgba(249, 115, 22, 0.08) 26%, transparent 27%, transparent 74%, rgba(249, 115, 22, 0.08) 75%, rgba(249, 115, 22, 0.08) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(249, 115, 22, 0.08) 25%, rgba(249, 115, 22, 0.08) 26%, transparent 27%, transparent 74%, rgba(249, 115, 22, 0.08) 75%, rgba(249, 115, 22, 0.08) 76%, transparent 77%, transparent);
+  background-size: 100px 100px;
+  transform: rotateX(80deg) translateZ(-50px);
+  animation: moveGrid 20s linear infinite;
+}
+
+.main-column {
+  position: absolute;
+  bottom: -10%;
+  left: 50%;
+  width: 1px;
+  height: 120%;
+  background: linear-gradient(to top, transparent, var(--light-color) 50%, transparent);
+  box-shadow: 0 0 60px 20px var(--glow-color-1), 0 0 120px 40px var(--glow-color-2);
+  transform: translateX(-50%);
+  animation: mainGlow 3s ease-in-out infinite alternate;
+  filter: blur(2px);
+}
+
+.light-stream-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.light-beam {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  background: linear-gradient(to top, var(--light-color), transparent);
+  filter: blur(1px);
+  animation: rise linear infinite, fade linear infinite;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.light-beam.primary {
+  box-shadow: 0 0 8px 2px var(--glow-color-1);
+}
+
+.light-beam.secondary {
+  background: linear-gradient(to top, var(--highlight-color), transparent);
+  box-shadow: 0 0 12px 4px var(--highlight-glow);
+}
