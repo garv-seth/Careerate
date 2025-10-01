@@ -28,7 +28,9 @@
       "Bash(az containerapp replica list:*)",
       "Bash(az containerapp exec:*)",
       "Bash(az containerapp revision restart:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(az login:*)",
+      "Bash(az acr show:*)"
     ],
     "deny": [],
     "ask": []

@@ -3,6 +3,7 @@ import { randomUUID, createHash } from "crypto";
 import { createServer, type Server } from "http";
 import Stripe from "stripe"; // From javascript_stripe blueprint
 import { storage } from "./storage";
+import { sseService } from "./services/sseService.js";
 import { setupAuth, isAuthenticated } from "./azureAuth";
 import {
   insertProjectSchema,
@@ -2288,6 +2289,109 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GitHub Webhook Handler for Auto-Deploy
+  app.post("/api/integrations/github/webhook", express.raw({ type: 'application/json' }), async (req, res) => {
+    try {
+      const signature = req.headers['x-hub-signature-256'] as string;
+      const event = req.headers['x-github-event'] as string;
+      const deliveryId = req.headers['x-github-delivery'] as string;
+
+      console.log(`GitHub webhook received: ${event} (${deliveryId})`);
+
+      // Verify webhook signature if secret is configured
+      if (process.env.GITHUB_WEBHOOK_SECRET && signature) {
+        const crypto = await import('crypto');
+        const hmac = crypto.createHmac('sha256', process.env.GITHUB_WEBHOOK_SECRET);
+        const digest = 'sha256=' + hmac.update(req.body).digest('hex');
+
+        if (signature !== digest) {
+          console.error('Invalid GitHub webhook signature');
+          return res.status(401).json({ message: 'Invalid signature' });
+        }
+      }
+
+      // Parse the payload
+      const payload = JSON.parse(req.body.toString());
+
+      // Handle push events for auto-deploy
+      if (event === 'push') {
+        const { repository, ref, pusher, commits } = payload;
+        const branch = ref.replace('refs/heads/', '');
+
+        console.log(`Push to ${repository.full_name} on branch ${branch} by ${pusher.name}`);
+
+        // Find project linked to this repository
+        const repoConnection = await storage.getRepositoryConnectionByUrl(repository.clone_url);
+
+        if (repoConnection && repoConnection.projectId && repoConnection.autoSync) {
+          const project = await storage.getProject(repoConnection.projectId);
+
+          if (project && repoConnection.syncBranches.includes(branch)) {
+            console.log(`Auto-deploying project ${project.id} from ${repository.full_name}/${branch}`);
+
+            // Create deployment
+            const deployment = await storage.createDeployment({
+              projectId: project.id,
+              version: commits[0]?.id?.substring(0, 7) || `v-${Date.now()}`,
+              strategy: "rolling",
+              status: "pending",
+              environment: branch === 'main' || branch === 'master' ? 'production' : 'staging',
+              port: 3000,
+              healthCheckUrl: `https://careerate-${project.id.slice(0, 8)}-${Date.now()}.politetree-6f564ad5.westus2.azurecontainerapps.io/health`
+            });
+
+            // Trigger deployment (async)
+            const appName = `careerate-${project.id.slice(0, 8)}-${Date.now()}`;
+            azureContainerApps.deployApp({
+              projectId: project.id,
+              appName,
+              sourceCode: project.files ? JSON.parse(project.files) : {},
+              envVars: {},
+              port: 3000
+            }, deployment.id).then(async (result) => {
+              await storage.updateDeployment(deployment.id, {
+                status: "deployed",
+                deploymentUrl: result.url,
+                healthStatus: "healthy",
+                containerId: result.containerAppName,
+                completedAt: new Date()
+              });
+
+              // Start health monitoring
+              await healthMonitor.addDeployment({
+                deploymentId: deployment.id,
+                projectId: project.id,
+                url: result.url,
+                containerAppName: result.containerAppName
+              });
+            }).catch(async (error) => {
+              await storage.updateDeployment(deployment.id, {
+                status: "failed",
+                errorLogs: error.message,
+                completedAt: new Date()
+              });
+            });
+
+            return res.status(202).json({
+              message: 'Deployment triggered',
+              deploymentId: deployment.id,
+              projectId: project.id
+            });
+          }
+        }
+
+        return res.status(200).json({ message: 'Push event received but no auto-deploy configured' });
+      }
+
+      // Acknowledge other events
+      res.status(200).json({ message: `Event ${event} received` });
+
+    } catch (error) {
+      console.error('GitHub webhook error:', error);
+      res.status(500).json({ message: "Webhook processing failed" });
+    }
+  });
+
   app.post("/api/integrations/gitlab/oauth/initiate", isAuthenticated, async (req, res) => {
     try {
       const { redirectUri, scopes = ['api', 'read_user'], baseUrl } = req.body;
@@ -3457,7 +3561,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sourceCode: sourceCode || (project.files ? JSON.parse(project.files) : ""),
         envVars,
         port
-      }).then(async (azureResult) => {
+      }, deployment.id).then(async (azureResult) => {
         // Update deployment with success
         await storage.updateDeployment(deployment.id, {
           status: "deployed",
@@ -3560,6 +3664,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Get deployment status error:', error);
       res.status(500).json({ message: "Failed to get deployment status" });
+    }
+  });
+
+  // =====================================================
+  // SSE (Server-Sent Events) Endpoints for Real-Time Updates
+  // =====================================================
+
+  // SSE: Real-time deployment updates
+  app.get("/api/hosting/deployments/:deploymentId/events", isAuthenticated, (req, res) => {
+    const { deploymentId } = req.params;
+    const clientId = `deployment-${deploymentId}-${Date.now()}`;
+
+    sseService.registerClient(clientId, res, [`deployment:${deploymentId}`]);
+
+    req.on('close', () => {
+      console.log(`Client disconnected from deployment ${deploymentId}`);
+    });
+  });
+
+  // SSE: Real-time project updates (all deployments in a project)
+  app.get("/api/projects/:projectId/events", isAuthenticated, (req, res) => {
+    const { projectId } = req.params;
+    const clientId = `project-${projectId}-${Date.now()}`;
+
+    sseService.registerClient(clientId, res, [`project:${projectId}`]);
+
+    req.on('close', () => {
+      console.log(`Client disconnected from project ${projectId}`);
+    });
+  });
+
+  // SSE: Real-time agent task updates
+  app.get("/api/ai-agents/tasks/:taskId/events", isAuthenticated, (req, res) => {
+    const { taskId } = req.params;
+    const clientId = `agent-task-${taskId}-${Date.now()}`;
+
+    sseService.registerClient(clientId, res, [`agent-task:${taskId}`]);
+
+    req.on('close', () => {
+      console.log(`Client disconnected from agent task ${taskId}`);
+    });
+  });
+
+  // SSE: Get service stats (for debugging/monitoring)
+  app.get("/api/sse/stats", isAuthenticated, (req, res) => {
+    res.json(sseService.getStats());
+  });
+
+  // =====================================================
+  // Deployment Rollback Functionality
+  // =====================================================
+
+  app.post("/api/hosting/deployments/:deploymentId/rollback", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { deploymentId } = req.params;
+
+      // Get deployment
+      const deployment = await storage.getDeployment(deploymentId);
+      if (!deployment) {
+        return res.status(404).json({ message: "Deployment not found" });
+      }
+
+      // Validate project ownership
+      await validateProjectOwnership(deployment.projectId, userId);
+
+      // Check if rollback is available
+      if (!deployment.rollbackVersion) {
+        return res.status(400).json({ message: "No previous version available for rollback" });
+      }
+
+      // Create rollback deployment
+      const rollbackDeployment = await storage.createDeployment({
+        projectId: deployment.projectId,
+        version: deployment.rollbackVersion,
+        strategy: "rollback",
+        status: "pending",
+        environment: deployment.environment,
+        port: deployment.port,
+        healthCheckUrl: deployment.healthCheckUrl
+      });
+
+      // Start SSE updates for rollback
+      await sseService.broadcastDeployment(rollbackDeployment.id, {
+        type: 'deployment.rollback_started',
+        message: `Rolling back to version ${deployment.rollbackVersion}`,
+        timestamp: new Date().toISOString()
+      });
+
+      res.status(202).json({
+        deploymentId: rollbackDeployment.id,
+        message: `Rollback initiated to version ${deployment.rollbackVersion}`,
+        statusUrl: `/api/hosting/deployments/${rollbackDeployment.id}`
+      });
+
+    } catch (error) {
+      console.error('Rollback deployment error:', error);
+      res.status(500).json({ message: "Failed to initiate rollback" });
     }
   });
 
@@ -3807,10 +4009,14 @@ test('renders learn react link', () => {
   // AI Agents (DevOps & Migration) - keep inside registerRoutes
   // =====================================================
 
-  // Import DevOps agents with ESM syntax
-  // Note: In production, these would be actual agent implementations
-  const devOpsAgent = null; // Placeholder for DevOpsAgent
-  const migrationAgent = null; // Placeholder for EnterpriseMigrationAgent
+  // Import DevOps agents - REAL IMPLEMENTATIONS
+  const { DevOpsAgent } = await import("./ai-agents/DevOpsAgent.js");
+  const { EnterpriseMigrationAgent } = await import("./ai-agents/EnterpriseMigrationAgent.js");
+  const { CaraOrchestrator } = await import("./agents/CaraOrchestrator.js");
+
+  const devOpsAgent = new DevOpsAgent();
+  const migrationAgent = new EnterpriseMigrationAgent();
+  const caraOrchestrator = process.env.OPENAI_API_KEY ? new CaraOrchestrator(process.env.OPENAI_API_KEY) : null;
 
   // DevOps Agent - Full automation workflow
   app.post("/api/ai-agents/devops/deploy", isAuthenticated, async (req, res) => {

@@ -11,6 +11,7 @@ import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
 import { storage } from "../storage";
+import { deploymentEventService } from "./deploymentEventService.js";
 
 const execAsync = promisify(exec);
 
@@ -74,7 +75,7 @@ export class AzureContainerAppsService {
   /**
    * Deploy an application to Azure Container Apps
    */
-  async deployApp(spec: DeploymentSpec): Promise<{
+  async deployApp(spec: DeploymentSpec, deploymentId?: string): Promise<{
     url: string;
     containerAppName: string;
     fqdn: string;
@@ -84,16 +85,61 @@ export class AzureContainerAppsService {
       console.log(`🚀 Starting Azure deployment for project ${spec.projectId}`);
 
       // Step 1: Build and push Docker image
-      const imageName = await this.buildAndPushImage(spec);
+      if (deploymentId) {
+        await deploymentEventService.emit({
+          type: 'deployment.building',
+          deploymentId,
+          projectId: spec.projectId,
+          message: 'Building Docker image in Azure Container Registry',
+          progress: 10,
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      const imageName = await this.buildAndPushImage(spec, deploymentId);
       console.log(`✅ Image built and pushed: ${imageName}`);
 
+      if (deploymentId) {
+        await deploymentEventService.emit({
+          type: 'deployment.pushing',
+          deploymentId,
+          projectId: spec.projectId,
+          message: 'Pushing image to registry',
+          progress: 50,
+          timestamp: new Date().toISOString()
+        });
+      }
+
       // Step 2: Create or update Container App
+      if (deploymentId) {
+        await deploymentEventService.emit({
+          type: 'deployment.deploying',
+          deploymentId,
+          projectId: spec.projectId,
+          message: 'Deploying to Azure Container Apps',
+          progress: 70,
+          timestamp: new Date().toISOString()
+        });
+      }
+
       const containerApp = await this.createOrUpdateContainerApp(spec, imageName);
       console.log(`✅ Container App deployed: ${containerApp.name}`);
 
       // Step 3: Get the app URL
       const fqdn = containerApp.properties?.configuration?.ingress?.fqdn || '';
       const url = fqdn ? `https://${fqdn}` : '';
+
+      if (deploymentId) {
+        await deploymentEventService.emit({
+          type: 'deployment.deployed',
+          deploymentId,
+          projectId: spec.projectId,
+          message: 'Deployment completed successfully',
+          progress: 100,
+          url,
+          timestamp: new Date().toISOString()
+        });
+      }
 
       return {
         url,
@@ -103,6 +149,18 @@ export class AzureContainerAppsService {
       };
     } catch (error) {
       console.error('❌ Azure deployment failed:', error);
+
+      if (deploymentId) {
+        await deploymentEventService.emit({
+          type: 'deployment.failed',
+          deploymentId,
+          projectId: spec.projectId,
+          message: 'Deployment failed',
+          error: error instanceof Error ? error.message : String(error),
+          timestamp: new Date().toISOString()
+        });
+      }
+
       throw new Error(`Azure deployment failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
@@ -110,7 +168,7 @@ export class AzureContainerAppsService {
   /**
    * Build Docker image and push to Azure Container Registry
    */
-  private async buildAndPushImage(spec: DeploymentSpec): Promise<string> {
+  private async buildAndPushImage(spec: DeploymentSpec, deploymentId?: string): Promise<string> {
     const imageTag = `${spec.appName}-${Date.now()}`;
     const fullImageName = `${this.config.containerRegistry}.azurecr.io/${imageTag}`;
 
@@ -125,12 +183,20 @@ export class AzureContainerAppsService {
       console.log('🔨 Building image in Azure Container Registry...');
       const buildCommand = `az acr build --registry ${this.config.containerRegistry} --image ${imageTag} --timeout 600 ${buildDir}`;
 
+      if (deploymentId) {
+        await deploymentEventService.log(deploymentId, spec.projectId, `Building image: ${imageTag}`);
+      }
+
       const { stdout } = await execAsync(buildCommand, {
         timeout: 600000, // 10 minute timeout
         maxBuffer: 10 * 1024 * 1024 // 10MB buffer for build logs
       });
 
       console.log('✅ ACR Build output:', stdout.substring(0, 500));
+
+      if (deploymentId) {
+        await deploymentEventService.log(deploymentId, spec.projectId, stdout);
+      }
 
       return fullImageName;
     } catch (error) {

@@ -1971,6 +1971,12 @@ export class DatabaseStorage implements IStorage {
     return result.rowCount > 0;
   }
 
+  async getRepositoryConnectionByUrl(repositoryUrl: string): Promise<RepositoryConnection | undefined> {
+    const [connection] = await db.select().from(repositoryConnections)
+      .where(eq(repositoryConnections.repositoryUrl, repositoryUrl));
+    return connection;
+  }
+
   async getRepositoryConnectionByRepo(integrationId: string, repositoryId: string): Promise<RepositoryConnection | undefined> {
     const [connection] = await db.select().from(repositoryConnections)
       .where(and(
