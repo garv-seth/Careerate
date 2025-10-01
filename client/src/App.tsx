@@ -25,6 +25,7 @@ const EnterpriseDashboard = lazy(() => import("@/pages/enterprise-dashboard"));
 const AccountSettings = lazy(() => import("@/pages/account-settings"));
 const VibeCoding = lazy(() => import("@/pages/vibe-coding"));
 const Deploy = lazy(() => import("@/pages/deploy"));
+const GitHubImport = lazy(() => import("@/pages/github-import"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("@/pages/TermsOfService"));
 
@@ -71,6 +72,8 @@ function Router() {
           <Route path="/settings" component={AccountSettings} />
           {/* Deployment Routes */}
           <Route path="/deploy" component={Deploy} />
+          {/* GitHub Import */}
+          <Route path="/dashboard/import" component={GitHubImport} />
           {/* Vibe Coding and Hosting Routes */}
           <Route path="/projects/:id/coding" component={VibeCoding} />
           <Route path="/projects/:id/hosting" component={VibeCoding} />

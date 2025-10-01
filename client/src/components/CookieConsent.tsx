@@ -30,7 +30,7 @@ export function CookieConsent() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-4xl"
+          className="fixed bottom-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 z-50 md:w-[calc(100%-2rem)] max-w-4xl mx-auto"
         >
           <div className="glass-pane rounded-2xl p-4 sm:p-6 shadow-2xl shadow-black/20">
             <div className="flex flex-col sm:flex-row items-center gap-4">

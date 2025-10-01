@@ -4,6 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { GradientDots } from "@/components/ui/gradient-dots";
 import CybercoreBackground from "@/components/ui/cybercore-section-hero";
 import { motion } from "framer-motion";
+import { useLocation } from "wouter";
 
 const FeatureCard = ({ icon: Icon, title, description, colorClass, index }: { icon: React.ElementType, title: string, description: string, colorClass: string, index?: number }) => (
     <motion.div
@@ -108,7 +109,7 @@ const CTA = () => (
                     <p className="max-w-2xl mx-auto text-lg text-foreground/70 mb-8">
                         Join developers who've already built with AI and now need production infrastructure. Upload your GitHub repo and deploy for real.
                     </p>
-                    <Button size="lg" className="rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40">
+                    <Button size="lg" onClick={handleImportFromGitHub} className="rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40">
                       <Sparkles className="mr-2 h-5 w-5" />
                       Import from GitHub
                     </Button>
@@ -163,9 +164,16 @@ const Footer = () => (
 
 
 export default function LandingNew() {
+  const [, navigate] = useLocation();
+
+  const handleImportFromGitHub = () => {
+    // Initiate GitHub OAuth flow
+    window.location.href = '/api/integrations/github/oauth/initiate';
+  };
+
   const handleGetStarted = () => {
-    // Scroll to features section
-    document.querySelector('#features')?.scrollIntoView({ behavior: 'smooth' });
+    // Redirect to GitHub import
+    handleImportFromGitHub();
   };
 
   return (
@@ -212,6 +220,9 @@ export default function LandingNew() {
             </motion.div>
           </main>
         </div>
+
+        {/* Gradient Transition to Features */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-black/50 to-[#090806] pointer-events-none z-20" />
       </div>
 
       {/* Structured content area with AppShell (navbar + footer) */}

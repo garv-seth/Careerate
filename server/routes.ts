@@ -2233,59 +2233,211 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // GitHub/GitLab OAuth and Repository Management
-  app.post("/api/integrations/github/oauth/initiate", isAuthenticated, async (req, res) => {
+  // Direct GitHub OAuth initiation (GET endpoint that redirects)
+  app.get("/api/integrations/github/oauth/initiate", (req, res) => {
     try {
-      const { redirectUri, scopes = ['repo', 'user:email'] } = req.body;
-      
       const config = {
         clientId: process.env.GITHUB_CLIENT_ID || 'demo-client-id',
         clientSecret: process.env.GITHUB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: redirectUri || `${process.env.BASE_URL || 'http://localhost:5000'}/api/integrations/github/oauth/callback`,
-        scopes
+        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/integrations/github/oauth/callback`,
+        scopes: ['repo', 'user:email', 'read:org']
       };
 
-      const result = repositoryIntegrationService.initiateGitHubOAuth(config);
-      res.json(result);
+      const { authUrl, state } = repositoryIntegrationService.initiateGitHubOAuth(config);
+
+      // Store state in session for verification
+      if (req.session) {
+        req.session.githubOAuthState = state;
+      }
+
+      // Redirect to GitHub
+      res.redirect(authUrl);
     } catch (error) {
       console.error('GitHub OAuth initiate error:', error);
-      res.status(500).json({ message: "Failed to initiate GitHub OAuth" });
+      res.status(500).send('Failed to initiate GitHub OAuth. Please try again.');
     }
   });
 
-  app.post("/api/integrations/github/oauth/callback", isAuthenticated, async (req, res) => {
+  // GitHub OAuth callback (GET endpoint that GitHub redirects to)
+  app.get("/api/integrations/github/oauth/callback", async (req, res) => {
     try {
+      const { code, state } = req.query;
+
+      if (!code || typeof code !== 'string') {
+        return res.redirect('/dashboard?error=no_code');
+      }
+
+      // Verify state if we stored it
+      if (req.session?.githubOAuthState && state !== req.session.githubOAuthState) {
+        return res.redirect('/dashboard?error=invalid_state');
+      }
+
+      // If user is not authenticated, store OAuth data and redirect to sign in
+      if (!req.isAuthenticated || !req.isAuthenticated()) {
+        // Store for after login
+        if (req.session) {
+          req.session.pendingGitHubCode = code as string;
+          req.session.pendingGitHubState = state as string;
+        }
+        return res.redirect('/auth/signin?return=/dashboard/import');
+      }
+
       const userId = getUserId(req);
-      const { code, state } = req.body;
-      
+
       const config = {
         clientId: process.env.GITHUB_CLIENT_ID || 'demo-client-id',
         clientSecret: process.env.GITHUB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: `${process.env.BASE_URL || 'http://localhost:5000'}/api/integrations/github/oauth/callback`,
-        scopes: ['repo', 'user:email']
+        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/integrations/github/oauth/callback`,
+        scopes: ['repo', 'user:email', 'read:org']
       };
 
       const result = await repositoryIntegrationService.handleGitHubOAuthCallback(
-        code,
-        state,
+        code as string,
+        state as string,
         config,
         userId
       );
 
       if (result.success) {
-        res.json({
-          success: true,
-          integration: result.integration,
-          userInfo: result.userInfo
-        });
+        // Store access token in session for immediate use
+        if (req.session) {
+          req.session.githubAccessToken = result.accessToken;
+          req.session.githubUsername = result.userInfo?.login;
+        }
+
+        // Redirect to dashboard import page
+        res.redirect('/dashboard/import?success=true');
       } else {
-        res.status(400).json({
-          success: false,
-          error: result.errorMessage
-        });
+        res.redirect(`/dashboard?error=${encodeURIComponent(result.errorMessage || 'OAuth failed')}`);
       }
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
-      res.status(500).json({ message: "Failed to handle GitHub OAuth callback" });
+      res.redirect('/dashboard?error=callback_failed');
+    }
+  });
+
+  // Get GitHub repositories for the authenticated user
+  app.get("/api/integrations/github/repositories", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+
+      // Get GitHub integration for user
+      const integrations = await storage.getUserIntegrations(userId);
+      const githubIntegration = integrations.find(i => i.service === 'github' && i.type === 'repository');
+
+      if (!githubIntegration) {
+        return res.status(404).json({ message: "GitHub not connected" });
+      }
+
+      // Get access token
+      const secrets = await storage.getIntegrationSecrets(githubIntegration.id);
+      const accessTokenSecret = secrets.find(s => s.secretName === 'access_token');
+
+      if (!accessTokenSecret) {
+        return res.status(401).json({ message: "No GitHub access token found" });
+      }
+
+      const accessToken = await secretsManager.getSecret(accessTokenSecret.id, userId);
+
+      // Fetch repositories from GitHub
+      const response = await fetch('https://api.github.com/user/repos?per_page=100&sort=updated', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Careerate'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.statusText}`);
+      }
+
+      const repos = await response.json();
+
+      // Transform to our format
+      const repositories = repos.map((repo: any) => ({
+        id: repo.id.toString(),
+        name: repo.name,
+        fullName: repo.full_name,
+        description: repo.description,
+        url: repo.html_url,
+        cloneUrl: repo.clone_url,
+        defaultBranch: repo.default_branch,
+        isPrivate: repo.private,
+        language: repo.language,
+        topics: repo.topics || [],
+        stargazersCount: repo.stargazers_count,
+        size: repo.size,
+        updatedAt: repo.updated_at,
+        pushedAt: repo.pushed_at,
+        owner: {
+          login: repo.owner.login,
+          avatarUrl: repo.owner.avatar_url
+        }
+      }));
+
+      res.json({ repositories });
+    } catch (error) {
+      console.error('Get GitHub repositories error:', error);
+      res.status(500).json({ message: "Failed to fetch repositories" });
+    }
+  });
+
+  // Import a GitHub repository as a new project
+  app.post("/api/integrations/github/import", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { repositoryId, repositoryName, repositoryUrl, defaultBranch } = req.body;
+
+      if (!repositoryId || !repositoryName || !repositoryUrl) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Create a new project
+      const project = await storage.createProject({
+        userId,
+        name: repositoryName,
+        description: `Imported from GitHub: ${repositoryUrl}`,
+        framework: 'imported',
+        metadata: {
+          source: 'github',
+          repositoryUrl,
+          defaultBranch: defaultBranch || 'main',
+          importedAt: new Date().toISOString()
+        }
+      });
+
+      // Get GitHub integration
+      const integrations = await storage.getUserIntegrations(userId);
+      const githubIntegration = integrations.find(i => i.service === 'github');
+
+      if (githubIntegration) {
+        // Create repository connection
+        await storage.createRepositoryConnection({
+          integrationId: githubIntegration.id,
+          projectId: project.id,
+          provider: 'github',
+          repositoryId,
+          repositoryName,
+          repositoryUrl,
+          ownerName: repositoryName.split('/')[0] || 'unknown',
+          ownerType: 'user',
+          defaultBranch: defaultBranch || 'main',
+          syncBranches: [defaultBranch || 'main'],
+          autoSync: true,
+          syncStatus: 'synced',
+          isActive: true
+        });
+      }
+
+      res.json({
+        success: true,
+        project,
+        message: "Repository imported successfully"
+      });
+    } catch (error) {
+      console.error('Import GitHub repository error:', error);
+      res.status(500).json({ message: "Failed to import repository" });
     }
   });
 

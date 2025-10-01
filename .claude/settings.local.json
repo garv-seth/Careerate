@@ -30,7 +30,9 @@
       "Bash(az containerapp revision restart:*)",
       "WebSearch",
       "Bash(az login:*)",
-      "Bash(az acr show:*)"
+      "Bash(az acr show:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": [],
     "ask": []
