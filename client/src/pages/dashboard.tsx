@@ -70,6 +70,26 @@ export default function Dashboard() {
   const { toast } = useToast();
   const promptRef = useRef<HTMLTextAreaElement>(null);
 
+  // Typing placeholder animation
+  const basePlaceholder = "Make me a";
+  const suggestionsRef = useRef<string[]>([
+    " fitness app",
+    " recipe generator",
+    " marketing landing page",
+    " travel itinerary planner",
+    " blog engine",
+    " customer support chatbot",
+    " personal finance dashboard",
+  ]);
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState<string>(basePlaceholder);
+  const typingStateRef = useRef({
+    suggestionIndex: 0,
+    charIndex: 0,
+    deleting: false,
+    running: true,
+  });
+  const timersRef = useRef<number[]>([]);
+
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ["/api/projects"],
   });
@@ -116,6 +136,72 @@ export default function Dashboard() {
   const filteredProjects = projects.filter((project: any) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Typing placeholder animation effect
+  useEffect(() => {
+    typingStateRef.current.running = true;
+    const typeSpeed = 70;
+    const deleteSpeed = 40;
+    const pauseAtEnd = 1200;
+    const pauseBetween = 500;
+
+    function schedule(fn: () => void, delay: number) {
+      const id = window.setTimeout(fn, delay);
+      timersRef.current.push(id);
+    }
+
+    function clearTimers() {
+      for (const id of timersRef.current) window.clearTimeout(id);
+      timersRef.current = [];
+    }
+
+    function step() {
+      if (!typingStateRef.current.running) return;
+      if (agentPrompt !== "") {
+        setAnimatedPlaceholder(basePlaceholder);
+        schedule(step, 300);
+        return;
+      }
+
+      const state = typingStateRef.current;
+      const suggestions = suggestionsRef.current;
+      const current = suggestions[state.suggestionIndex % suggestions.length] || "";
+
+      if (!state.deleting) {
+        const nextIndex = state.charIndex + 1;
+        const next = current.slice(0, nextIndex);
+        setAnimatedPlaceholder(basePlaceholder + next);
+        state.charIndex = nextIndex;
+        if (nextIndex >= current.length) {
+          schedule(() => {
+            state.deleting = true;
+            step();
+          }, pauseAtEnd);
+        } else {
+          schedule(step, typeSpeed);
+        }
+      } else {
+        const nextIndex = Math.max(0, state.charIndex - 1);
+        const next = current.slice(0, nextIndex);
+        setAnimatedPlaceholder(basePlaceholder + next);
+        state.charIndex = nextIndex;
+        if (nextIndex <= 0) {
+          state.deleting = false;
+          state.suggestionIndex = (state.suggestionIndex + 1) % suggestions.length;
+          schedule(step, pauseBetween);
+        } else {
+          schedule(step, deleteSpeed);
+        }
+      }
+    }
+
+    clearTimers();
+    schedule(step, 400);
+    return () => {
+      typingStateRef.current.running = false;
+      clearTimers();
+    };
+  }, [agentPrompt]);
 
   // Keep tab state in sync with URL hash so navbar links work
   useEffect(() => {
@@ -218,18 +304,6 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* HeroWave Hero Section */}
-      <HeroWave
-        title="Build with AI."
-        subtitle="The AI Fullstack Engineer. Build prototypes, apps, and websites"
-        placeholder="Describe what you want to create..."
-        buttonText="Generate"
-        onPromptSubmit={(prompt) => {
-          setAgentPrompt(prompt);
-          setActiveTab("agent");
-        }}
-      />
-
       <AppShell>
         {/* Dynamic Background Effects */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -256,16 +330,16 @@ export default function Dashboard() {
               </div>
 
             {/* Main Agent Prompt Interface */}
-            <Card className="glass-pane rounded-3xl">
+            <Card className="glass-pane rounded-3xl overflow-hidden">
               <CardContent className="p-8">
                 <div className="space-y-6">
-                  <div className="relative">
+                  <div className="relative rounded-2xl p-[2px] shadow-[0_1px_2px_0_rgba(0,0,0,0.06)] bg-gradient-to-br from-orange-500/20 via-amber-500/10 to-black/20">
                     <Textarea
                       ref={promptRef}
-                      placeholder="Build me a Netflix clone with user authentication, video streaming, and recommendations..."
+                      placeholder={animatedPlaceholder}
                       value={agentPrompt}
                       onChange={(e) => setAgentPrompt(e.target.value)}
-                      className="min-h-[120px] glass-pane rounded-2xl text-foreground placeholder:text-foreground/50 text-lg resize-none"
+                      className="min-h-[120px] resize-none rounded-2xl bg-[rgba(15,15,20,0.55)] border border-white/10 text-foreground placeholder:text-foreground/40 outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-500/40 backdrop-blur-md px-4 py-4 pr-16 text-lg"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                           e.preventDefault();
@@ -286,7 +360,7 @@ export default function Dashboard() {
                         <Cpu className="h-3 w-3 mr-1" />
                         GPT-5 Ready
                       </Badge>
-                      <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 flex-shrink-0">
+                      <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 flex-shrink-0">
                         <Cloud className="h-3 w-3 mr-1" />
                         Multi-Cloud
                       </Badge>

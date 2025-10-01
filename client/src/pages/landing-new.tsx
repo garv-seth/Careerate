@@ -3,15 +3,22 @@ import { ArrowRight, Play, Sparkles, Code, Cloud, Shield, Brain, Globe, Users, D
 import { AppShell } from "@/components/AppShell";
 import { GradientDots } from "@/components/ui/gradient-dots";
 import CybercoreBackground from "@/components/ui/cybercore-section-hero";
+import { motion } from "framer-motion";
 
-const FeatureCard = ({ icon: Icon, title, description, colorClass }: { icon: React.ElementType, title: string, description: string, colorClass: string }) => (
-    <div className="glass-pane rounded-3xl p-6 flex flex-col items-start text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10">
+const FeatureCard = ({ icon: Icon, title, description, colorClass, index }: { icon: React.ElementType, title: string, description: string, colorClass: string, index?: number }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: (index || 0) * 0.1 }}
+      className="glass-pane rounded-3xl p-6 flex flex-col items-start text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
+    >
       <div className={`mb-4 p-3 rounded-xl bg-gradient-to-br ${colorClass}`}>
           <Icon className="h-6 w-6 text-white"/>
       </div>
       <h3 className="text-display text-xl font-semibold mb-2">{title}</h3>
       <p className="text-foreground/60">{description}</p>
-    </div>
+    </motion.div>
 );
 
 
@@ -33,7 +40,7 @@ const Features = () => (
             { icon: Shield, title: "Production Security", description: "Azure KeyVault encryption, SOC 2 Type II compliance, and enterprise SSO", colorClass: "from-orange-500 to-red-500" },
             { icon: Activity, title: "Autonomous Monitoring", description: "AI agents handle scaling, health checks, and maintenance 24/7", colorClass: "from-indigo-500 to-purple-500" },
             { icon: GitBranch, title: "GitHub Integration", description: "Every push triggers automatic rebuild and deployment to production", colorClass: "from-pink-500 to-rose-500" },
-        ].map(feature => <FeatureCard key={feature.title} {...feature} />)}
+        ].map((feature, idx) => <FeatureCard key={feature.title} {...feature} index={idx} />)}
       </div>
     </div>
   </section>
@@ -162,55 +169,52 @@ export default function LandingNew() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black text-foreground">
-      {/* Cybercore Grid Background */}
-      <CybercoreBackground beamCount={70} />
+    <>
+      {/* Hero Section with Cybercore Background */}
+      <div className="relative min-h-screen overflow-hidden bg-black text-foreground">
+        {/* Cybercore Grid Background */}
+        <CybercoreBackground beamCount={70} />
 
-      {/* Content Wrapper */}
-      <div className="content-wrapper relative z-10">
-        <header className="main-header fixed top-6 left-1/2 transform -translate-x-1/2 z-20 flex items-center justify-between pl-6 pr-6 py-3 backdrop-blur-sm rounded-full border border-[#333] bg-[#1f1f1f57] gap-x-8">
-          <div className="flex items-center">
-            <div className="text-display font-semibold text-lg text-white">Careerate</div>
-          </div>
-          <nav className="hidden md:flex items-center space-x-6 text-sm">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a>
-            <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
-            <a href="#docs" className="text-gray-300 hover:text-white transition-colors">Docs</a>
-          </nav>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-full border-[#333] bg-[rgba(31,31,31,0.62)] text-gray-300 hover:border-white/50 hover:text-white">
-              Login
-            </Button>
-            <div className="relative group">
-              <div className="absolute inset-0 -m-2 rounded-full bg-gray-100 opacity-40 filter blur-lg pointer-events-none transition-all duration-300 ease-out group-hover:opacity-60 group-hover:blur-xl group-hover:-m-3"></div>
-              <Button className="relative z-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30">
-                Get Started
+        {/* Content Wrapper */}
+        <div className="content-wrapper relative z-10">
+          <main className="hero-section flex flex-col items-center justify-center min-h-screen text-center px-4 pt-32">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
+            >
+              AI Built It.
+              <br />
+              We'll Deploy It for Real.
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
+            >
+              Your AI prototype got traction. Now make it production-ready with enterprise-grade infrastructure and autonomous agents.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+            >
+              <Button
+                size="lg"
+                onClick={handleGetStarted}
+                className="cta-button rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40"
+              >
+                <Sparkles className="mr-2 h-5 w-5" />
+                Import from GitHub
               </Button>
-            </div>
-          </div>
-        </header>
-
-        <main className="hero-section flex flex-col items-center justify-center min-h-screen text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]">
-            AI Built It.
-            <br />
-            We'll Deploy It for Real.
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8">
-            Your AI prototype got traction. Now make it production-ready with enterprise-grade infrastructure and autonomous agents.
-          </p>
-          <Button 
-            size="lg" 
-            onClick={handleGetStarted}
-            className="cta-button rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40"
-          >
-            <Sparkles className="mr-2 h-5 w-5" />
-            Import from GitHub
-          </Button>
-        </main>
+            </motion.div>
+          </main>
+        </div>
       </div>
 
-      {/* Structured content area */}
+      {/* Structured content area with AppShell (navbar + footer) */}
       <div className="relative z-10 bg-[#090806]">
         <AppShell className="bg-transparent">
           <main className="relative">
@@ -221,6 +225,6 @@ export default function LandingNew() {
           </main>
         </AppShell>
       </div>
-    </div>
+    </>
   );
 }
