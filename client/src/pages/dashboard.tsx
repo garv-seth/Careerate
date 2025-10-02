@@ -26,34 +26,34 @@ const appTemplates = [
   {
     id: 'react-app',
     name: 'React App',
-    description: 'Modern web application with React and TypeScript',
+    description: 'Deploy to Vercel or Azure Static Web Apps',
     icon: Globe,
     framework: 'react',
-    tags: ['Web', 'Frontend']
+    tags: ['Vercel', 'Azure']
   },
   {
     id: 'node-api',
     name: 'Node.js API',
-    description: 'RESTful API with Express and TypeScript',
+    description: 'Deploy to Azure Container Apps or Railway',
     icon: Database,
     framework: 'node',
-    tags: ['Backend', 'API']
+    tags: ['Azure', 'Railway']
   },
   {
     id: 'full-stack',
     name: 'Full Stack App',
-    description: 'Complete web application with React + Node.js',
+    description: 'Deploy frontend + backend + database',
     icon: FileCode,
     framework: 'fullstack',
-    tags: ['Full Stack', 'Web']
+    tags: ['Multi-Cloud', 'Full Stack']
   },
   {
     id: 'mobile-app',
     name: 'Mobile App',
-    description: 'React Native mobile application',
+    description: 'Deploy backend API to AWS or Azure',
     icon: Smartphone,
     framework: 'react-native',
-    tags: ['Mobile', 'Cross-platform']
+    tags: ['AWS', 'Azure']
   }
 ];
 
@@ -71,15 +71,15 @@ export default function Dashboard() {
   const promptRef = useRef<HTMLTextAreaElement>(null);
 
   // Typing placeholder animation
-  const basePlaceholder = "Make me a";
+  const basePlaceholder = "Deploy my";
   const suggestionsRef = useRef<string[]>([
-    " fitness app",
-    " recipe generator",
-    " marketing landing page",
-    " travel itinerary planner",
-    " blog engine",
-    " customer support chatbot",
-    " personal finance dashboard",
+    " Next.js app to Vercel",
+    " Express API to Azure",
+    " React app with PostgreSQL",
+    " full-stack app to AWS",
+    " mobile app backend",
+    " e-commerce site to production",
+    " SaaS app for under $50/month",
   ]);
   const [animatedPlaceholder, setAnimatedPlaceholder] = useState<string>(basePlaceholder);
   const typingStateRef = useRef({
@@ -322,10 +322,10 @@ export default function Dashboard() {
               {/* Header Section */}
               <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-clip-text text-transparent mb-4">
-                  What will you build today? 🚀
+                  What will you deploy today? 🚀
                 </h1>
                 <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-                  Describe your idea in natural language and our AI agents will handle everything from code to deployment.
+                  Built it with Cursor? Ship it with Careerate. Describe your app and our AI agent deploys to the best cloud—AWS, Azure, GCP, Vercel, or Railway.
                 </p>
               </div>
 
@@ -358,7 +358,7 @@ export default function Dashboard() {
                     <div className="flex items-center space-x-2 sm:space-x-4 overflow-x-auto pb-2">
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/30 flex-shrink-0">
                         <Cpu className="h-3 w-3 mr-1" />
-                        GPT-5 Ready
+                        Vibe Hosting™
                       </Badge>
                       <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 flex-shrink-0">
                         <Cloud className="h-3 w-3 mr-1" />
@@ -366,7 +366,7 @@ export default function Dashboard() {
                       </Badge>
                       <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 flex-shrink-0">
                         <Shield className="h-3 w-3 mr-1" />
-                        DevSecOps
+                        Zero Lock-In
                       </Badge>
                     </div>
 
@@ -379,12 +379,12 @@ export default function Dashboard() {
                       {isGenerating ? (
                         <>
                           <Sparkles className="h-4 w-4 mr-2 animate-spin" />
-                          Generating...
+                          Deploying...
                         </>
                       ) : (
                         <>
                           <Send className="h-4 w-4 mr-2" />
-                          Start Building
+                          Deploy Now
                         </>
                       )}
                     </Button>
