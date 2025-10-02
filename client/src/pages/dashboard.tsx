@@ -5,11 +5,13 @@ import {
   Plus, Play, Code, Settings, User, Search, FileCode, Globe, Database,
   Smartphone, Bot, Send, Sparkles, Zap, GitBranch, Cloud, Shield,
   Activity, BarChart3, Terminal, MessageSquare, Rocket, Star,
-  ChevronRight, Clock, TrendingUp, Users, Brain, Cpu, Server
+  ChevronRight, Clock, TrendingUp, Users, Brain, Cpu, Server, Trash2,
+  AlertTriangle, Archive, Copy, ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -70,6 +72,11 @@ export default function Dashboard() {
   const [selectedRepo, setSelectedRepo] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>(() => (typeof window !== 'undefined' ? (window.location.hash?.replace('#', '') || 'agent') : 'agent'));
+  const [settingsProjectId, setSettingsProjectId] = useState<string | null>(null);
+  const [settingsName, setSettingsName] = useState("");
+  const [settingsDescription, setSettingsDescription] = useState("");
+  const [settingsFramework, setSettingsFramework] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const promptRef = useRef<HTMLTextAreaElement>(null);
@@ -115,6 +122,14 @@ export default function Dashboard() {
     queryKey: ["/api/integrations/repos"],
     queryFn: async () => {
       const res = await fetch("/api/integrations/repos", { credentials: "include" });
+      if (res.status === 401) {
+        const data = await res.json().catch(()=>({}));
+        // If not authorized, redirect to OAuth flow
+        if (data?.authorizeUrl) {
+          window.location.href = data.authorizeUrl;
+        }
+        throw new Error("GitHub not connected");
+      }
       if (!res.ok) throw new Error("Failed to load repositories");
       return res.json();
     },
@@ -153,6 +168,67 @@ export default function Dashboard() {
     onError: (error: Error) => {
       toast({
         title: "Creation failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    },
+  });
+
+  const updateProjectMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: { name?: string; description?: string; framework?: string } }) => {
+      const response = await fetch(`/api/projects/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update project");
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      setSettingsProjectId(null);
+      toast({
+        title: "Project updated!",
+        description: `${data.name} has been updated successfully`,
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Update failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    },
+  });
+
+  const deleteProjectMutation = useMutation({
+    mutationFn: async (projectId: string) => {
+      const response = await fetch(`/api/projects/${projectId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: "Failed to delete project" }));
+        throw new Error(errorData.message || "Failed to delete project");
+      }
+      return projectId;
+    },
+    onSuccess: (projectId) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      setSettingsProjectId(null);
+      setShowDeleteConfirm(false);
+      toast({
+        title: "Project deleted",
+        description: "The project has been permanently deleted",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Delete failed",
         description: error.message,
         variant: "destructive"
       });
@@ -337,6 +413,30 @@ export default function Dashboard() {
   const handleWatchDemo = () => {
     // Scroll to projects or features section
     setActiveTab('projects');
+  };
+
+  const handleOpenSettings = (project: any) => {
+    setSettingsProjectId(project.id);
+    setSettingsName(project.name);
+    setSettingsDescription(project.description || "");
+    setSettingsFramework(project.framework || project.metadata?.framework || "react");
+  };
+
+  const handleSaveSettings = () => {
+    if (!settingsProjectId) return;
+    updateProjectMutation.mutate({
+      id: settingsProjectId,
+      updates: {
+        name: settingsName,
+        description: settingsDescription,
+        framework: settingsFramework,
+      },
+    });
+  };
+
+  const handleDeleteProject = () => {
+    if (!settingsProjectId) return;
+    deleteProjectMutation.mutate(settingsProjectId);
   };
 
   return (
@@ -647,10 +747,7 @@ export default function Dashboard() {
                             title="Settings"
                             onClick={(e) => {
                               e.preventDefault();
-                              toast({
-                                title: "Coming Soon",
-                                description: "Project settings will be available soon.",
-                              });
+                              handleOpenSettings(project);
                             }}
                           >
                             <Settings className="h-4 w-4" />
@@ -915,6 +1012,218 @@ export default function Dashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Project Settings Dialog */}
+      <Dialog open={settingsProjectId !== null} onOpenChange={(open) => !open && setSettingsProjectId(null)}>
+        <DialogContent className="glass-pane rounded-3xl border-border text-foreground max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-foreground flex items-center">
+              <Settings className="h-5 w-5 mr-2 text-primary" />
+              Project Settings
+            </DialogTitle>
+            <DialogDescription className="text-foreground/70">
+              Update your project details, framework, or manage advanced settings.
+            </DialogDescription>
+          </DialogHeader>
+
+          <Tabs defaultValue="general" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 glass-pane">
+              <TabsTrigger value="general">General</TabsTrigger>
+              <TabsTrigger value="advanced">Advanced</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="general" className="space-y-6 mt-6">
+              <div className="space-y-2">
+                <Label htmlFor="settings-name" className="text-foreground font-medium">Project Name</Label>
+                <Input
+                  id="settings-name"
+                  value={settingsName}
+                  onChange={(e) => setSettingsName(e.target.value)}
+                  placeholder="My Awesome Project"
+                  className="glass-pane rounded-lg text-foreground placeholder:text-foreground/50"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="settings-description" className="text-foreground font-medium">Description</Label>
+                <Textarea
+                  id="settings-description"
+                  value={settingsDescription}
+                  onChange={(e) => setSettingsDescription(e.target.value)}
+                  placeholder="Describe your project..."
+                  rows={4}
+                  className="glass-pane rounded-lg text-foreground placeholder:text-foreground/50 resize-none"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="settings-framework" className="text-foreground font-medium">Framework</Label>
+                <Select value={settingsFramework} onValueChange={setSettingsFramework}>
+                  <SelectTrigger className="glass-pane rounded-lg text-foreground bg-[rgba(15,15,20,0.6)] border-white/10 backdrop-blur-md">
+                    <SelectValue placeholder="Choose a framework" />
+                  </SelectTrigger>
+                  <SelectContent className="glass-pane rounded-xl border-white/10 bg-[rgba(15,15,20,0.95)] backdrop-blur-xl">
+                    <SelectItem value="react" className="text-foreground hover:bg-primary/10 rounded-lg my-1">
+                      <div className="flex items-center">
+                        <Globe className="h-4 w-4 mr-2" />
+                        React - Modern Web App
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="node" className="text-foreground hover:bg-primary/10 rounded-lg my-1">
+                      <div className="flex items-center">
+                        <Server className="h-4 w-4 mr-2" />
+                        Node.js - Backend API
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="fullstack" className="text-foreground hover:bg-primary/10 rounded-lg my-1">
+                      <div className="flex items-center">
+                        <Code className="h-4 w-4 mr-2" />
+                        Full Stack - Complete App
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="react-native" className="text-foreground hover:bg-primary/10 rounded-lg my-1">
+                      <div className="flex items-center">
+                        <Smartphone className="h-4 w-4 mr-2" />
+                        React Native - Mobile App
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="nextjs" className="text-foreground hover:bg-primary/10 rounded-lg my-1">
+                      <div className="flex items-center">
+                        <Rocket className="h-4 w-4 mr-2" />
+                        Next.js - Production Ready
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="advanced" className="space-y-6 mt-6">
+              <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+                <div className="flex items-start space-x-3">
+                  <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="text-sm font-semibold text-red-500 mb-1">Danger Zone</h4>
+                    <p className="text-xs text-foreground/60 mb-4">
+                      Deleting a project is permanent and cannot be undone. All associated data, code, and deployments will be removed.
+                    </p>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => setShowDeleteConfirm(true)}
+                      className="bg-red-500/20 hover:bg-red-500/30 text-red-500 border border-red-500/30"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Project
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-foreground/10 bg-foreground/5 p-4">
+                <h4 className="text-sm font-semibold text-foreground mb-3">Quick Actions</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant="outline" size="sm" className="justify-start glass-pane rounded-lg" disabled>
+                    <Archive className="h-4 w-4 mr-2" />
+                    Archive Project
+                  </Button>
+                  <Button variant="outline" size="sm" className="justify-start glass-pane rounded-lg" disabled>
+                    <Copy className="h-4 w-4 mr-2" />
+                    Duplicate Project
+                  </Button>
+                  <Button variant="outline" size="sm" className="justify-start glass-pane rounded-lg" disabled>
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Export Data
+                  </Button>
+                  <Button variant="outline" size="sm" className="justify-start glass-pane rounded-lg" disabled>
+                    <GitBranch className="h-4 w-4 mr-2" />
+                    View History
+                  </Button>
+                </div>
+                <p className="text-xs text-foreground/50 mt-3">
+                  These features are coming soon.
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          <DialogFooter className="flex space-x-3">
+            <Button
+              variant="outline"
+              onClick={() => setSettingsProjectId(null)}
+              className="border-border text-foreground hover:bg-primary/10 rounded-full"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveSettings}
+              disabled={!settingsName || !settingsFramework || updateProjectMutation.isPending}
+              className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25"
+            >
+              {updateProjectMutation.isPending ? (
+                <>
+                  <Sparkles className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Settings className="h-4 w-4 mr-2" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Alert Dialog */}
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent className="glass-pane rounded-3xl border-red-500/20 bg-[rgba(15,15,20,0.98)] backdrop-blur-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold text-foreground flex items-center">
+              <AlertTriangle className="h-5 w-5 mr-2 text-red-500" />
+              Are you absolutely sure?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-foreground/70">
+              This action cannot be undone. This will permanently delete the project{" "}
+              <span className="font-semibold text-foreground">{settingsName}</span> and remove all associated data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-3 my-2">
+            <p className="text-sm text-foreground/80">
+              <strong>What will be deleted:</strong>
+            </p>
+            <ul className="text-sm text-foreground/60 mt-2 space-y-1 ml-4 list-disc">
+              <li>All project files and code</li>
+              <li>Deployment history and configurations</li>
+              <li>Related integrations and connections</li>
+              <li>Activity logs and analytics</li>
+            </ul>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-full border-border hover:bg-foreground/10">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteProject}
+              disabled={deleteProjectMutation.isPending}
+              className="rounded-full bg-red-500 hover:bg-red-600 text-white font-semibold shadow-lg shadow-red-500/25"
+            >
+              {deleteProjectMutation.isPending ? (
+                <>
+                  <Sparkles className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Forever
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </AppShell>
     </>
   );

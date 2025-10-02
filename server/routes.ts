@@ -3772,31 +3772,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // List connected repositories (GitHub/GitLab) if tokens exist in Key Vault
-  app.get("/api/integrations/repos", isAuthenticated, async (_req, res) => {
+  // Initiate GitHub OAuth for current user (per-user authorization)
+  app.get("/api/integrations/github/oauth/initiate", isAuthenticated, async (req, res) => {
     try {
-      const { getSecret } = await import("./services/keyVault");
-      const results: { provider: string; repos: { id: string; name: string; url: string }[] }[] = [];
+      const { getGitHubOAuthConfig } = await import('./services/oauthConfig');
+      const { clientId, redirectUri, scopes } = await getGitHubOAuthConfig(req);
+      const state = Math.random().toString(36).slice(2);
+      if (req.session) (req.session as any).githubOAuthState = state;
+      if (!clientId) return res.status(500).send('GitHub client not configured');
+      const params = new URLSearchParams({ client_id: clientId, redirect_uri: redirectUri, scope: scopes.join(' '), state, allow_signup: 'true' });
+      res.redirect(`https://github.com/login/oauth/authorize?${params.toString()}`);
+    } catch (e) {
+      console.error('GitHub OAuth initiate error', e);
+      res.status(500).send('Failed to start GitHub OAuth');
+    }
+  });
 
-      // GitHub
-      let ghToken: string | null = null;
-      try { ghToken = await getSecret("github-token"); } catch { ghToken = null; }
+  // List connected repositories (GitHub/GitLab) if tokens exist in Key Vault
+  app.get("/api/integrations/repos", isAuthenticated, async (req, res) => {
+    try {
+      const results: { provider: string; repos: { id: string; name: string; url: string }[] }[] = [];
+      const ghToken = (req.session as any)?.githubAccessToken as string | undefined;
       if (ghToken) {
         const ghResp = await fetch("https://api.github.com/user/repos?per_page=100", {
           headers: { Authorization: `Bearer ${ghToken}`, Accept: "application/vnd.github+json" },
         });
         if (ghResp.ok) {
           const data = await ghResp.json();
-          results.push({
-            provider: "github",
-            repos: (data || []).map((r: any) => ({ id: String(r.id), name: r.full_name, url: r.html_url })),
-          });
+          results.push({ provider: 'github', repos: (data || []).map((r: any) => ({ id: String(r.id), name: r.full_name, url: r.html_url })) });
+        } else if (ghResp.status === 401 && req.session) {
+          delete (req.session as any).githubAccessToken;
         }
       }
 
       // GitLab
       let glToken: string | null = null;
-      try { glToken = await getSecret("gitlab-token"); } catch { glToken = null; }
       if (glToken) {
         const glResp = await fetch("https://gitlab.com/api/v4/projects?membership=true&simple=true&per_page=100", {
           headers: { Authorization: `Bearer ${glToken}` },
@@ -3808,6 +3818,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
             repos: (data || []).map((p: any) => ({ id: String(p.id), name: p.path_with_namespace, url: p.web_url })),
           });
         }
+      }
+
+      if (results.length === 0) {
+        const clientId = process.env.GITHUB_CLIENT_ID;
+        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        const redirectUri = `${baseUrl}/api/callback/github`;
+        const state = Math.random().toString(36).slice(2);
+        if (req.session) (req.session as any).githubOAuthState = state;
+        const scopes = ['repo','read:org','user:email'];
+        const params = new URLSearchParams({ client_id: clientId || '', redirect_uri: redirectUri, scope: scopes.join(' '), state, allow_signup: 'true' });
+        const authorizeUrl = clientId ? `https://github.com/login/oauth/authorize?${params.toString()}` : undefined;
+        return res.status(401).json({ providers: [], authorizeUrl });
       }
 
       res.json({ providers: results });
