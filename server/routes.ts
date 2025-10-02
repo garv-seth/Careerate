@@ -2239,7 +2239,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const config = {
         clientId: process.env.GITHUB_CLIENT_ID || 'demo-client-id',
         clientSecret: process.env.GITHUB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/integrations/github/oauth/callback`,
+        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/callback/github`,
         scopes: ['repo', 'user:email', 'read:org']
       };
 
@@ -2259,7 +2259,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // GitHub OAuth callback (GET endpoint that GitHub redirects to)
-  app.get("/api/integrations/github/oauth/callback", async (req, res) => {
+  app.get("/api/callback/github", async (req, res) => {
     try {
       const { code, state } = req.query;
 
@@ -2287,7 +2287,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const config = {
         clientId: process.env.GITHUB_CLIENT_ID || 'demo-client-id',
         clientSecret: process.env.GITHUB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/integrations/github/oauth/callback`,
+        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/callback/github`,
         scopes: ['repo', 'user:email', 'read:org']
       };
 
@@ -4283,6 +4283,66 @@ test('renders learn react link', () => {
       res.status(500).json({
         success: false,
         message: "Failed to get agent status",
+        error: (error as Error).message
+      });
+    }
+  });
+
+  // Cara AI Chat endpoint - Natural language interface
+  app.post("/api/ai-agents/chat", isAuthenticated, async (req, res) => {
+    try {
+      const { message, projectId, conversationHistory } = req.body;
+      const userId = getUserId(req);
+
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({
+          success: false,
+          message: "Message is required"
+        });
+      }
+
+      // Use OpenAI to generate response
+      const { OpenAI } = await import('openai');
+      const openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+      });
+
+      const systemPrompt = `You are Cara, an AI assistant for Careerate - a platform that helps developers deploy applications to Azure.
+
+Your capabilities:
+- Help users describe and deploy applications using natural language
+- Analyze GitHub repositories and suggest deployment configurations
+- Guide users through Azure Container Apps deployment
+- Explain deployment status and troubleshoot issues
+- Recommend environment variables and configurations
+
+Be helpful, concise, and technical when needed. If asked to deploy something, guide the user through the process.`;
+
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...(conversationHistory || []),
+        { role: 'user', content: message }
+      ];
+
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: messages as any,
+        temperature: 0.7,
+        max_tokens: 500
+      });
+
+      const response = completion.choices[0]?.message?.content || "I'm not sure how to respond to that. Can you provide more details?";
+
+      res.json({
+        success: true,
+        response,
+        usage: completion.usage
+      });
+    } catch (error) {
+      console.error('Chat error:', error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to process chat message",
         error: (error as Error).message
       });
     }
