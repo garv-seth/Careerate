@@ -18,6 +18,7 @@ const DevOpsDashboard = lazy(() => import("@/pages/devops-dashboard"));
 const MonitoringDashboard = lazy(() => import("@/pages/monitoring-dashboard"));
 const IntegrationsPage = lazy(() => import("@/pages/integrations"));
 const IntegrationsSetup = lazy(() => import("@/pages/integrations-setup"));
+const LaunchWizard = lazy(() => import("@/pages/launch-wizard"));
 const BillingDashboard = lazy(() => import("@/pages/BillingDashboard"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 const PaymentPage = lazy(() => import("@/pages/payment"));
@@ -72,6 +73,7 @@ function Router() {
           <Route path="/enterprise" component={EnterpriseDashboard} />
           <Route path="/account" component={AccountSettings} />
           <Route path="/settings" component={AccountSettings} />
+          <Route path="/launch-wizard" component={LaunchWizard} />
           {/* Deployment Routes */}
           <Route path="/deploy" component={Deploy} />
           {/* GitHub Import */}
