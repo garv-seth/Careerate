@@ -30,21 +30,10 @@ import {
   type GenerationContext,
   type StreamingUpdate
 } from "./services/ai";
-import { agentManager } from "./services/agentManager";
-import { createEnhancedAgentManager } from "./services/enhancedAgentManager";
-import { legacyAssessmentService } from "./services/legacyAssessment";
-
-// Create the enhanced agent manager instance
-const enhancedAgentManager = createEnhancedAgentManager();
-import { integrationService } from "./services/integrationService";
-import { repositoryIntegrationService } from "./services/repositoryIntegrationService";
-import { apiConnectorManager, ApiConnectorFactory } from "./services/apiConnectorFramework";
-import { encryptionService, secretsManager } from "./services/encryptionService";
-import { collaborationServer } from "./services/collaborationServer";
-import agentsRouter from "./src/routes/agents.js";
-import { subscriptionService } from "./services/subscriptionService"; // Subscription management service
+import { subscriptionService } from "./services/subscriptionService";
 import { azureContainerApps } from "./services/azureContainerApps";
 import { healthMonitor } from "./services/healthMonitor";
+import { collaborationServer } from "./services/collaborationServer";
 import { 
   projectCreationMiddleware,
   aiGenerationMiddleware,
@@ -219,9 +208,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(404).json({ message: "Project not found" });
     }
   });
-
-  // Agent Communication Routes (A2A Protocol)
-  app.use("/api/agents", agentsRouter);
 
   // Get recent activity for authenticated user
   app.get("/api/recent-activity", isAuthenticated, async (req, res) => {

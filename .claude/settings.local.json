@@ -41,7 +41,8 @@
       "Bash(az keyvault secret show:*)",
       "Bash(az resource list:*)",
       "Bash(test:*)",
-      "Bash(az acr build:*)"
+      "Bash(az acr build:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
