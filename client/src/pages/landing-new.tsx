@@ -99,7 +99,7 @@ const Docs = () => (
   </section>
 );
 
-const CTA = () => (
+const CTA = ({ onImportClick }: { onImportClick: () => void }) => (
     <section className="py-24 sm:py-32">
         <div className="container mx-auto px-4">
             <div className="relative rounded-3xl p-10 sm:p-16 text-center overflow-hidden glass-pane">
@@ -109,7 +109,7 @@ const CTA = () => (
                     <p className="max-w-2xl mx-auto text-lg text-foreground/70 mb-8">
                         Join developers who've already built with AI and now need production infrastructure. Upload your GitHub repo and deploy for real.
                     </p>
-                    <Button size="lg" onClick={handleImportFromGitHub} className="rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40">
+                    <Button size="lg" onClick={onImportClick} className="rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40">
                       <Sparkles className="mr-2 h-5 w-5" />
                       Import from GitHub
                     </Button>
@@ -232,7 +232,7 @@ export default function LandingNew() {
             <Features />
             <Pricing />
             <Docs />
-            <CTA />
+            <CTA onImportClick={handleImportFromGitHub} />
           </main>
         </AppShell>
       </div>

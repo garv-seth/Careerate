@@ -32,7 +32,9 @@
       "Bash(az login:*)",
       "Bash(az acr show:*)",
       "Bash(gh run list:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Read(//c/**)",
+      "Bash(nslookup:*)"
     ],
     "deny": [],
     "ask": []
