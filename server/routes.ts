@@ -3611,6 +3611,230 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // =====================================================
+  // Cloud Account & Repository Integration Routes
+  // =====================================================
+
+  // Link cloud account (AWS, GCP, Azure, Vercel, Railway)
+  app.post("/api/integrations/cloud/link", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { provider, accountName, credentials, projectId } = req.body;
+
+      if (!provider || !accountName || !credentials) {
+        return res.status(400).json({ message: "Provider, account name, and credentials are required" });
+      }
+
+      const { cloudAccountService } = await import("./services/cloudAccountService");
+      const integration = await cloudAccountService.linkCloudAccount(
+        userId,
+        provider,
+        accountName,
+        credentials,
+        projectId
+      );
+
+      res.json({
+        success: true,
+        integration: {
+          id: integration.id,
+          name: integration.name,
+          provider: integration.service,
+          status: integration.status
+        }
+      });
+    } catch (error) {
+      console.error('Cloud account linking error:', error);
+      res.status(500).json({
+        message: error instanceof Error ? error.message : "Failed to link cloud account",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // Get user's cloud accounts
+  app.get("/api/integrations/cloud", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { cloudAccountService } = await import("./services/cloudAccountService");
+      const accounts = await cloudAccountService.getUserCloudAccounts(userId);
+
+      res.json({
+        accounts: accounts.map(acc => ({
+          id: acc.id,
+          name: acc.name,
+          provider: acc.service,
+          status: acc.status,
+          configuration: acc.configuration,
+          createdAt: acc.createdAt
+        }))
+      });
+    } catch (error) {
+      console.error('Get cloud accounts error:', error);
+      res.status(500).json({
+        message: "Failed to fetch cloud accounts",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // Test cloud account connection
+  app.post("/api/integrations/cloud/:integrationId/test", isAuthenticated, async (req, res) => {
+    try {
+      const { integrationId } = req.params;
+      const { cloudAccountService } = await import("./services/cloudAccountService");
+      const result = await cloudAccountService.testConnection(integrationId);
+
+      res.json(result);
+    } catch (error) {
+      console.error('Connection test error:', error);
+      res.status(500).json({
+        message: "Connection test failed",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // Delete cloud account
+  app.delete("/api/integrations/cloud/:integrationId", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { integrationId } = req.params;
+      const { cloudAccountService } = await import("./services/cloudAccountService");
+
+      await cloudAccountService.deleteCloudAccount(integrationId, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Delete cloud account error:', error);
+      res.status(500).json({
+        message: error instanceof Error ? error.message : "Failed to delete cloud account",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // GitHub OAuth callback (public route - no auth required)
+  app.get("/api/auth/github/callback", async (req, res) => {
+    try {
+      const { code, state } = req.query;
+
+      if (!code) {
+        return res.status(400).send("Missing authorization code");
+      }
+
+      const { githubService } = await import("./services/githubService");
+      const token = await githubService.exchangeCodeForToken(code as string);
+
+      // Get GitHub user info
+      const githubUser = await githubService.getUserInfo(token);
+
+      // Create or update user in database
+      const user = await storage.upsertUser({
+        id: `github-${githubUser.id}`,
+        email: githubUser.email || `${githubUser.login}@github.com`,
+        name: githubUser.name || githubUser.login,
+        metadata: {
+          githubId: githubUser.id,
+          githubLogin: githubUser.login,
+          githubAvatar: githubUser.avatar_url
+        }
+      });
+
+      // Store token in session with user ID
+      if (req.session) {
+        (req.session as any).githubToken = token;
+        (req.session as any).userId = user.id;
+        (req.session as any).passport = { user: user.id };
+      }
+
+      // Redirect back to integrations page
+      res.redirect("/integrations?github=success");
+    } catch (error) {
+      console.error('GitHub OAuth error:', error);
+      res.redirect("/integrations?github=error");
+    }
+  });
+
+  // List GitHub repositories
+  app.get("/api/integrations/github/repositories", isAuthenticated, async (req, res) => {
+    try {
+      const token = req.session ? (req.session as any).githubToken : null;
+
+      if (!token) {
+        return res.status(401).json({ message: "GitHub not connected" });
+      }
+
+      const { githubService } = await import("./services/githubService");
+      const repositories = await githubService.listRepositories(token);
+
+      res.json({ repositories });
+    } catch (error) {
+      console.error('List repositories error:', error);
+      res.status(500).json({
+        message: "Failed to fetch repositories",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // Link GitHub repository to project
+  app.post("/api/integrations/github/link", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId, owner, repo } = req.body;
+      const token = req.session ? (req.session as any).githubToken : null;
+
+      if (!token) {
+        return res.status(401).json({ message: "GitHub not connected" });
+      }
+
+      if (!projectId || !owner || !repo) {
+        return res.status(400).json({ message: "Project ID, owner, and repo are required" });
+      }
+
+      const { githubService } = await import("./services/githubService");
+      const result = await githubService.linkRepository(userId, projectId, token, owner, repo);
+
+      res.json({
+        success: true,
+        integration: {
+          id: result.integration.id,
+          name: result.integration.name,
+          repository: `${owner}/${repo}`
+        }
+      });
+    } catch (error) {
+      console.error('Link repository error:', error);
+      res.status(500).json({
+        message: error instanceof Error ? error.message : "Failed to link repository",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // Get repository details and detect framework
+  app.get("/api/integrations/github/:owner/:repo/detect", isAuthenticated, async (req, res) => {
+    try {
+      const { owner, repo } = req.params;
+      const token = req.session ? (req.session as any).githubToken : null;
+
+      if (!token) {
+        return res.status(401).json({ message: "GitHub not connected" });
+      }
+
+      const { githubService } = await import("./services/githubService");
+      const framework = await githubService.detectFramework(token, owner, repo);
+
+      res.json({ framework });
+    } catch (error) {
+      console.error('Framework detection error:', error);
+      res.status(500).json({
+        message: "Failed to detect framework",
+        correlationId: (res as any).locals?.requestId
+      });
+    }
+  });
+
+  // =====================================================
   // Vibe Hosting API Endpoints
   // =====================================================
 

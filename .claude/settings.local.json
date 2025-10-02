@@ -38,7 +38,10 @@
       "Bash(az account:*)",
       "Bash(az keyvault secret list:*)",
       "Bash(npm install:*)",
-      "Bash(az keyvault secret show:*)"
+      "Bash(az keyvault secret show:*)",
+      "Bash(az resource list:*)",
+      "Bash(test:*)",
+      "Bash(az acr build:*)"
     ],
     "deny": [],
     "ask": []

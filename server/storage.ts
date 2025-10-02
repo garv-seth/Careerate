@@ -1927,6 +1927,15 @@ export class DatabaseStorage implements IStorage {
     return secret;
   }
 
+  async incrementSecretAccessCount(id: string): Promise<void> {
+    await db.update(integrationSecrets)
+      .set({
+        accessCount: sql`${integrationSecrets.accessCount} + 1`,
+        lastAccessed: new Date()
+      })
+      .where(eq(integrationSecrets.id, id));
+  }
+
   // Repository Connection operations
   async createRepositoryConnection(connection: InsertRepositoryConnection): Promise<RepositoryConnection> {
     const [newConnection] = await db
