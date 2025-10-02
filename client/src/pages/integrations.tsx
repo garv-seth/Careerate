@@ -273,7 +273,7 @@ const categoryNames = {
   'source-control': 'Source Control'
 };
 
-export default function Integrations() {
+export function DevOpsIntegrations() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [configureIntegration, setConfigureIntegration] = useState<DevOpsIntegration | null>(null);

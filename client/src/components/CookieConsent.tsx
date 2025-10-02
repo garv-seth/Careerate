@@ -50,19 +50,19 @@ export function CookieConsent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="fixed bottom-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:w-[90vw] max-w-4xl z-50"
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="fixed inset-x-0 bottom-0 z-50"
         >
-          <div className="glass-pane rounded-2xl p-4 sm:p-6 shadow-2xl shadow-black/20">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <p className="flex-grow text-sm text-foreground/80 text-center sm:text-left">
-                We use essential cookies to make our site work. With your consent, we may also use non-essential cookies to improve user experience. By clicking "Accept", you agree to our cookie use. You can view our
+          <div className="backdrop-blur-md bg-black/70 border-t border-white/10">
+            <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+              <p className="flex-1 text-sm text-foreground/85">
+                We use essential cookies to make our site work. With your consent, we may also use non‑essential cookies to improve your experience. See our
                 <Link href="/privacy">
                   <a className="underline hover:text-primary transition-colors mx-1">Privacy Policy</a>
                 </Link>
-                for more details.
+                for details.
               </p>
-              <div className="flex-shrink-0 flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   className="rounded-full border-border text-foreground hover:bg-primary/10"
@@ -86,6 +86,7 @@ export function CookieConsent() {
               </div>
             </div>
           </div>
+          <div className="h-2 bg-gradient-to-t from-black/50 to-transparent" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -116,9 +117,9 @@ function CookieConsentDetails({ onClose }: { onClose: () => void }) {
       className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
     >
       <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
+        initial={{ scale: 0.98, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
+        exit={{ scale: 0.98, opacity: 0 }}
         className="glass-pane rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
       >
         <h2 className="text-xl font-bold mb-4">Cookie Preferences</h2>
@@ -149,7 +150,7 @@ function CookieConsentDetails({ onClose }: { onClose: () => void }) {
           <div className="flex items-center justify-between p-4 rounded-lg bg-foreground/5">
             <div>
               <h3 className="font-medium">Marketing Cookies</h3>
-              <p className="text-sm text-foreground/60">Used to deliver relevant ads and content</p>
+              <p className="text-sm text-foreground/60">Used to deliver relevant content</p>
             </div>
             <Button
               variant={preferences.marketing ? "default" : "outline"}

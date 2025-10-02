@@ -3824,6 +3824,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ integrations: INTEGRATIONS, status });
   });
 
+  // Preflight validation and plan
+  app.post("/api/hosting/preflight", isAuthenticated, async (req, res) => {
+    try {
+      const { repo, provider, projectId } = req.body || {};
+      const errors: string[] = [];
+
+      if (!provider) errors.push("Missing provider");
+      if (!repo) errors.push("Missing repository");
+
+      const { generateReadinessReport } = await import("./services/integrationReadiness");
+      const readiness = await generateReadinessReport(req);
+      const providerState = readiness.providers.find((p) => p.id === provider);
+
+      if (!providerState?.ready) {
+        errors.push(`Provider ${provider} not configured`);
+      }
+
+      if (errors.length) {
+        return res.status(400).json({ ok: false, errors });
+      }
+
+      // Build a simple deployment plan preview
+      const plan = {
+        projectId: projectId || "preview",
+        provider,
+        steps: [
+          "Validate configuration",
+          `Build container image (${provider})`,
+          `Provision app service (${provider})`,
+          "Deploy image",
+          "Run health checks",
+          "Enable monitoring and alerts",
+        ],
+        envHints: ["PORT", "NODE_ENV"],
+        costNote: "Estimates vary by region/size; show at deploy time",
+      };
+
+      res.json({ ok: true, plan, readiness });
+    } catch (error) {
+      console.error("Preflight failed", error);
+      res.status(500).json({ ok: false, error: "Preflight failed" });
+    }
+  });
+
   // Get Deployment Status (Real Database Integration)
   app.get("/api/hosting/deployments/:deploymentId", isAuthenticated, async (req, res) => {
     try {

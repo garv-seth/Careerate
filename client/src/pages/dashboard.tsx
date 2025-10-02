@@ -464,6 +464,9 @@ export default function Dashboard() {
                         </>
                       )}
                       </Button>
+                      <Button asChild variant="outline" className="rounded-full">
+                        <a href="/launch-wizard">Open Wizard</a>
+                      </Button>
                     </div>
                   </div>
                 </div>
