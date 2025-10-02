@@ -14,6 +14,8 @@ export default function LaunchWizard() {
   const [plan, setPlan] = useState<any | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [deploying, setDeploying] = useState(false);
+  const [deployment, setDeployment] = useState<any | null>(null);
 
   const { data: readiness } = useQuery({
     queryKey: ["/api/hosting/readiness"],
@@ -49,7 +51,56 @@ export default function LaunchWizard() {
       return;
     }
     if (step === 'preflight') {
-      setStep('deploy');
+      // Start deployment
+      setSubmitting(true);
+      setDeploying(true);
+      try {
+        // Derive a projectId from repo or fallback
+        const projectId = (repo?.split(':').pop() || 'careerate-app')
+          .toLowerCase()
+          .replace(/[^a-z0-9-]/g, '-')
+          .slice(-50);
+
+        const body = {
+          projectId,
+          environment: 'production',
+          // For now deploy a minimal Node app if sourceCode not provided server-side
+          sourceCode: {
+            'package.json': JSON.stringify({
+              name: projectId,
+              version: '1.0.0',
+              main: 'index.js',
+              scripts: { start: 'node index.js' },
+              dependencies: { express: '^4.18.0' }
+            }),
+            'index.js': `const express = require('express');\nconst app = express();\nconst port = process.env.PORT || 3000;\napp.get('/', (req, res) => res.send('Hello from ${projectId}! 🚀'));\napp.get('/health', (req, res) => res.json({ status: 'healthy', ts: new Date().toISOString() }));\napp.listen(port, '0.0.0.0', () => console.log('Listening on', port));`
+          },
+          envVars: {},
+          port: 3000,
+        };
+
+        const res = await fetch('/api/hosting/deploy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setErrors([data?.message || 'Deployment failed to start']);
+          setDeploying(false);
+          return;
+        }
+        setDeployment({
+          id: data.deploymentId,
+          statusUrl: data.statusUrl,
+          status: data.status,
+          appName: data.appName,
+        });
+        setStep('deploy');
+      } finally {
+        setSubmitting(false);
+      }
       return;
     }
     const order: Step[] = ['connect','repo','provider','preflight','deploy'];
@@ -144,16 +195,59 @@ export default function LaunchWizard() {
 
             {step === 'deploy' && (
               <div className="space-y-3">
-                <p className="text-sm text-foreground/70">Deployment started. You can monitor status on the dashboard.</p>
-                <Button asChild>
-                  <a href="/dashboard">Go to Dashboard</a>
-                </Button>
+                <DeployStatus statusUrl={deployment?.statusUrl} />
+                <div className="flex gap-3">
+                  <Button asChild>
+                    <a href="/dashboard">Open Dashboard</a>
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>
         </Card>
       </div>
     </AppShell>
+  );
+}
+
+function DeployStatus({ statusUrl }: { statusUrl?: string }) {
+  const [status, setStatus] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!statusUrl) return;
+    let cancelled = false;
+
+    async function poll() {
+      try {
+        const res = await fetch(statusUrl, { credentials: 'include' });
+        const data = await res.json();
+        if (cancelled) return;
+        setStatus(data);
+        if (data.status === 'pending' || data.status === 'deploying' || data.status === 'building') {
+          setTimeout(poll, 2000);
+        }
+      } catch (e: any) {
+        if (!cancelled) setError('Failed to fetch status');
+      }
+    }
+    poll();
+    return () => { cancelled = true; };
+  }, [statusUrl]);
+
+  if (!statusUrl) return <p className="text-sm text-foreground/60">Missing deployment status URL.</p>;
+  if (error) return <p className="text-sm text-red-400">{error}</p>;
+
+  return (
+    <div className="p-4 rounded-lg bg-foreground/5 text-sm">
+      <div>Status: <strong>{status?.status || 'starting'}</strong></div>
+      {status?.deployment?.deploymentUrl && (
+        <div className="mt-1">URL: <a className="underline" href={status.deployment.deploymentUrl} target="_blank" rel="noreferrer">{status.deployment.deploymentUrl}</a></div>
+      )}
+      {status?.errorLogs && (
+        <pre className="mt-2 text-xs whitespace-pre-wrap text-red-300">{status.errorLogs}</pre>
+      )}
+    </div>
   );
 }
 
