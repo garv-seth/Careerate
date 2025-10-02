@@ -34,7 +34,9 @@
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
       "Read(//c/**)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Bash(az account:*)",
+      "Bash(az keyvault secret list:*)"
     ],
     "deny": [],
     "ask": []

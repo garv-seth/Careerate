@@ -4288,7 +4288,7 @@ test('renders learn react link', () => {
     }
   });
 
-  // Cara AI Chat endpoint - Natural language interface
+  // Cara AI Chat endpoint - Natural language interface with function calling
   app.post("/api/ai-agents/chat", isAuthenticated, async (req, res) => {
     try {
       const { message, projectId, conversationHistory } = req.body;
@@ -4301,22 +4301,39 @@ test('renders learn react link', () => {
         });
       }
 
-      // Use OpenAI to generate response
+      // Import required modules
       const { OpenAI } = await import('openai');
+      const { agentTools } = await import('./services/agentTools');
+      const { executeAgentTool } = await import('./services/agentToolExecutors');
+
       const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY
       });
 
-      const systemPrompt = `You are Cara, an AI assistant for Careerate - a platform that helps developers deploy applications to Azure.
+      const systemPrompt = `You are Cara, an AI deployment assistant for Careerate - a multi-cloud orchestration platform.
+
+Your mission: Help developers deploy their applications to the best cloud provider based on their specific needs.
 
 Your capabilities:
-- Help users describe and deploy applications using natural language
-- Analyze GitHub repositories and suggest deployment configurations
-- Guide users through Azure Container Apps deployment
-- Explain deployment status and troubleshoot issues
-- Recommend environment variables and configurations
+- Analyze GitHub repositories to detect frameworks and requirements
+- Suggest optimal deployment architectures (AWS, Azure, GCP, Vercel, Railway)
+- Calculate cost estimates for different cloud providers
+- Deploy applications to multiple cloud platforms
+- Provision databases (Neon PostgreSQL, MongoDB Atlas)
+- Set up monitoring (Datadog, PagerDuty)
+- Explain your reasoning and ask permission before executing
 
-Be helpful, concise, and technical when needed. If asked to deploy something, guide the user through the process.`;
+Your approach:
+1. Understand user's needs (app type, budget, traffic, requirements)
+2. Analyze their repository if they provide a GitHub URL
+3. Suggest 1-2 deployment options with reasoning
+4. Explain costs transparently
+5. Ask permission before deploying
+6. Execute deployment using appropriate cloud provider
+7. Provide production URL and next steps
+
+Be helpful, transparent, and technical. Always explain WHY you recommend specific services.
+Never deploy without explicit user confirmation.`;
 
       const messages = [
         { role: 'system', content: systemPrompt },
@@ -4324,18 +4341,72 @@ Be helpful, concise, and technical when needed. If asked to deploy something, gu
         { role: 'user', content: message }
       ];
 
-      const completion = await openai.chat.completions.create({
+      // First completion with function calling enabled
+      let completion = await openai.chat.completions.create({
         model: 'gpt-4o',
         messages: messages as any,
+        tools: agentTools,
+        tool_choice: 'auto',
         temperature: 0.7,
-        max_tokens: 500
+        max_tokens: 1000
       });
 
-      const response = completion.choices[0]?.message?.content || "I'm not sure how to respond to that. Can you provide more details?";
+      let assistantMessage = completion.choices[0].message;
+      const toolCalls = assistantMessage.tool_calls || [];
+
+      // If agent wants to call tools, execute them
+      if (toolCalls.length > 0) {
+        const toolResults: any[] = [];
+
+        for (const toolCall of toolCalls) {
+          const functionName = toolCall.function.name;
+          const functionArgs = JSON.parse(toolCall.function.arguments);
+
+          console.log(`Executing tool: ${functionName}`, functionArgs);
+
+          try {
+            const result = await executeAgentTool(functionName, functionArgs);
+            toolResults.push({
+              tool_call_id: toolCall.id,
+              role: 'tool',
+              name: functionName,
+              content: JSON.stringify(result)
+            });
+          } catch (error) {
+            console.error(`Tool execution error for ${functionName}:`, error);
+            toolResults.push({
+              tool_call_id: toolCall.id,
+              role: 'tool',
+              name: functionName,
+              content: JSON.stringify({
+                success: false,
+                error: (error as Error).message
+              })
+            });
+          }
+        }
+
+        // Add assistant message with tool calls and tool results to conversation
+        messages.push(assistantMessage as any);
+        messages.push(...toolResults);
+
+        // Get final response after tool execution
+        completion = await openai.chat.completions.create({
+          model: 'gpt-4o',
+          messages: messages as any,
+          temperature: 0.7,
+          max_tokens: 1000
+        });
+
+        assistantMessage = completion.choices[0].message;
+      }
+
+      const response = assistantMessage.content || "I'm not sure how to respond to that. Can you provide more details?";
 
       res.json({
         success: true,
         response,
+        toolsExecuted: toolCalls.map(tc => tc.function.name),
         usage: completion.usage
       });
     } catch (error) {

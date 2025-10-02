@@ -26,20 +26,20 @@ const Features = () => (
   <section id="features" className="py-24 sm:py-32">
     <div className="container mx-auto px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Production Infrastructure for AI-Built Apps</h2>
+        <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Multi-Cloud Freedom via Natural Language</h2>
         <p className="text-lg text-foreground/70">
-            Built it with AI? Deploy it for real with Careerate. Autonomous agents handle migration, scaling, and enterprise features while you focus on growth.
+            Describe your app to our AI agent. It analyzes your needs, suggests the best cloud provider, estimates costs, and deploys—all through conversation. No vendor lock-in, no DevOps expertise required.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
-            { icon: Brain, title: "Agent-Powered Migration", description: "Upload any GitHub repo and our agents fix production issues automatically", colorClass: "from-primary to-secondary" },
-            { icon: Globe, title: "Multi-Platform Import", description: "Works with apps from Replit, Base44, Emergent, Bolt.new and any AI coding platform", colorClass: "from-blue-500 to-cyan-500" },
-            { icon: Cloud, title: "Enterprise Infrastructure", description: "Azure Container Apps with auto-scaling, SSL, custom domains, and 99.9% uptime", colorClass: "from-green-500 to-emerald-500" },
-            { icon: Shield, title: "Production Security", description: "Azure KeyVault encryption, SOC 2 Type II compliance, and enterprise SSO", colorClass: "from-orange-500 to-red-500" },
-            { icon: Activity, title: "Autonomous Monitoring", description: "AI agents handle scaling, health checks, and maintenance 24/7", colorClass: "from-indigo-500 to-purple-500" },
-            { icon: GitBranch, title: "GitHub Integration", description: "Every push triggers automatic rebuild and deployment to production", colorClass: "from-pink-500 to-rose-500" },
+            { icon: Brain, title: "AI Cloud Selection", description: "Agent analyzes your app and chooses the best cloud provider based on framework, budget, and traffic", colorClass: "from-primary to-secondary" },
+            { icon: Globe, title: "Multi-Cloud Support", description: "Deploy to AWS, Azure, GCP, Vercel, or Railway—agent picks the optimal platform for each use case", colorClass: "from-blue-500 to-cyan-500" },
+            { icon: Cloud, title: "Cost Transparency", description: "Get detailed cost estimates before deployment. Agent suggests most cost-effective architecture", colorClass: "from-green-500 to-emerald-500" },
+            { icon: Shield, title: "Zero Lock-In", description: "Not tied to one vendor. Switch clouds anytime. 60+ integrations pre-configured in Azure Key Vault", colorClass: "from-orange-500 to-red-500" },
+            { icon: Activity, title: "Intelligent Provisioning", description: "Agent provisions databases (Neon, MongoDB Atlas), monitoring (Datadog), and CDN automatically", colorClass: "from-indigo-500 to-purple-500" },
+            { icon: GitBranch, title: "Natural Language Interface", description: "Just describe what you need. Agent handles GitHub analysis, deployment, and configuration", colorClass: "from-pink-500 to-rose-500" },
         ].map((feature, idx) => <FeatureCard key={feature.title} {...feature} index={idx} />)}
       </div>
     </div>
@@ -104,9 +104,9 @@ const CTA = ({ onImportClick }: { onImportClick: () => void }) => (
             <div className="relative rounded-3xl p-10 sm:p-16 text-center overflow-hidden glass-pane">
                  <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary opacity-10 blur-3xl"></div>
                  <div className="relative z-10">
-                    <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Ready to Make Your AI App Production-Ready?</h2>
+                    <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Ready to Deploy Without Vendor Lock-In?</h2>
                     <p className="max-w-2xl mx-auto text-lg text-foreground/70 mb-8">
-                        Join developers who've already built with AI and now need production infrastructure. Upload your GitHub repo and deploy for real.
+                        Stop choosing between AWS, Azure, and GCP. Let our AI agent analyze your app and deploy to the best cloud for your specific needs—all through natural language.
                     </p>
                     <Button size="lg" onClick={onImportClick} className="rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40">
                       <Sparkles className="mr-2 h-5 w-5" />
@@ -189,9 +189,9 @@ export default function LandingNew() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
             >
-              AI Built It.
+              Deploy Anywhere.
               <br />
-              We'll Deploy It for Real.
+              Let AI Choose the Best Cloud.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -199,7 +199,7 @@ export default function LandingNew() {
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
             >
-              Your AI prototype got traction. Now make it production-ready with enterprise-grade infrastructure and autonomous agents.
+              Stop being locked into one cloud provider. Our AI agent analyzes your app and deploys to the best platform—AWS, Azure, GCP, Vercel, or Railway—based on your needs and budget.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}

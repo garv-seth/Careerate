@@ -1,34 +1,35 @@
-# Careerate - Natural Language Deployment Platform
+# Careerate - Multi-Cloud Deployment Freedom Platform
 
 ## Mission
-Make deployment accessible to everyone through natural language and Azure cloud infrastructure.
+Give developers complete deployment freedom through natural language and AI-powered cloud orchestration across AWS, Azure, GCP, and specialized platforms.
 
-## What We Actually Do (v1.0 - Production Ready)
+## What We Actually Do (v2.0 - Multi-Cloud Intelligence)
 
-### Core Features (100% Functional)
-1. **Natural Language Deployment**: Describe your app in plain English → get a production URL on Azure
-2. **Automated Containerization**: We detect your framework and create optimized Docker containers
-3. **Azure Container Apps**: Production hosting with auto-scaling and 99.9% uptime SLA
-4. **Health Monitoring**: Basic health checks and monitoring for deployed apps
-5. **Simple Dashboard**: View your deployments, URLs, and status
+### Core Features
+1. **Natural Language Deployment**: Describe your needs → agent chooses best cloud and deploys
+2. **Multi-Cloud Intelligence**: Not locked to one provider—agent picks AWS, Azure, GCP, Vercel, Railway, etc. based on your requirements
+3. **Transparent Decision-Making**: Agent explains why it recommends specific services and asks permission before deploying
+4. **60+ Integrated Services**: Cloud providers, databases, monitoring, CDN, communication—all pre-configured
+5. **Cost Optimization**: Agent calculates estimates and suggests most cost-effective architecture
 
 ### What Works Right Now
-- ✅ Natural language intent parsing (GPT-4o)
-- ✅ Automated Docker image building (Azure Container Registry)
+- ✅ Natural language intent parsing (GPT-4o with function calling)
 - ✅ Production deployment to Azure Container Apps
+- ✅ GitHub OAuth integration for repository access
+- ✅ Automated Docker image building (Azure Container Registry)
 - ✅ Custom domains with SSL
 - ✅ Auto-scaling (scale-to-zero capable)
-- ✅ Basic health monitoring
 - ✅ User authentication (Azure B2C)
 - ✅ Subscription billing (Stripe)
+- ✅ Basic chat interface (Cara agent)
 
-### What We DON'T Do (Yet)
-- ❌ GitHub integration (planned for v1.1)
-- ❌ Live logs streaming (basic logs only)
-- ❌ Advanced monitoring & alerting
-- ❌ Multi-cloud support (Azure only)
-- ❌ Team collaboration features
-- ❌ CI/CD pipeline customization
+### What We're Building Next
+- 🔄 **Agent Tool Calling**: Function calling for AWS, GCP, Vercel, Railway deployments
+- 🔄 **Database Provisioning**: Neon, MongoDB Atlas, PlanetScale via agent
+- 🔄 **Monitoring Setup**: Automatic Datadog, PagerDuty configuration
+- 🔄 **Cost Estimation**: Pre-deployment cost calculator
+- 🔄 **Permission Flow**: Agent asks before executing deployments
+- 🔄 **Multi-Cloud Orchestration**: Deploy frontend to Vercel, backend to AWS, database to Neon in one command
 
 ## Architecture
 
@@ -142,17 +143,20 @@ az containerapp update --name careerate-web --resource-group Careerate --image c
 | Feature | Careerate | Vercel | Heroku | Railway |
 |---------|-----------|--------|--------|---------|
 | Natural Language Deploy | ✅ | ❌ | ❌ | ❌ |
+| **Multi-Cloud Freedom** | **✅ (AWS+Azure+GCP+Vercel+Railway)** | ❌ (Vercel only) | ❌ (Heroku only) | ❌ (Railway only) |
+| **AI Agent Chooses Best Service** | **✅** | ❌ | ❌ | ❌ |
 | Backend Support | ✅ | ⚠️ | ✅ | ✅ |
 | Frontend Support | ✅ | ✅ | ⚠️ | ✅ |
-| Enterprise Cloud | ✅ (Azure) | ✅ | ✅ (AWS) | ⚠️ |
-| Price (Starter) | $29 | $20 | $50 | $20 |
+| Cost Transparency | ✅ (agent estimates) | ⚠️ | ⚠️ | ✅ |
+| Price (Pro) | $49 | $20 | $50 | $20 |
 | Price (Business) | $199 | $400 | $500 | $100 |
 
 **Our Differentiation:**
-1. **Only platform with true natural language deployment**
-2. **Azure-backed** - enterprise-ready infrastructure
-3. **Simpler pricing** - no compute-hour calculations
-4. **Full-stack** - backend + frontend in one place
+1. **Only platform with multi-cloud AI orchestration** - Agent chooses best provider for your needs
+2. **Not locked-in** - Deploy frontend to Vercel, backend to AWS, database to Neon in one workflow
+3. **Transparent decision-making** - Agent explains why it recommends specific services
+4. **60+ pre-configured integrations** - AWS, GCP, Azure, monitoring, databases, CDN
+5. **Permission-based execution** - Agent asks before spending money or provisioning resources
 
 ## Pricing Model
 
@@ -163,27 +167,31 @@ az containerapp update --name careerate-web --resource-group Careerate --image c
 
 See `BUSINESS-STRATEGY.md` for detailed pricing analysis and unit economics.
 
-## Current Status (September 30, 2025)
+## Current Status (October 2, 2025)
 
 **✅ Production Ready:**
 - Platform deployed at gocareerate.com
-- Deployment engine fully functional
-- User authentication working
-- Billing integration complete
-- Basic monitoring operational
+- Azure Container Apps deployment fully functional
+- GitHub OAuth integration working
+- User authentication working (Azure B2C)
+- Billing integration complete (Stripe)
+- Cara chat interface operational
+- 60+ integrations configured in Azure Key Vault
 
-**🚀 Launch Ready:**
-- MVP feature complete
-- Infrastructure stable
-- Pricing validated
-- Business model defined
+**🔄 In Development (Next 7 Days):**
+- Agent function calling for multi-cloud deployments
+- AWS ECS, GCP Cloud Run, Vercel integration wiring
+- Database provisioning (Neon, MongoDB Atlas)
+- Cost estimation calculator
+- Permission/confirmation flow
+- Monitoring setup automation (Datadog, PagerDuty)
 
 **📋 Immediate Roadmap (Next 30 Days):**
-- Public launch (Product Hunt, Reddit, HN)
-- GitHub integration for auto-deploy
+- Complete multi-cloud agent orchestration
 - Enhanced monitoring dashboard
+- Landing page messaging update (emphasize multi-cloud freedom)
+- Public launch (Product Hunt, Reddit, HN)
 - Email support system
-- Referral program
 
 ## Success Metrics
 
@@ -207,21 +215,29 @@ See `BUSINESS-STRATEGY.md` for detailed pricing analysis and unit economics.
 
 ## Technical Constraints & Limitations
 
-**Current Limitations:**
-- **Azure Only**: No AWS/GCP support (yet)
-- **Basic Monitoring**: Health checks only, no APM/tracing
-- **Manual GitHub**: No automated CI/CD from repos (yet)
-- **Single Region**: West US 2 only
-- **Framework Detection**: Node.js, React, Next.js supported; others via custom Dockerfile
+**Current Implementation Status:**
+- **Azure Container Apps**: ✅ Fully functional (production-ready)
+- **AWS ECS/Lambda**: 🔄 Credentials configured, wiring in progress
+- **GCP Cloud Run**: 🔄 Credentials configured, wiring in progress
+- **Vercel/Railway**: 🔄 Credentials configured, wiring in progress
+- **Databases (Neon, MongoDB Atlas)**: 🔄 Credentials configured, wiring in progress
+- **Monitoring (Datadog, PagerDuty)**: 🔄 Credentials configured, wiring in progress
 
-**Known Issues:**
-- Deploy UI doesn't show real-time build logs (polls status instead)
+**Agent Capabilities:**
+- **Function Calling**: 🔄 Implementing OpenAI tool schemas
+- **Cost Estimation**: 🔄 Building calculator
+- **Permission Flow**: 🔄 Designing confirmation UI
+- **Multi-Service Orchestration**: 🔄 Coordinating cross-cloud deployments
+
+**Known Limitations:**
+- Agent currently only deploys to Azure (multi-cloud coming in v2.0)
+- No real-time build logs (polls status instead)
 - No rollback functionality
 - No blue-green deployments
-- Limited environment variable management
+- Single region deployments (West US 2 for Azure)
 
 **Performance:**
-- Average deployment time: 3-5 minutes
+- Average deployment time: 3-5 minutes (Azure Container Apps)
 - Build time: 2-4 minutes (depends on app size)
 - Container startup: 30-60 seconds
 
@@ -255,35 +271,56 @@ az containerapp logs show --name [app-name] --resource-group Careerate --type co
 az acr task list-runs --registry careerateacr --top 5
 ```
 
-## Business Documents
+## Documentation
 
+### Business Documents
 - `BUSINESS-STRATEGY.md` - Complete business plan, pricing analysis, financial projections
 - `PITCH-DECK.md` - Investor pitch deck content
 - `CLAUDE.md` - This file (technical + product overview)
+
+### Technical Documentation (docs/)
+- **`PLATFORM_VISION.md`** - Multi-cloud deployment freedom strategy, competitive positioning
+- **`AGENT_ARCHITECTURE.md`** - How Cara agent works, function calling, decision trees
+- **`INTEGRATION_GUIDE.md`** - Complete mapping of 60+ integrations in Azure Key Vault
+
+### Knowledge Transfer
+These documentation files are updated after each coding session to ensure:
+- Future developers understand the vision
+- Cursor/Claude Code knows current state and next steps
+- Business context is preserved across development cycles
 
 ---
 
 ## The Bottom Line
 
 **What We Promise:**
-- Simple natural language deployment
-- Production-ready Azure hosting
-- Basic monitoring
-- Fast, reliable infrastructure
+- **Multi-cloud deployment freedom** - Not locked into one provider
+- **AI-powered orchestration** - Agent chooses best services for your needs
+- **Transparent decision-making** - Agent explains and asks permission
+- **Cost optimization** - Agent suggests most cost-effective architecture
 
-**What We Deliver:**
-- ✅ All of the above, fully functional
-- ✅ Real Azure Container Apps (not a toy)
+**What We Deliver (Today):**
+- ✅ Natural language deployment interface (Cara chat)
+- ✅ Production Azure Container Apps deployment
+- ✅ GitHub OAuth integration
+- ✅ 60+ integrations configured (credentials in Key Vault)
 - ✅ SSL, custom domains, auto-scaling
-- ✅ 99.9% uptime on Azure's infrastructure
+- ✅ User auth (Azure B2C), billing (Stripe)
 
-**What We Don't Promise:**
-- Multi-cloud (maybe later)
-- Advanced DevOps features (maybe later)
-- AI code generation (focus is deployment, not coding)
-- Enterprise migration (different product)
+**What We're Building (Next 7 Days):**
+- 🔄 Agent function calling for AWS, GCP, Vercel, Railway
+- 🔄 Database provisioning (Neon, MongoDB Atlas, PlanetScale)
+- 🔄 Cost estimation calculator
+- 🔄 Permission/confirmation flow
+- 🔄 Monitoring setup (Datadog, PagerDuty)
+
+**What We Don't Do:**
+- ❌ AI code generation (focus is deployment, not coding)
+- ❌ Enterprise migration consulting (focus is self-service)
+- ❌ Infrastructure management after deployment (users own their cloud accounts)
 
 ---
 
-*Last Updated: September 30, 2025*
-*Status: Production Ready, Launch Imminent*
+*Last Updated: October 2, 2025*
+*Status: Pivoting from Azure-Only to Multi-Cloud Orchestration*
+*Phase: Documentation Complete, Agent Implementation In Progress*
