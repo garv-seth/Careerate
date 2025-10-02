@@ -46,7 +46,10 @@
       "Bash($env:PYTHONIOENCODING=\"utf-8\")",
       "Bash(az ad app show:*)",
       "Bash(az rest:*)",
-      "Bash(az ad app update:*)"
+      "Bash(az ad app update:*)",
+      "Bash(az keyvault list:*)",
+      "Bash(az keyvault secret set:*)",
+      "Bash(az containerapp secret set:*)"
     ],
     "deny": [],
     "ask": []
