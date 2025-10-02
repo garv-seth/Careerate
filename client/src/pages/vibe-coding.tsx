@@ -1,6 +1,6 @@
-import { Link, useRoute } from "wouter";
+import { useRoute } from "wouter";
 import { AppShell } from "@/components/AppShell";
-import CaraWorkshop from "@/components/CaraWorkshop";
+import CaraWorkshopLite from "@/components/CaraWorkshopLite";
 
 export default function VibeCoding() {
   const [codingMatch, codingParams] = useRoute("/projects/:id/coding");
@@ -12,7 +12,7 @@ export default function VibeCoding() {
   return (
     <AppShell>
       <div className="relative min-h-screen">
-        <CaraWorkshop projectId={projectId} initialMode={initialMode} />
+        <CaraWorkshopLite projectId={projectId} initialMode={initialMode} />
       </div>
     </AppShell>
   );
