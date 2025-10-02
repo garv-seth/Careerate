@@ -1,7 +1,7 @@
-# Careerate - Multi-Cloud Deployment Freedom Platform
+# Careerate - Vibe Hosting™ Platform
 
 ## Mission
-Give developers complete deployment freedom through natural language and AI-powered cloud orchestration across AWS, Azure, GCP, and specialized platforms.
+**Vibe Hosting for the Vibe Coding Era** - Deploy apps built with AI (Cursor, Replit, Windsurf) using AI. Natural language cloud orchestration across AWS, Azure, GCP, Vercel, and Railway. The natural evolution of vibe coding.
 
 ## What We Actually Do (v2.0 - Multi-Cloud Intelligence)
 

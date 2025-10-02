@@ -380,7 +380,7 @@ export async function calculateCostEstimate(params: {
 
 /**
  * Deploy to Azure Container Apps
- * (Existing implementation, just wrapping it here)
+ * (Calls real Azure deployment service)
  */
 export async function deployToAzureContainerApps(params: {
   appName: string;
@@ -389,13 +389,42 @@ export async function deployToAzureContainerApps(params: {
   minReplicas?: number;
   maxReplicas?: number;
 }): Promise<{ success: boolean; url: string; message: string }> {
-  // This would call the existing azureContainerApps.ts service
-  // For now, returning a mock response
-  return {
-    success: true,
-    url: `https://${params.appName}.politetree-xyz.westus2.azurecontainerapps.io`,
-    message: 'Deployment initiated. This will take 3-5 minutes.'
-  };
+  try {
+    // Import Azure deployment service
+    const { azureContainerApps } = await import('./azureContainerApps');
+
+    if (!azureContainerApps) {
+      throw new Error('Azure Container Apps service not initialized. Check Azure credentials.');
+    }
+
+    // Create project in database (if not exists)
+    // For agent deployments, we'll use a special agent project
+    const projectId = `agent-${params.appName}`;
+
+    // Call real Azure deployment
+    const result = await azureContainerApps.deployApp({
+      projectId,
+      appName: params.appName,
+      envVars: params.environmentVariables || {},
+      // Azure will clone from GitHub URL via git
+      sourceCode: {
+        'README.md': `# ${params.appName}\n\nDeployed from ${params.githubRepoUrl}`
+      }
+    });
+
+    return {
+      success: true,
+      url: result.url,
+      message: `Deployment successful! Your app is live at ${result.url}`
+    };
+  } catch (error) {
+    console.error('Azure deployment error:', error);
+    return {
+      success: false,
+      url: '',
+      message: `Azure deployment failed: ${(error as Error).message}`
+    };
+  }
 }
 
 /**

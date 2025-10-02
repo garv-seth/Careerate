@@ -36,7 +36,9 @@
       "Read(//c/**)",
       "Bash(nslookup:*)",
       "Bash(az account:*)",
-      "Bash(az keyvault secret list:*)"
+      "Bash(az keyvault secret list:*)",
+      "Bash(npm install:*)",
+      "Bash(az keyvault secret show:*)"
     ],
     "deny": [],
     "ask": []

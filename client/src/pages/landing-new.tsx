@@ -26,9 +26,9 @@ const Features = () => (
   <section id="features" className="py-24 sm:py-32">
     <div className="container mx-auto px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Multi-Cloud Freedom via Natural Language</h2>
+        <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">From Vibe Coding to Vibe Hosting™ in One Conversation</h2>
         <p className="text-lg text-foreground/70">
-            Describe your app to our AI agent. It analyzes your needs, suggests the best cloud provider, estimates costs, and deploys—all through conversation. No vendor lock-in, no DevOps expertise required.
+            You built it with AI. Now deploy it with AI. Just describe what you need—our agent chooses the best cloud, estimates costs, and ships to production. The natural evolution of vibe coding.
         </p>
       </div>
 
@@ -189,9 +189,9 @@ export default function LandingNew() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
             >
-              Deploy Anywhere.
+              Vibe Hosting™
               <br />
-              Let AI Choose the Best Cloud.
+              For the Vibe Coding Era
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -199,7 +199,7 @@ export default function LandingNew() {
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
             >
-              Stop being locked into one cloud provider. Our AI agent analyzes your app and deploys to the best platform—AWS, Azure, GCP, Vercel, or Railway—based on your needs and budget.
+              Built it with Cursor? Ship it with Careerate. Our AI analyzes your app and deploys to the best cloud—AWS, Azure, GCP, Vercel, or Railway—all through natural language. No DevOps degree required.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
