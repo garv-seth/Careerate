@@ -12,7 +12,8 @@
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "db:push": "drizzle-kit push",
-    "db:migrate:framework": "tsx scripts/migrate-add-framework.ts"
+    "db:migrate:framework": "tsx scripts/migrate-add-framework.ts",
+    "smoke": "tsx scripts/smoke-tests.ts"
   },
   "dependencies": {
     "@azure/arm-appcontainers": "^2.2.0",

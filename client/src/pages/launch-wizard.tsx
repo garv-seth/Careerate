@@ -16,6 +16,7 @@ export default function LaunchWizard() {
   const [submitting, setSubmitting] = useState(false);
   const [deploying, setDeploying] = useState(false);
   const [deployment, setDeployment] = useState<any | null>(null);
+  const [rollbacking, setRollbacking] = useState(false);
 
   const { data: readiness } = useQuery({
     queryKey: ["/api/hosting/readiness"],
@@ -197,6 +198,29 @@ export default function LaunchWizard() {
               <div className="space-y-3">
                 <DeployStatus statusUrl={deployment?.statusUrl} />
                 <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    disabled={!deployment?.id || rollbacking}
+                    onClick={async () => {
+                      if (!deployment?.id) return;
+                      setRollbacking(true);
+                      try {
+                        const res = await fetch(`/api/hosting/deployments/${deployment.id}/rollback`, {
+                          method: 'POST',
+                          credentials: 'include'
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                          // Switch to polling rollback deployment
+                          setDeployment({ id: data.deploymentId, statusUrl: data.statusUrl, status: 'pending' });
+                        }
+                      } finally {
+                        setRollbacking(false);
+                      }
+                    }}
+                  >
+                    {rollbacking ? 'Rolling back…' : 'Rollback'}
+                  </Button>
                   <Button asChild>
                     <a href="/dashboard">Open Dashboard</a>
                   </Button>
@@ -213,6 +237,7 @@ export default function LaunchWizard() {
 function DeployStatus({ statusUrl }: { statusUrl?: string }) {
   const [status, setStatus] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [autoRefresh, setAutoRefresh] = useState(true);
 
   useEffect(() => {
     if (!statusUrl) return;
@@ -224,7 +249,7 @@ function DeployStatus({ statusUrl }: { statusUrl?: string }) {
         const data = await res.json();
         if (cancelled) return;
         setStatus(data);
-        if (data.status === 'pending' || data.status === 'deploying' || data.status === 'building') {
+        if (autoRefresh && (data.status === 'pending' || data.status === 'deploying' || data.status === 'building')) {
           setTimeout(poll, 2000);
         }
       } catch (e: any) {
@@ -233,19 +258,39 @@ function DeployStatus({ statusUrl }: { statusUrl?: string }) {
     }
     poll();
     return () => { cancelled = true; };
-  }, [statusUrl]);
+  }, [statusUrl, autoRefresh]);
 
   if (!statusUrl) return <p className="text-sm text-foreground/60">Missing deployment status URL.</p>;
   if (error) return <p className="text-sm text-red-400">{error}</p>;
 
+  const health = status?.deployment?.healthStatus || status?.healthStatus;
+  const url = status?.deployment?.deploymentUrl || status?.deploymentUrl;
+  const logs = status?.deployment?.deploymentLogs || status?.deploymentLogs;
+  const errors = status?.deployment?.errorLogs || status?.errorLogs;
+
   return (
-    <div className="p-4 rounded-lg bg-foreground/5 text-sm">
-      <div>Status: <strong>{status?.status || 'starting'}</strong></div>
-      {status?.deployment?.deploymentUrl && (
-        <div className="mt-1">URL: <a className="underline" href={status.deployment.deploymentUrl} target="_blank" rel="noreferrer">{status.deployment.deploymentUrl}</a></div>
+    <div className="p-4 rounded-lg bg-foreground/5 text-sm space-y-2">
+      <div className="flex items-center justify-between">
+        <div>
+          <div>Status: <strong>{status?.status || 'starting'}</strong></div>
+          {health && (<div className="text-foreground/70">Health: <strong>{health}</strong></div>)}
+          {url && (
+            <div className="mt-1">URL: <a className="underline" href={url} target="_blank" rel="noreferrer">{url}</a></div>
+          )}
+        </div>
+        <button className="text-xs underline text-foreground/60" onClick={() => setAutoRefresh((v)=>!v)}>{autoRefresh ? 'Pause' : 'Resume'}</button>
+      </div>
+      {logs && (
+        <details className="rounded-md bg-black/30 p-2">
+          <summary className="cursor-pointer">Logs</summary>
+          <pre className="mt-2 text-xs whitespace-pre-wrap text-foreground/80">{logs}</pre>
+        </details>
       )}
-      {status?.errorLogs && (
-        <pre className="mt-2 text-xs whitespace-pre-wrap text-red-300">{status.errorLogs}</pre>
+      {errors && (
+        <details open className="rounded-md bg-red-500/10 p-2">
+          <summary className="cursor-pointer text-red-300">Errors</summary>
+          <pre className="mt-2 text-xs whitespace-pre-wrap text-red-300">{errors}</pre>
+        </details>
       )}
     </div>
   );
