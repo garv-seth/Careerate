@@ -3760,6 +3760,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Readiness report - checks Key Vault and available providers/integrations
+  app.get("/api/hosting/readiness", isAuthenticated, async (req, res) => {
+    try {
+      const { generateReadinessReport } = await import("./services/integrationReadiness");
+      const report = await generateReadinessReport(req);
+      res.json(report);
+    } catch (error) {
+      console.error("Readiness check failed", error);
+      res.status(500).json({ error: "Failed to generate readiness report" });
+    }
+  });
+
+  // List connected repositories (GitHub/GitLab) if tokens exist in Key Vault
+  app.get("/api/integrations/repos", isAuthenticated, async (_req, res) => {
+    try {
+      const { getSecret } = await import("./services/keyVault");
+      const results: { provider: string; repos: { id: string; name: string; url: string }[] }[] = [];
+
+      // GitHub
+      let ghToken: string | null = null;
+      try { ghToken = await getSecret("github-token"); } catch { ghToken = null; }
+      if (ghToken) {
+        const ghResp = await fetch("https://api.github.com/user/repos?per_page=100", {
+          headers: { Authorization: `Bearer ${ghToken}`, Accept: "application/vnd.github+json" },
+        });
+        if (ghResp.ok) {
+          const data = await ghResp.json();
+          results.push({
+            provider: "github",
+            repos: (data || []).map((r: any) => ({ id: String(r.id), name: r.full_name, url: r.html_url })),
+          });
+        }
+      }
+
+      // GitLab
+      let glToken: string | null = null;
+      try { glToken = await getSecret("gitlab-token"); } catch { glToken = null; }
+      if (glToken) {
+        const glResp = await fetch("https://gitlab.com/api/v4/projects?membership=true&simple=true&per_page=100", {
+          headers: { Authorization: `Bearer ${glToken}` },
+        });
+        if (glResp.ok) {
+          const data = await glResp.json();
+          results.push({
+            provider: "gitlab",
+            repos: (data || []).map((p: any) => ({ id: String(p.id), name: p.path_with_namespace, url: p.web_url })),
+          });
+        }
+      }
+
+      res.json({ providers: results });
+    } catch (error) {
+      console.error("Failed to list repos", error);
+      res.status(500).json({ error: "Failed to list repositories" });
+    }
+  });
+
+  // Integrations catalog + status
+  app.get("/api/integrations/catalog", isAuthenticated, async (_req, res) => {
+    const { INTEGRATIONS, getIntegrationStatus } = await import("./services/integrationsCatalog");
+    const status = await getIntegrationStatus();
+    res.json({ integrations: INTEGRATIONS, status });
+  });
+
   // Get Deployment Status (Real Database Integration)
   app.get("/api/hosting/deployments/:deploymentId", isAuthenticated, async (req, res) => {
     try {

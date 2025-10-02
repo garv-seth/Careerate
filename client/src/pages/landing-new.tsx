@@ -189,7 +189,7 @@ export default function LandingNew() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
             >
-              Vibe Hosting™
+              Vibe Hosting
               <br />
               For the Vibe Coding Era
             </motion.h1>
@@ -199,7 +199,7 @@ export default function LandingNew() {
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
             >
-              Built it with Cursor? Ship it with Careerate. Our AI analyzes your app and deploys to the best cloud—AWS, Azure, GCP, Vercel, or Railway—all through natural language. No DevOps degree required.
+              Built with Cursor? Ship with Careerate. Tell our AI what you need—it picks the best cloud (AWS, Azure, GCP, Vercel, Railway), shows you the costs, and ships your app. Zero DevOps required.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}

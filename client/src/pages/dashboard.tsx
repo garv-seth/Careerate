@@ -19,6 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { Select as UiSelect, SelectContent as UiSelectContent, SelectItem as UiSelectItem, SelectTrigger as UiSelectTrigger, SelectValue as UiSelectValue } from "@/components/ui/select";
 import { AppShell } from "@/components/AppShell";
 import { HeroWave } from "@/components/ui/ai-input-hero";
 
@@ -65,6 +66,9 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [agentPrompt, setAgentPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [readiness, setReadiness] = useState<any | null>(null);
+  const [selectedRepo, setSelectedRepo] = useState<string>("");
+  const [selectedProvider, setSelectedProvider] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>(() => (typeof window !== 'undefined' ? (window.location.hash?.replace('#', '') || 'agent') : 'agent'));
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -92,6 +96,28 @@ export default function Dashboard() {
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ["/api/projects"],
+  });
+
+  // Load readiness status
+  const { data: readinessData } = useQuery({
+    queryKey: ["/api/hosting/readiness"],
+    queryFn: async () => {
+      const res = await fetch("/api/hosting/readiness", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to load readiness");
+      return res.json();
+    },
+  });
+
+  useEffect(() => { if (readinessData) setReadiness(readinessData); }, [readinessData]);
+
+  // Load repos from connected providers
+  const { data: reposData } = useQuery({
+    queryKey: ["/api/integrations/repos"],
+    queryFn: async () => {
+      const res = await fetch("/api/integrations/repos", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to load repositories");
+      return res.json();
+    },
   });
 
   const { data: recentActivity = [], isLoading: isActivityLoading } = useQuery({
@@ -229,6 +255,17 @@ export default function Dashboard() {
 
   const handleAgentPrompt = async () => {
     if (!agentPrompt.trim()) return;
+
+    // Gate: require at least one provider ready
+    const providerReady = readiness?.providers?.some((p: any) => p.ready);
+    if (!providerReady) {
+      toast({
+        title: "Connect a cloud provider",
+        description: "Go to Integrations to add Azure, AWS, or GCP credentials before deploying.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     setIsGenerating(true);
     try {
@@ -354,6 +391,18 @@ export default function Dashboard() {
                     </div>
                   </div>
 
+                  {/* Readiness banner */}
+                  {readiness && (
+                    <div className="rounded-xl p-3 border border-foreground/10 bg-foreground/5 flex flex-wrap items-center gap-3">
+                      <span className="text-sm text-foreground/80 flex items-center"><Shield className="h-4 w-4 mr-2" /> Readiness:</span>
+                      {readiness.providers.map((p: any) => (
+                        <Badge key={p.id} className={`${p.ready ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-foreground/10 text-foreground/60 border-foreground/20'}`}>
+                          {p.label}: {p.ready ? 'Ready' : 'Missing'}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center space-x-2 sm:space-x-4 overflow-x-auto pb-2">
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/30 flex-shrink-0">
@@ -370,9 +419,36 @@ export default function Dashboard() {
                       </Badge>
                     </div>
 
-                    <Button
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      {/* Provider select */}
+                      <UiSelect value={selectedProvider} onValueChange={setSelectedProvider}>
+                        <UiSelectTrigger className="w-[160px] rounded-full">
+                          <UiSelectValue placeholder="Cloud" />
+                        </UiSelectTrigger>
+                        <UiSelectContent>
+                          {(readiness?.providers || []).map((p: any) => (
+                            <UiSelectItem key={p.id} value={p.id} disabled={!p.ready}>{p.label}{!p.ready ? " (setup)" : ""}</UiSelectItem>
+                          ))}
+                        </UiSelectContent>
+                      </UiSelect>
+
+                      {/* Repo select (optional) */}
+                      <UiSelect value={selectedRepo} onValueChange={setSelectedRepo}>
+                        <UiSelectTrigger className="w-[220px] rounded-full">
+                          <UiSelectValue placeholder="Repository (optional)" />
+                        </UiSelectTrigger>
+                        <UiSelectContent>
+                          {(reposData?.providers || []).flatMap((prov: any) => (
+                            prov.repos.map((r: any) => (
+                              <UiSelectItem key={`${prov.provider}:${r.id}`} value={`${prov.provider}:${r.id}`}>{r.name}</UiSelectItem>
+                            ))
+                          ))}
+                        </UiSelectContent>
+                      </UiSelect>
+
+                      <Button
                       onClick={handleAgentPrompt}
-                      disabled={!agentPrompt.trim() || isGenerating}
+                      disabled={!agentPrompt.trim() || isGenerating || (readiness && !readiness.providers?.some((p:any)=>p.ready))}
                       className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-lg shadow-orange-500/25 px-8 w-full sm:w-auto font-semibold"
                       size="lg"
                     >
@@ -387,7 +463,8 @@ export default function Dashboard() {
                           Deploy Now
                         </>
                       )}
-                    </Button>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -1,3 +1,82 @@
+import { useQuery } from "@tanstack/react-query";
+import { AppShell } from "@/components/AppShell";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+export default function IntegrationsPage() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["/api/integrations/catalog"],
+    queryFn: async () => {
+      const res = await fetch("/api/integrations/catalog", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to load integrations catalog");
+      return res.json();
+    },
+  });
+
+  const mapStatus = new Map<string, { ready: boolean; missing: string[] }>();
+  (data?.status || []).forEach((s: any) => mapStatus.set(s.id, s));
+
+  const grouped = (data?.integrations || []).reduce((acc: any, i: any) => {
+    acc[i.category] = acc[i.category] || [];
+    acc[i.category].push(i);
+    return acc;
+  }, {} as Record<string, any[]>);
+
+  return (
+    <AppShell>
+      <div className="max-w-6xl mx-auto p-6 space-y-8">
+        <div>
+          <h1 className="text-3xl font-bold">Integrations</h1>
+          <p className="text-foreground/70">Connect providers and tools. We read credentials from Azure Key Vault automatically.</p>
+        </div>
+
+        {isLoading ? (
+          <div className="text-foreground/60">Loading…</div>
+        ) : (
+          Object.entries(grouped).map(([category, items]) => (
+            <div key={category} className="space-y-3">
+              <h2 className="text-xl font-semibold capitalize">{category.replace('_',' ')}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {(items as any[]).map((i) => {
+                  const st = mapStatus.get(i.id);
+                  const ready = st?.ready;
+                  return (
+                    <Card key={i.id} className="glass-pane rounded-2xl">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="flex items-center justify-between text-sm">
+                          <span>{i.name}</span>
+                          <Badge className={ready ? "bg-green-500/20 text-green-300 border-green-500/30" : "bg-foreground/10 text-foreground/60 border-foreground/20"}>
+                            {ready ? "Ready" : "Not configured"}
+                          </Badge>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        {ready ? (
+                          <p className="text-xs text-foreground/60">All required secrets present.</p>
+                        ) : (
+                          <div className="text-xs text-foreground/60">
+                            Missing: {(st?.missing || []).join(', ') || '—'}
+                          </div>
+                        )}
+                        {i.docsUrl && (
+                          <Button asChild size="sm" variant="outline" className="rounded-full">
+                            <a href={i.docsUrl} target="_blank" rel="noreferrer">Docs</a>
+                          </Button>
+                        )}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </AppShell>
+  );
+}
+
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Link } from 'wouter';
