@@ -4,7 +4,6 @@ import { AppShell } from "@/components/AppShell";
 import { GradientDots } from "@/components/ui/gradient-dots";
 import CybercoreBackground from "@/components/ui/cybercore-section-hero";
 import { motion } from "framer-motion";
-import { useLocation } from "wouter";
 
 const FeatureCard = ({ icon: Icon, title, description, colorClass, index }: { icon: React.ElementType, title: string, description: string, colorClass: string, index?: number }) => (
     <motion.div
@@ -164,8 +163,6 @@ const Footer = () => (
 
 
 export default function LandingNew() {
-  const [, navigate] = useLocation();
-
   const handleImportFromGitHub = () => {
     // Initiate GitHub OAuth flow
     window.location.href = '/api/integrations/github/oauth/initiate';
