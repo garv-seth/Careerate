@@ -26,6 +26,7 @@ const initializeCaraOrchestrator = async (req: Request, res: Response, next: any
       return res.status(500).json({ error: 'OpenAI API key not configured' });
     }
     caraOrchestrator = new CaraOrchestrator(openaiApiKey);
+    await caraOrchestrator.initialize();
   }
   next();
 };
