@@ -91,8 +91,12 @@ export class CaraOrchestrator extends EventEmitter {
     super();
     this.openai = new OpenAI({ apiKey: openaiApiKey });
     this.initializeAgents();
-    this.initializeTools();
     this.initializeMCPServers();
+  }
+
+  // Async initialization for tools (must be called after constructor)
+  async initialize() {
+    await this.initializeTools();
   }
 
   // Initialize specialist agents
@@ -145,9 +149,9 @@ export class CaraOrchestrator extends EventEmitter {
   }
 
   // Initialize available tools
-  private initializeTools() {
+  private async initializeTools() {
     // Import the production tool registry
-    const AgentToolRegistry = require('./AgentToolRegistry').default;
+    const { default: AgentToolRegistry } = await import('./AgentToolRegistry.js');
     this.toolRegistry = new AgentToolRegistry();
 
     // Get all available production tools

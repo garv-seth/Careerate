@@ -4510,6 +4510,11 @@ test('renders learn react link', () => {
   const migrationAgent = new EnterpriseMigrationAgent();
   const caraOrchestrator = process.env.OPENAI_API_KEY ? new CaraOrchestrator(process.env.OPENAI_API_KEY) : null;
 
+  // Initialize CaraOrchestrator async tools
+  if (caraOrchestrator) {
+    await caraOrchestrator.initialize();
+  }
+
   // DevOps Agent - Full automation workflow
   app.post("/api/ai-agents/devops/deploy", isAuthenticated, async (req, res) => {
     try {
