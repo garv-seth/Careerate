@@ -51,7 +51,16 @@
       "Bash(az keyvault secret set:*)",
       "Bash(az containerapp secret set:*)",
       "Bash(az containerapp ingress traffic set:*)",
-      "Bash(python:*)"
+      "Bash(timeout:*)",
+      "Bash(az containerapp secret show:*)",
+      "Bash(python:*)",
+      "Bash(az monitor log-analytics query:*)",
+      "Bash(docker pull:*)",
+      "Bash(for file in client/src/pages/*.tsx)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(done)",
+      "Bash(xargs:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []
