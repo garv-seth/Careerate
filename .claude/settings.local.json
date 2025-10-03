@@ -49,7 +49,10 @@
       "Bash(az ad app update:*)",
       "Bash(az keyvault list:*)",
       "Bash(az keyvault secret set:*)",
-      "Bash(az containerapp secret set:*)"
+      "Bash(az containerapp secret set:*)",
+      "Bash(az containerapp ingress traffic set:*)",
+      "Bash(timeout:*)",
+      "Bash(az containerapp secret show:*)"
     ],
     "deny": [],
     "ask": []

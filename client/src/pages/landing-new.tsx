@@ -174,9 +174,9 @@ export default function LandingNew() {
   };
 
   return (
-    <>
+    <AppShell className="bg-transparent">
       {/* Hero Section with Cybercore Background */}
-      <div className="relative min-h-screen overflow-hidden bg-black text-foreground">
+      <div className="relative min-h-screen overflow-hidden bg-black text-foreground -mt-24 md:-mt-28">
         {/* Cybercore Grid Background */}
         <CybercoreBackground beamCount={70} />
 
@@ -222,17 +222,13 @@ export default function LandingNew() {
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-black/50 to-[#090806] pointer-events-none z-20" />
       </div>
 
-      {/* Structured content area with AppShell (navbar + footer) */}
+      {/* Structured content area */}
       <div className="relative z-10 bg-[#090806]">
-        <AppShell className="bg-transparent">
-          <main className="relative">
-            <Features />
-            <Pricing />
-            <Docs />
-            <CTA onImportClick={handleImportFromGitHub} />
-          </main>
-        </AppShell>
+        <Features />
+        <Pricing />
+        <Docs />
+        <CTA onImportClick={handleImportFromGitHub} />
       </div>
-    </>
+    </AppShell>
   );
 }
