@@ -150,26 +150,17 @@ export class CaraOrchestrator extends EventEmitter {
 
   // Initialize available tools
   private async initializeTools() {
-    // Import the production tool registry
-    const { default: AgentToolRegistry } = await import('./AgentToolRegistry.js');
-    this.toolRegistry = new AgentToolRegistry();
+    // TODO: Re-enable tool registry when import issues are resolved
+    // Temporarily disabled to prevent ES module import crashes
+    console.log('🛠️  Tool registry initialization skipped (will re-enable after fixing import)');
 
-    // Get all available production tools
-    const productionTools = this.toolRegistry.getAvailableTools();
-
-    // Convert to ToolAccess format for compatibility
-    productionTools.forEach(tool => {
-      const toolAccess: ToolAccess = {
-        name: tool.name,
-        type: tool.type as any,
-        endpoint: tool.endpoint,
-        capabilities: tool.capabilities
-      };
-      this.tools.set(tool.name, toolAccess);
+    // Initialize basic tool placeholders
+    this.tools.set('web_search', {
+      name: 'web_search',
+      type: 'system',
+      endpoint: '/api/tools/search',
+      capabilities: ['internet_search']
     });
-
-    console.log(`🛠️  Initialized ${productionTools.length} production tools for agents:`,
-      productionTools.map(t => `${t.name} (${t.type})`).join(', '));
   }
 
   // Initialize MCP Server connections
