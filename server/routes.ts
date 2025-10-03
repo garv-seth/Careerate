@@ -4504,16 +4504,18 @@ test('renders learn react link', () => {
   // Import DevOps agents - REAL IMPLEMENTATIONS
   const { DevOpsAgent } = await import("./ai-agents/DevOpsAgent.js");
   const { EnterpriseMigrationAgent } = await import("./ai-agents/EnterpriseMigrationAgent.js");
-  const { CaraOrchestrator } = await import("./agents/CaraOrchestrator.js");
+  // TODO: Re-enable CaraOrchestrator after fixing ES module import issues
+  // const { CaraOrchestrator } = await import("./agents/CaraOrchestrator.js");
 
   const devOpsAgent = new DevOpsAgent();
   const migrationAgent = new EnterpriseMigrationAgent();
-  const caraOrchestrator = process.env.OPENAI_API_KEY ? new CaraOrchestrator(process.env.OPENAI_API_KEY) : null;
+  // Temporarily disabled to fix server startup crash
+  const caraOrchestrator = null;
 
   // Initialize CaraOrchestrator async tools
-  if (caraOrchestrator) {
-    await caraOrchestrator.initialize();
-  }
+  // if (caraOrchestrator) {
+  //   await caraOrchestrator.initialize();
+  // }
 
   // DevOps Agent - Full automation workflow
   app.post("/api/ai-agents/devops/deploy", isAuthenticated, async (req, res) => {

@@ -7,7 +7,8 @@
 
 import express from 'express';
 import { Request, Response } from 'express';
-import CaraOrchestrator from '../agents/CaraOrchestrator.js';
+// TODO: Re-enable after fixing ES module import issues
+// import CaraOrchestrator from '../agents/CaraOrchestrator.js';
 import { isAuthenticated } from '../auth.js';
 import { db } from '../db.js';
 import { eq } from 'drizzle-orm';
@@ -16,19 +17,27 @@ import { users, projects, codeGenerations } from '../../shared/schema.js';
 const router = express.Router();
 
 // Initialize Cara orchestrator (in production, this would be per-user or singleton)
-let caraOrchestrator: CaraOrchestrator | null = null;
+// Temporarily disabled to fix server startup crash
+// let caraOrchestrator: CaraOrchestrator | null = null;
+let caraOrchestrator: any = null;
 
 // Initialize orchestrator middleware
 const initializeCaraOrchestrator = async (req: Request, res: Response, next: any) => {
-  if (!caraOrchestrator) {
-    const openaiApiKey = process.env.OPENAI_API_KEY;
-    if (!openaiApiKey) {
-      return res.status(500).json({ error: 'OpenAI API key not configured' });
-    }
-    caraOrchestrator = new CaraOrchestrator(openaiApiKey);
-    await caraOrchestrator.initialize();
-  }
-  next();
+  // Temporarily disabled - return error for now
+  return res.status(503).json({
+    error: 'CaraOrchestrator temporarily disabled for maintenance',
+    message: 'Please use the /api/ai-agents/chat endpoint instead'
+  });
+
+  // if (!caraOrchestrator) {
+  //   const openaiApiKey = process.env.OPENAI_API_KEY;
+  //   if (!openaiApiKey) {
+  //     return res.status(500).json({ error: 'OpenAI API key not configured' });
+  //   }
+  //   caraOrchestrator = new CaraOrchestrator(openaiApiKey);
+  //   await caraOrchestrator.initialize();
+  // }
+  // next();
 };
 
 // Chat with Cara - Main orchestration endpoint
