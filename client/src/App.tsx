@@ -5,7 +5,6 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@/hooks/useAuth";
 import { DeploymentInfo } from "@/components/DeploymentInfo";
 import { CookieConsent } from "@/components/CookieConsent";
 
@@ -31,39 +30,25 @@ const PageLoader = () => (
 );
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  // Show loading state to prevent flash
-  if (isLoading) {
-    return <PageLoader />;
-  }
-
   return (
     <Suspense fallback={<PageLoader />}>
       <AnimatePresence mode="wait">
       <Switch>
-      {/* Routes accessible to all users */}
-      <Route path="/payment" component={PaymentPage} />
-      <Route path="/privacy" component={PrivacyPolicy} />
-      <Route path="/terms" component={TermsOfService} />
+        {/* Public routes */}
+        <Route path="/" component={Landing} />
+        <Route path="/payment" component={PaymentPage} />
+        <Route path="/privacy" component={PrivacyPolicy} />
+        <Route path="/terms" component={TermsOfService} />
 
-      {/* Authenticated routes */}
-      {isAuthenticated ? (
-        <>
-          <Route path="/" component={Dashboard} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/integrations" component={IntegrationsPage} />
-          <Route path="/account" component={AccountSettings} />
-          <Route path="/settings" component={AccountSettings} />
-          <Route path="/deploy" component={Deploy} />
-          <Route component={NotFound} />
-        </>
-      ) : (
-        <>
-          <Route path="/" component={Landing} />
-          <Route component={Landing} />
-        </>
-      )}
+        {/* App routes (auth handled per-page) */}
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/integrations" component={IntegrationsPage} />
+        <Route path="/account" component={AccountSettings} />
+        <Route path="/settings" component={AccountSettings} />
+        <Route path="/deploy" component={Deploy} />
+
+        {/* 404 */}
+        <Route component={NotFound} />
       </Switch>
       </AnimatePresence>
     </Suspense>
