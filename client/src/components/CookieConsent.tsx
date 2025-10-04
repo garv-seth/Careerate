@@ -51,10 +51,10 @@ export function CookieConsent() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed inset-x-0 bottom-0 z-50"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4"
         >
-          <div className="backdrop-blur-md bg-black/70 border-t border-white/10">
-            <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="glass-pane rounded-full p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <p className="flex-1 text-sm text-foreground/85">
                 We use essential cookies to make our site work. With your consent, we may also use non‑essential cookies to improve your experience. See our
                 <Link href="/privacy">
@@ -65,6 +65,7 @@ export function CookieConsent() {
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
+                  size="sm"
                   className="rounded-full border-border text-foreground hover:bg-primary/10"
                   onClick={handleDeclineAll}
                 >
@@ -72,12 +73,14 @@ export function CookieConsent() {
                 </Button>
                 <Button
                   variant="outline"
+                  size="sm"
                   className="rounded-full border-border text-foreground hover:bg-primary/10"
                   onClick={handleCustomize}
                 >
                   Customize
                 </Button>
                 <Button
+                  size="sm"
                   className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25"
                   onClick={handleAcceptAll}
                 >
@@ -86,7 +89,6 @@ export function CookieConsent() {
               </div>
             </div>
           </div>
-          <div className="h-2 bg-gradient-to-t from-black/50 to-transparent" />
         </motion.div>
       )}
     </AnimatePresence>
