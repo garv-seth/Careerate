@@ -228,6 +228,7 @@ export default function LandingNew() {
         <Pricing />
         <Docs />
         <CTA onImportClick={handleImportFromGitHub} />
+        <Footer />
       </div>
     </AppShell>
   );

@@ -79,7 +79,8 @@
       "Bash(az postgres flexible-server update:*)",
       "Bash(az postgres flexible-server firewall-rule list:*)",
       "Bash(export DATABASE_URL=\"postgresql://careerateadmin:Careerate2024!@#PostgresAdmin@careerate-postgres.postgres.database.azure.com/careerate?sslmode=require\")",
-      "Bash(npx drizzle-kit:*)"
+      "Bash(npx drizzle-kit:*)",
+      "Bash(gh run watch:*)"
     ],
     "deny": [],
     "ask": []

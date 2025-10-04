@@ -3732,11 +3732,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         (req.session as any).passport = { user: user.id };
       }
 
-      // Redirect back to integrations page
-      res.redirect("/integrations?github=success");
+      // Redirect to dashboard after successful login
+      res.redirect("/dashboard");
     } catch (error) {
       console.error('GitHub OAuth error:', error);
-      res.redirect("/integrations?github=error");
+      res.redirect("/?error=github_login_failed");
     }
   });
 

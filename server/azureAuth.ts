@@ -270,13 +270,32 @@ export async function setupAuth(app: Express) {
     }
   });
 
-  // Microsoft OAuth logout (Azure AD)
+  // Logout endpoint (handles both Azure AD and GitHub OAuth)
   app.get("/api/logout", (req, res) => {
+    const baseUrl = (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, "");
+
+    // Check if user is logged in via Azure AD
+    const isAzureUser = req.user && (req.user as any).oid;
+
     req.logout(() => {
-      const baseUrl = (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, "");
-      const logoutUrl = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/logout?` +
-        `post_logout_redirect_uri=${encodeURIComponent(baseUrl)}`;
-      res.redirect(logoutUrl);
+      // Clear session
+      if (req.session) {
+        req.session.destroy((err) => {
+          if (err) {
+            console.error('Session destruction error:', err);
+          }
+        });
+      }
+
+      // If Azure AD user, redirect through Azure logout
+      if (isAzureUser && process.env.AZURE_TENANT_ID) {
+        const logoutUrl = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/logout?` +
+          `post_logout_redirect_uri=${encodeURIComponent(baseUrl)}`;
+        return res.redirect(logoutUrl);
+      }
+
+      // For GitHub users or unauthenticated, redirect directly to landing page
+      res.redirect("/");
     });
   });
 

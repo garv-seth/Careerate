@@ -7,7 +7,7 @@ import { LoginModal } from "@/components/LoginModal";
 import { cn } from "@/lib/utils";
 
 const Logo = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
-    <Link href={isAuthenticated ? "/#agent" : "/"} className="flex items-center gap-3 group pl-2">
+    <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center gap-3 group pl-2">
         <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:scale-110">
             <path d="M20 0L24.4903 15.5097L40 20L24.4903 24.4903L20 40L15.5097 24.4903L0 20L15.5097 15.5097L20 0Z" fill="url(#logo-gradient)"/>
             <defs>
@@ -137,36 +137,33 @@ export function AppShell({ children, className }: { children: ReactNode; classNa
 
     const AuthenticatedNav = () => (
         <>
-            <a
-                href="/#agent"
-                className={cn(
+            <Link href="/dashboard#agent">
+                <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
                     "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}
-            >
-                <Brain className="h-4 w-4 mr-2" />
-                Cara
-            </a>
-            <a
-                href="/#projects"
-                className={cn(
+                )}>
+                    <Brain className="h-4 w-4 mr-2" />
+                    Cara
+                </a>
+            </Link>
+            <Link href="/dashboard#projects">
+                <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
                     "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}
-            >
-                <GitBranch className="h-4 w-4 mr-2" />
-                Projects
-            </a>
-            <a
-                href="/#overview"
-                className={cn(
+                )}>
+                    <GitBranch className="h-4 w-4 mr-2" />
+                    Projects
+                </a>
+            </Link>
+            <Link href="/dashboard#overview">
+                <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
                     "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}
-            >
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Overview
-            </a>
+                )}>
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Overview
+                </a>
+            </Link>
         </>
     );
 
