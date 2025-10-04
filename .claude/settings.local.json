@@ -71,7 +71,9 @@
       "Bash(for:*)",
       "Bash(do echo \"Deactivating $rev\")",
       "Bash(az containerapp revision deactivate:*)",
-      "Bash(az containerapp revision set-mode:*)"
+      "Bash(az containerapp revision set-mode:*)",
+      "Bash(rm:*)",
+      "Bash(npm ls:*)"
     ],
     "deny": [],
     "ask": []

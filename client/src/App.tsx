@@ -7,9 +7,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DeploymentInfo } from "@/components/DeploymentInfo";
 import { CookieConsent } from "@/components/CookieConsent";
+import Landing from "@/pages/landing-new";
 
-// Lazy load pages for better performance
-const Landing = lazy(() => import("@/pages/landing-new"));
+// Lazy load pages for better performance (except Landing which is the entry point)
 const Dashboard = lazy(() => import("@/pages/dashboard"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 const IntegrationsPage = lazy(() => import("@/pages/integrations"));
