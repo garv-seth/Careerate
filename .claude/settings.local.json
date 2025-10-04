@@ -60,7 +60,18 @@
       "Bash(do echo \"=== $file ===\")",
       "Bash(done)",
       "Bash(xargs:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:gocareerate.com)",
+      "Bash(az containerapp secret list:*)",
+      "Bash(az acr repository show-tags:*)",
+      "Bash(az acr repository:*)",
+      "Bash(az postgres flexible-server show:*)",
+      "Bash(az monitor activity-log list:*)",
+      "Bash(az containerapp list:*)",
+      "Bash(for:*)",
+      "Bash(do echo \"Deactivating $rev\")",
+      "Bash(az containerapp revision deactivate:*)",
+      "Bash(az containerapp revision set-mode:*)"
     ],
     "deny": [],
     "ask": []
