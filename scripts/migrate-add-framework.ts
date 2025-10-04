@@ -1,5 +1,4 @@
-import { neonConfig, Pool } from '@neondatabase/serverless';
-import ws from 'ws';
+import { Pool } from 'pg';
 
 async function main() {
   try {
@@ -8,7 +7,6 @@ async function main() {
       console.error('DATABASE_URL is not set');
       process.exit(1);
     }
-    neonConfig.webSocketConstructor = ws as unknown as any;
     const pool = new Pool({ connectionString: url });
 
     // Add framework column if missing
