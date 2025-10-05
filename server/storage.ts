@@ -14,6 +14,11 @@ import {
   deployments,
   healthChecks,
   incidents,
+  deploymentPlans,
+  alertChannels,
+  alertRules,
+  scalingPolicies,
+  deploymentEvents,
   type User,
   type UpsertUser,
   type Project,
@@ -51,7 +56,17 @@ import {
   type HealthCheck,
   type InsertHealthCheck,
   type Incident,
-  type InsertIncident
+  type InsertIncident,
+  type DeploymentPlan,
+  type InsertDeploymentPlan,
+  type AlertChannel,
+  type InsertAlertChannel,
+  type AlertRule,
+  type InsertAlertRule,
+  type ScalingPolicy,
+  type InsertScalingPolicy,
+  type DeploymentEvent,
+  type InsertDeploymentEvent
 } from "@shared/schema";
 
 // Recent Activity Type
