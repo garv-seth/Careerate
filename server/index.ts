@@ -109,12 +109,19 @@ app.get('/api/health', (req, res) => {
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
     const port = parseInt(process.env.PORT || '5000', 10);
+    
+    // Import collaborationServer to initialize WebSocket AFTER server starts
+    const { collaborationServer } = await import("./services/collaborationServer");
+    
     server.listen(port, "0.0.0.0", () => {
       log(`serving on port ${port}`);
       console.log(`🚀 Careerate server running on port ${port}`);
       console.log(`🔗 Production URL: https://gocareerate.com`);
       console.log(`🔗 Direct URL: https://careerate-web.politetree-6f564ad5.westus2.azurecontainerapps.io`);
 
+      // Initialize WebSocket server AFTER HTTP server is listening
+      collaborationServer.initialize(server);
+      
       // Start health monitoring agent for all active deployments
       healthMonitor.start().then(() => {
         console.log(`🏥 Health Monitor started - monitoring active deployments`);
