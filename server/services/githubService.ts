@@ -323,17 +323,24 @@ export class GitHubService {
     });
 
     // Store encrypted token
+    const { encrypted, iv, authTag } = this.encryptToken(token);
     await storage.createIntegrationSecret({
       integrationId: integration.id,
       secretType: 'oauth-token',
       secretName: 'github_token',
-      encryptedValue: token, // TODO: encrypt this properly
+      encryptedValue: `${encrypted}:${iv}:${authTag}`,
       encryptionAlgorithm: 'AES-256-GCM',
       environment: 'all',
       scope: [],
-      rotationPolicy: {},
+      rotationPolicy: {
+        enabled: true,
+        intervalDays: 90,
+        lastRotated: new Date().toISOString()
+      },
       isActive: true,
-      metadata: {}
+      metadata: {
+        tokenScopes: ['repo', 'read:org', 'user:email']
+      }
     });
 
     // Create repository connection record
