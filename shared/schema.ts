@@ -1361,6 +1361,70 @@ export const insertIncidentSchema = createInsertSchema(incidents).pick({
   resolvedAt: true,
 });
 
+export const insertDeploymentPlanSchema = createInsertSchema(deploymentPlans).pick({
+  projectId: true,
+  userId: true,
+  name: true,
+  description: true,
+  nlInput: true,
+  status: true,
+  provider: true,
+  region: true,
+  estimatedCost: true,
+  resources: true,
+  configuration: true,
+  approvedBy: true,
+  approvedAt: true,
+  rejectedReason: true,
+  deploymentId: true,
+  metadata: true,
+});
+
+export const insertAlertChannelSchema = createInsertSchema(alertChannels).pick({
+  userId: true,
+  projectId: true,
+  name: true,
+  type: true,
+  configuration: true,
+  isActive: true,
+  metadata: true,
+});
+
+export const insertAlertRuleSchema = createInsertSchema(alertRules).pick({
+  projectId: true,
+  name: true,
+  description: true,
+  condition: true,
+  severity: true,
+  channels: true,
+  cooldownMinutes: true,
+  isActive: true,
+  metadata: true,
+});
+
+export const insertScalingPolicySchema = createInsertSchema(scalingPolicies).pick({
+  projectId: true,
+  deploymentId: true,
+  name: true,
+  metricType: true,
+  scaleUpThreshold: true,
+  scaleDownThreshold: true,
+  minReplicas: true,
+  maxReplicas: true,
+  cooldownSeconds: true,
+  isActive: true,
+  metadata: true,
+});
+
+export const insertDeploymentEventSchema = createInsertSchema(deploymentEvents).pick({
+  deploymentId: true,
+  eventType: true,
+  step: true,
+  message: true,
+  details: true,
+  severity: true,
+});
+
 // Type exports for deployment tables
 export type Deployment = typeof deployments.$inferSelect;
 export type InsertDeployment = z.infer<typeof insertDeploymentSchema>;
@@ -1368,3 +1432,13 @@ export type HealthCheck = typeof healthChecks.$inferSelect;
 export type InsertHealthCheck = z.infer<typeof insertHealthCheckSchema>;
 export type Incident = typeof incidents.$inferSelect;
 export type InsertIncident = z.infer<typeof insertIncidentSchema>;
+export type DeploymentPlan = typeof deploymentPlans.$inferSelect;
+export type InsertDeploymentPlan = z.infer<typeof insertDeploymentPlanSchema>;
+export type AlertChannel = typeof alertChannels.$inferSelect;
+export type InsertAlertChannel = z.infer<typeof insertAlertChannelSchema>;
+export type AlertRule = typeof alertRules.$inferSelect;
+export type InsertAlertRule = z.infer<typeof insertAlertRuleSchema>;
+export type ScalingPolicy = typeof scalingPolicies.$inferSelect;
+export type InsertScalingPolicy = z.infer<typeof insertScalingPolicySchema>;
+export type DeploymentEvent = typeof deploymentEvents.$inferSelect;
+export type InsertDeploymentEvent = z.infer<typeof insertDeploymentEventSchema>;
