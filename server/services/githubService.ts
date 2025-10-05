@@ -26,12 +26,61 @@ export interface GitHubRepository {
 
 export class GitHubService {
   private octokit: Octokit | null = null;
+  private readonly ENCRYPTION_ALGORITHM = 'aes-256-gcm';
 
   /**
    * Initialize Octokit client with user's token
    */
   private getClient(token: string): Octokit {
     return new Octokit({ auth: token });
+  }
+
+  /**
+   * Encrypt OAuth token using AES-256-GCM
+   */
+  private encryptToken(token: string): { encrypted: string; iv: string; authTag: string } {
+    const encryptionKey = process.env.ENCRYPTION_KEY || process.env.AZURE_KEY_VAULT_URI;
+    if (!encryptionKey) {
+      throw new Error('ENCRYPTION_KEY environment variable not set');
+    }
+
+    const iv = crypto.randomBytes(16);
+    const key = Buffer.from(encryptionKey.slice(0, 64), 'hex').slice(0, 32);
+    const cipher = crypto.createCipheriv(this.ENCRYPTION_ALGORITHM, key, iv);
+
+    let encrypted = cipher.update(token, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    const authTag = cipher.getAuthTag();
+
+    return {
+      encrypted,
+      iv: iv.toString('hex'),
+      authTag: authTag.toString('hex')
+    };
+  }
+
+  /**
+   * Decrypt OAuth token
+   */
+  private decryptToken(encrypted: string, iv: string, authTag: string): string {
+    const encryptionKey = process.env.ENCRYPTION_KEY || process.env.AZURE_KEY_VAULT_URI;
+    if (!encryptionKey) {
+      throw new Error('ENCRYPTION_KEY environment variable not set');
+    }
+
+    const key = Buffer.from(encryptionKey.slice(0, 64), 'hex').slice(0, 32);
+    const decipher = crypto.createDecipheriv(
+      this.ENCRYPTION_ALGORITHM,
+      key,
+      Buffer.from(iv, 'hex')
+    );
+
+    decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    return decrypted;
   }
 
   /**
