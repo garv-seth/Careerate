@@ -113,6 +113,19 @@ app.get('/api/health', (req, res) => {
     // Import collaborationServer to initialize WebSocket AFTER server starts
     const { collaborationServer } = await import("./services/collaborationServer");
     
+    server.on('error', (error: any) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${port} is already in use. Retrying in 2 seconds...`);
+        setTimeout(() => {
+          server.close();
+          server.listen(port, "0.0.0.0");
+        }, 2000);
+      } else {
+        console.error('❌ Server error:', error);
+        process.exit(1);
+      }
+    });
+
     server.listen(port, "0.0.0.0", () => {
       log(`serving on port ${port}`);
       console.log(`🚀 Careerate server running on port ${port}`);
