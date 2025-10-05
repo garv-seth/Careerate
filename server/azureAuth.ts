@@ -4,12 +4,11 @@ import type { Express, RequestHandler } from "express";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 
-if (!process.env.AZURE_TENANT_ID) {
-  throw new Error("Environment variable AZURE_TENANT_ID not provided");
-}
+const AZURE_AUTH_ENABLED = !!(process.env.AZURE_TENANT_ID && process.env.AZURE_CLIENT_ID);
 
-if (!process.env.AZURE_CLIENT_ID) {
-  throw new Error("Environment variable AZURE_CLIENT_ID not provided");
+if (!AZURE_AUTH_ENABLED) {
+  console.warn("⚠️  Azure AD authentication is disabled - AZURE_TENANT_ID or AZURE_CLIENT_ID not provided");
+  console.warn("   App will run in development mode without Azure AD authentication");
 }
 
 interface UserPayload {
