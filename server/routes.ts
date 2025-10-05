@@ -3967,6 +3967,182 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // =====================================================
+  // Alert Management API
+  // =====================================================
+
+  // Create alert channel
+  app.post("/api/alert-channels", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { name, type, configuration, projectId } = req.body;
+
+      const channel = await storage.createAlertChannel({
+        userId,
+        projectId: projectId || null,
+        name,
+        type,
+        configuration,
+        isActive: true,
+        metadata: {}
+      });
+
+      res.json(channel);
+    } catch (error) {
+      console.error('Create alert channel error:', error);
+      res.status(500).json({ message: "Failed to create alert channel" });
+    }
+  });
+
+  // Get user's alert channels
+  app.get("/api/alert-channels", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const channels = await storage.getUserAlertChannels(userId);
+      res.json(channels);
+    } catch (error) {
+      console.error('Get alert channels error:', error);
+      res.status(500).json({ message: "Failed to retrieve alert channels" });
+    }
+  });
+
+  // Create alert rule
+  app.post("/api/projects/:projectId/alert-rules", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId } = req.params;
+      const { name, description, condition, severity, channels, cooldownMinutes } = req.body;
+
+      await validateProjectOwnership(projectId, userId);
+
+      const rule = await storage.createAlertRule({
+        projectId,
+        name,
+        description,
+        condition,
+        severity,
+        channels,
+        cooldownMinutes,
+        isActive: true,
+        metadata: {}
+      });
+
+      res.json(rule);
+    } catch (error) {
+      console.error('Create alert rule error:', error);
+      res.status(500).json({ message: "Failed to create alert rule" });
+    }
+  });
+
+  // Get project alert rules
+  app.get("/api/projects/:projectId/alert-rules", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId } = req.params;
+
+      await validateProjectOwnership(projectId, userId);
+
+      const rules = await storage.getProjectAlertRules(projectId);
+      res.json(rules);
+    } catch (error) {
+      console.error('Get alert rules error:', error);
+      res.status(500).json({ message: "Failed to retrieve alert rules" });
+    }
+  });
+
+  // Test alert (send test notification)
+  app.post("/api/alert-channels/:channelId/test", isAuthenticated, async (req, res) => {
+    try {
+      const { channelId } = req.params;
+      const { alertService } = await import("./services/alertService");
+
+      await alertService.sendAlert({
+        title: "Test Alert",
+        message: "This is a test alert from Careerate. If you receive this, your alert channel is configured correctly!",
+        severity: "info",
+        projectId: "test",
+        metadata: { test: true }
+      }, [channelId]);
+
+      res.json({ success: true, message: "Test alert sent" });
+    } catch (error) {
+      console.error('Test alert error:', error);
+      res.status(500).json({ message: "Failed to send test alert" });
+    }
+  });
+
+  // =====================================================
+  // Scaling Policy API
+  // =====================================================
+
+  // Create scaling policy
+  app.post("/api/projects/:projectId/scaling-policies", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId } = req.params;
+      const { 
+        name, deploymentId, metricType, scaleUpThreshold, scaleDownThreshold,
+        minReplicas, maxReplicas, cooldownSeconds 
+      } = req.body;
+
+      await validateProjectOwnership(projectId, userId);
+
+      const policy = await storage.createScalingPolicy({
+        projectId,
+        deploymentId: deploymentId || null,
+        name,
+        metricType,
+        scaleUpThreshold,
+        scaleDownThreshold,
+        minReplicas,
+        maxReplicas,
+        cooldownSeconds,
+        isActive: true,
+        metadata: {}
+      });
+
+      res.json(policy);
+    } catch (error) {
+      console.error('Create scaling policy error:', error);
+      res.status(500).json({ message: "Failed to create scaling policy" });
+    }
+  });
+
+  // Get project scaling policies
+  app.get("/api/projects/:projectId/scaling-policies", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId } = req.params;
+
+      await validateProjectOwnership(projectId, userId);
+
+      const policies = await storage.getProjectScalingPolicies(projectId);
+      res.json(policies);
+    } catch (error) {
+      console.error('Get scaling policies error:', error);
+      res.status(500).json({ message: "Failed to retrieve scaling policies" });
+    }
+  });
+
+  // Evaluate scaling for deployment (manual trigger)
+  app.post("/api/deployments/:deploymentId/evaluate-scaling", isAuthenticated, async (req, res) => {
+    try {
+      const { deploymentId } = req.params;
+      const { metrics } = req.body;
+      const { scalingService } = await import("./services/scalingService");
+
+      const decision = await scalingService.evaluateScaling(deploymentId, metrics);
+
+      res.json({
+        success: true,
+        decision
+      });
+    } catch (error) {
+      console.error('Evaluate scaling error:', error);
+      res.status(500).json({ message: "Failed to evaluate scaling" });
+    }
+  });
+
+  // =====================================================
   // Vibe Hosting API Endpoints
   // =====================================================
 
