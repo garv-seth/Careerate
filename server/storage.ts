@@ -3093,6 +3093,199 @@ export class DatabaseStorage implements IStorage {
       orderBy: desc(incidents.createdAt)
     });
   }
+
+  // =====================================================
+  // DEPLOYMENT PLAN OPERATIONS
+  // =====================================================
+
+  async createDeploymentPlan(plan: InsertDeploymentPlan) {
+    const [result] = await db.insert(deploymentPlans).values(plan).returning();
+    return result;
+  }
+
+  async updateDeploymentPlan(id: string, updates: Partial<InsertDeploymentPlan>) {
+    const [result] = await db
+      .update(deploymentPlans)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(deploymentPlans.id, id))
+      .returning();
+    return result;
+  }
+
+  async getDeploymentPlan(id: string) {
+    return db.query.deploymentPlans.findFirst({
+      where: eq(deploymentPlans.id, id)
+    });
+  }
+
+  async getProjectDeploymentPlans(projectId: string) {
+    return db.query.deploymentPlans.findMany({
+      where: eq(deploymentPlans.projectId, projectId),
+      orderBy: desc(deploymentPlans.createdAt)
+    });
+  }
+
+  async getUserPendingPlans(userId: string) {
+    return db.query.deploymentPlans.findMany({
+      where: and(
+        eq(deploymentPlans.userId, userId),
+        eq(deploymentPlans.status, 'pending')
+      ),
+      orderBy: desc(deploymentPlans.createdAt)
+    });
+  }
+
+  // =====================================================
+  // ALERT CHANNEL OPERATIONS
+  // =====================================================
+
+  async createAlertChannel(channel: InsertAlertChannel) {
+    const [result] = await db.insert(alertChannels).values(channel).returning();
+    return result;
+  }
+
+  async updateAlertChannel(id: string, updates: Partial<InsertAlertChannel>) {
+    const [result] = await db
+      .update(alertChannels)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(alertChannels.id, id))
+      .returning();
+    return result;
+  }
+
+  async getAlertChannel(id: string) {
+    return db.query.alertChannels.findFirst({
+      where: eq(alertChannels.id, id)
+    });
+  }
+
+  async getUserAlertChannels(userId: string) {
+    return db.query.alertChannels.findMany({
+      where: eq(alertChannels.userId, userId),
+      orderBy: desc(alertChannels.createdAt)
+    });
+  }
+
+  async getProjectAlertChannels(projectId: string) {
+    return db.query.alertChannels.findMany({
+      where: eq(alertChannels.projectId, projectId)
+    });
+  }
+
+  // =====================================================
+  // ALERT RULE OPERATIONS
+  // =====================================================
+
+  async createAlertRule(rule: InsertAlertRule) {
+    const [result] = await db.insert(alertRules).values(rule).returning();
+    return result;
+  }
+
+  async updateAlertRule(id: string, updates: Partial<InsertAlertRule>) {
+    const [result] = await db
+      .update(alertRules)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(alertRules.id, id))
+      .returning();
+    return result;
+  }
+
+  async getAlertRule(id: string) {
+    return db.query.alertRules.findFirst({
+      where: eq(alertRules.id, id)
+    });
+  }
+
+  async getProjectAlertRules(projectId: string) {
+    return db.query.alertRules.findMany({
+      where: eq(alertRules.projectId, projectId),
+      orderBy: desc(alertRules.createdAt)
+    });
+  }
+
+  async getActiveAlertRules(projectId: string) {
+    return db.query.alertRules.findMany({
+      where: and(
+        eq(alertRules.projectId, projectId),
+        eq(alertRules.isActive, true)
+      )
+    });
+  }
+
+  // =====================================================
+  // SCALING POLICY OPERATIONS
+  // =====================================================
+
+  async createScalingPolicy(policy: InsertScalingPolicy) {
+    const [result] = await db.insert(scalingPolicies).values(policy).returning();
+    return result;
+  }
+
+  async updateScalingPolicy(id: string, updates: Partial<InsertScalingPolicy>) {
+    const [result] = await db
+      .update(scalingPolicies)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(scalingPolicies.id, id))
+      .returning();
+    return result;
+  }
+
+  async getScalingPolicy(id: string) {
+    return db.query.scalingPolicies.findFirst({
+      where: eq(scalingPolicies.id, id)
+    });
+  }
+
+  async getProjectScalingPolicies(projectId: string) {
+    return db.query.scalingPolicies.findMany({
+      where: eq(scalingPolicies.projectId, projectId),
+      orderBy: desc(scalingPolicies.createdAt)
+    });
+  }
+
+  async getDeploymentScalingPolicies(deploymentId: string) {
+    return db.query.scalingPolicies.findMany({
+      where: eq(scalingPolicies.deploymentId, deploymentId)
+    });
+  }
+
+  // =====================================================
+  // DEPLOYMENT EVENT OPERATIONS (for SSE)
+  // =====================================================
+
+  async createDeploymentEvent(event: InsertDeploymentEvent) {
+    const [result] = await db.insert(deploymentEvents).values(event).returning();
+    return result;
+  }
+
+  async getDeploymentEvents(deploymentId: string, limit: number = 100) {
+    return db.query.deploymentEvents.findMany({
+      where: eq(deploymentEvents.deploymentId, deploymentId),
+      orderBy: desc(deploymentEvents.timestamp),
+      limit
+    });
+  }
+
+  async getDeploymentEventsByStep(deploymentId: string, step: string) {
+    return db.query.deploymentEvents.findMany({
+      where: and(
+        eq(deploymentEvents.deploymentId, deploymentId),
+        eq(deploymentEvents.step, step)
+      ),
+      orderBy: desc(deploymentEvents.timestamp)
+    });
+  }
+
+  // Helper method to increment secret access count
+  async incrementSecretAccessCount(secretId: string) {
+    const secret = await this.getIntegrationSecret(secretId);
+    if (secret) {
+      await this.updateIntegrationSecret(secretId, {
+        accessCount: (secret.accessCount || 0) + 1,
+        lastAccessed: new Date()
+      });
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();
