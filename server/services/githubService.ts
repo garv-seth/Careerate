@@ -126,6 +126,88 @@ export class GitHubService {
   }
 
   /**
+   * Get decrypted GitHub token from storage
+   */
+  async getDecryptedToken(integrationId: string): Promise<string> {
+    const secret = await storage.getSecretByName(integrationId, 'github_token');
+    if (!secret || !secret.isActive) {
+      throw new Error('GitHub token not found or inactive');
+    }
+
+    const [encrypted, iv, authTag] = secret.encryptedValue.split(':');
+    const token = this.decryptToken(encrypted, iv, authTag);
+
+    // Update last accessed timestamp
+    await storage.updateIntegrationSecret(secret.id, {
+      lastAccessed: new Date(),
+      accessCount: (secret.accessCount || 0) + 1
+    });
+
+    // Check if rotation is needed
+    if (secret.rotationPolicy && (secret.rotationPolicy as any).enabled) {
+      const lastRotated = new Date((secret.rotationPolicy as any).lastRotated || secret.createdAt);
+      const daysSinceRotation = Math.floor((Date.now() - lastRotated.getTime()) / (1000 * 60 * 60 * 24));
+      const intervalDays = (secret.rotationPolicy as any).intervalDays || 90;
+
+      if (daysSinceRotation >= intervalDays) {
+        // Token needs rotation - log for admin action
+        await storage.createIntegrationAuditLog({
+          integrationId,
+          userId: null,
+          action: 'rotation_needed',
+          resourceType: 'secret',
+          resourceId: secret.id,
+          details: {
+            secretName: secret.secretName,
+            daysSinceRotation,
+            message: 'OAuth token requires rotation'
+          },
+          risk: 'medium',
+          complianceFlags: ['token-rotation-due'],
+          metadata: {}
+        });
+      }
+    }
+
+    return token;
+  }
+
+  /**
+   * Rotate GitHub OAuth token
+   */
+  async rotateToken(userId: string, integrationId: string, newToken: string): Promise<void> {
+    const { encrypted, iv, authTag } = this.encryptToken(newToken);
+
+    const existingSecret = await storage.getSecretByName(integrationId, 'github_token');
+    if (existingSecret) {
+      await storage.updateIntegrationSecret(existingSecret.id, {
+        encryptedValue: `${encrypted}:${iv}:${authTag}`,
+        lastRotated: new Date(),
+        rotationPolicy: {
+          ...(existingSecret.rotationPolicy as any || {}),
+          lastRotated: new Date().toISOString()
+        }
+      });
+
+      // Log rotation
+      await storage.createIntegrationAuditLog({
+        integrationId,
+        userId,
+        action: 'rotated',
+        resourceType: 'secret',
+        resourceId: existingSecret.id,
+        details: {
+          secretName: 'github_token',
+          rotatedAt: new Date().toISOString()
+        },
+        risk: 'high',
+        complianceFlags: ['manual-rotation'],
+        metadata: {}
+      });
+    }
+  }
+
+  /**
    * List user's repositories
    */
   async listRepositories(token: string, type: 'all' | 'owner' | 'public' | 'private' = 'all'): Promise<GitHubRepository[]> {
