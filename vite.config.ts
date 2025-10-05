@@ -24,7 +24,7 @@ export default defineConfig({
       deny: ["**/.*"],
     },
     hmr: {
-      port: 5000,
+      clientPort: 5173, // Use default Vite port for HMR
       host: "0.0.0.0",
     },
   },
