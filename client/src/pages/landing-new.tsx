@@ -167,13 +167,14 @@ const Footer = () => (
 
 export default function LandingNew() {
   const { isAuthenticated, isLoading } = useAuth();
+  const [, setLocation] = useLocation();
 
-  // Redirect authenticated users to dashboard with full page reload to avoid hook conflicts
+  // Redirect authenticated users to dashboard
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      window.location.href = '/dashboard';
+      setLocation("/dashboard");
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading, setLocation]);
 
   const handleImportFromGitHub = () => {
     // Initiate GitHub OAuth flow
