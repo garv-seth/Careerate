@@ -90,6 +90,7 @@ export class DeploymentManager {
       });
 
       logs.push(`Deployment record created: ${deployment.id}`);
+      await this.emitDeploymentEvent(deployment.id, 'step_start', 'initialization', 'Deployment initialized', { version: options.version });
 
       // Get project files and configuration
       const project = await storage.getProject(options.projectId);
