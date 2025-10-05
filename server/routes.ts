@@ -76,9 +76,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup Replit Auth first
   await setupAuth(app);
 
-  // Create HTTP server and initialize WebSocket collaboration
+  // Create HTTP server (WebSocket will be initialized after server starts listening)
   const server = createServer(app);
-  collaborationServer.initialize(server);
 
   // Request correlation ID middleware
   app.use((req, res, next) => {
