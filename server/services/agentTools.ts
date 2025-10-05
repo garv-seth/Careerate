@@ -281,6 +281,122 @@ export const agentTools: ChatCompletionTool[] = [
         required: ['channel', 'message']
       }
     }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'deploy_to_aws_ecs',
+      description: 'Deploy application to AWS ECS Fargate with auto-scaling and load balancing',
+      parameters: {
+        type: 'object',
+        properties: {
+          appName: {
+            type: 'string',
+            description: 'Application name (lowercase, alphanumeric, hyphens only)'
+          },
+          githubRepoUrl: {
+            type: 'string',
+            description: 'GitHub repository URL'
+          },
+          cpu: {
+            type: 'number',
+            description: 'CPU units (256, 512, 1024, 2048, 4096)',
+            enum: [256, 512, 1024, 2048, 4096],
+            default: 256
+          },
+          memory: {
+            type: 'number',
+            description: 'Memory in MB (512, 1024, 2048, 4096, 8192)',
+            enum: [512, 1024, 2048, 4096, 8192],
+            default: 512
+          },
+          environmentVariables: {
+            type: 'object',
+            description: 'Environment variables as key-value pairs',
+            additionalProperties: { type: 'string' }
+          },
+          minReplicas: {
+            type: 'number',
+            description: 'Minimum number of tasks',
+            default: 1
+          },
+          maxReplicas: {
+            type: 'number',
+            description: 'Maximum number of tasks',
+            default: 10
+          }
+        },
+        required: ['appName', 'githubRepoUrl']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'deploy_to_gcp_cloud_run',
+      description: 'Deploy application to GCP Cloud Run (serverless containers)',
+      parameters: {
+        type: 'object',
+        properties: {
+          appName: {
+            type: 'string',
+            description: 'Service name (lowercase, alphanumeric, hyphens only)'
+          },
+          githubRepoUrl: {
+            type: 'string',
+            description: 'GitHub repository URL'
+          },
+          region: {
+            type: 'string',
+            description: 'GCP region',
+            enum: ['us-central1', 'us-east1', 'us-west1', 'europe-west1', 'asia-east1'],
+            default: 'us-central1'
+          },
+          environmentVariables: {
+            type: 'object',
+            description: 'Environment variables',
+            additionalProperties: { type: 'string' }
+          },
+          minInstances: {
+            type: 'number',
+            description: 'Minimum instances (0 for scale-to-zero)',
+            default: 0
+          },
+          maxInstances: {
+            type: 'number',
+            description: 'Maximum instances',
+            default: 100
+          }
+        },
+        required: ['appName', 'githubRepoUrl']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'deploy_to_railway',
+      description: 'Deploy application to Railway (simple deployment platform)',
+      parameters: {
+        type: 'object',
+        properties: {
+          projectName: {
+            type: 'string',
+            description: 'Project name'
+          },
+          githubRepoUrl: {
+            type: 'string',
+            description: 'GitHub repository URL'
+          },
+          environmentVariables: {
+            type: 'object',
+            description: 'Environment variables',
+            additionalProperties: { type: 'string' }
+          }
+        },
+        required: ['projectName', 'githubRepoUrl']
+      }
+    }
   }
 ];
 

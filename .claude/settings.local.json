@@ -81,7 +81,8 @@
       "Bash(export DATABASE_URL=\"postgresql://careerateadmin:Careerate2024!@#PostgresAdmin@careerate-postgres.postgres.database.azure.com/careerate?sslmode=require\")",
       "Bash(npx drizzle-kit:*)",
       "Bash(gh run watch:*)",
-      "Bash(npm run build:production:*)"
+      "Bash(npm run build:production:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []
