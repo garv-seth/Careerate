@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import fetch from "node-fetch";
 import { storage } from "../storage";
+import { sseService } from "./sseService";
 import { 
   Deployment, 
   InsertDeployment, 
