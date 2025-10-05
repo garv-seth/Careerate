@@ -5,6 +5,7 @@
 
 import { Octokit } from "@octokit/rest";
 import { storage } from "../storage";
+import crypto from "crypto";
 
 export interface GitHubRepository {
   id: number;
