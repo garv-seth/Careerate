@@ -51,7 +51,7 @@ export function CookieConsent() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-3xl px-4"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-3xl px-4"
         >
           <div className="glass-pane rounded-2xl p-4">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -62,11 +62,11 @@ export function CookieConsent() {
                 </Link>
                 {" "}for details.
               </p>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2 flex-shrink-0">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-full border-border text-foreground hover:bg-primary/10 text-xs"
+                  className="rounded-full border-border text-foreground hover:bg-primary/10 text-xs flex-1 sm:flex-none"
                   onClick={handleDeclineAll}
                 >
                   Decline
@@ -74,14 +74,14 @@ export function CookieConsent() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="rounded-full border-border text-foreground hover:bg-primary/10 text-xs"
+                  className="rounded-full border-border text-foreground hover:bg-primary/10 text-xs flex-1 sm:flex-none"
                   onClick={handleCustomize}
                 >
                   Customize
                 </Button>
                 <Button
                   size="sm"
-                  className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25 text-xs whitespace-nowrap"
+                  className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25 text-xs whitespace-nowrap flex-1 sm:flex-none"
                   onClick={handleAcceptAll}
                 >
                   Accept All

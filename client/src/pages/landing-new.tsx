@@ -4,6 +4,9 @@ import { AppShell } from "@/components/AppShell";
 import { GradientDots } from "@/components/ui/gradient-dots";
 import CybercoreBackground from "@/components/ui/cybercore-section-hero";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+import { useLocation } from "wouter";
+import { useEffect } from "react";
 
 const FeatureCard = ({ icon: Icon, title, description, colorClass, index }: { icon: React.ElementType, title: string, description: string, colorClass: string, index?: number }) => (
     <motion.div
@@ -163,6 +166,16 @@ const Footer = () => (
 
 
 export default function LandingNew() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const [, setLocation] = useLocation();
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      setLocation("/dashboard");
+    }
+  }, [isAuthenticated, isLoading, setLocation]);
+
   const handleImportFromGitHub = () => {
     // Initiate GitHub OAuth flow
     window.location.href = '/api/integrations/github/oauth/initiate';
@@ -173,63 +186,70 @@ export default function LandingNew() {
     handleImportFromGitHub();
   };
 
-  return (
-    <AppShell className="bg-transparent">
-      {/* Hero Section with Cybercore Background */}
-      <div className="relative min-h-screen overflow-hidden bg-black text-foreground -mt-24 md:-mt-28">
-        {/* Cybercore Grid Background */}
-        <CybercoreBackground beamCount={70} />
+  // Don't render landing page if user is authenticated (they'll be redirected)
+  if (isAuthenticated) {
+    return null;
+  }
 
-        {/* Content Wrapper */}
-        <div className="content-wrapper relative z-10">
-          <main className="hero-section flex flex-col items-center justify-center min-h-screen text-center px-4 pt-32">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
-            >
-              Vibe Hosting
-              <br />
-              For the Vibe Coding Era
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
-            >
-              Built with Cursor? Ship with Careerate. Tell our AI what you need—it picks the best cloud (AWS, Azure, GCP, Vercel, Railway), shows you the costs, and ships your app. Zero DevOps required.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-            >
-              <Button
-                size="lg"
-                onClick={handleGetStarted}
-                className="cta-button rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40"
+  return (
+    <div className="min-h-screen flex flex-col">
+      <AppShell className="bg-transparent flex-1">
+        {/* Hero Section with Cybercore Background */}
+        <div className="relative min-h-screen overflow-hidden bg-black text-foreground -mt-24 md:-mt-28">
+          {/* Cybercore Grid Background */}
+          <CybercoreBackground beamCount={70} />
+
+          {/* Content Wrapper */}
+          <div className="content-wrapper relative z-10">
+            <main className="hero-section flex flex-col items-center justify-center min-h-screen text-center px-4 pt-32">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
               >
-                <Sparkles className="mr-2 h-5 w-5" />
-                Import from GitHub
-              </Button>
-            </motion.div>
-          </main>
+                Vibe Hosting
+                <br />
+                For the Vibe Coding Era
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
+              >
+                Built with Cursor? Ship with Careerate. Tell our AI what you need—it picks the best cloud (AWS, Azure, GCP, Vercel, Railway), shows you the costs, and ships your app. Zero DevOps required.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+              >
+                <Button
+                  size="lg"
+                  onClick={handleGetStarted}
+                  className="cta-button rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40"
+                >
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Import from GitHub
+                </Button>
+              </motion.div>
+            </main>
+          </div>
+
+          {/* Gradient Transition to Features */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-black/50 to-[#090806] pointer-events-none z-20" />
         </div>
 
-        {/* Gradient Transition to Features */}
-        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-black/50 to-[#090806] pointer-events-none z-20" />
-      </div>
-
-      {/* Structured content area */}
-      <div className="relative z-10 bg-[#090806]">
-        <Features />
-        <Pricing />
-        <Docs />
-        <CTA onImportClick={handleImportFromGitHub} />
-        <Footer />
-      </div>
-    </AppShell>
+        {/* Structured content area */}
+        <div className="relative z-10 bg-[#090806]">
+          <Features />
+          <Pricing />
+          <Docs />
+          <CTA onImportClick={handleImportFromGitHub} />
+          <Footer />
+        </div>
+      </AppShell>
+    </div>
   );
 }
