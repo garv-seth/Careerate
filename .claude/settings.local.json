@@ -13,7 +13,7 @@
       "Bash(npx dotenv-cli:*)",
       "Bash(az ad sp credential reset:*)",
       "Bash(unset:*)",
-      "Bash(export AZURE_SUBSCRIPTION_ID=46c583cc-1f11-4953-9502-d8d723fca7e9)",
+      "Bash(export AZURE_SUBSCRIPTION_ID=careerate)",
       "Bash(az containerapp env show:*)",
       "Bash(curl -s https://careerate-test-1759263401844.politetree-6f564ad5.westus2.azurecontainerapps.io)",
       "Bash(curl -s https://careerate-test-1759263401844.politetree-6f564ad5.westus2.azurecontainerapps.io/health)",
