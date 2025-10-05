@@ -3821,6 +3821,153 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // =====================================================
+  // Deployment Plans API - NL to Plan Workflow
+  // =====================================================
+
+  // Generate deployment plan from natural language
+  app.post("/api/deployment-plans/generate", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId, nlInput, repositoryInfo, context } = req.body;
+
+      if (!projectId || !nlInput) {
+        return res.status(400).json({ message: "Project ID and natural language input are required" });
+      }
+
+      // Validate project ownership
+      await validateProjectOwnership(projectId, userId);
+
+      const { deploymentPlanService } = await import("./services/deploymentPlanService");
+      const planId = await deploymentPlanService.generatePlanFromNL({
+        userId,
+        projectId,
+        nlInput,
+        repositoryInfo,
+        context
+      });
+
+      const plan = await deploymentPlanService.getPlanDetails(planId);
+
+      res.json({
+        success: true,
+        planId,
+        plan
+      });
+    } catch (error) {
+      console.error('Plan generation error:', error);
+      res.status(500).json({ 
+        success: false,
+        message: "Failed to generate deployment plan",
+        error: (error as Error).message
+      });
+    }
+  });
+
+  // Get deployment plan details
+  app.get("/api/deployment-plans/:planId", isAuthenticated, async (req, res) => {
+    try {
+      const { planId } = req.params;
+      const { deploymentPlanService } = await import("./services/deploymentPlanService");
+      
+      const plan = await deploymentPlanService.getPlanDetails(planId);
+      
+      if (!plan) {
+        return res.status(404).json({ message: "Plan not found" });
+      }
+
+      res.json(plan);
+    } catch (error) {
+      console.error('Get plan error:', error);
+      res.status(500).json({ message: "Failed to retrieve plan" });
+    }
+  });
+
+  // Get all plans for a project
+  app.get("/api/projects/:projectId/deployment-plans", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId } = req.params;
+
+      await validateProjectOwnership(projectId, userId);
+
+      const plans = await storage.getProjectDeploymentPlans(projectId);
+      res.json(plans);
+    } catch (error) {
+      console.error('Get project plans error:', error);
+      res.status(500).json({ message: "Failed to retrieve plans" });
+    }
+  });
+
+  // Approve deployment plan
+  app.post("/api/deployment-plans/:planId/approve", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { planId } = req.params;
+      const { deploymentPlanService } = await import("./services/deploymentPlanService");
+
+      await deploymentPlanService.approvePlan(planId, userId);
+
+      res.json({
+        success: true,
+        message: "Plan approved successfully"
+      });
+    } catch (error) {
+      console.error('Approve plan error:', error);
+      res.status(400).json({ 
+        success: false,
+        message: (error as Error).message 
+      });
+    }
+  });
+
+  // Reject deployment plan
+  app.post("/api/deployment-plans/:planId/reject", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { planId } = req.params;
+      const { reason } = req.body;
+      const { deploymentPlanService } = await import("./services/deploymentPlanService");
+
+      if (!reason) {
+        return res.status(400).json({ message: "Rejection reason is required" });
+      }
+
+      await deploymentPlanService.rejectPlan(planId, userId, reason);
+
+      res.json({
+        success: true,
+        message: "Plan rejected"
+      });
+    } catch (error) {
+      console.error('Reject plan error:', error);
+      res.status(400).json({ message: (error as Error).message });
+    }
+  });
+
+  // Execute approved deployment plan
+  app.post("/api/deployment-plans/:planId/execute", isAuthenticated, async (req, res) => {
+    try {
+      const { planId } = req.params;
+      const { deploymentPlanService } = await import("./services/deploymentPlanService");
+
+      const deploymentId = await deploymentPlanService.executePlan(planId);
+
+      res.json({
+        success: true,
+        deploymentId,
+        message: "Deployment started",
+        statusUrl: `/api/hosting/deployments/${deploymentId}`
+      });
+    } catch (error) {
+      console.error('Execute plan error:', error);
+      res.status(400).json({ 
+        success: false,
+        message: (error as Error).message 
+      });
+    }
+  });
+
+  // =====================================================
   // Vibe Hosting API Endpoints
   // =====================================================
 
