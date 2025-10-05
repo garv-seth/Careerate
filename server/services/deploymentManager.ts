@@ -101,14 +101,18 @@ export class DeploymentManager {
       // Setup deployment directory
       const deploymentPath = await this.setupDeploymentDirectory(deployment.id, project);
       logs.push(`Deployment directory setup: ${deploymentPath}`);
+      await this.emitDeploymentEvent(deployment.id, 'step_complete', 'initialization', 'Setup complete', { path: deploymentPath });
 
       // Build the application
+      await this.emitDeploymentEvent(deployment.id, 'step_start', 'build', 'Building application...', { framework: project.framework });
       const buildResult = await this.buildApplication(deploymentPath, options.buildCommand, project.framework);
       logs.push(`Build result: ${buildResult.success ? 'SUCCESS' : 'FAILED'}`);
       if (!buildResult.success) {
+        await this.emitDeploymentEvent(deployment.id, 'error', 'build', 'Build failed', { error: buildResult.error }, 'error');
         await this.updateDeploymentStatus(deployment.id, "failed", buildResult.error, logs);
         return { deploymentId: deployment.id, status: "failed", error: buildResult.error, logs };
       }
+      await this.emitDeploymentEvent(deployment.id, 'step_complete', 'build', 'Build successful', {});
 
       // Deploy based on strategy
       let deployResult: any;
