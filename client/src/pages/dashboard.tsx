@@ -71,7 +71,7 @@ export default function Dashboard() {
   const [readiness, setReadiness] = useState<any | null>(null);
   const [selectedRepo, setSelectedRepo] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<string>("");
-  const [activeTab, setActiveTab] = useState<string>(() => (typeof window !== 'undefined' ? (window.location.hash?.replace('#', '') || 'agent') : 'agent'));
+  const [activeTab, setActiveTab] = useState<string>('agent');
   const [settingsProjectId, setSettingsProjectId] = useState<string | null>(null);
   const [settingsName, setSettingsName] = useState("");
   const [settingsDescription, setSettingsDescription] = useState("");
@@ -116,6 +116,18 @@ export default function Dashboard() {
   });
 
   useEffect(() => { if (readinessData) setReadiness(readinessData); }, [readinessData]);
+
+  // Sync active tab with URL hash on mount and hash changes
+  useEffect(() => {
+    const syncTabFromHash = () => {
+      const hash = window.location.hash?.replace('#', '') || 'agent';
+      setActiveTab(hash);
+    };
+
+    syncTabFromHash(); // Set initial value
+    window.addEventListener('hashchange', syncTabFromHash);
+    return () => window.removeEventListener('hashchange', syncTabFromHash);
+  }, []);
 
   // Load repos from connected providers
   const { data: reposData } = useQuery({
