@@ -45,6 +45,31 @@ export class DeploymentManager {
     this.startHealthCheckMonitor();
   }
 
+  /**
+   * Emit deployment event via SSE and store in database
+   */
+  private async emitDeploymentEvent(deploymentId: string, eventType: string, step: string, message: string, details: any = {}, severity: 'info' | 'warning' | 'error' = 'info') {
+    // Store event in database
+    await storage.createDeploymentEvent({
+      deploymentId,
+      eventType,
+      step,
+      message,
+      details,
+      severity
+    });
+
+    // Broadcast via SSE
+    sseService.broadcastDeployment(deploymentId, {
+      type: eventType,
+      step,
+      message,
+      details,
+      severity,
+      timestamp: new Date().toISOString()
+    });
+  }
+
   // Main deployment method that replaces setTimeout simulation
   async deployProject(options: DeploymentOptions): Promise<DeploymentResult> {
     const logs: string[] = [];
