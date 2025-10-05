@@ -1217,6 +1217,92 @@ export const incidents = pgTable("incidents", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Deployment Plans - for NL to Plan workflow
+export const deploymentPlans = pgTable("deployment_plans", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  nlInput: text("nl_input").notNull(), // Original natural language input
+  status: text("status").notNull().default("pending"), // pending, approved, rejected, executing, completed
+  provider: text("provider"), // aws, azure, gcp, vercel, railway
+  region: text("region"),
+  estimatedCost: jsonb("estimated_cost").default({}), // { monthly: 0, setup: 0, currency: 'USD' }
+  resources: jsonb("resources").default([]), // List of resources to be created
+  configuration: jsonb("configuration").default({}), // Provider-specific config
+  approvedBy: varchar("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
+  rejectedReason: text("rejected_reason"),
+  deploymentId: varchar("deployment_id").references(() => deployments.id),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Alert Channels - for monitoring alerts
+export const alertChannels = pgTable("alert_channels", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  projectId: varchar("project_id").references(() => projects.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // slack, email, webhook, sms
+  configuration: jsonb("configuration").notNull(), // channel-specific config
+  isActive: boolean("is_active").default(true),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Alert Rules - conditions for triggering alerts
+export const alertRules = pgTable("alert_rules", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  condition: jsonb("condition").notNull(), // { metric: 'cpu', operator: '>', threshold: 80 }
+  severity: text("severity").notNull().default("warning"), // info, warning, critical
+  channels: text("channels").array().default([]), // Array of channel IDs
+  cooldownMinutes: integer("cooldown_minutes").default(5),
+  isActive: boolean("is_active").default(true),
+  lastTriggered: timestamp("last_triggered"),
+  triggerCount: integer("trigger_count").default(0),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Scaling Policies - autoscaling configuration
+export const scalingPolicies = pgTable("scaling_policies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  deploymentId: varchar("deployment_id").references(() => deployments.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  metricType: text("metric_type").notNull(), // cpu, memory, requests, custom
+  scaleUpThreshold: integer("scale_up_threshold").notNull(),
+  scaleDownThreshold: integer("scale_down_threshold").notNull(),
+  minReplicas: integer("min_replicas").default(1),
+  maxReplicas: integer("max_replicas").default(10),
+  cooldownSeconds: integer("cooldown_seconds").default(300),
+  isActive: boolean("is_active").default(true),
+  lastScaled: timestamp("last_scaled"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Deployment Events - for SSE streaming
+export const deploymentEvents = pgTable("deployment_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  deploymentId: varchar("deployment_id").notNull().references(() => deployments.id, { onDelete: "cascade" }),
+  eventType: text("event_type").notNull(), // step_start, step_complete, log, error, status_change
+  step: text("step"), // build, push, deploy, health_check, etc.
+  message: text("message").notNull(),
+  details: jsonb("details").default({}),
+  severity: text("severity").default("info"), // info, warning, error
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
 // Insert schemas for deployment tables
 export const insertDeploymentSchema = createInsertSchema(deployments).pick({
   projectId: true,
