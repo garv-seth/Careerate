@@ -30,3 +30,7 @@ build-output.log
 # OS
 Thumbs.db
 *.bak
+-e 
+# Environment files
+*.env
+*.env.*
