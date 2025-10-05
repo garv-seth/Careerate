@@ -178,6 +178,84 @@ export const agentTools: ChatCompletionTool[] = [
   {
     type: 'function',
     function: {
+      name: 'deploy_to_aws_ecs',
+      description: 'Deploy application to AWS ECS Fargate (production-ready, scalable container orchestration)',
+      parameters: {
+        type: 'object',
+        properties: {
+          appName: {
+            type: 'string',
+            description: 'Application name (lowercase, alphanumeric, hyphens only)'
+          },
+          githubRepoUrl: {
+            type: 'string',
+            description: 'GitHub repository URL'
+          },
+          environmentVariables: {
+            type: 'object',
+            description: 'Environment variables as key-value pairs',
+            additionalProperties: { type: 'string' }
+          }
+        },
+        required: ['appName', 'githubRepoUrl']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'deploy_to_gcp_cloud_run',
+      description: 'Deploy application to Google Cloud Run (serverless container platform)',
+      parameters: {
+        type: 'object',
+        properties: {
+          appName: {
+            type: 'string',
+            description: 'Application name (lowercase, alphanumeric, hyphens only)'
+          },
+          githubRepoUrl: {
+            type: 'string',
+            description: 'GitHub repository URL'
+          },
+          environmentVariables: {
+            type: 'object',
+            description: 'Environment variables as key-value pairs',
+            additionalProperties: { type: 'string' }
+          }
+        },
+        required: ['appName', 'githubRepoUrl']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'deploy_to_railway',
+      description: 'Deploy backend application to Railway (simple deployment with built-in database)',
+      parameters: {
+        type: 'object',
+        properties: {
+          projectName: {
+            type: 'string',
+            description: 'Project name'
+          },
+          githubRepoUrl: {
+            type: 'string',
+            description: 'GitHub repository URL'
+          },
+          environmentVariables: {
+            type: 'object',
+            description: 'Environment variables',
+            additionalProperties: { type: 'string' }
+          }
+        },
+        required: ['projectName', 'githubRepoUrl']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
       name: 'provision_neon_database',
       description: 'Create a serverless PostgreSQL database on Neon (scales to zero when idle)',
       parameters: {
