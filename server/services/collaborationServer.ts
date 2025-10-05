@@ -90,19 +90,29 @@ export class CollaborationServer {
   private userColorMap: Map<string, string> = new Map();
 
   initialize(server: Server): void {
-    this.wss = new WebSocketServer({ 
-      server,
-      path: '/ws/collaboration'
-    });
+    try {
+      this.wss = new WebSocketServer({ 
+        server,
+        path: '/ws/collaboration',
+        noServer: false
+      });
 
-    this.wss.on('connection', this.handleConnection.bind(this));
-    
-    // Clean up inactive rooms every 5 minutes
-    setInterval(() => {
-      this.cleanupInactiveRooms();
-    }, 5 * 60 * 1000);
+      this.wss.on('connection', this.handleConnection.bind(this));
+      
+      this.wss.on('error', (error) => {
+        console.error('WebSocket server error:', error);
+      });
+      
+      // Clean up inactive rooms every 5 minutes
+      setInterval(() => {
+        this.cleanupInactiveRooms();
+      }, 5 * 60 * 1000);
 
-    log('Collaboration WebSocket server initialized on /ws/collaboration');
+      log('Collaboration WebSocket server initialized on /ws/collaboration');
+    } catch (error) {
+      console.error('Failed to initialize WebSocket server:', error);
+      // Don't throw - allow server to start without WebSocket
+    }
   }
 
   private handleConnection(ws: WebSocket, request: any): void {
