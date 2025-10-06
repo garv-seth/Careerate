@@ -82,7 +82,13 @@
       "Bash(npx drizzle-kit:*)",
       "Bash(gh run watch:*)",
       "Bash(npm run build:production:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(do sleep:*)",
+      "Bash(echo:*)",
+      "Bash(Select-String -Pattern \"Successfully|Error|Step [234][0-9]|FAILED\")",
+      "Bash(Select-Object -First 50)",
+      "Bash(sed:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
