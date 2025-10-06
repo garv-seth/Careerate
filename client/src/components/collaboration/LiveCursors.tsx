@@ -38,23 +38,34 @@ export default function LiveCursors({ cursors, currentFileName, textareaRef, get
     tempTextarea.style.overflow = 'hidden';
     tempTextarea.value = value.substring(0, charIndex);
     
-    document.body.appendChild(tempTextarea);
-    
+    try {
+      document.body.appendChild(tempTextarea);
+    } catch (error) {
+      console.warn('Failed to append temp textarea:', error);
+      return { x: 0, y: 0 };
+    }
+
     // Get the computed styles
     const computedStyle = window.getComputedStyle(textarea);
     const fontSize = parseInt(computedStyle.fontSize);
     const lineHeight = parseInt(computedStyle.lineHeight) || fontSize * 1.2;
-    
+
     // Calculate position
     const textareaRect = textarea.getBoundingClientRect();
     const scrollTop = textarea.scrollTop;
     const scrollLeft = textarea.scrollLeft;
-    
+
     // Approximate calculation (simplified)
     const x = column * (fontSize * 0.6) - scrollLeft + 4; // 4px padding
     const y = line * lineHeight - scrollTop + 4; // 4px padding
-    
-    document.body.removeChild(tempTextarea);
+
+    try {
+      if (tempTextarea.parentNode === document.body) {
+        document.body.removeChild(tempTextarea);
+      }
+    } catch (error) {
+      console.warn('Failed to remove temp textarea:', error);
+    }
     
     return { x, y };
   };
@@ -144,11 +155,15 @@ export default function LiveCursors({ cursors, currentFileName, textareaRef, get
       cursorElement.labelElement.style.top = `${position.y}px`;
 
       // Add to DOM if not already there
-      if (!cursorElement.element.parentNode) {
-        textarea.parentElement?.appendChild(cursorElement.element);
-      }
-      if (!cursorElement.labelElement.parentNode) {
-        textarea.parentElement?.appendChild(cursorElement.labelElement);
+      try {
+        if (!cursorElement.element.parentNode && textarea.parentElement) {
+          textarea.parentElement.appendChild(cursorElement.element);
+        }
+        if (!cursorElement.labelElement.parentNode && textarea.parentElement) {
+          textarea.parentElement.appendChild(cursorElement.labelElement);
+        }
+      } catch (error) {
+        console.warn('Failed to append cursor elements:', error);
       }
 
       // Handle selection

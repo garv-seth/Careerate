@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DeploymentInfo } from "@/components/DeploymentInfo";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Landing from "@/pages/landing-new";
 
 // Lazy load pages for better performance (except Landing which is the entry point)
@@ -57,14 +58,16 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-        <CookieConsent />
-        <DeploymentInfo />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+          <CookieConsent />
+          <DeploymentInfo />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

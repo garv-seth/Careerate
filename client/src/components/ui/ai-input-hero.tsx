@@ -244,8 +244,15 @@ export function HeroWave({ className, style, extendLeftPx = 320, title = "Build 
 
     const waveContainer = waveRef.current!;
     // Guard against duplicate canvases (e.g., React StrictMode double-mount)
-    while (waveContainer.firstChild) {
-      waveContainer.removeChild(waveContainer.firstChild);
+    // Safely remove all children to prevent DOM errors
+    try {
+      while (waveContainer.firstChild) {
+        waveContainer.removeChild(waveContainer.firstChild);
+      }
+    } catch (error) {
+      console.warn('Error clearing wave container:', error);
+      // If removeChild fails, try clearing innerHTML as fallback
+      waveContainer.innerHTML = '';
     }
     const waveRenderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
     waveRenderer.setPixelRatio(EFFECT_PR);
