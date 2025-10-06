@@ -24,6 +24,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Select as UiSelect, SelectContent as UiSelectContent, SelectItem as UiSelectItem, SelectTrigger as UiSelectTrigger, SelectValue as UiSelectValue } from "@/components/ui/select";
 import { AppShell } from "@/components/AppShell";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PageTransition, FadeIn, SlideUp } from "@/components/PageTransition";
+import { AnimatePresence } from "framer-motion";
 
 const appTemplates = [
   {
@@ -337,38 +339,98 @@ export default function Dashboard() {
   const handleAgentPrompt = async () => {
     if (!agentPrompt.trim()) return;
 
-    // Gate: require at least one provider ready
-    const providerReady = readiness?.providers?.some((p: any) => p.ready);
-    if (!providerReady) {
-      toast({
-        title: "Connect a cloud provider",
-        description: "Go to Integrations to add Azure, AWS, or GCP credentials before deploying.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
     setIsGenerating(true);
     try {
-      // Create project from agent prompt
-      const projectData = {
-        name: extractProjectName(agentPrompt) || "AI Generated Project",
-        description: agentPrompt,
-        framework: detectFramework(agentPrompt)
-      };
-      
-      const project = await createProjectMutation.mutateAsync(projectData);
-      
-      // Navigate to coding environment
-      window.location.href = `/projects/${project.id}/coding`;
-      
-    } catch (error) {
+      // Call autonomous deployment API
+      const response = await fetch('/api/autonomous/deploy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          naturalLanguageInput: agentPrompt,
+          repositoryUrl: selectedRepo,
+          projectId: `project-${Date.now()}`
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Deployment failed');
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.planId) {
+        // Show deployment plan
+        const plan = result.plan;
+        const approved = confirm(
+          `🚀 Deployment Plan\n\n` +
+          `Provider: ${plan.provider.toUpperCase()}\n` +
+          `Region: ${plan.region}\n` +
+          `Architecture: ${plan.architecture.compute}\n` +
+          `Cost: $${plan.costEstimate.monthly}/month\n\n` +
+          `${plan.reasoning}\n\n` +
+          `Approve deployment?`
+        );
+
+        if (approved) {
+          // Approve plan
+          await fetch(`/api/autonomous/plans/${result.planId}/approve`, {
+            method: 'POST',
+            credentials: 'include'
+          });
+
+          toast({
+            title: "Deploying...",
+            description: "Watch real-time progress below",
+          });
+
+          // Execute with Server-Sent Events
+          const eventSource = new EventSource(`/api/autonomous/plans/${result.planId}/execute`);
+
+          eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'progress') {
+              toast({
+                title: `${Math.round(data.progress)}% Complete`,
+                description: data.step,
+              });
+            } else if (data.type === 'completed') {
+              eventSource.close();
+              setIsGenerating(false);
+              toast({
+                title: "🎉 Deployment Complete!",
+                description: data.url ? `Live at: ${data.url}` : 'Deployment successful!',
+                duration: 10000,
+              });
+              setAgentPrompt('');
+              queryClient.invalidateQueries();
+            } else if (data.type === 'failed') {
+              eventSource.close();
+              setIsGenerating(false);
+              toast({
+                title: "Deployment Failed",
+                description: data.error,
+                variant: "destructive",
+              });
+            }
+          };
+
+          eventSource.onerror = () => {
+            eventSource.close();
+            setIsGenerating(false);
+          };
+        } else {
+          setIsGenerating(false);
+        }
+      }
+    } catch (error: any) {
       toast({
-        title: "Generation failed",
-        description: (error as Error).message,
+        title: "Deployment Failed",
+        description: error.message || "Unknown error",
         variant: "destructive"
       });
-    } finally {
       setIsGenerating(false);
     }
   };
@@ -459,7 +521,10 @@ export default function Dashboard() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
 
             {/* Cara Tab - Main Interface */}
-            <TabsContent value="agent" className="space-y-6">
+            <TabsContent value="agent" className="space-y-6" forceMount={activeTab === 'agent'}>
+              <AnimatePresence mode="wait">
+                {activeTab === 'agent' && (
+                  <PageTransition>
 
               {/* Header Section */}
               <div className="text-center mb-8">
@@ -688,10 +753,16 @@ export default function Dashboard() {
                 )}
               </CardContent>
             </Card>
+                  </PageTransition>
+                )}
+              </AnimatePresence>
           </TabsContent>
 
           {/* Projects Tab */}
-          <TabsContent value="projects" className="space-y-6">
+          <TabsContent value="projects" className="space-y-6" forceMount={activeTab === 'projects'}>
+            <AnimatePresence mode="wait">
+              {activeTab === 'projects' && (
+                <PageTransition>
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">Your Projects</h2>
               <div className="flex items-center space-x-4">
@@ -800,10 +871,16 @@ export default function Dashboard() {
                 )}
               </div>
             )}
+                </PageTransition>
+              )}
+            </AnimatePresence>
           </TabsContent>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-6" forceMount={activeTab === 'overview'}>
+            <AnimatePresence mode="wait">
+              {activeTab === 'overview' && (
+                <PageTransition>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="glass-pane rounded-2xl">
                 <CardHeader className="pb-2">
@@ -902,6 +979,9 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
+                </PageTransition>
+              )}
+            </AnimatePresence>
           </TabsContent>
         </Tabs>
       </div>

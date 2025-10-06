@@ -81,7 +81,7 @@
     "embla-carousel-react": "^8.6.0",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
-    "framer-motion": "^12.23.16",
+    "framer-motion": "^12.23.22",
     "gsap": "^3.13.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.544.0",

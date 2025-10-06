@@ -67,34 +67,47 @@ const Footer = () => (
   )
 
 const NavLink = ({ href, children, isPageLink = false }: { href: string; children: React.ReactNode; isPageLink?: boolean }) => {
-    const [location] = useLocation();
-    const isActive = location === href;
+    const [location, setLocation] = useLocation();
+    const isActive = location === href || (href.includes('#') && window.location.hash === href.split('#')[1]);
 
     const commonClasses = "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300";
 
+    const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+
+        if (isPageLink) {
+            setLocation(href);
+        } else if (href.startsWith('#')) {
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+        } else if (href.includes('#')) {
+            const [path, hash] = href.split('#');
+            if (path) setLocation(path);
+            window.location.hash = hash;
+        } else {
+            window.location.href = href;
+        }
+    };
+
     if (isPageLink) {
         return (
-            <Link href={href}>
-                <a className={cn(
+            <a
+                href={href}
+                onClick={handleClick}
+                className={cn(
                     commonClasses,
                     isActive ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}>
-                    {children}
-                </a>
-            </Link>
+                )}
+            >
+                {children}
+            </a>
         )
     }
-    
+
     return (
         <a
             href={href}
             className={cn(commonClasses, "text-foreground/80 hover:text-foreground hover:bg-primary/10")}
-            onClick={(e) => {
-                if (href.startsWith('#')) {
-                    e.preventDefault();
-                    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-                }
-            }}
+            onClick={handleClick}
         >
             {children}
         </a>
