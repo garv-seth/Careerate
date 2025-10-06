@@ -23,12 +23,16 @@ export default function IntegrationsPage() {
     return acc;
   }, {} as Record<string, any[]>);
 
+  const handleConnectGitHub = () => {
+    window.location.href = "/api/integrations/github/oauth/initiate";
+  };
+
   return (
     <AppShell>
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Integrations</h1>
-          <p className="text-foreground/70">Connect providers and tools. We read credentials from Azure Key Vault automatically.</p>
+          <h1 className="text-3xl font-bold text-foreground">Integrations</h1>
+          <p className="text-foreground/70">Connect your accounts to enable AI agents to deploy and manage your infrastructure.</p>
         </div>
 
         {isLoading ? (
@@ -36,34 +40,51 @@ export default function IntegrationsPage() {
         ) : (
           Object.entries(grouped).map(([category, items]) => (
             <div key={category} className="space-y-3">
-              <h2 className="text-xl font-semibold capitalize">{category.replace('_',' ')}</h2>
+              <h2 className="text-xl font-semibold capitalize text-foreground">{category.replace('_',' ')}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {(items as any[]).map((i) => {
                   const st = mapStatus.get(i.id);
                   const ready = st?.ready;
+                  const isGitHub = i.id === 'github';
+
                   return (
-                    <Card key={i.id} className="glass-pane rounded-2xl">
+                    <Card key={i.id} className="glass-pane rounded-2xl hover:border-primary/50 transition-colors">
                       <CardHeader className="pb-2">
                         <CardTitle className="flex items-center justify-between text-sm">
-                          <span>{i.name}</span>
+                          <span className="text-foreground">{i.name}</span>
                           <Badge className={ready ? "bg-green-500/20 text-green-300 border-green-500/30" : "bg-foreground/10 text-foreground/60 border-foreground/20"}>
-                            {ready ? "Ready" : "Not configured"}
+                            {ready ? "Connected" : "Disconnected"}
                           </Badge>
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-3">
                         {ready ? (
-                          <p className="text-xs text-foreground/60">All required secrets present.</p>
+                          <p className="text-xs text-foreground/60">All required credentials configured. Agents can access this integration.</p>
                         ) : (
                           <div className="text-xs text-foreground/60">
-                            Missing: {(st?.missing || []).join(', ') || '—'}
+                            {isGitHub ? (
+                              "Connect your GitHub account to let agents access your repositories."
+                            ) : (
+                              `Missing: ${(st?.missing || []).join(', ') || 'Configuration required'}`
+                            )}
                           </div>
                         )}
-                        {i.docsUrl && (
-                          <Button asChild size="sm" variant="outline" className="rounded-full">
-                            <a href={i.docsUrl} target="_blank" rel="noreferrer">Docs</a>
-                          </Button>
-                        )}
+                        <div className="flex gap-2">
+                          {isGitHub && !ready && (
+                            <Button
+                              onClick={handleConnectGitHub}
+                              size="sm"
+                              className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white"
+                            >
+                              Connect GitHub
+                            </Button>
+                          )}
+                          {i.docsUrl && (
+                            <Button asChild size="sm" variant="outline" className="rounded-full border-border hover:bg-primary/10">
+                              <a href={i.docsUrl} target="_blank" rel="noreferrer">Docs</a>
+                            </Button>
+                          )}
+                        </div>
                       </CardContent>
                     </Card>
                   );

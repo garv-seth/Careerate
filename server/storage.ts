@@ -3276,16 +3276,6 @@ export class DatabaseStorage implements IStorage {
     });
   }
 
-  // Helper method to increment secret access count
-  async incrementSecretAccessCount(secretId: string) {
-    const secret = await this.getIntegrationSecret(secretId);
-    if (secret) {
-      await this.updateIntegrationSecret(secretId, {
-        accessCount: (secret.accessCount || 0) + 1,
-        lastAccessed: new Date()
-      });
-    }
-  }
 }
 
 export const storage = new DatabaseStorage();

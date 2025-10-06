@@ -423,13 +423,20 @@ export async function setupAuth(app: Express) {
       }
 
       console.log('Attempting GitHub session login...');
+
+      // Store GitHub access token in session for repo access
+      if (req.session) {
+        (req.session as any).githubAccessToken = tokenJson.access_token;
+        console.log('Stored GitHub access token in session');
+      }
+
       req.login(dbUser, (err) => {
         if (err) {
           console.error('GitHub session login error:', err);
           return res.status(500).json({ error: "Login failed", details: err.message });
         }
-        console.log('GitHub session login successful, redirecting to /');
-        res.redirect("/");
+        console.log('GitHub session login successful, redirecting to /dashboard');
+        res.redirect("/dashboard");
       });
     } catch (error) {
       console.error('=== GitHub OAuth Error ===');

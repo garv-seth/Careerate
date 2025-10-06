@@ -23,6 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { Select as UiSelect, SelectContent as UiSelectContent, SelectItem as UiSelectItem, SelectTrigger as UiSelectTrigger, SelectValue as UiSelectValue } from "@/components/ui/select";
 import { AppShell } from "@/components/AppShell";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const appTemplates = [
   {
@@ -117,20 +118,25 @@ export default function Dashboard() {
   useEffect(() => { if (readinessData) setReadiness(readinessData); }, [readinessData]);
 
   // Load repos from connected providers
-  const { data: reposData } = useQuery({
+  const { data: reposData, error: reposError } = useQuery({
     queryKey: ["/api/integrations/repos"],
+    retry: false,
     queryFn: async () => {
-      const res = await fetch("/api/integrations/repos", { credentials: "include" });
-      if (res.status === 401) {
-        const data = await res.json().catch(()=>({}));
-        // If not authorized, redirect to OAuth flow
-        if (data?.authorizeUrl) {
-          window.location.href = data.authorizeUrl;
+      try {
+        const res = await fetch("/api/integrations/repos", { credentials: "include" });
+        if (res.status === 401) {
+          // Return empty data instead of redirecting automatically
+          return { providers: [], needsAuth: true };
         }
-        throw new Error("GitHub not connected");
+        if (!res.ok) {
+          console.error("Failed to load repositories:", res.status, res.statusText);
+          return { providers: [] };
+        }
+        return res.json();
+      } catch (error) {
+        console.error("Repos query error:", error);
+        return { providers: [] };
       }
-      if (!res.ok) throw new Error("Failed to load repositories");
-      return res.json();
     },
   });
 
@@ -439,7 +445,7 @@ export default function Dashboard() {
   };
 
   return (
-    <>
+    <ErrorBoundary>
       <AppShell>
         {/* Dynamic Background Effects */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -521,10 +527,10 @@ export default function Dashboard() {
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       {/* Provider select */}
                       <UiSelect value={selectedProvider} onValueChange={setSelectedProvider}>
-                        <UiSelectTrigger className="w-[160px] rounded-full">
+                        <UiSelectTrigger className="w-[160px] rounded-full bg-[rgba(15,15,20,0.7)] border-white/10 backdrop-blur-md">
                           <UiSelectValue placeholder="Cloud" />
                         </UiSelectTrigger>
-                        <UiSelectContent>
+                        <UiSelectContent className="bg-[rgba(15,15,20,0.95)] border-white/10 backdrop-blur-xl">
                           {(readiness?.providers || []).map((p: any) => (
                             <UiSelectItem key={p.id} value={p.id} disabled={!p.ready}>{p.label}{!p.ready ? " (setup)" : ""}</UiSelectItem>
                           ))}
@@ -533,10 +539,10 @@ export default function Dashboard() {
 
                       {/* Repo select (optional) */}
                       <UiSelect value={selectedRepo} onValueChange={setSelectedRepo}>
-                        <UiSelectTrigger className="w-[220px] rounded-full">
+                        <UiSelectTrigger className="w-[220px] rounded-full bg-[rgba(15,15,20,0.7)] border-white/10 backdrop-blur-md">
                           <UiSelectValue placeholder="Repository (optional)" />
                         </UiSelectTrigger>
-                        <UiSelectContent>
+                        <UiSelectContent className="bg-[rgba(15,15,20,0.95)] border-white/10 backdrop-blur-xl">
                           {(reposData?.providers || []).flatMap((prov: any) => (
                             prov.repos.map((r: any) => (
                               <UiSelectItem key={`${prov.provider}:${r.id}`} value={`${prov.provider}:${r.id}`}>{r.name}</UiSelectItem>
@@ -1224,6 +1230,6 @@ export default function Dashboard() {
         </AlertDialogContent>
       </AlertDialog>
       </AppShell>
-    </>
+    </ErrorBoundary>
   );
 }
