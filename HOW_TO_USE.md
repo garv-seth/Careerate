@@ -43,6 +43,12 @@ Deploy my e-commerce site to production
 ### 2. **Connect Cloud Providers**
 **Location:** Integrations Page
 
+**How to Access Integrations Page:**
+1. Login to https://gocareerate.com
+2. Click on your **Account icon** (top right)
+3. Or navigate directly to: https://gocareerate.com/integrations
+4. From the Overview tab, click the **"Integrations"** quick action button
+
 **How to Connect:**
 
 #### GitHub (OAuth)
@@ -50,7 +56,7 @@ Deploy my e-commerce site to production
 2. Find "GitHub" card
 3. Click "Connect GitHub"
 4. Authorize on GitHub
-5. Done! Your repos will now show in dashboard
+5. Done! Your repos will now show in dashboard dropdown
 
 #### AWS (API Keys)
 1. Coming soon - Currently need to add in Azure Key Vault

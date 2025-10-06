@@ -73,7 +73,7 @@ export default function Dashboard() {
   const [readiness, setReadiness] = useState<any | null>(null);
   const [selectedRepo, setSelectedRepo] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<string>("");
-  const [activeTab, setActiveTab] = useState<string>(() => (typeof window !== 'undefined' ? (window.location.hash?.replace('#', '') || 'agent') : 'agent'));
+  const [activeTab, setActiveTab] = useState<string>('agent');
   const [settingsProjectId, setSettingsProjectId] = useState<string | null>(null);
   const [settingsName, setSettingsName] = useState("");
   const [settingsDescription, setSettingsDescription] = useState("");
@@ -312,11 +312,14 @@ export default function Dashboard() {
     };
   }, [agentPrompt]);
 
-  // Keep tab state in sync with URL hash so navbar links work
+  // Initialize activeTab from URL hash on mount and listen for changes
   useEffect(() => {
+    const hash = window.location.hash?.replace('#', '') || 'agent';
+    setActiveTab(hash);
+
     const onHashChange = () => {
-      const hash = window.location.hash?.replace('#', '') || 'agent';
-      setActiveTab(hash);
+      const newHash = window.location.hash?.replace('#', '') || 'agent';
+      setActiveTab(newHash);
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);

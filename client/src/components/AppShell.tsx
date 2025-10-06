@@ -181,40 +181,50 @@ export function AppShell({ children, className }: { children: ReactNode; classNa
     );
 
     // Dashboard-specific nav that mirrors the tabs: Cara, Projects, Overview
-    const DashboardNav = () => (
-        <>
-            <a
-                href="#agent"
-                className={cn(
-                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    activeDashTab === 'agent' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}
-            >
-                <Brain className="h-4 w-4 mr-2" />
-                Cara
-            </a>
-            <a
-                href="#projects"
-                className={cn(
-                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    activeDashTab === 'projects' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}
-            >
-                <GitBranch className="h-4 w-4 mr-2" />
-                Projects
-            </a>
-            <a
-                href="#overview"
-                className={cn(
-                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    activeDashTab === 'overview' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                )}
-            >
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Overview
-            </a>
-        </>
-    );
+    const DashboardNav = () => {
+        const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+            e.preventDefault();
+            window.location.hash = hash;
+        };
+
+        return (
+            <>
+                <a
+                    href="#agent"
+                    onClick={(e) => handleHashClick(e, 'agent')}
+                    className={cn(
+                        "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center cursor-pointer",
+                        activeDashTab === 'agent' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    )}
+                >
+                    <Brain className="h-4 w-4 mr-2" />
+                    Cara
+                </a>
+                <a
+                    href="#projects"
+                    onClick={(e) => handleHashClick(e, 'projects')}
+                    className={cn(
+                        "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center cursor-pointer",
+                        activeDashTab === 'projects' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    )}
+                >
+                    <GitBranch className="h-4 w-4 mr-2" />
+                    Projects
+                </a>
+                <a
+                    href="#overview"
+                    onClick={(e) => handleHashClick(e, 'overview')}
+                    className={cn(
+                        "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center cursor-pointer",
+                        activeDashTab === 'overview' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    )}
+                >
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Overview
+                </a>
+            </>
+        );
+    };
 
     const AuthButtons = () => (
         <div className="flex items-center gap-2">
