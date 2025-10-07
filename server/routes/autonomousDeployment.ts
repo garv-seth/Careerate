@@ -324,4 +324,26 @@ router.get('/health', async (req, res) => {
   });
 });
 
+// Secrets verification endpoint (for debugging)
+router.get('/secrets-status', (req, res) => {
+  const secretsStatus = {
+    aws: !!(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY),
+    gcp: !!(process.env.GOOGLE_CLOUD_PROJECT && process.env.GOOGLE_CLOUD_CLIENT_EMAIL),
+    azure: !!(process.env.AZURE_CLIENT_ID && process.env.AZURE_CLIENT_SECRET),
+    github: !!(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET),
+    gitlab: !!(process.env.GITLAB_CLIENT_ID && process.env.GITLAB_CLIENT_SECRET),
+    openai: !!process.env.OPENAI_API_KEY,
+    database: !!process.env.DATABASE_URL,
+    encryption: !!process.env.ENCRYPTION_KEY,
+    session: !!process.env.SESSION_SECRET,
+  };
+
+  res.json({
+    keyvault: process.env.AZURE_KEY_VAULT_NAME || 'not-configured',
+    secretsLoaded: Object.values(secretsStatus).filter(Boolean).length,
+    totalExpected: Object.keys(secretsStatus).length,
+    integrations: secretsStatus,
+  });
+});
+
 export default router;

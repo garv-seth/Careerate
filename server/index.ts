@@ -5,6 +5,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { healthMonitor } from "./services/healthMonitor";
+import { loadSecretsFromKeyVault, loadGCPCredentials, validateRequiredSecrets, getAvailableIntegrations } from "./services/secretsLoader";
 
 const app = express();
 
@@ -85,6 +86,38 @@ app.get('/api/health', (req, res) => {
 
 (async () => {
   try {
+    console.log('🚀 Starting Careerate Runbook Platform...');
+    console.log('');
+
+    // Load all secrets from Azure Key Vault
+    try {
+      log('🔐 Loading secrets from Azure Key Vault...');
+      const secretsResult = await loadSecretsFromKeyVault();
+      await loadGCPCredentials();
+      validateRequiredSecrets();
+      
+      const integrations = getAvailableIntegrations();
+      console.log('');
+      console.log('🔌 Configured Cloud Providers:');
+      if (integrations.includes('aws')) console.log('  ✅ AWS');
+      if (integrations.includes('azure')) console.log('  ✅ Azure');
+      if (integrations.includes('gcp')) console.log('  ✅ GCP');
+      if (integrations.includes('github')) console.log('  ✅ GitHub');
+      if (integrations.includes('gitlab')) console.log('  ✅ GitLab');
+      if (integrations.includes('openai')) console.log('  ✅ OpenAI');
+      console.log('');
+    } catch (error: any) {
+      console.error('❌ Failed to load secrets from Key Vault:', error.message);
+      console.error('');
+      console.error('💡 Make sure you have run: az login');
+      console.error('💡 Or set AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID');
+      console.error('');
+      // Don't exit - allow running without Key Vault in development
+      if (process.env.NODE_ENV === 'production') {
+        process.exit(1);
+      }
+    }
+
     const server = await registerRoutes(app);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
