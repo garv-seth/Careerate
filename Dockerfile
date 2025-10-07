@@ -18,17 +18,17 @@ COPY package.json package-lock.json* ./
 RUN npm install -g npm@latest
 RUN npm ci
 
+# Force cache busting BEFORE copying source code
+ARG CACHE_BUST
+RUN echo "Cache bust: $CACHE_BUST"
+
 # Copy source code
 COPY . .
 ENV CI=true
 ENV NO_COLOR=1
 ENV FORCE_COLOR=0
 
-# Force cache busting for every build
-ARG CACHE_BUST
-RUN echo "Cache bust: $CACHE_BUST" && rm -rf node_modules/.vite dist
-
-# Build the application
+# Build the application (dist is not copied due to .dockerignore)
 RUN npm run build
 
 # Production image
