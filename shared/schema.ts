@@ -1442,3 +1442,392 @@ export type ScalingPolicy = typeof scalingPolicies.$inferSelect;
 export type InsertScalingPolicy = z.infer<typeof insertScalingPolicySchema>;
 export type DeploymentEvent = typeof deploymentEvents.$inferSelect;
 export type InsertDeploymentEvent = z.infer<typeof insertDeploymentEventSchema>;
+
+// ============================
+// RUNBOOK GOVERNANCE TABLES
+// ============================
+
+// User Roles for RBAC
+export const userRoles = pgTable("user_roles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  role: text("role").notNull(), // "admin", "approver", "operator", "viewer"
+  scope: text("scope").default("global"), // "global", "project:id", "environment:prod"
+  grantedBy: varchar("granted_by").references(() => users.id),
+  grantedAt: timestamp("granted_at").defaultNow(),
+  expiresAt: timestamp("expires_at"),
+  isActive: boolean("is_active").default(true),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => {
+  return {
+    userIdIdx: index("user_roles_user_id_idx").on(table.userId),
+    roleIdx: index("user_roles_role_idx").on(table.role),
+  };
+});
+
+// Approval Requests
+export const approvalRequests = pgTable("approval_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  requesterId: varchar("requester_id").notNull().references(() => users.id),
+  runbookType: text("runbook_type").notNull(), // "incident-mitigation", "blue-green-deploy", "manual-action"
+  runbookExecutionId: varchar("runbook_execution_id"),
+  resourceType: text("resource_type"), // "container-service", "compute-instance", "deployment"
+  resourceId: varchar("resource_id"),
+  provider: text("provider"), // "aws", "azure", "gcp"
+  environment: text("environment"), // "development", "staging", "production"
+  action: text("action").notNull(), // "scale", "rollback", "deploy", "restart", "terminate"
+  requestedChanges: jsonb("requested_changes").notNull(), // details of what will change
+  dryRunResults: jsonb("dry_run_results"), // results of dry-run simulation
+  policyChecks: jsonb("policy_checks"), // policy check results
+  costEstimate: jsonb("cost_estimate"), // estimated cost impact
+  riskLevel: text("risk_level").default("medium"), // "low", "medium", "high", "critical"
+  status: text("status").notNull().default("pending"), // "pending", "approved", "rejected", "expired", "cancelled"
+  requiredApprovals: integer("required_approvals").default(1),
+  approvedCount: integer("approved_count").default(0),
+  rejectedCount: integer("rejected_count").default(0),
+  approvers: jsonb("approvers").default([]), // list of approver IDs
+  approvedBy: jsonb("approved_by").default([]), // list of who approved
+  rejectedBy: jsonb("rejected_by").default([]), // list of who rejected
+  approvalDeadline: timestamp("approval_deadline"),
+  approvedAt: timestamp("approved_at"),
+  rejectedAt: timestamp("rejected_at"),
+  executedAt: timestamp("executed_at"),
+  evidence: jsonb("evidence").default({}), // tickets, logs, metrics
+  comments: jsonb("comments").default([]),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    requesterIdIdx: index("approval_requests_requester_id_idx").on(table.requesterId),
+    statusIdx: index("approval_requests_status_idx").on(table.status),
+    runbookTypeIdx: index("approval_requests_runbook_type_idx").on(table.runbookType),
+  };
+});
+
+// Approval Actions (individual approver responses)
+export const approvalActions = pgTable("approval_actions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  approvalRequestId: varchar("approval_request_id").notNull().references(() => approvalRequests.id, { onDelete: "cascade" }),
+  approverId: varchar("approver_id").notNull().references(() => users.id),
+  action: text("action").notNull(), // "approve", "reject", "defer"
+  reason: text("reason"),
+  conditions: jsonb("conditions").default({}), // conditional approval
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => {
+  return {
+    approvalRequestIdIdx: index("approval_actions_request_id_idx").on(table.approvalRequestId),
+    approverIdIdx: index("approval_actions_approver_id_idx").on(table.approverId),
+  };
+});
+
+// Runbook Executions
+export const runbookExecutions = pgTable("runbook_executions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  runbookType: text("runbook_type").notNull(), // "incident-mitigation", "blue-green-deploy"
+  triggeredBy: varchar("triggered_by").notNull().references(() => users.id),
+  approvalRequestId: varchar("approval_request_id").references(() => approvalRequests.id),
+  provider: text("provider").notNull(), // "aws", "azure", "gcp"
+  environment: text("environment").notNull(),
+  resourceType: text("resource_type").notNull(),
+  resourceId: varchar("resource_id").notNull(),
+  executionPlan: jsonb("execution_plan").notNull(), // detailed steps
+  status: text("status").notNull().default("planning"), // "planning", "pending-approval", "approved", "executing", "completed", "failed", "rolled-back"
+  currentStep: integer("current_step").default(0),
+  totalSteps: integer("total_steps"),
+  steps: jsonb("steps").default([]), // execution steps with status
+  dryRun: boolean("dry_run").default(true),
+  beforeState: jsonb("before_state"), // state before execution
+  afterState: jsonb("after_state"), // state after execution
+  diff: jsonb("diff"), // computed diff
+  healthChecks: jsonb("health_checks").default([]),
+  metrics: jsonb("metrics").default({}),
+  logs: jsonb("logs").default([]),
+  errors: jsonb("errors").default([]),
+  rollbackPlan: jsonb("rollback_plan"),
+  rolledBackAt: timestamp("rolled_back_at"),
+  completedAt: timestamp("completed_at"),
+  duration: integer("duration"), // in seconds
+  costActual: decimal("cost_actual", { precision: 10, scale: 2 }),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    runbookTypeIdx: index("runbook_executions_type_idx").on(table.runbookType),
+    statusIdx: index("runbook_executions_status_idx").on(table.status),
+    triggeredByIdx: index("runbook_executions_triggered_by_idx").on(table.triggeredBy),
+  };
+});
+
+// Governance Policies
+export const governancePolicies = pgTable("governance_policies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // "change-window", "budget-limit", "approval-requirement", "region-allowlist", "environment-protection"
+  scope: text("scope").default("global"), // "global", "environment:prod", "provider:aws"
+  isActive: boolean("is_active").default(true),
+  priority: integer("priority").default(100), // higher = more important
+  rules: jsonb("rules").notNull(), // policy rule definitions
+  enforcement: text("enforcement").default("block"), // "block", "warn", "audit"
+  exceptions: jsonb("exceptions").default([]),
+  approvers: jsonb("approvers").default([]), // required approvers for policy
+  createdBy: varchar("created_by").references(() => users.id),
+  updatedBy: varchar("updated_by").references(() => users.id),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    typeIdx: index("governance_policies_type_idx").on(table.type),
+    isActiveIdx: index("governance_policies_is_active_idx").on(table.isActive),
+  };
+});
+
+// Policy Evaluations
+export const policyEvaluations = pgTable("policy_evaluations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  policyId: varchar("policy_id").notNull().references(() => governancePolicies.id),
+  evaluatedBy: varchar("evaluated_by").references(() => users.id),
+  evaluationType: text("evaluation_type").notNull(), // "pre-execution", "continuous", "audit"
+  resourceType: text("resource_type"),
+  resourceId: varchar("resource_id"),
+  context: jsonb("context").notNull(), // evaluation context
+  result: text("result").notNull(), // "pass", "fail", "warn"
+  violations: jsonb("violations").default([]),
+  recommendations: jsonb("recommendations").default([]),
+  metadata: jsonb("metadata").default({}),
+  evaluatedAt: timestamp("evaluated_at").defaultNow(),
+}, (table) => {
+  return {
+    policyIdIdx: index("policy_evaluations_policy_id_idx").on(table.policyId),
+    resultIdx: index("policy_evaluations_result_idx").on(table.result),
+  };
+});
+
+// Budget Tracking
+export const budgetLimits = pgTable("budget_limits", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  scope: text("scope").notNull(), // "global", "project:id", "environment:prod", "runbook:type"
+  limitType: text("limit_type").notNull(), // "workflow", "daily", "monthly", "per-execution"
+  limitAmount: decimal("limit_amount", { precision: 10, scale: 2 }).notNull(),
+  currency: text("currency").default("USD"),
+  currentSpend: decimal("current_spend", { precision: 10, scale: 2 }).default(sql`0`),
+  threshold: integer("threshold").default(80), // percentage threshold for alerts
+  enforcement: text("enforcement").default("warn"), // "block", "warn", "audit"
+  alertChannels: jsonb("alert_channels").default([]),
+  resetPeriod: text("reset_period"), // "daily", "weekly", "monthly"
+  lastReset: timestamp("last_reset"),
+  isActive: boolean("is_active").default(true),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    scopeIdx: index("budget_limits_scope_idx").on(table.scope),
+    isActiveIdx: index("budget_limits_is_active_idx").on(table.isActive),
+  };
+});
+
+// Immutable Audit Trail for Runbooks
+export const runbookAuditLogs = pgTable("runbook_audit_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  runbookExecutionId: varchar("runbook_execution_id").references(() => runbookExecutions.id),
+  approvalRequestId: varchar("approval_request_id").references(() => approvalRequests.id),
+  action: text("action").notNull(), // "plan-generated", "approval-requested", "approved", "executed", "rolled-back", "failed"
+  actor: varchar("actor").notNull(), // user ID or "system"
+  actorType: text("actor_type").default("user"), // "user", "system", "automation"
+  targetResource: jsonb("target_resource").notNull(),
+  beforeState: jsonb("before_state"),
+  afterState: jsonb("after_state"),
+  diff: jsonb("diff"),
+  approvals: jsonb("approvals").default([]),
+  policyChecks: jsonb("policy_checks").default([]),
+  evidence: jsonb("evidence").default({}), // tickets, logs, metrics, screenshots
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  traceId: varchar("trace_id"), // for request correlation
+  sessionId: varchar("session_id"),
+  success: boolean("success"),
+  errorMessage: text("error_message"),
+  metadata: jsonb("metadata").default({}),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+}, (table) => {
+  return {
+    runbookExecutionIdIdx: index("runbook_audit_logs_execution_id_idx").on(table.runbookExecutionId),
+    actorIdx: index("runbook_audit_logs_actor_idx").on(table.actor),
+    timestampIdx: index("runbook_audit_logs_timestamp_idx").on(table.timestamp),
+  };
+});
+
+// Global Kill Switch
+export const systemControls = pgTable("system_controls", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  controlType: text("control_type").notNull().unique(), // "global-kill-switch", "write-operations", "auto-approvals"
+  isEnabled: boolean("is_enabled").default(true),
+  affectedScopes: jsonb("affected_scopes").default([]), // environments/providers affected
+  reason: text("reason"),
+  enabledBy: varchar("enabled_by").references(() => users.id),
+  disabledBy: varchar("disabled_by").references(() => users.id),
+  enabledAt: timestamp("enabled_at"),
+  disabledAt: timestamp("disabled_at"),
+  metadata: jsonb("metadata").default({}),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Relations
+export const userRolesRelations = relations(userRoles, ({ one }) => ({
+  user: one(users, {
+    fields: [userRoles.userId],
+    references: [users.id],
+  }),
+}));
+
+export const approvalRequestsRelations = relations(approvalRequests, ({ one, many }) => ({
+  requester: one(users, {
+    fields: [approvalRequests.requesterId],
+    references: [users.id],
+  }),
+  actions: many(approvalActions),
+  execution: one(runbookExecutions, {
+    fields: [approvalRequests.runbookExecutionId],
+    references: [runbookExecutions.id],
+  }),
+}));
+
+export const runbookExecutionsRelations = relations(runbookExecutions, ({ one, many }) => ({
+  triggeredByUser: one(users, {
+    fields: [runbookExecutions.triggeredBy],
+    references: [users.id],
+  }),
+  approvalRequest: one(approvalRequests, {
+    fields: [runbookExecutions.approvalRequestId],
+    references: [approvalRequests.id],
+  }),
+  auditLogs: many(runbookAuditLogs),
+}));
+
+// Insert schemas
+export const insertUserRoleSchema = createInsertSchema(userRoles).pick({
+  userId: true,
+  role: true,
+  scope: true,
+  grantedBy: true,
+  expiresAt: true,
+  isActive: true,
+  metadata: true,
+});
+
+export const insertApprovalRequestSchema = createInsertSchema(approvalRequests).pick({
+  requesterId: true,
+  runbookType: true,
+  runbookExecutionId: true,
+  resourceType: true,
+  resourceId: true,
+  provider: true,
+  environment: true,
+  action: true,
+  requestedChanges: true,
+  dryRunResults: true,
+  policyChecks: true,
+  costEstimate: true,
+  riskLevel: true,
+  requiredApprovals: true,
+  approvers: true,
+  approvalDeadline: true,
+  evidence: true,
+  metadata: true,
+});
+
+export const insertApprovalActionSchema = createInsertSchema(approvalActions).pick({
+  approvalRequestId: true,
+  approverId: true,
+  action: true,
+  reason: true,
+  conditions: true,
+  metadata: true,
+});
+
+export const insertRunbookExecutionSchema = createInsertSchema(runbookExecutions).pick({
+  runbookType: true,
+  triggeredBy: true,
+  approvalRequestId: true,
+  provider: true,
+  environment: true,
+  resourceType: true,
+  resourceId: true,
+  executionPlan: true,
+  totalSteps: true,
+  dryRun: true,
+  metadata: true,
+});
+
+export const insertGovernancePolicySchema = createInsertSchema(governancePolicies).pick({
+  name: true,
+  type: true,
+  scope: true,
+  isActive: true,
+  priority: true,
+  rules: true,
+  enforcement: true,
+  exceptions: true,
+  approvers: true,
+  createdBy: true,
+  metadata: true,
+});
+
+export const insertBudgetLimitSchema = createInsertSchema(budgetLimits).pick({
+  name: true,
+  scope: true,
+  limitType: true,
+  limitAmount: true,
+  currency: true,
+  threshold: true,
+  enforcement: true,
+  alertChannels: true,
+  resetPeriod: true,
+  isActive: true,
+  metadata: true,
+});
+
+export const insertRunbookAuditLogSchema = createInsertSchema(runbookAuditLogs).pick({
+  runbookExecutionId: true,
+  approvalRequestId: true,
+  action: true,
+  actor: true,
+  actorType: true,
+  targetResource: true,
+  beforeState: true,
+  afterState: true,
+  diff: true,
+  approvals: true,
+  policyChecks: true,
+  evidence: true,
+  ipAddress: true,
+  userAgent: true,
+  traceId: true,
+  sessionId: true,
+  success: true,
+  errorMessage: true,
+  metadata: true,
+});
+
+// Type exports
+export type UserRole = typeof userRoles.$inferSelect;
+export type InsertUserRole = z.infer<typeof insertUserRoleSchema>;
+export type ApprovalRequest = typeof approvalRequests.$inferSelect;
+export type InsertApprovalRequest = z.infer<typeof insertApprovalRequestSchema>;
+export type ApprovalAction = typeof approvalActions.$inferSelect;
+export type InsertApprovalAction = z.infer<typeof insertApprovalActionSchema>;
+export type RunbookExecution = typeof runbookExecutions.$inferSelect;
+export type InsertRunbookExecution = z.infer<typeof insertRunbookExecutionSchema>;
+export type GovernancePolicy = typeof governancePolicies.$inferSelect;
+export type InsertGovernancePolicy = z.infer<typeof insertGovernancePolicySchema>;
+export type BudgetLimit = typeof budgetLimits.$inferSelect;
+export type InsertBudgetLimit = z.infer<typeof insertBudgetLimitSchema>;
+export type RunbookAuditLog = typeof runbookAuditLogs.$inferSelect;
+export type InsertRunbookAuditLog = z.infer<typeof insertRunbookAuditLogSchema>;
+export type SystemControl = typeof systemControls.$inferSelect;

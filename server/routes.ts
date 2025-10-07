@@ -4,6 +4,7 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe"; // From javascript_stripe blueprint
 import { storage } from "./storage";
 import autonomousDeploymentRoutes from "./routes/autonomousDeployment";
+import runbookRoutes from "./routes/runbooks";
 import { sseService } from "./services/sseService.js";
 import { setupAuth, isAuthenticated } from "./azureAuth";
 import {
@@ -5531,6 +5532,7 @@ Never deploy without explicit user confirmation.`;
 
   // Register autonomous deployment routes
   app.use('/api/autonomous', autonomousDeploymentRoutes);
+  app.use('/api/runbooks', runbookRoutes);
 
   return server;
 }
