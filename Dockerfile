@@ -24,6 +24,10 @@ ENV CI=true
 ENV NO_COLOR=1
 ENV FORCE_COLOR=0
 
+# Force cache busting for every build
+ARG CACHE_BUST
+RUN echo "Cache bust: $CACHE_BUST" && rm -rf node_modules/.vite dist
+
 # Build the application
 RUN npm run build
 
