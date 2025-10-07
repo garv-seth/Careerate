@@ -8,7 +8,7 @@
     "dev": "concurrently \"npm:server:dev\" \"npm:client:dev\"",
     "server:dev": "tsx server/index.ts",
     "client:dev": "vite",
-    "build": "rm -rf dist node_modules/.vite && vite build --force && esbuild server/index.ts --platform=node --packages=external --bundle --format=cjs --outfile=dist/index.cjs --define:import.meta.dirname=__dirname",
+    "build": "vite build --emptyOutDir && esbuild server/index.ts --platform=node --packages=external --bundle --format=cjs --outfile=dist/index.cjs --define:import.meta.dirname=__dirname",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "test": "jest",
