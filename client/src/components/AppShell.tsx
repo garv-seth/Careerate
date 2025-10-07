@@ -122,7 +122,7 @@ export function AppShell({ children, className }: { children: ReactNode; classNa
     const [isScrolled, setIsScrolled] = useState(false);
     const [location] = useLocation();
     const isOnDashboard = isAuthenticated && (location === "/" || location.startsWith("/dashboard"));
-    const [activeDashTab, setActiveDashTab] = useState<string>(() => (typeof window !== 'undefined' ? (window.location.hash?.replace('#', '') || 'agent') : 'agent'));
+    const [activeDashTab, setActiveDashTab] = useState<string>('agent');
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -130,11 +130,14 @@ export function AppShell({ children, className }: { children: ReactNode; classNa
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Keep navbar dashboard tab highlighting in sync with URL hash
+    // Initialize activeDashTab from URL hash on mount and keep in sync
     useEffect(() => {
+        const hash = window.location.hash?.replace('#', '') || 'agent';
+        setActiveDashTab(hash);
+
         const onHashChange = () => {
-            const hash = window.location.hash?.replace('#', '') || 'agent';
-            setActiveDashTab(hash);
+            const newHash = window.location.hash?.replace('#', '') || 'agent';
+            setActiveDashTab(newHash);
         };
         window.addEventListener('hashchange', onHashChange);
         return () => window.removeEventListener('hashchange', onHashChange);
