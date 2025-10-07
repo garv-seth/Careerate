@@ -63,6 +63,7 @@ const appTemplates = [
 ];
 
 export default function Dashboard() {
+  // Build version: 2.0.2 - Fixed React hydration error (forced rebuild)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
