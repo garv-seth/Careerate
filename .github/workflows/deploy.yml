@@ -40,11 +40,8 @@ jobs:
     # - name: Run type check
     #   run: npm run check
 
-    - name: Build application
-      run: |
-        echo "🏗️ Building application..."
-        npm run build
-
+    # Build is handled by Docker - removed pre-build step to avoid cache issues
+    
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
