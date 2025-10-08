@@ -57,17 +57,53 @@ function Router() {
 }
 
 function App() {
-  // Force rebuild: 2025-10-08T21:00:00Z
+  // Force rebuild: 2025-10-08T22:45:00Z - Complete SSR disable
   const [isClient, setIsClient] = useState(false);
-  useEffect(() => setIsClient(true), []);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Don't render anything until client-side
+  if (!isClient) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        background: '#0a0a0a',
+        color: 'white'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid #f97316', 
+            borderTop: '3px solid transparent',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading Careerate...</p>
+        </div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          {isClient && <Toaster />}
+          <Toaster />
           <Router />
-          {isClient && <CookieConsent />}
-          {isClient && <DeploymentInfo />}
+          <CookieConsent />
+          <DeploymentInfo />
         </TooltipProvider>
       </QueryClientProvider>
     </ErrorBoundary>
