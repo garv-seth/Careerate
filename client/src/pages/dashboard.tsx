@@ -143,6 +143,15 @@ export default function Dashboard() {
     },
   });
 
+  // Update typewriter placeholder based on selected repository
+  useEffect(() => {
+    if (!selectedRepo) return;
+    const repoName = selectedRepo.split(":").pop() || selectedRepo;
+    // Pause the rotating suggestions and show targeted CTA
+    typingStateRef.current.running = false;
+    setAnimatedPlaceholder(`Deploy \"${repoName}\"`);
+  }, [selectedRepo]);
+
   const { data: recentActivity = [], isLoading: isActivityLoading } = useQuery({
     queryKey: ["/api/recent-activity"],
   });
@@ -615,19 +624,32 @@ export default function Dashboard() {
                         </UiSelectContent>
                       </UiSelect>
 
-                      {/* Repo select (optional) */}
-                      <UiSelect value={selectedRepo} onValueChange={setSelectedRepo}>
-                        <UiSelectTrigger className="w-[220px] rounded-full bg-[rgba(15,15,20,0.7)] border-white/10 backdrop-blur-md">
-                          <UiSelectValue placeholder="Repository (optional)" />
-                        </UiSelectTrigger>
-                        <UiSelectContent className="bg-[rgba(15,15,20,0.95)] border-white/10 backdrop-blur-xl">
-                          {(reposData?.providers || []).flatMap((prov: any) => (
-                            prov.repos.map((r: any) => (
-                              <UiSelectItem key={`${prov.provider}:${r.id}`} value={`${prov.provider}:${r.id}`}>{r.name}</UiSelectItem>
-                            ))
-                          ))}
-                        </UiSelectContent>
-                      </UiSelect>
+                      {/* Repo select / auth state */}
+                      {reposData?.needsAuth ? (
+                        <Button
+                          variant="outline"
+                          className="rounded-full"
+                          onClick={() => {
+                            // Let backend compute OAuth params; will redirect
+                            window.location.href = "/api/integrations/github/oauth/initiate";
+                          }}
+                        >
+                          Connect GitHub
+                        </Button>
+                      ) : (
+                        <UiSelect value={selectedRepo} onValueChange={setSelectedRepo}>
+                          <UiSelectTrigger className="w-[260px] rounded-full bg-[rgba(15,15,20,0.7)] border-white/10 backdrop-blur-md">
+                            <UiSelectValue placeholder="Choose repository (optional)" />
+                          </UiSelectTrigger>
+                          <UiSelectContent className="bg-[rgba(15,15,20,0.95)] border-white/10 backdrop-blur-xl">
+                            {(reposData?.providers || []).flatMap((prov: any) => (
+                              prov.repos.map((r: any) => (
+                                <UiSelectItem key={`${prov.provider}:${r.id}`} value={`${prov.provider}:${r.id}`}>{r.name}</UiSelectItem>
+                              ))
+                            ))}
+                          </UiSelectContent>
+                        </UiSelect>
+                      )}
 
                       <Button
                       onClick={handleAgentPrompt}
