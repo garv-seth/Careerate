@@ -1,7 +1,30 @@
 {
   "permissions": {
     "allow": [
-      "Bash(Select-Object -First 30)"
+      "Bash(Select-Object -First 30)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(az account show:*)",
+      "Bash(az acr repository delete:*)",
+      "Bash(az containerapp revision deactivate:*)",
+      "Bash(az acr repository show-tags:*)",
+      "Bash(timeout 180 bash -c 'while true; do az acr repository show-tags --name careerateacr --repository careerate-app --orderby time_desc --top 1 2>&1 | grep -q \"\"0690090\"\" && echo \"\"✅ Build complete!\"\" && exit 0 || echo \"\"⏳ Still building... (waiting 15s)\"\"; sleep 15; done')",
+      "Bash(powershell.exe:*)",
+      "Bash(bash:*)",
+      "Bash(gh run list:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(az acr task:*)",
+      "Bash(az containerapp ingress traffic set:*)",
+      "Bash(curl:*)",
+      "Bash(az containerapp revision list:*)",
+      "Bash(az containerapp logs show:*)",
+      "Bash(az keyvault secret list:*)",
+      "Bash(az keyvault list:*)",
+      "Bash(az containerapp revision restart:*)",
+      "Bash(az containerapp show:*)",
+      "Bash(az containerapp secret set:*)",
+      "Bash(az containerapp revision show:*)"
     ],
     "deny": [],
     "ask": []
