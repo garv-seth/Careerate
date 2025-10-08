@@ -1,5 +1,5 @@
 import { Switch, Route } from "wouter";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -57,13 +57,15 @@ function Router() {
 }
 
 function App() {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Toaster />
           <Router />
-          <CookieConsent />
+          {isClient && <CookieConsent />}
           <DeploymentInfo />
         </TooltipProvider>
       </QueryClientProvider>
