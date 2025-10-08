@@ -63,7 +63,6 @@ const appTemplates = [
 ];
 
 export default function Dashboard() {
-  // Build version: 2.0.2 - Fixed React hydration error (forced rebuild)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
@@ -75,6 +74,7 @@ export default function Dashboard() {
   const [selectedRepo, setSelectedRepo] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>('agent');
+  const [isClient, setIsClient] = useState(false);
   const [settingsProjectId, setSettingsProjectId] = useState<string | null>(null);
   const [settingsName, setSettingsName] = useState("");
   const [settingsDescription, setSettingsDescription] = useState("");
@@ -313,8 +313,15 @@ export default function Dashboard() {
     };
   }, [agentPrompt]);
 
-  // Initialize activeTab from URL hash on mount and listen for changes
+  // Mark as client-side only after hydration
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Initialize activeTab from URL hash on mount and listen for changes (client-only)
+  useEffect(() => {
+    if (!isClient) return;
+
     const hash = window.location.hash?.replace('#', '') || 'agent';
     setActiveTab(hash);
 
@@ -324,14 +331,16 @@ export default function Dashboard() {
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
+  }, [isClient]);
 
   useEffect(() => {
+    if (!isClient) return;
+
     const nextHash = `#${activeTab}`;
     if (window.location.hash !== nextHash) {
       window.history.replaceState(null, '', `${window.location.pathname}${nextHash}`);
     }
-  }, [activeTab]);
+  }, [activeTab, isClient]);
 
   const handleCreateProject = (template: any) => {
     setFramework(template.framework);
