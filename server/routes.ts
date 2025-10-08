@@ -4424,6 +4424,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // One-call NL → Plan → Deploy endpoint
+  app.post("/api/deploy/auto", isAuthenticated, async (req, res) => {
+    try {
+      const { prompt, repoUrl, provider = "azure" } = req.body || {};
+      
+      if (!prompt) {
+        return res.status(400).json({ error: "Prompt is required" });
+      }
+
+      const userId = getUserId(req);
+      
+      // Step 1: Analyze repository if URL provided
+      let analysis = null;
+      if (repoUrl) {
+        const { executeAgentTool } = await import("./services/agentToolExecutors");
+        analysis = await executeAgentTool("analyze_repository", { repositoryUrl: repoUrl });
+      }
+
+      // Step 2: Generate deployment plan
+      const { executeAgentTool } = await import("./services/agentToolExecutors");
+      const plan = await executeAgentTool("suggest_deployment_architecture", {
+        framework: analysis?.framework || "unknown",
+        needsDatabase: analysis?.needsDatabase || false,
+        databaseType: analysis?.databaseType || "postgresql",
+        expectedTraffic: "medium",
+        budgetConstraint: 200
+      });
+
+      // Step 3: Calculate costs
+      const costEstimate = await executeAgentTool("calculate_cost_estimate", {
+        provider: plan.primary_recommendation.provider.split(" ")[0].toLowerCase(),
+        services: plan.primary_recommendation.services.map(s => ({ service: s.service, tier: "basic" })),
+        expectedTraffic: "medium"
+      });
+
+      // Step 4: Execute deployment
+      const appName = `careerate-${Date.now()}`;
+      let deploymentResult;
+      
+      if (provider === "azure") {
+        deploymentResult = await executeAgentTool("deploy_to_azure_container_apps", {
+          appName,
+          githubRepoUrl: repoUrl || "https://github.com/vercel/next.js",
+          environmentVariables: {
+            NODE_ENV: "production",
+            PORT: "3000"
+          }
+        });
+      } else if (provider === "vercel") {
+        deploymentResult = await executeAgentTool("deploy_to_vercel", {
+          projectName: appName,
+          githubRepoUrl: repoUrl || "https://github.com/vercel/next.js",
+          framework: analysis?.framework || "nextjs",
+          environmentVariables: {
+            NODE_ENV: "production"
+          }
+        });
+      }
+
+      // Step 5: Create project record
+      const project = await storage.createProject({
+        userId,
+        name: appName,
+        description: `Auto-deployed from: ${prompt}`,
+        framework: analysis?.framework || "unknown",
+        metadata: {
+          framework: analysis?.framework || "unknown",
+          status: deploymentResult?.success ? "deployed" : "failed",
+          deploymentUrl: deploymentResult?.url,
+          prompt,
+          repoUrl,
+          provider,
+          plan,
+          costEstimate
+        }
+      });
+
+      res.json({
+        success: true,
+        project,
+        analysis,
+        plan,
+        costEstimate,
+        deployment: deploymentResult,
+        message: `Deployment ${deploymentResult?.success ? 'successful' : 'failed'}: ${deploymentResult?.url || 'No URL available'}`
+      });
+
+    } catch (error) {
+      console.error("Auto deploy failed", error);
+      res.status(500).json({ 
+        success: false, 
+        error: "Auto deployment failed", 
+        details: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
   // Get Deployment Status (Real Database Integration)
   app.get("/api/hosting/deployments/:deploymentId", isAuthenticated, async (req, res) => {
     try {

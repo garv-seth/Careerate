@@ -363,96 +363,46 @@ export default function Dashboard() {
 
     setIsGenerating(true);
     try {
-      // Call autonomous deployment API
-      const response = await fetch('/api/autonomous/deploy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          naturalLanguageInput: agentPrompt,
-          repositoryUrl: selectedRepo,
-          projectId: `project-${Date.now()}`
-        })
+      // Use the new one-call auto-deploy endpoint
+      const response = await fetch("/api/deploy/auto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ 
+          prompt: agentPrompt,
+          repoUrl: selectedRepo ? `https://github.com/${selectedRepo.split(':')[1]}` : undefined,
+          provider: selectedProvider || "azure"
+        }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Deployment failed');
+        throw new Error(error.error || 'Auto-deployment failed');
       }
-
-      const result = await response.json();
-
-      if (result.success && result.planId) {
-        // Show deployment plan
-        const plan = result.plan;
-        const approved = confirm(
-          `🚀 Deployment Plan\n\n` +
-          `Provider: ${plan.provider.toUpperCase()}\n` +
-          `Region: ${plan.region}\n` +
-          `Architecture: ${plan.architecture.compute}\n` +
-          `Cost: $${plan.costEstimate.monthly}/month\n\n` +
-          `${plan.reasoning}\n\n` +
-          `Approve deployment?`
-        );
-
-        if (approved) {
-          // Approve plan
-          await fetch(`/api/autonomous/plans/${result.planId}/approve`, {
-            method: 'POST',
-            credentials: 'include'
-          });
-
-          toast({
-            title: "Deploying...",
-            description: "Watch real-time progress below",
-          });
-
-          // Execute with Server-Sent Events
-          const eventSource = new EventSource(`/api/autonomous/plans/${result.planId}/execute`);
-
-          eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-
-            if (data.type === 'progress') {
-              toast({
-                title: `${Math.round(data.progress)}% Complete`,
-                description: data.step,
-              });
-            } else if (data.type === 'completed') {
-              eventSource.close();
-              setIsGenerating(false);
-              toast({
-                title: "🎉 Deployment Complete!",
-                description: data.url ? `Live at: ${data.url}` : 'Deployment successful!',
-                duration: 10000,
-              });
-              setAgentPrompt('');
-              queryClient.invalidateQueries();
-            } else if (data.type === 'failed') {
-              eventSource.close();
-              setIsGenerating(false);
-              toast({
-                title: "Deployment Failed",
-                description: data.error,
-                variant: "destructive",
-              });
-            }
-          };
-
-          eventSource.onerror = () => {
-            eventSource.close();
-            setIsGenerating(false);
-          };
-        } else {
-          setIsGenerating(false);
-        }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        toast({
+          title: "🚀 Deployment successful!",
+          description: data.message,
+        });
+        
+        // Refresh projects list
+        queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      } else {
+        throw new Error(data.error || "Deployment failed");
       }
+      
+      setAgentPrompt("");
     } catch (error: any) {
+      console.error('Deployment error:', error);
       toast({
         title: "Deployment Failed",
         description: error.message || "Unknown error",
         variant: "destructive"
       });
+    } finally {
       setIsGenerating(false);
     }
   };
@@ -654,20 +604,23 @@ export default function Dashboard() {
                       <Button
                       onClick={handleAgentPrompt}
                       disabled={!agentPrompt.trim() || isGenerating || (readiness && !readiness.providers?.some((p:any)=>p.ready))}
-                      className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-lg shadow-orange-500/25 px-8 w-full sm:w-auto font-semibold"
+                      className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-orange-500/40 px-8 w-full sm:w-auto font-semibold group relative overflow-hidden"
                       size="lg"
                     >
-                      {isGenerating ? (
-                        <>
-                          <Sparkles className="h-4 w-4 mr-2 animate-spin" />
-                          Deploying...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="h-4 w-4 mr-2" />
-                          Deploy Now
-                        </>
-                      )}
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="relative flex items-center">
+                        {isGenerating ? (
+                          <>
+                            <Sparkles className="h-4 w-4 mr-2 animate-spin" />
+                            <span className="animate-pulse">Deploying...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2 group-hover:animate-bounce" />
+                            <span className="group-hover:tracking-wide transition-all duration-300">Deploy Now</span>
+                          </>
+                        )}
+                      </div>
                       </Button>
                       <Button asChild variant="outline" className="rounded-full">
                         <a href="/launch-wizard">Open Wizard</a>

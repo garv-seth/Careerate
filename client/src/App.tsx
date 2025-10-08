@@ -63,10 +63,10 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <Toaster />
+          {isClient && <Toaster />}
           <Router />
           {isClient && <CookieConsent />}
-          <DeploymentInfo />
+          {isClient && <DeploymentInfo />}
         </TooltipProvider>
       </QueryClientProvider>
     </ErrorBoundary>
