@@ -122,44 +122,52 @@ const CTA = ({ onImportClick }: { onImportClick: () => void }) => (
 );
 
 const Footer = () => (
-  <footer className="border-t border-white/10 mt-20">
-    <div className="container mx-auto px-4 py-12">
-       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
-          <div className="col-span-full lg:col-span-1">
-              <h3 className="text-display font-semibold text-lg mb-2">Careerate</h3>
-              <p className="text-sm text-foreground/60">Production infrastructure for AI-built applications.</p>
-          </div>
-          {[
-            {
-              title: 'Migration',
-              links: ['From Replit', 'From Base44', 'From Emergent', 'From Bolt.new']
-            },
-            {
-              title: 'Platform',
-              links: ['GitHub Integration', 'Azure Infrastructure', 'Auto-scaling', 'Monitoring']
-            },
-            {
-              title: 'Enterprise',
-              links: ['SSO & SAML', 'Private Deployments', 'Compliance', 'Support']
-            },
-            {
-              title: 'Company',
-              links: ['About', 'Blog', 'Careers', 'Contact']
-            }
-          ].map(section => (
-              <div key={section.title}>
-                  <h4 className="font-semibold mb-4">{section.title}</h4>
-                  <ul className="space-y-3">
-                      {section.links.map(link => (
-                        <li key={link}><a href="#" className="text-sm text-foreground/60 hover:text-foreground transition">{link}</a></li>
-                      ))}
-                  </ul>
-              </div>
-          ))}
-       </div>
-       <div className="border-t border-white/10 pt-8 text-center text-sm text-foreground/60">
-        <p>© {new Date().getFullYear()} Careerate. All rights reserved.</p>
-       </div>
+  <footer className="relative mt-20 overflow-hidden bg-black">
+    {/* Cybercore Background - Blurred */}
+    <div className="absolute inset-0 opacity-40 blur-sm">
+      <CybercoreBackground beamCount={50} />
+    </div>
+    
+    {/* Footer Content with transparency */}
+    <div className="relative z-10 border-t border-white/10 bg-black/60 backdrop-blur-xl">
+      <div className="container mx-auto px-4 py-12">
+         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
+            <div className="col-span-full lg:col-span-1">
+                <h3 className="text-display font-semibold text-lg mb-2 text-white">Careerate</h3>
+                <p className="text-sm text-gray-300/80">Production infrastructure for AI-built applications.</p>
+            </div>
+            {[
+              {
+                title: 'Migration',
+                links: ['From Replit', 'From Base44', 'From Emergent', 'From Bolt.new']
+              },
+              {
+                title: 'Platform',
+                links: ['GitHub Integration', 'Azure Infrastructure', 'Auto-scaling', 'Monitoring']
+              },
+              {
+                title: 'Enterprise',
+                links: ['SSO & SAML', 'Private Deployments', 'Compliance', 'Support']
+              },
+              {
+                title: 'Company',
+                links: ['About', 'Blog', 'Careers', 'Contact']
+              }
+            ].map(section => (
+                <div key={section.title}>
+                    <h4 className="font-semibold mb-4 text-white">{section.title}</h4>
+                    <ul className="space-y-3">
+                        {section.links.map(link => (
+                          <li key={link}><a href="#" className="text-sm text-gray-300/70 hover:text-white transition">{link}</a></li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+         </div>
+         <div className="border-t border-white/10 pt-8 text-center text-sm text-gray-300/70">
+          <p>© {new Date().getFullYear()} Careerate. All rights reserved.</p>
+         </div>
+      </div>
     </div>
   </footer>
 )
@@ -193,7 +201,7 @@ export default function LandingNew() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <AppShell className="bg-transparent flex-1">
+      <AppShell className="bg-transparent flex-1" hideFooter={true}>
         {/* Hero Section with Cybercore Background */}
         <div className="relative min-h-screen overflow-hidden bg-black text-foreground -mt-24 md:-mt-28">
           {/* Cybercore Grid Background */}

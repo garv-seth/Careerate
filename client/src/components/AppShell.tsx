@@ -115,7 +115,7 @@ const NavLink = ({ href, children, isPageLink = false }: { href: string; childre
 };
 
 
-export function AppShell({ children, className }: { children: ReactNode; className?: string }) {
+export function AppShell({ children, className, hideFooter = false }: { children: ReactNode; className?: string; hideFooter?: boolean }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const { isAuthenticated, isLoading } = useAuth();
@@ -316,7 +316,7 @@ export function AppShell({ children, className }: { children: ReactNode; classNa
                 {children}
             </main>
 
-            <Footer />
+            {!hideFooter && <Footer />}
 
             <LoginModal
                 isOpen={isLoginModalOpen}
