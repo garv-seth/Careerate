@@ -36,6 +36,7 @@ import { subscriptionService } from "./services/subscriptionService";
 import { azureContainerApps } from "./services/azureContainerApps";
 import { healthMonitor } from "./services/healthMonitor";
 import { collaborationServer } from "./services/collaborationServer";
+import { multiCloudOAuth } from "./services/multiCloudOAuth";
 import { 
   projectCreationMiddleware,
   aiGenerationMiddleware,
@@ -2221,7 +2222,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // GitHub/GitLab OAuth and Repository Management
   // Direct GitHub OAuth initiation (GET endpoint that redirects)
-  app.get("/api/integrations/github/oauth/initiate", (req, res) => {
+  app.get("/api/integrations/github/oauth/initiate", async (req, res) => {
     try {
       const config = {
         clientId: process.env.GITHUB_CLIENT_ID || 'demo-client-id',
@@ -2230,7 +2231,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         scopes: ['repo', 'user:email', 'read:org']
       };
 
-      const { authUrl, state } = repositoryIntegrationService.initiateGitHubOAuth(config);
+      const { authUrl, state } = await multiCloudOAuth.initiateGitHubOAuth(config.redirectUri);
 
       // Store state in session for verification
       if (req.session) {
