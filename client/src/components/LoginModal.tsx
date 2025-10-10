@@ -55,7 +55,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               <rect width="10" height="10" x="1" y="13" fill="#00A4EF"/>
               <rect width="10" height="10" x="13" y="13" fill="#FFB900"/>
             </svg>
-            <span>{isLoading ? 'Connecting…' : 'Sign in with Microsoft'}</span>
+            <span>{isLoading ? 'Connecting…' : 'Continue with Microsoft'}</span>
           </Button>
 
           {/* GitHub Login */}
