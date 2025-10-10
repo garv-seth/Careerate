@@ -42,6 +42,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Track secret loading status globally
+let secretsLoaded = false;
+let secretsError: string | null = null;
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -73,14 +77,18 @@ app.use((req, res, next) => {
 });
 
 // Add a simple health check route with deployment info
+// This must respond immediately for Azure Container Apps health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
+    healthy: true,
     timestamp: new Date().toISOString(),
-    version: 'v0.0.24',
+    version: 'v0.0.25',
     deployTimestamp: process.env.DEPLOY_TIMESTAMP || 'unknown',
     gitCommit: process.env.GIT_COMMIT || 'unknown',
-    cacheBust: process.env.CACHE_BUST || 'unknown'
+    cacheBust: process.env.CACHE_BUST || 'unknown',
+    secretsStatus: secretsLoaded ? 'loaded' : (secretsError ? 'failed' : 'loading'),
+    secretsError: secretsError || undefined
   });
 });
 
@@ -89,34 +97,44 @@ app.get('/api/health', (req, res) => {
     console.log('🚀 Starting Careerate Runbook Platform...');
     console.log('');
 
-    // Load all secrets from Azure Key Vault
-    try {
-      log('🔐 Loading secrets from Azure Key Vault...');
-      const secretsResult = await loadSecretsFromKeyVault();
-      await loadGCPCredentials();
-      validateRequiredSecrets();
-      
-      const integrations = getAvailableIntegrations();
-      console.log('');
-      console.log('🔌 Configured Cloud Providers:');
-      if (integrations.includes('aws')) console.log('  ✅ AWS');
-      if (integrations.includes('azure')) console.log('  ✅ Azure');
-      if (integrations.includes('gcp')) console.log('  ✅ GCP');
-      if (integrations.includes('github')) console.log('  ✅ GitHub');
-      if (integrations.includes('gitlab')) console.log('  ✅ GitLab');
-      if (integrations.includes('openai')) console.log('  ✅ OpenAI');
-      console.log('');
-    } catch (error: any) {
-      console.error('❌ Failed to load secrets from Key Vault:', error.message);
-      console.error('');
-      console.error('💡 Make sure you have run: az login');
-      console.error('💡 Or set AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID');
-      console.error('');
-      // Don't exit - allow running without Key Vault in development
-      if (process.env.NODE_ENV === 'production') {
-        process.exit(1);
+    // Load secrets in background (non-blocking)
+    const secretsPromise = (async () => {
+      try {
+        log('🔐 Loading secrets from Azure Key Vault (background)...');
+        const secretsResult = await Promise.race([
+          loadSecretsFromKeyVault(),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Key Vault timeout after 10 seconds')), 10000)
+          )
+        ]) as any;
+        
+        await loadGCPCredentials();
+        validateRequiredSecrets();
+        
+        const integrations = getAvailableIntegrations();
+        console.log('');
+        console.log('🔌 Configured Cloud Providers:');
+        if (integrations.includes('aws')) console.log('  ✅ AWS');
+        if (integrations.includes('azure')) console.log('  ✅ Azure');
+        if (integrations.includes('gcp')) console.log('  ✅ GCP');
+        if (integrations.includes('github')) console.log('  ✅ GitHub');
+        if (integrations.includes('gitlab')) console.log('  ✅ GitLab');
+        if (integrations.includes('openai')) console.log('  ✅ OpenAI');
+        console.log('');
+        secretsLoaded = true;
+      } catch (error: any) {
+        secretsError = error.message;
+        console.error('⚠️  Secrets loading failed (non-fatal):', error.message);
+        console.error('');
+        console.error('💡 Using environment variables as fallback');
+        console.error('💡 Make sure required secrets are set in environment');
+        console.error('');
+        // In production, we'll still start but log the error
+        // Health check will reflect the status
       }
-    }
+    })();
+
+    // Don't wait for secrets - start server immediately
 
     const server = await registerRoutes(app);
 

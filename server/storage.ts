@@ -3276,6 +3276,52 @@ export class DatabaseStorage implements IStorage {
     });
   }
 
+  // =====================================================
+  // OAUTH STATE MANAGEMENT (for cloud provider OAuth)
+  // =====================================================
+
+  private oauthStates: Map<string, { provider: string; state: string; data: any; expiry: Date }> = new Map();
+
+  async storeOAuthState(userId: string, provider: string, state: string, data: any = {}) {
+    const key = `${userId}:${provider}`;
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    
+    this.oauthStates.set(key, {
+      provider,
+      state,
+      data,
+      expiry
+    });
+
+    // Clean up expired states
+    this.cleanupExpiredOAuthStates();
+  }
+
+  async verifyOAuthState(userId: string, provider: string, state: string): Promise<any | null> {
+    const key = `${userId}:${provider}`;
+    const stored = this.oauthStates.get(key);
+
+    if (!stored) return null;
+    if (stored.state !== state) return null;
+    if (stored.expiry < new Date()) {
+      this.oauthStates.delete(key);
+      return null;
+    }
+
+    // Delete after verification (one-time use)
+    this.oauthStates.delete(key);
+    return stored.data;
+  }
+
+  private cleanupExpiredOAuthStates() {
+    const now = new Date();
+    for (const [key, value] of this.oauthStates.entries()) {
+      if (value.expiry < now) {
+        this.oauthStates.delete(key);
+      }
+    }
+  }
+
 }
 
 export const storage = new DatabaseStorage();

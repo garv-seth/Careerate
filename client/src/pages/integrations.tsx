@@ -3,6 +3,8 @@ import { AppShell } from "@/components/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CloudAccountsManager } from "@/components/CloudAccountsManager";
+import { Separator } from "@/components/ui/separator";
 
 export default function IntegrationsPage() {
   const { data, isLoading } = useQuery({
@@ -33,6 +35,17 @@ export default function IntegrationsPage() {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Integrations</h1>
           <p className="text-foreground/70">Connect your accounts to enable AI agents to deploy and manage your infrastructure.</p>
+        </div>
+
+        {/* Cloud Accounts Section */}
+        <CloudAccountsManager />
+
+        <Separator className="my-8" />
+
+        {/* Other Integrations */}
+        <div>
+          <h2 className="text-2xl font-bold text-foreground mb-1">Other Integrations</h2>
+          <p className="text-foreground/70 mb-6">Additional services and tools for monitoring, notifications, and more.</p>
         </div>
 
         {isLoading ? (

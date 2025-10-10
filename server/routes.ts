@@ -5631,6 +5631,274 @@ Never deploy without explicit user confirmation.`;
   app.use('/api/autonomous', autonomousDeploymentRoutes);
   app.use('/api/runbooks', runbookRoutes);
 
+  // =====================================================
+  // CLOUD OAUTH ROUTES
+  // =====================================================
+
+  // AWS CloudFormation Stack Connection
+  app.post('/api/cloud-oauth/aws/initiate', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { region = 'us-east-1' } = req.body;
+      
+      const { awsOAuth } = await import('./services/cloudOAuth/awsOAuth');
+      const result = awsOAuth.generateStackCreationURL(userId, region);
+      
+      res.json({
+        success: true,
+        ...result
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  app.post('/api/cloud-oauth/aws/complete', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { accountId, roleARN, externalId, region } = req.body;
+      
+      if (!accountId || !roleARN || !externalId) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: accountId, roleARN, externalId'
+        });
+      }
+
+      const { awsOAuth } = await import('./services/cloudOAuth/awsOAuth');
+      const result = await awsOAuth.completeAWSConnection(
+        userId,
+        accountId,
+        roleARN,
+        externalId,
+        region || 'us-east-1'
+      );
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  app.get('/api/cloud-oauth/aws/template', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { awsOAuth } = await import('./services/cloudOAuth/awsOAuth');
+      const result = await awsOAuth.getTemplateForDownload(userId);
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename="careerate-aws-stack.json"');
+      res.send(result.template);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Azure OAuth
+  app.post('/api/cloud-oauth/azure/initiate', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+      const result = await azureOAuth.initiateOAuth(userId);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  app.get('/api/oauth/azure/callback', async (req, res) => {
+    try {
+      const { code, state } = req.query;
+      const userId = req.user?.id || req.user?.sub || '';
+      
+      if (!code || !state) {
+        return res.redirect('/integrations?error=missing_oauth_params');
+      }
+
+      const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+      const result = await azureOAuth.handleCallback(
+        code as string,
+        state as string,
+        userId
+      );
+      
+      if (result.success) {
+        res.redirect('/integrations?azure=connected');
+      } else {
+        res.redirect(`/integrations?error=${encodeURIComponent(result.error || 'unknown')}`);
+      }
+    } catch (error: any) {
+      res.redirect(`/integrations?error=${encodeURIComponent(error.message)}`);
+    }
+  });
+
+  // GCP OAuth
+  app.post('/api/cloud-oauth/gcp/initiate', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { gcpOAuth } = await import('./services/cloudOAuth/gcpOAuth');
+      const result = await gcpOAuth.initiateOAuth(userId);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  app.get('/api/oauth/gcp/callback', async (req, res) => {
+    try {
+      const { code, state } = req.query;
+      const userId = req.user?.id || req.user?.sub || '';
+      
+      if (!code || !state) {
+        return res.redirect('/integrations?error=missing_oauth_params');
+      }
+
+      const { gcpOAuth } = await import('./services/cloudOAuth/gcpOAuth');
+      const result = await gcpOAuth.handleCallback(
+        code as string,
+        state as string,
+        userId
+      );
+      
+      if (result.success) {
+        res.redirect('/integrations?gcp=connected');
+      } else {
+        res.redirect(`/integrations?error=${encodeURIComponent(result.error || 'unknown')}`);
+      }
+    } catch (error: any) {
+      res.redirect(`/integrations?error=${encodeURIComponent(error.message)}`);
+    }
+  });
+
+  app.post('/api/cloud-oauth/gcp/service-account', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { serviceAccountJSON } = req.body;
+      
+      if (!serviceAccountJSON) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing service account JSON'
+        });
+      }
+
+      const { gcpOAuth } = await import('./services/cloudOAuth/gcpOAuth');
+      const result = await gcpOAuth.connectViaServiceAccount(userId, serviceAccountJSON);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Disconnect cloud accounts
+  app.delete('/api/cloud-oauth/:provider/:integrationId', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { provider, integrationId } = req.params;
+
+      let result;
+      if (provider === 'aws') {
+        const { awsOAuth } = await import('./services/cloudOAuth/awsOAuth');
+        result = await awsOAuth.disconnectAWS(userId, integrationId);
+      } else if (provider === 'azure') {
+        const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+        result = await azureOAuth.disconnectAzure(userId, integrationId);
+      } else if (provider === 'gcp') {
+        const { gcpOAuth } = await import('./services/cloudOAuth/gcpOAuth');
+        result = await gcpOAuth.disconnectGCP(userId, integrationId);
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid provider'
+        });
+      }
+
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // =====================================================
+  // INFRASTRUCTURE EXPORT & EJECTABILITY ROUTES
+  // =====================================================
+
+  // Export deployment as IaC
+  app.get('/api/deployments/:deploymentId/export', isAuthenticated, async (req, res) => {
+    try {
+      const { deploymentId } = req.params;
+      const { infrastructureExport } = await import('./services/infrastructureExport');
+      
+      const exported = await infrastructureExport.exportDeployment(deploymentId);
+      
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', `attachment; filename="deployment-${deploymentId}.json"`);
+      res.json(exported);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Eject cloud account (export all deployments and revoke access)
+  app.post('/api/cloud-accounts/:integrationId/eject', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const { integrationId } = req.params;
+      
+      const { infrastructureExport } = await import('./services/infrastructureExport');
+      const result = await infrastructureExport.ejectCloudAccount(userId, integrationId);
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
+  // Get cloud provider integrations
+  app.get('/api/integrations/cloud-providers', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.id || req.user?.sub || '';
+      const integrations = await storage.getUserIntegrations(userId, 'cloud-provider');
+      
+      res.json(integrations);
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  });
+
   return server;
 }
 
