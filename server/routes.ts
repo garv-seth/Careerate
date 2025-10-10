@@ -4307,7 +4307,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Initiate GitHub OAuth for current user (per-user authorization)
-  app.get("/api/integrations/github/oauth/initiate", isAuthenticated, async (req, res) => {
+  app.get("/api/integrations/github/oauth/initiate-authenticated", isAuthenticated, async (req, res) => {
     try {
       const { getGitHubOAuthConfig } = await import('./services/oauthConfig');
       const { clientId, redirectUri, scopes } = await getGitHubOAuthConfig(req);
