@@ -1,6 +1,6 @@
 import { useState, useEffect, ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Sparkles, Code, Cloud, Shield, Brain, GitBranch, BarChart3, User, Settings, LogOut } from "lucide-react";
+import { Menu, X, Sparkles, Code, Cloud, Shield, User, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginModal } from "@/components/LoginModal";
@@ -121,26 +121,10 @@ export function AppShell({ children, className, hideFooter = false }: { children
     const { isAuthenticated, isLoading } = useAuth();
     const [isScrolled, setIsScrolled] = useState(false);
     const [location] = useLocation();
-    const isOnDashboard = isAuthenticated && (location === "/" || location.startsWith("/dashboard"));
-    const [activeDashTab, setActiveDashTab] = useState<string>('agent');
-
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    // Initialize activeDashTab from URL hash on mount and keep in sync
-    useEffect(() => {
-        const hash = window.location.hash?.replace('#', '') || 'agent';
-        setActiveDashTab(hash);
-
-        const onHashChange = () => {
-            const newHash = window.location.hash?.replace('#', '') || 'agent';
-            setActiveDashTab(newHash);
-        };
-        window.addEventListener('hashchange', onHashChange);
-        return () => window.removeEventListener('hashchange', onHashChange);
     }, []);
 
     const UnauthenticatedNav = () => (
@@ -192,51 +176,6 @@ export function AppShell({ children, className, hideFooter = false }: { children
         </>
     );
 
-    // Dashboard-specific nav that mirrors the tabs: Cara, Projects, Overview
-    const DashboardNav = () => {
-        const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
-            e.preventDefault();
-            window.location.hash = hash;
-        };
-
-        return (
-            <>
-                <a
-                    href="#agent"
-                    onClick={(e) => handleHashClick(e, 'agent')}
-                    className={cn(
-                        "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center cursor-pointer",
-                        activeDashTab === 'agent' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                    )}
-                >
-                    <Brain className="h-4 w-4 mr-2" />
-                    Cara
-                </a>
-                <a
-                    href="#projects"
-                    onClick={(e) => handleHashClick(e, 'projects')}
-                    className={cn(
-                        "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center cursor-pointer",
-                        activeDashTab === 'projects' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                    )}
-                >
-                    <GitBranch className="h-4 w-4 mr-2" />
-                    Projects
-                </a>
-                <a
-                    href="#overview"
-                    onClick={(e) => handleHashClick(e, 'overview')}
-                    className={cn(
-                        "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center cursor-pointer",
-                        activeDashTab === 'overview' ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
-                    )}
-                >
-                    <BarChart3 className="h-4 w-4 mr-2" />
-                    Overview
-                </a>
-            </>
-        );
-    };
 
     const AuthButtons = () => (
         <div className="flex items-center gap-2">
@@ -284,7 +223,7 @@ export function AppShell({ children, className, hideFooter = false }: { children
                         <Logo isAuthenticated={isAuthenticated} />
 
                         <div className="hidden md:flex items-center gap-1">
-                            {isAuthenticated ? (isOnDashboard ? <DashboardNav /> : <AuthenticatedNav />) : <UnauthenticatedNav />}
+                            {isAuthenticated ? <AuthenticatedNav /> : <UnauthenticatedNav />}
                         </div>
 
                         <div className="hidden md:flex items-center pr-2">
@@ -306,7 +245,7 @@ export function AppShell({ children, className, hideFooter = false }: { children
             )}>
                 <div className="h-full flex flex-col justify-between p-6 pt-24">
                     <div className="flex flex-col gap-4">
-                        {isAuthenticated ? (isOnDashboard ? <DashboardNav /> : <AuthenticatedNav />) : <UnauthenticatedNav />}
+                        {isAuthenticated ? <AuthenticatedNav /> : <UnauthenticatedNav />}
                     </div>
                     <AuthButtons />
                 </div>
