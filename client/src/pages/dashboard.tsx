@@ -74,7 +74,6 @@ export default function Dashboard() {
   const [selectedRepo, setSelectedRepo] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>('agent');
-  const [isClient, setIsClient] = useState(false);
   const [settingsProjectId, setSettingsProjectId] = useState<string | null>(null);
   const [settingsName, setSettingsName] = useState("");
   const [settingsDescription, setSettingsDescription] = useState("");
@@ -379,15 +378,8 @@ export default function Dashboard() {
     };
   }, [agentPrompt]);
 
-  // Mark as client-side only after hydration
+  // Initialize activeTab from URL hash on mount and listen for changes
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Initialize activeTab from URL hash on mount and listen for changes (client-only)
-  useEffect(() => {
-    if (!isClient) return;
-
     const hash = window.location.hash?.replace('#', '') || 'agent';
     setActiveTab(hash);
 
@@ -397,16 +389,14 @@ export default function Dashboard() {
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
-  }, [isClient]);
+  }, []);
 
   useEffect(() => {
-    if (!isClient) return;
-
     const nextHash = `#${activeTab}`;
     if (window.location.hash !== nextHash) {
       window.history.replaceState(null, '', `${window.location.pathname}${nextHash}`);
     }
-  }, [activeTab, isClient]);
+  }, [activeTab]);
 
   const handleCreateProject = (template: any) => {
     setFramework(template.framework);
