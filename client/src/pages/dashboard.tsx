@@ -106,15 +106,55 @@ export default function Dashboard() {
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ["/api/projects"],
+    retry: false,
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/projects", { credentials: "include" });
+        if (res.status === 401) {
+          return [];
+        }
+        if (!res.ok) {
+          console.error("Failed to load projects:", res.status, res.statusText);
+          return [];
+        }
+        return res.json();
+      } catch (error) {
+        console.error("Projects query error:", error);
+        return [];
+      }
+    },
   });
 
   // Load readiness status
   const { data: readinessData } = useQuery({
     queryKey: ["/api/hosting/readiness"],
+    retry: false,
     queryFn: async () => {
-      const res = await fetch("/api/hosting/readiness", { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load readiness");
-      return res.json();
+      try {
+        const res = await fetch("/api/hosting/readiness", { credentials: "include" });
+        if (res.status === 401) {
+          // Return default readiness data for unauthenticated users
+          return { 
+            github: { connected: false, status: "disconnected" },
+            cloudProviders: { connected: false, status: "disconnected" },
+            needsAuth: true 
+          };
+        }
+        if (!res.ok) {
+          console.error("Failed to load readiness:", res.status, res.statusText);
+          return { 
+            github: { connected: false, status: "error" },
+            cloudProviders: { connected: false, status: "error" }
+          };
+        }
+        return res.json();
+      } catch (error) {
+        console.error("Readiness query error:", error);
+        return { 
+          github: { connected: false, status: "error" },
+          cloudProviders: { connected: false, status: "error" }
+        };
+      }
     },
   });
 
@@ -154,6 +194,23 @@ export default function Dashboard() {
 
   const { data: recentActivity = [], isLoading: isActivityLoading } = useQuery({
     queryKey: ["/api/recent-activity"],
+    retry: false,
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/recent-activity", { credentials: "include" });
+        if (res.status === 401) {
+          return [];
+        }
+        if (!res.ok) {
+          console.error("Failed to load recent activity:", res.status, res.statusText);
+          return [];
+        }
+        return res.json();
+      } catch (error) {
+        console.error("Recent activity query error:", error);
+        return [];
+      }
+    },
   });
 
   const createProjectMutation = useMutation({
@@ -252,7 +309,7 @@ export default function Dashboard() {
     },
   });
 
-  const filteredProjects = projects.filter((project: any) =>
+  const filteredProjects = (projects || []).filter((project: any) =>
     project.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -537,7 +594,7 @@ export default function Dashboard() {
                   {readiness && (
                     <div className="rounded-xl p-3 border border-foreground/10 bg-foreground/5 flex flex-wrap items-center gap-3">
                       <span className="text-sm text-foreground/80 flex items-center"><Shield className="h-4 w-4 mr-2" /> Readiness:</span>
-                      {readiness.providers.map((p: any) => (
+                      {(readiness?.providers || []).map((p: any) => (
                         <Badge key={p.id} className={`${p.ready ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-foreground/10 text-foreground/60 border-foreground/20'}`}>
                           {p.label}: {p.ready ? 'Ready' : 'Missing'}
                         </Badge>

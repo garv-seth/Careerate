@@ -9,10 +9,22 @@ import { Separator } from "@/components/ui/separator";
 export default function IntegrationsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["/api/integrations/catalog"],
+    retry: false,
     queryFn: async () => {
-      const res = await fetch("/api/integrations/catalog", { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load integrations catalog");
-      return res.json();
+      try {
+        const res = await fetch("/api/integrations/catalog", { credentials: "include" });
+        if (res.status === 401) {
+          return { integrations: [], status: [] };
+        }
+        if (!res.ok) {
+          console.error("Failed to load integrations catalog:", res.status, res.statusText);
+          return { integrations: [], status: [] };
+        }
+        return res.json();
+      } catch (error) {
+        console.error("Integrations catalog query error:", error);
+        return { integrations: [], status: [] };
+      }
     },
   });
 

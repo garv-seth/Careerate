@@ -50,6 +50,23 @@ export function CloudAccountsManager() {
   // Fetch connected cloud accounts
   const { data: cloudAccounts = [], isLoading } = useQuery<CloudAccount[]>({
     queryKey: ['/api/integrations/cloud-providers'],
+    retry: false,
+    queryFn: async () => {
+      try {
+        const res = await fetch('/api/integrations/cloud-providers', { credentials: 'include' });
+        if (res.status === 401) {
+          return [];
+        }
+        if (!res.ok) {
+          console.error('Failed to load cloud providers:', res.status, res.statusText);
+          return [];
+        }
+        return res.json();
+      } catch (error) {
+        console.error('Cloud providers query error:', error);
+        return [];
+      }
+    },
   });
 
   // AWS CloudFormation flow

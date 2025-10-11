@@ -2267,7 +2267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           req.session.pendingGitHubCode = code as string;
           req.session.pendingGitHubState = state as string;
         }
-        return res.redirect('/auth/signin?return=/dashboard/import');
+        return res.redirect('/?pending_github_auth=true');
       }
 
       const userId = getUserId(req);
