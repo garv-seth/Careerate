@@ -3,6 +3,7 @@ dotenv.config();
 
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
+import agentRoutes from "./routes/agentRoutes";
 import { setupVite, serveStatic, log } from "./vite";
 import { healthMonitor } from "./services/healthMonitor";
 import { loadSecretsFromKeyVault, loadGCPCredentials, validateRequiredSecrets, getAvailableIntegrations } from "./services/secretsLoader";
@@ -137,6 +138,9 @@ app.get('/api/health', (req, res) => {
     // Don't wait for secrets - start server immediately
 
     const server = await registerRoutes(app);
+    
+    // Register agent routes
+    app.use('/api/agent', agentRoutes);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || err.statusCode || 500;
