@@ -177,12 +177,7 @@ export default function LandingNew() {
   const { isAuthenticated, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
-  // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      setLocation("/dashboard");
-    }
-  }, [isAuthenticated, isLoading, setLocation]);
+  // Dashboard redirect removed - dashboard page deleted
 
   const handleImportFromGitHub = () => {
     // Initiate GitHub OAuth flow
