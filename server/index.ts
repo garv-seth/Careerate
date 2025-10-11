@@ -4,6 +4,7 @@ dotenv.config();
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import agentRoutes from "./routes/agentRoutes";
+import ejectionRoutes from "./routes/ejectionRoutes";
 import { setupVite, serveStatic, log } from "./vite";
 import { healthMonitor } from "./services/healthMonitor";
 import { loadSecretsFromKeyVault, loadGCPCredentials, validateRequiredSecrets, getAvailableIntegrations } from "./services/secretsLoader";
@@ -141,6 +142,9 @@ app.get('/api/health', (req, res) => {
     
     // Register agent routes
     app.use('/api/agent', agentRoutes);
+    
+    // Register ejection routes
+    app.use('/api/eject', ejectionRoutes);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || err.statusCode || 500;
