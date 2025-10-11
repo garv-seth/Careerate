@@ -44,12 +44,11 @@ export function CookieConsent() {
   }
 
   return (
-    <AnimatePresence>
+    <>
       {isVisible && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-3xl"
         >
@@ -91,7 +90,7 @@ export function CookieConsent() {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
 

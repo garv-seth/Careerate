@@ -17,6 +17,8 @@ const IntegrationsPage = lazy(() => import("@/pages/integrations"));
 const PaymentPage = lazy(() => import("@/pages/payment"));
 const AccountSettings = lazy(() => import("@/pages/account-settings"));
 const Deploy = lazy(() => import("@/pages/deploy"));
+const Test = lazy(() => import("@/pages/test"));
+const Minimal = lazy(() => import("@/pages/minimal"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("@/pages/TermsOfService"));
 
@@ -33,7 +35,6 @@ const PageLoader = () => (
 function Router() {
   return (
     <Suspense fallback={<PageLoader />}>
-      <AnimatePresence mode="wait">
       <Switch>
         {/* Public routes */}
         <Route path="/" component={Landing} />
@@ -43,6 +44,8 @@ function Router() {
 
         {/* App routes (auth handled per-page) */}
         <Route path="/dashboard" component={Landing} />
+        <Route path="/test" component={Test} />
+        <Route path="/minimal" component={Minimal} />
         <Route path="/integrations" component={IntegrationsPage} />
         <Route path="/account" component={AccountSettings} />
         <Route path="/settings" component={AccountSettings} />
@@ -51,62 +54,22 @@ function Router() {
         {/* 404 */}
         <Route component={NotFound} />
       </Switch>
-      </AnimatePresence>
     </Suspense>
   );
 }
 
 function App() {
   // Force rebuild: 2025-10-08T22:45:00Z - Complete SSR disable
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Don't render anything until client-side
-  if (!isClient) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        background: '#0a0a0a',
-        color: 'white'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid #f97316', 
-            borderTop: '3px solid transparent',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading Careerate...</p>
-        </div>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
-  }
 
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-          <CookieConsent />
-          <DeploymentInfo />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+        <CookieConsent />
+        <DeploymentInfo />
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
