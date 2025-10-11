@@ -11,7 +11,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Landing from "@/pages/landing-new";
 
 // Lazy load pages for better performance (except Landing which is the entry point)
-const Dashboard = lazy(() => import("@/pages/dashboard"));
+// Dashboard page removed due to persistent React errors
 const NotFound = lazy(() => import("@/pages/not-found"));
 const IntegrationsPage = lazy(() => import("@/pages/integrations"));
 const PaymentPage = lazy(() => import("@/pages/payment"));
@@ -42,7 +42,7 @@ function Router() {
         <Route path="/terms" component={TermsOfService} />
 
         {/* App routes (auth handled per-page) */}
-        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/dashboard" component={Landing} />
         <Route path="/integrations" component={IntegrationsPage} />
         <Route path="/account" component={AccountSettings} />
         <Route path="/settings" component={AccountSettings} />
