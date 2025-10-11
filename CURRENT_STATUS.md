@@ -40,13 +40,15 @@ Phase 9: Documentation & Launch ⏳   0% Not Started
 - `DESIGN_SYSTEM_V2.md` - UI/UX standards
 - `REBUILD_PROGRESS_OCT_11_2025.md` - Progress tracking
 
-### 🔄 Phase 3: Core Infrastructure (40%)
+### 🔄 Phase 3: Core Infrastructure (60%)
 - ✅ `shared/schema-v2.ts` - Database schema with 7 new tables
 - ✅ `migrations/0001_add_v2_agent_tables.sql` - Migration script
 - ✅ `scripts/migrate-v2-schema.ts` - Safe migration tool with rollback
 - ✅ `server/services/encryptionService.ts` - AES-256-GCM encryption
-- 🔜 Azure AI Foundry workspace setup (next)
-- ⏳ Semantic Kernel initialization
+- ✅ `docs/AZURE_AI_FOUNDRY_SETUP.md` - Complete setup guide
+- ✅ `docs/SEMANTIC_KERNEL_SETUP.md` - Agent framework guide
+- 🔜 Execute Azure AI Foundry setup (manual steps)
+- 🔜 Implement agent classes (Planner, Deployer, Monitor)
 - ⏳ MCP server integration
 
 ---
