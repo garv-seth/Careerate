@@ -1,0 +1,30 @@
+# PWA Icon Placeholders Needed
+
+The following icon files are referenced in manifest.json but don't exist yet:
+
+- /icon-72.png (72x72)
+- /icon-96.png (96x96)
+- /icon-128.png (128x128)
+- /icon-144.png (144x144)
+- /icon-152.png (152x152)
+- /icon-192.png (192x192) - Required for PWA
+- /icon-384.png (384x384)
+- /icon-512.png (512x512) - Required for PWA
+
+## To Generate:
+
+1. Create a 512x512 PNG logo with Careerate branding (orange/amber gradient)
+2. Use an icon generator tool (e.g., https://realfavicongenerator.net/) to create all sizes
+3. Replace this file with actual icons
+
+## Temporary Fix:
+
+For now, we'll use a solid color square as a placeholder to prevent PWA errors.
+
+## Design Specs:
+
+- Background: Gradient from orange-500 (#F97316) to amber-500 (#F59E0B)
+- Icon: White "C" letter or abstract symbol
+- Style: Modern, rounded corners (8px radius on 512px version)
+- Format: PNG with transparency
+
