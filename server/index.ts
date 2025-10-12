@@ -63,6 +63,13 @@ app.use((req, res, next) => {
   if (req.path.includes('/assets/') || req.path.endsWith('.js') || req.path.endsWith('.css')) {
     res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
     res.setHeader('ETag', `"${gitCommit}-${cacheBust}"`);
+    
+    // Set correct MIME types for CSS and JS
+    if (req.path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css; charset=utf-8');
+    } else if (req.path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    }
   }
 
   next();

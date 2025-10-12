@@ -16,7 +16,11 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
-    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:prod": "BASE_URL=https://gocareerate.com playwright test",
+    "test:all": "npm run test:run && npm run test:e2e",
     "db:push": "drizzle-kit push",
     "db:migrate:framework": "tsx scripts/migrate-add-framework.ts",
     "smoke": "tsx scripts/smoke-tests.ts"
@@ -138,6 +142,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/typography": "^0.5.18",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
