@@ -18,11 +18,24 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    sourcemap: false, // Disable sourcemaps for production
+    minify: 'esbuild', // Use esbuild for faster minification
+    target: 'es2020', // Modern browsers only
+    cssCodeSplit: true, // Split CSS for better caching
+    chunkSizeWarningLimit: 1000, // Warn on large chunks
     rollupOptions: {
       output: {
         entryFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
         chunkFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
-        assetFileNames: `assets/[name]-[hash]-${Date.now()}.[ext]`
+        assetFileNames: `assets/[name]-[hash]-${Date.now()}.[ext]`,
+        // Optimize chunk splitting
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react/jsx-runtime'],
+          'vendor-router': ['wouter'],
+          'vendor-query': ['@tanstack/react-query'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-ui': ['lucide-react'],
+        }
       }
     }
   },

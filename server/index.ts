@@ -8,8 +8,15 @@ import ejectionRoutes from "./routes/ejectionRoutes";
 import { setupVite, serveStatic, log } from "./vite";
 import { healthMonitor } from "./services/healthMonitor";
 import { loadSecretsFromKeyVault, loadGCPCredentials, validateRequiredSecrets, getAvailableIntegrations } from "./services/secretsLoader";
+import { compressionMiddleware, optimizeResponseHeaders } from "./middleware/compression";
 
 const app = express();
+
+// Enable compression for all responses
+app.use(compressionMiddleware);
+
+// Optimize response headers
+app.use(optimizeResponseHeaders);
 
 // Stripe webhook needs raw body, so handle it before JSON parsing
 app.use('/api/webhooks/stripe', express.raw({type: 'application/json'}));
