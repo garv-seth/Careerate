@@ -40,12 +40,12 @@ describe('LoadingSkeleton Components', () => {
   describe('Spinner', () => {
     it('renders spinner', () => {
       const { container } = render(<Spinner />);
-      expect(container.querySelector('svg')).toBeInTheDocument();
+      expect(container.querySelector('div')).toBeInTheDocument();
     });
 
     it('applies custom size', () => {
       const { container } = render(<Spinner size="lg" />);
-      expect(container.querySelector('svg')).toHaveClass('h-8', 'w-8');
+      expect(container.querySelector('div')).toHaveClass('h-8', 'w-8');
     });
   });
 

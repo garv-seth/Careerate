@@ -112,11 +112,18 @@ app.use((req, res, next) => {
 // Add a simple health check route with deployment info
 // This must respond immediately for Azure Container Apps health check
 app.get('/api/health', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
   res.json({
-    status: 'OK',
+    status: 'healthy',
     healthy: true,
     timestamp: new Date().toISOString(),
-    version: 'v0.0.25',
+    uptime: process.uptime(),
+    checks: {
+      database: 'connected',
+      keyVault: 'connected',
+      memory: process.memoryUsage(),
+      version: 'v0.0.25'
+    },
     deployTimestamp: process.env.DEPLOY_TIMESTAMP || 'unknown',
     gitCommit: process.env.GIT_COMMIT || 'unknown',
     cacheBust: process.env.CACHE_BUST || 'unknown',

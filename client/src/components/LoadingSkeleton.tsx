@@ -10,12 +10,16 @@ import { motion } from "framer-motion";
 interface SkeletonProps {
   className?: string;
   animate?: boolean;
+  variant?: 'default' | 'circle';
 }
 
-export function Skeleton({ className = "", animate = true }: SkeletonProps) {
+export function Skeleton({ className = "", animate = true, variant = 'default' }: SkeletonProps) {
+  const baseClasses = "bg-gradient-to-r from-white/5 via-white/10 to-white/5";
+  const variantClasses = variant === 'circle' ? 'rounded-full' : 'rounded-lg';
+  
   return (
     <motion.div
-      className={`bg-gradient-to-r from-white/5 via-white/10 to-white/5 rounded-lg ${className}`}
+      className={`${baseClasses} ${variantClasses} ${className}`}
       animate={animate ? {
         backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
       } : undefined}
@@ -58,24 +62,14 @@ export function CardSkeleton() {
 }
 
 // Table Row Skeleton
-export function TableRowSkeleton() {
+export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
   return (
     <tr className="border-b border-white/5">
-      <td className="px-6 py-4">
-        <Skeleton className="h-4 w-32" />
-      </td>
-      <td className="px-6 py-4">
-        <Skeleton className="h-4 w-24" />
-      </td>
-      <td className="px-6 py-4">
-        <Skeleton className="h-4 w-20" />
-      </td>
-      <td className="px-6 py-4">
-        <Skeleton className="h-4 w-16" />
-      </td>
-      <td className="px-6 py-4">
-        <Skeleton className="h-8 w-8 rounded-full" />
-      </td>
+      {Array.from({ length: columns }, (_, i) => (
+        <td key={i} className="px-6 py-4">
+          <Skeleton className="h-4 w-24" />
+        </td>
+      ))}
     </tr>
   );
 }
