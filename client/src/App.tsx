@@ -17,6 +17,7 @@ const IntegrationsPage = lazy(() => import("@/pages/integrations"));
 const PaymentPage = lazy(() => import("@/pages/payment"));
 const AccountSettings = lazy(() => import("@/pages/account-settings"));
 const Deploy = lazy(() => import("@/pages/deploy"));
+const Install = lazy(() => import("@/pages/install"));
 const Test = lazy(() => import("@/pages/test"));
 const Minimal = lazy(() => import("@/pages/minimal"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
@@ -50,6 +51,7 @@ function Router() {
         <Route path="/account" component={AccountSettings} />
         <Route path="/settings" component={AccountSettings} />
         <Route path="/deploy" component={Deploy} />
+        <Route path="/install" component={Install} />
 
         {/* 404 */}
         <Route component={NotFound} />
