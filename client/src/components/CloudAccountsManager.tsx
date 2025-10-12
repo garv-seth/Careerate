@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { IntegrationCardSkeleton } from './LoadingSkeleton';
 
 interface CloudAccount {
   id: string;
@@ -371,8 +372,10 @@ export function CloudAccountsManager() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <IntegrationCardSkeleton />
+          <IntegrationCardSkeleton />
+          <IntegrationCardSkeleton />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
