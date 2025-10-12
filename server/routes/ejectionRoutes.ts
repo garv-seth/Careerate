@@ -8,7 +8,7 @@ import { Router, Request, Response } from 'express';
 import { awsEjector } from '../cloud/ejection/awsEjector';
 import { azureEjector } from '../cloud/ejection/azureEjector';
 import { gcpEjector } from '../cloud/ejection/gcpEjector';
-import { isAuthenticated } from '../middleware/auth';
+import { isAuthenticated } from '../azureAuth';
 import JSZip from 'jszip';
 
 const router = Router();

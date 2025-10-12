@@ -12,7 +12,7 @@ import { HealerAgent } from '../agents/healerAgent';
 import { CostOptimizerAgent } from '../agents/costOptimizerAgent';
 import { orchestrator } from '../agents/orchestrator';
 import { storageV2 } from '../storage-v2';
-import { isAuthenticated } from '../middleware/auth';
+import { isAuthenticated } from '../azureAuth';
 
 const router = Router();
 
