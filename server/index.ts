@@ -35,6 +35,19 @@ app.use((req, res, next) => {
     res.setHeader('Expires', '0');
   }
 
+  // Service Worker - must be served with correct MIME type and no cache
+  if (req.path === '/sw.js') {
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Service-Worker-Allowed', '/');
+  }
+
+  // Manifest and PWA icons - allow caching
+  if (req.path === '/manifest.json' || req.path.match(/icon-\d+\.png$/)) {
+    res.setHeader('Content-Type', req.path.endsWith('.json') ? 'application/json' : 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day
+  }
+
   // Allow caching for static assets but with validation
   if (req.path.includes('/assets/') || req.path.endsWith('.js') || req.path.endsWith('.css')) {
     res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
