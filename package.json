@@ -83,6 +83,7 @@
     "@types/memoizee": "^0.4.12",
     "@types/node-fetch": "^2.6.13",
     "@types/three": "^0.180.0",
+    "applicationinsights": "^3.7.0",
     "axios": "^1.12.2",
     "better-sqlite3": "^12.4.1",
     "class-variance-authority": "^0.7.1",

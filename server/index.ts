@@ -1,6 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Initialize Application Insights FIRST (before other imports)
+import { initializeApplicationInsights } from "./services/applicationInsights";
+initializeApplicationInsights();
+
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import agentRoutes from "./routes/agentRoutes";
