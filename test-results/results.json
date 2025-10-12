@@ -131,21 +131,21 @@
   },
   "suites": [
     {
-      "title": "landing-page.spec.ts",
-      "file": "landing-page.spec.ts",
+      "title": "security.spec.ts",
+      "file": "security.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Landing Page",
-          "file": "landing-page.spec.ts",
+          "title": "Security",
+          "file": "security.spec.ts",
           "line": 9,
           "column": 6,
           "specs": [
             {
-              "title": "should load successfully",
-              "ok": true,
+              "title": "should enforce HTTPS",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -158,27 +158,62 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 8549,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 514,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 28,
+                          "line": 16
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 28,
+                            "line": 16
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28\u001b[22m"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.239Z",
+                      "startTime": "2025-10-12T21:12:59.929Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-chromium\\video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 28,
+                        "line": 16
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-2d2e54234a3c739362dd",
-              "file": "landing-page.spec.ts",
+              "id": "a7e9410bcc1ef00e9656-82dcc9f46f8b92145ca8",
+              "file": "security.spec.ts",
               "line": 10,
               "column": 3
             },
             {
-              "title": "should display all main sections",
+              "title": "should have secure headers",
               "ok": true,
               "tags": [],
               "tests": [
@@ -193,12 +228,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 4984,
+                      "duration": 1989,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.250Z",
+                      "startTime": "2025-10-12T21:12:59.960Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -206,13 +241,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-f381edf7031eac5aad6b",
-              "file": "landing-page.spec.ts",
+              "id": "a7e9410bcc1ef00e9656-6b547a1a32c397ba0cd4",
+              "file": "security.spec.ts",
               "line": 20,
               "column": 3
             },
             {
-              "title": "should register service worker",
+              "title": "should sanitize user input",
               "ok": true,
               "tags": [],
               "tests": [
@@ -227,12 +262,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 8480,
+                      "duration": 825,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.295Z",
+                      "startTime": "2025-10-12T21:12:59.945Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -240,14 +275,14 @@
                   "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-68d57c813273095f5cc0",
-              "file": "landing-page.spec.ts",
-              "line": 38,
+              "id": "a7e9410bcc1ef00e9656-40deb549658f02df6cba",
+              "file": "security.spec.ts",
+              "line": 37,
               "column": 3
             },
             {
-              "title": "should show cookie consent on first visit",
-              "ok": true,
+              "title": "should protect against CSRF",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -260,28 +295,68 @@
                     {
                       "workerIndex": 3,
                       "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 7820,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 2913,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:82:19",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 19,
+                          "line": 82
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 80 |\u001b[39m     \u001b[90m// Should have state parameter in OAuth URL\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mincludes(\u001b[32m'github.com'\u001b[39m)) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m       expect(url)\u001b[33m.\u001b[39mtoContain(\u001b[32m'state='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m     }\n \u001b[90m 84 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 19,
+                            "line": 82
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n\n\u001b[0m \u001b[90m 80 |\u001b[39m     \u001b[90m// Should have state parameter in OAuth URL\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mincludes(\u001b[32m'github.com'\u001b[39m)) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m       expect(url)\u001b[33m.\u001b[39mtoContain(\u001b[32m'state='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m     }\n \u001b[90m 84 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:82:19\u001b[22m"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.294Z",
+                      "startTime": "2025-10-12T21:12:59.944Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 19,
+                        "line": 82
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-e85bc165b25f0f19332e",
-              "file": "landing-page.spec.ts",
-              "line": 59,
+              "id": "a7e9410bcc1ef00e9656-0f10f0151d5502e2bd99",
+              "file": "security.spec.ts",
+              "line": 68,
               "column": 3
             },
             {
-              "title": "should navigate to features section",
-              "ok": false,
+              "title": "should have strong Content Security Policy",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -294,67 +369,27 @@
                     {
                       "workerIndex": 4,
                       "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 8310,
-                      "error": {
-                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
-                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:78:24",
-                        "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                          "column": 24,
-                          "line": 78
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m     \u001b[90m// Click Features link\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[36mconst\u001b[39m featuresLink \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Features'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 80 |\u001b[39m     \n \u001b[90m 81 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 24,
-                            "line": 78
-                          },
-                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 76 |\u001b[39m     \u001b[90m// Click Features link\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[36mconst\u001b[39m featuresLink \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Features'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 80 |\u001b[39m     \n \u001b[90m 81 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:78:24\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 1628,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.330Z",
+                      "startTime": "2025-10-12T21:12:59.944Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                        "column": 24,
-                        "line": 78
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-f4b7629670630be4a137",
-              "file": "landing-page.spec.ts",
-              "line": 73,
+              "id": "a7e9410bcc1ef00e9656-dcd05133574282200c93",
+              "file": "security.spec.ts",
+              "line": 86,
               "column": 3
             },
             {
-              "title": "should navigate to pricing section",
+              "title": "should not expose sensitive data in client-side code",
               "ok": true,
               "tags": [],
               "tests": [
@@ -369,12 +404,12 @@
                       "workerIndex": 5,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 6352,
+                      "duration": 2453,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.315Z",
+                      "startTime": "2025-10-12T21:12:59.958Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -382,14 +417,14 @@
                   "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-b7e78db8671b5c8f5e64",
-              "file": "landing-page.spec.ts",
-              "line": 85,
+              "id": "a7e9410bcc1ef00e9656-0129b3c9bd04a12a6657",
+              "file": "security.spec.ts",
+              "line": 103,
               "column": 3
             },
             {
-              "title": "should open sign-in modal",
-              "ok": false,
+              "title": "should handle authentication errors gracefully",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -402,67 +437,27 @@
                     {
                       "workerIndex": 6,
                       "parallelIndex": 6,
-                      "status": "failed",
-                      "duration": 5086,
-                      "error": {
-                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
-                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:102:24",
-                        "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                          "column": 24,
-                          "line": 102
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 100 |\u001b[39m     \u001b[90m// Click Sign In button\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 102 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 103 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 104 |\u001b[39m     \n \u001b[90m 105 |\u001b[39m     \u001b[90m// Modal should appear\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 24,
-                            "line": 102
-                          },
-                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 100 |\u001b[39m     \u001b[90m// Click Sign In button\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 102 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 103 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 104 |\u001b[39m     \n \u001b[90m 105 |\u001b[39m     \u001b[90m// Modal should appear\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:102:24\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 584,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.295Z",
+                      "startTime": "2025-10-12T21:12:59.993Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                        "column": 24,
-                        "line": 102
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-79203b28d99de6b02d4f",
-              "file": "landing-page.spec.ts",
-              "line": 97,
+              "id": "a7e9410bcc1ef00e9656-e5ce912ff25bc7aacf37",
+              "file": "security.spec.ts",
+              "line": 115,
               "column": 3
             },
             {
-              "title": "should be responsive on mobile",
+              "title": "should use HttpOnly cookies for sessions",
               "ok": true,
               "tags": [],
               "tests": [
@@ -477,12 +472,12 @@
                       "workerIndex": 7,
                       "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 7109,
+                      "duration": 2669,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.342Z",
+                      "startTime": "2025-10-12T21:12:59.976Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -490,14 +485,14 @@
                   "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-42b25e6a8bcab9a0c199",
-              "file": "landing-page.spec.ts",
-              "line": 113,
+              "id": "a7e9410bcc1ef00e9656-ba8d31a54888f9c0c9d7",
+              "file": "security.spec.ts",
+              "line": 128,
               "column": 3
             },
             {
-              "title": "should load quickly",
-              "ok": false,
+              "title": "should rate limit API requests",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -510,68 +505,28 @@
                     {
                       "workerIndex": 8,
                       "parallelIndex": 8,
-                      "status": "failed",
-                      "duration": 6357,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m5003\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m5003\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:138:22",
-                        "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                          "column": 22,
-                          "line": 138
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 136 |\u001b[39m     \n \u001b[90m 137 |\u001b[39m     \u001b[90m// Should load in less than 5 seconds (generous for CI)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 138 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 139 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 140 |\u001b[39m\n \u001b[90m 141 |\u001b[39m   test(\u001b[32m'should have no console errors'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 22,
-                            "line": 138
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m5003\u001b[39m\n\n\u001b[0m \u001b[90m 136 |\u001b[39m     \n \u001b[90m 137 |\u001b[39m     \u001b[90m// Should load in less than 5 seconds (generous for CI)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 138 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 139 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 140 |\u001b[39m\n \u001b[90m 141 |\u001b[39m   test(\u001b[32m'should have no console errors'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:138:22\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 2407,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.358Z",
+                      "startTime": "2025-10-12T21:12:59.996Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                        "column": 22,
-                        "line": 138
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-43f1408dbcd7209973c0",
-              "file": "landing-page.spec.ts",
-              "line": 127,
+              "id": "a7e9410bcc1ef00e9656-66d695de4c9a303b228a",
+              "file": "security.spec.ts",
+              "line": 144,
               "column": 3
             },
             {
-              "title": "should have no console errors",
-              "ok": false,
+              "title": "should log out securely",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -584,67 +539,96 @@
                     {
                       "workerIndex": 9,
                       "parallelIndex": 9,
+                      "status": "passed",
+                      "duration": 2592,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:00.011Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-60aff3aa3575184af6e9",
+              "file": "security.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "should enforce HTTPS",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 10,
                       "status": "failed",
-                      "duration": 9940,
+                      "duration": 1739,
                       "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:161:28",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28",
                         "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
                           "column": 28,
-                          "line": 161
+                          "line": 16
                         },
-                        "snippet": "\u001b[0m \u001b[90m 159 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 160 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 161 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 162 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 163 |\u001b[39m\n \u001b[90m 164 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
                             "column": 28,
-                            "line": 161
+                            "line": 16
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n\n\u001b[0m \u001b[90m 159 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 160 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 161 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 162 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 163 |\u001b[39m\n \u001b[90m 164 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:161:28\u001b[22m"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.401Z",
+                      "startTime": "2025-10-12T21:13:00.070Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-have-no-console-errors-chromium\\test-failed-1.png"
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-firefox\\test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-have-no-console-errors-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-have-no-console-errors-chromium\\error-context.md"
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-firefox\\video.webm"
                         }
                       ],
                       "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
                         "column": 28,
-                        "line": 161
+                        "line": 16
                       }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-e39c72cedb6a832eb156",
-              "file": "landing-page.spec.ts",
-              "line": 141,
+              "id": "a7e9410bcc1ef00e9656-7043d8834d31e6be8065",
+              "file": "security.spec.ts",
+              "line": 10,
               "column": 3
             },
             {
-              "title": "should have accessible images",
+              "title": "should have secure headers",
               "ok": true,
               "tags": [],
               "tests": [
@@ -652,53 +636,19 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 10,
-                      "parallelIndex": 10,
-                      "status": "passed",
-                      "duration": 5638,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.401Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-7e80fe2b8ce8d28f0194",
-              "file": "landing-page.spec.ts",
-              "line": 164,
-              "column": 3
-            },
-            {
-              "title": "should support keyboard navigation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
                   "results": [
                     {
                       "workerIndex": 11,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 6709,
+                      "duration": 3430,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T20:38:21.371Z",
+                      "startTime": "2025-10-12T21:13:00.011Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -706,9 +656,1550 @@
                   "status": "expected"
                 }
               ],
-              "id": "e0f2b3f5c1ecc224a2ed-6d7c4d03c010ce99b0ae",
-              "file": "landing-page.spec.ts",
-              "line": 179,
+              "id": "a7e9410bcc1ef00e9656-941bea915084387874f7",
+              "file": "security.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "should sanitize user input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2435,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:03.141Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-4543c433cc1073204510",
+              "file": "security.spec.ts",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "should protect against CSRF",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 6,
+                      "status": "failed",
+                      "duration": 5840,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:82:19",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 19,
+                          "line": 82
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 80 |\u001b[39m     \u001b[90m// Should have state parameter in OAuth URL\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mincludes(\u001b[32m'github.com'\u001b[39m)) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m       expect(url)\u001b[33m.\u001b[39mtoContain(\u001b[32m'state='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m     }\n \u001b[90m 84 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 19,
+                            "line": 82
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n\n\u001b[0m \u001b[90m 80 |\u001b[39m     \u001b[90m// Should have state parameter in OAuth URL\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mincludes(\u001b[32m'github.com'\u001b[39m)) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m       expect(url)\u001b[33m.\u001b[39mtoContain(\u001b[32m'state='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m     }\n \u001b[90m 84 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:82:19\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:03.187Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-firefox\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-firefox\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-firefox\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 19,
+                        "line": 82
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-8c7e3833e50c96d1889c",
+              "file": "security.spec.ts",
+              "line": 68,
+              "column": 3
+            },
+            {
+              "title": "should have strong Content Security Policy",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3278,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:03.343Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-a074c69977f4f592b476",
+              "file": "security.spec.ts",
+              "line": 86,
+              "column": 3
+            },
+            {
+              "title": "should not expose sensitive data in client-side code",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 4121,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.180Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-f62db1cf950eeef5c218",
+              "file": "security.spec.ts",
+              "line": 103,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3142,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.422Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-9a530ad9ab30bee1c0fd",
+              "file": "security.spec.ts",
+              "line": 115,
+              "column": 3
+            },
+            {
+              "title": "should use HttpOnly cookies for sessions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 3639,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.515Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-902ce73d2d68f98f688b",
+              "file": "security.spec.ts",
+              "line": 128,
+              "column": 3
+            },
+            {
+              "title": "should rate limit API requests",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 8,
+                      "status": "passed",
+                      "duration": 3876,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.552Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-067916fa2dd29f39e163",
+              "file": "security.spec.ts",
+              "line": 144,
+              "column": 3
+            },
+            {
+              "title": "should log out securely",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 7,
+                      "status": "passed",
+                      "duration": 3866,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.577Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-6a8d608f11d78320b5b7",
+              "file": "security.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "should enforce HTTPS",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 9,
+                      "status": "failed",
+                      "duration": 633,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 28,
+                          "line": 16
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 28,
+                            "line": 16
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.564Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-webkit\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-webkit\\video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 28,
+                        "line": 16
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-d8e610346bb9dffcc49d",
+              "file": "security.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "should have secure headers",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1469,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:04.700Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-4816c6dfdcd5dca013d4",
+              "file": "security.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "should sanitize user input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 11,
+                      "status": "passed",
+                      "duration": 1604,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:06.780Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-1a90ab7c2b8294ba972d",
+              "file": "security.spec.ts",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "should protect against CSRF",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 10,
+                      "status": "failed",
+                      "duration": 12461,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:82:19",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 19,
+                          "line": 82
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 80 |\u001b[39m     \u001b[90m// Should have state parameter in OAuth URL\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mincludes(\u001b[32m'github.com'\u001b[39m)) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m       expect(url)\u001b[33m.\u001b[39mtoContain(\u001b[32m'state='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m     }\n \u001b[90m 84 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 19,
+                            "line": 82
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n\n\u001b[0m \u001b[90m 80 |\u001b[39m     \u001b[90m// Should have state parameter in OAuth URL\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mincludes(\u001b[32m'github.com'\u001b[39m)) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 82 |\u001b[39m       expect(url)\u001b[33m.\u001b[39mtoContain(\u001b[32m'state='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 83 |\u001b[39m     }\n \u001b[90m 84 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:82:19\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:06.195Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-webkit\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-webkit\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-webkit\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 19,
+                        "line": 82
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-7172f19798df121eea03",
+              "file": "security.spec.ts",
+              "line": 68,
+              "column": 3
+            },
+            {
+              "title": "should have strong Content Security Policy",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 9,
+                      "status": "passed",
+                      "duration": 2294,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:06.783Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-6ff3939ae159723297b9",
+              "file": "security.spec.ts",
+              "line": 86,
+              "column": 3
+            },
+            {
+              "title": "should not expose sensitive data in client-side code",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1561,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:06.304Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-529375bac4184186b3f1",
+              "file": "security.spec.ts",
+              "line": 103,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 881,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:11.287Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-bd3ceff49e1362f78108",
+              "file": "security.spec.ts",
+              "line": 115,
+              "column": 3
+            },
+            {
+              "title": "should use HttpOnly cookies for sessions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1801,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:07.886Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-8f51d76ff2464b2585b1",
+              "file": "security.spec.ts",
+              "line": 128,
+              "column": 3
+            },
+            {
+              "title": "should rate limit API requests",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 25,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1728,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:11.222Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-0daf75fce40482b81f9c",
+              "file": "security.spec.ts",
+              "line": 144,
+              "column": 3
+            },
+            {
+              "title": "should log out securely",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 11,
+                      "status": "passed",
+                      "duration": 2134,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:08.533Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-fefc3acc67a017242b42",
+              "file": "security.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "should enforce HTTPS",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 27,
+                      "parallelIndex": 9,
+                      "status": "failed",
+                      "duration": 499,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 28,
+                          "line": 16
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 28,
+                            "line": 16
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:11.684Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-Mobile-Chrome\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-Mobile-Chrome\\video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 28,
+                        "line": 16
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-32784dd737642c24da18",
+              "file": "security.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "should have secure headers",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 30,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 1873,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:13.185Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-b27685671946f35dad08",
+              "file": "security.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "should sanitize user input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 28,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 826,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:12.088Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-00b4d63e0db078c43914",
+              "file": "security.spec.ts",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "should protect against CSRF",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 11,
+                      "status": "timedOut",
+                      "duration": 31522,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 57,
+                            "line": 72
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - element is outside of the viewport\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    53 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n\u001b[0m \u001b[90m 70 |\u001b[39m     \n \u001b[90m 71 |\u001b[39m     \u001b[90m// OAuth flows should use state parameter\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 72 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Continue with GitHub/i\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 74 |\u001b[39m     \n \u001b[90m 75 |\u001b[39m     \u001b[90m// Wait for navigation\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:72:57\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:12.666Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-Mobile-Chrome\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-Mobile-Chrome\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-Mobile-Chrome\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-e76913bffcfa9d010aa7",
+              "file": "security.spec.ts",
+              "line": 68,
+              "column": 3
+            },
+            {
+              "title": "should have strong Content Security Policy",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2038,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:13.753Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-bdfb1b0d911ea7385bb7",
+              "file": "security.spec.ts",
+              "line": 86,
+              "column": 3
+            },
+            {
+              "title": "should not expose sensitive data in client-side code",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 35,
+                      "parallelIndex": 8,
+                      "status": "passed",
+                      "duration": 2039,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:14.330Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-75da79484f96de644a58",
+              "file": "security.spec.ts",
+              "line": 103,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 32,
+                      "parallelIndex": 6,
+                      "status": "passed",
+                      "duration": 628,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:13.819Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-ca4ea5ab442b5e281685",
+              "file": "security.spec.ts",
+              "line": 115,
+              "column": 3
+            },
+            {
+              "title": "should use HttpOnly cookies for sessions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 33,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2007,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:14.093Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-c96b1c2ba2b51cc0530e",
+              "file": "security.spec.ts",
+              "line": 128,
+              "column": 3
+            },
+            {
+              "title": "should rate limit API requests",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 34,
+                      "parallelIndex": 9,
+                      "status": "passed",
+                      "duration": 1862,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:14.255Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-3f138493f5ce2a1d0460",
+              "file": "security.spec.ts",
+              "line": 144,
+              "column": 3
+            },
+            {
+              "title": "should log out securely",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 38,
+                      "parallelIndex": 7,
+                      "status": "passed",
+                      "duration": 2293,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:15.678Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-cb4c116d90f81fff6bf3",
+              "file": "security.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "should enforce HTTPS",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 36,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 775,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                          "column": 28,
+                          "line": 16
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 28,
+                            "line": 16
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mhttps\u001b[27m:\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mabout\u001b[27m:\"\u001b[39m\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \n \u001b[90m 15 |\u001b[39m     \u001b[36mif\u001b[39m (url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'localhost'\u001b[39m \u001b[33m&&\u001b[39m url\u001b[33m.\u001b[39mhostname \u001b[33m!==\u001b[39m \u001b[32m'127.0.0.1'\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m       expect(url\u001b[33m.\u001b[39mprotocol)\u001b[33m.\u001b[39mtoBe(\u001b[32m'https:'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m     }\n \u001b[90m 18 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:16:28\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:15.076Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-Mobile-Safari\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-enforce-HTTPS-Mobile-Safari\\video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                        "column": 28,
+                        "line": 16
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-656ae9a6e3a1222b3a13",
+              "file": "security.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "should have secure headers",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 39,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2011,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:16.100Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-575820d64c3d87cb9902",
+              "file": "security.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "should sanitize user input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 37,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1065,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:15.441Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-0c9da3c78d15544f9107",
+              "file": "security.spec.ts",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "should protect against CSRF",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 40,
+                      "parallelIndex": 6,
+                      "status": "timedOut",
+                      "duration": 30645,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
+                            "column": 57,
+                            "line": 72
+                          },
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m  - element was detached from the DOM, retrying\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    4 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 70 |\u001b[39m     \n \u001b[90m 71 |\u001b[39m     \u001b[90m// OAuth flows should use state parameter\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 72 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Continue with GitHub/i\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 74 |\u001b[39m     \n \u001b[90m 75 |\u001b[39m     \u001b[90m// Wait for navigation\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:72:57\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:16.883Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-Mobile-Safari\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-Mobile-Safari\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\security-Security-should-protect-against-CSRF-Mobile-Safari\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-bd65db818baec64c7313",
+              "file": "security.spec.ts",
+              "line": 68,
+              "column": 3
+            },
+            {
+              "title": "should have strong Content Security Policy",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 41,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 2029,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:17.401Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-faffc99254cdbae4abb9",
+              "file": "security.spec.ts",
+              "line": 86,
+              "column": 3
+            },
+            {
+              "title": "should not expose sensitive data in client-side code",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 42,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2229,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:17.771Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-c5967e20b35a4b82620a",
+              "file": "security.spec.ts",
+              "line": 103,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 43,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1265,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:17.800Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-7d057fc1d768da1d0da7",
+              "file": "security.spec.ts",
+              "line": 115,
+              "column": 3
+            },
+            {
+              "title": "should use HttpOnly cookies for sessions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 44,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2079,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:18.133Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-080bf6d7dca6e68120f7",
+              "file": "security.spec.ts",
+              "line": 128,
+              "column": 3
+            },
+            {
+              "title": "should rate limit API requests",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 45,
+                      "parallelIndex": 9,
+                      "status": "passed",
+                      "duration": 1602,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:18.210Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-e266452adccb0ecb78f8",
+              "file": "security.spec.ts",
+              "line": 144,
+              "column": 3
+            },
+            {
+              "title": "should log out securely",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 46,
+                      "parallelIndex": 8,
+                      "status": "passed",
+                      "duration": 1883,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-12T21:13:18.368Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a7e9410bcc1ef00e9656-6823fb2499b53b6ff38a",
+              "file": "security.spec.ts",
+              "line": 164,
               "column": 3
             }
           ]
@@ -718,11 +2209,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-12T20:38:11.980Z",
-    "duration": 20891.621000000003,
-    "expected": 8,
+    "startTime": "2025-10-12T21:12:52.068Z",
+    "duration": 56477.261,
+    "expected": 40,
     "skipped": 0,
-    "unexpected": 4,
+    "unexpected": 10,
     "flaky": 0
   }
 }
