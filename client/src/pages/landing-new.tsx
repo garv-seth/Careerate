@@ -29,20 +29,20 @@ const Features = () => (
   <section id="features" className="py-24 sm:py-32">
     <div className="container mx-auto px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">From Vibe Coding to Vibe Hosting™ in One Conversation</h2>
+        <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Deploy Without the DevOps Headache</h2>
         <p className="text-lg text-foreground/70">
-            You built it with AI. Now deploy it with AI. Just describe what you need—our agent chooses the best cloud, estimates costs, and ships to production. The natural evolution of vibe coding.
+            You built your app. Now just tell our AI where it should go. It picks the right cloud, shows you what it'll cost, and handles everything. No Kubernetes. No Terraform. No weekend spent reading AWS docs.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
-            { icon: Brain, title: "AI Cloud Selection", description: "Agent analyzes your app and chooses the best cloud provider based on framework, budget, and traffic", colorClass: "from-primary to-secondary" },
-            { icon: Globe, title: "Multi-Cloud Support", description: "Deploy to AWS, Azure, GCP, Vercel, or Railway—agent picks the optimal platform for each use case", colorClass: "from-blue-500 to-cyan-500" },
-            { icon: Cloud, title: "Cost Transparency", description: "Get detailed cost estimates before deployment. Agent suggests most cost-effective architecture", colorClass: "from-green-500 to-emerald-500" },
-            { icon: Shield, title: "Zero Lock-In", description: "Not tied to one vendor. Switch clouds anytime. 60+ integrations pre-configured in Azure Key Vault", colorClass: "from-orange-500 to-red-500" },
-            { icon: Activity, title: "Intelligent Provisioning", description: "Agent provisions databases (Neon, MongoDB Atlas), monitoring (Datadog), and CDN automatically", colorClass: "from-indigo-500 to-purple-500" },
-            { icon: GitBranch, title: "Natural Language Interface", description: "Just describe what you need. Agent handles GitHub analysis, deployment, and configuration", colorClass: "from-pink-500 to-rose-500" },
+            { icon: Brain, title: "Smart Cloud Picker", description: "Tell us what you're building. We'll figure out if it belongs on AWS, Azure, GCP, Vercel, or Railway—and explain why.", colorClass: "from-primary to-secondary" },
+            { icon: Cloud, title: "See Costs Upfront", description: "No surprise bills. We show you exactly what you'll pay before we deploy anything. Change your mind? No problem.", colorClass: "from-green-500 to-emerald-500" },
+            { icon: Shield, title: "Deploy to YOUR Cloud", description: "We connect to your AWS/Azure/GCP account. You own the infrastructure. Kick us out anytime and it keeps running.", colorClass: "from-orange-500 to-red-500" },
+            { icon: GitBranch, title: "Just Talk to It", description: "\"Deploy my Next.js app to AWS with a Postgres database.\" That's it. The AI figures out the rest.", colorClass: "from-pink-500 to-rose-500" },
+            { icon: Activity, title: "Sets Up Everything", description: "Databases, CDN, monitoring, SSL certificates—all the boring stuff you'd spend hours googling gets configured automatically.", colorClass: "from-indigo-500 to-purple-500" },
+            { icon: Globe, title: "Works Everywhere", description: "Connect GitHub, GitLab, AWS, Azure, GCP, Vercel, Railway. If you use it, we probably integrate with it.", colorClass: "from-blue-500 to-cyan-500" },
         ].map((feature, idx) => <FeatureCard key={feature.title} {...feature} index={idx} />)}
       </div>
     </div>
@@ -53,16 +53,16 @@ const Pricing = () => (
   <section id="pricing" className="py-24 sm:py-32">
     <div className="container mx-auto px-4">
       <div className="text-center mb-12">
-        <h2 className="text-display text-4xl font-bold mb-2">Simple, transparent pricing</h2>
-        <p className="text-foreground/70">Start free. Scale when your AI app gets traction.</p>
+        <h2 className="text-display text-4xl font-bold mb-2">Pricing that makes sense</h2>
+        <p className="text-foreground/70">Free to start. Pay only when you're actually using it.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {        [{
-          name: 'Free', price: '$0', desc: 'For prototypes and testing', features: ['1 Project', 'Basic migration', 'Community support']
+          name: 'Free', price: '$0', desc: 'Try it out, no credit card', features: ['1 project', '1 deployment', 'Community help', 'All core features']
         },{
-          name: 'Pro', price: '$49', desc: 'For growing AI apps', features: ['Unlimited Projects', 'Advanced agents', 'Priority migrations', 'Email support', 'Custom domains']
+          name: 'Pro', price: '$49', desc: 'For real projects', features: ['Unlimited projects', 'Unlimited deployments', 'Email support', 'Custom domains', 'Priority deployment queue']
         },{
-          name: 'Enterprise', price: 'Contact', desc: 'For teams and production apps', features: ['SSO & SAML', 'Private deployments', '99.9% SLA', 'Dedicated support', 'Compliance features']
+          name: 'Enterprise', price: 'Let\'s talk', desc: 'For teams who need more', features: ['SSO & SAML', 'Private cloud deployment', '99.9% uptime SLA', 'Dedicated support', 'Custom integrations']
         }].map(tier => (
           <div key={tier.name} className="glass-pane rounded-3xl p-8 flex flex-col">
             <h3 className="text-xl font-semibold mb-1">{tier.name}</h3>
@@ -84,11 +84,11 @@ const Docs = () => (
     <div className="container mx-auto px-4">
       <div className="grid md:grid-cols-2 gap-8 items-center">
         <div>
-          <h2 className="text-display text-4xl font-bold mb-4">Developer-first docs</h2>
-          <p className="text-foreground/70 mb-6">Clear guides, API references, and copy‑paste snippets to automate everything—from code generation to multi‑cloud deploys.</p>
+          <h2 className="text-display text-4xl font-bold mb-4">Works how you work</h2>
+          <p className="text-foreground/70 mb-6">Use the web UI, CLI, or API. Whatever fits your workflow. Docs are actually readable (we promise).</p>
           <div className="flex gap-3">
-            <a href="#" className="rounded-full px-5 py-3 glass-pane">Quickstart</a>
-            <a href="#" className="rounded-full px-5 py-3 glass-pane">CLI & API</a>
+            <a href="/docs" className="rounded-full px-5 py-3 glass-pane hover:bg-primary/10 transition-colors">Read the docs</a>
+            <a href="/deploy" className="rounded-full px-5 py-3 glass-pane hover:bg-primary/10 transition-colors">Try it now</a>
           </div>
         </div>
         <div className="glass-pane rounded-3xl p-6 text-sm text-foreground/80">
@@ -107,9 +107,9 @@ const CTA = ({ onImportClick }: { onImportClick: () => void }) => (
             <div className="relative rounded-3xl p-10 sm:p-16 text-center overflow-hidden glass-pane">
                  <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary opacity-10 blur-3xl"></div>
                  <div className="relative z-10">
-                    <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Ready to Deploy Without Vendor Lock-In?</h2>
+                    <h2 className="text-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">Try it with your next project</h2>
                     <p className="max-w-2xl mx-auto text-lg text-foreground/70 mb-8">
-                        Stop choosing between AWS, Azure, and GCP. Let our AI agent analyze your app and deploy to the best cloud for your specific needs—all through natural language.
+                        Import from GitHub and we'll show you exactly what deployment would look like—which cloud, what it costs, how long it'll take. No commitment required.
                     </p>
                     <Button size="lg" onClick={onImportClick} className="rounded-full px-10 py-6 text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/40">
                       <Sparkles className="mr-2 h-5 w-5" />
@@ -134,7 +134,7 @@ const Footer = () => (
          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
             <div className="col-span-full lg:col-span-1">
                 <h3 className="text-display font-semibold text-lg mb-2 text-white">Careerate</h3>
-                <p className="text-sm text-gray-300/80">Production infrastructure for AI-built applications.</p>
+                <p className="text-sm text-gray-300/80">Deploy to any cloud without the DevOps headache.</p>
             </div>
             {[
               {
@@ -211,9 +211,9 @@ export default function LandingNew() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"
               >
-                Vibe Hosting
+                Deploy to Any Cloud
                 <br />
-                For the Vibe Coding Era
+                By Just Asking
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -221,7 +221,7 @@ export default function LandingNew() {
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 className="text-lg md:text-xl text-gray-300/90 max-w-2xl mb-8"
               >
-                Built with Cursor? Ship with Careerate. Tell our AI what you need—it picks the best cloud (AWS, Azure, GCP, Vercel, Railway), shows you the costs, and ships your app. Zero DevOps required.
+                Stop choosing between AWS, Azure, and GCP. Our AI picks the right one for your app, shows you the cost, and deploys it. Works with whatever you're already using.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
