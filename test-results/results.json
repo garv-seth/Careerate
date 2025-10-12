@@ -159,12 +159,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3974,
+                      "duration": 8549,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.420Z",
+                      "startTime": "2025-10-12T20:38:21.239Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -193,12 +193,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 6988,
+                      "duration": 4984,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.544Z",
+                      "startTime": "2025-10-12T20:38:21.250Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -227,12 +227,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 7121,
+                      "duration": 8480,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.511Z",
+                      "startTime": "2025-10-12T20:38:21.295Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -261,12 +261,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 7225,
+                      "duration": 7820,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.266Z",
+                      "startTime": "2025-10-12T20:38:21.294Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -281,7 +281,7 @@
             },
             {
               "title": "should navigate to features section",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -294,18 +294,58 @@
                     {
                       "workerIndex": 4,
                       "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 7043,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 8310,
+                      "error": {
+                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
+                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:78:24",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                          "column": 24,
+                          "line": 78
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 76 |\u001b[39m     \u001b[90m// Click Features link\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[36mconst\u001b[39m featuresLink \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Features'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 80 |\u001b[39m     \n \u001b[90m 81 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                            "column": 24,
+                            "line": 78
+                          },
+                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 76 |\u001b[39m     \u001b[90m// Click Features link\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[36mconst\u001b[39m featuresLink \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Features'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 80 |\u001b[39m     \n \u001b[90m 81 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:78:24\u001b[22m"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.602Z",
+                      "startTime": "2025-10-12T20:38:21.330Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                        "column": 24,
+                        "line": 78
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "e0f2b3f5c1ecc224a2ed-f4b7629670630be4a137",
@@ -329,12 +369,12 @@
                       "workerIndex": 5,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 5854,
+                      "duration": 6352,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.509Z",
+                      "startTime": "2025-10-12T20:38:21.315Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -344,12 +384,12 @@
               ],
               "id": "e0f2b3f5c1ecc224a2ed-b7e78db8671b5c8f5e64",
               "file": "landing-page.spec.ts",
-              "line": 83,
+              "line": 85,
               "column": 3
             },
             {
               "title": "should open sign-in modal",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -362,23 +402,63 @@
                     {
                       "workerIndex": 6,
                       "parallelIndex": 6,
-                      "status": "passed",
-                      "duration": 7255,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 5086,
+                      "error": {
+                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
+                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:102:24",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                          "column": 24,
+                          "line": 102
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 100 |\u001b[39m     \u001b[90m// Click Sign In button\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 102 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 103 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 104 |\u001b[39m     \n \u001b[90m 105 |\u001b[39m     \u001b[90m// Modal should appear\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                            "column": 24,
+                            "line": 102
+                          },
+                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 100 |\u001b[39m     \u001b[90m// Click Sign In button\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 102 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 103 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 104 |\u001b[39m     \n \u001b[90m 105 |\u001b[39m     \u001b[90m// Modal should appear\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:102:24\u001b[22m"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.646Z",
+                      "startTime": "2025-10-12T20:38:21.295Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                        "column": 24,
+                        "line": 102
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "e0f2b3f5c1ecc224a2ed-79203b28d99de6b02d4f",
               "file": "landing-page.spec.ts",
-              "line": 93,
+              "line": 97,
               "column": 3
             },
             {
@@ -397,12 +477,12 @@
                       "workerIndex": 7,
                       "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 7286,
+                      "duration": 7109,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.543Z",
+                      "startTime": "2025-10-12T20:38:21.342Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -412,12 +492,12 @@
               ],
               "id": "e0f2b3f5c1ecc224a2ed-42b25e6a8bcab9a0c199",
               "file": "landing-page.spec.ts",
-              "line": 107,
+              "line": 113,
               "column": 3
             },
             {
               "title": "should load quickly",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -430,23 +510,63 @@
                     {
                       "workerIndex": 8,
                       "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 6380,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 6357,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m5003\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m5003\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:138:22",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                          "column": 22,
+                          "line": 138
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 136 |\u001b[39m     \n \u001b[90m 137 |\u001b[39m     \u001b[90m// Should load in less than 5 seconds (generous for CI)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 138 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 139 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 140 |\u001b[39m\n \u001b[90m 141 |\u001b[39m   test(\u001b[32m'should have no console errors'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                            "column": 22,
+                            "line": 138
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m5003\u001b[39m\n\n\u001b[0m \u001b[90m 136 |\u001b[39m     \n \u001b[90m 137 |\u001b[39m     \u001b[90m// Should load in less than 5 seconds (generous for CI)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 138 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 139 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 140 |\u001b[39m\n \u001b[90m 141 |\u001b[39m   test(\u001b[32m'should have no console errors'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:138:22\u001b[22m"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.637Z",
+                      "startTime": "2025-10-12T20:38:21.358Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                        "column": 22,
+                        "line": 138
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "e0f2b3f5c1ecc224a2ed-43f1408dbcd7209973c0",
               "file": "landing-page.spec.ts",
-              "line": 121,
+              "line": 127,
               "column": 3
             },
             {
@@ -465,31 +585,31 @@
                       "workerIndex": 9,
                       "parallelIndex": 9,
                       "status": "failed",
-                      "duration": 6227,
+                      "duration": 9940,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:155:28",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:161:28",
                         "location": {
                           "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
                           "column": 28,
-                          "line": 155
+                          "line": 161
                         },
-                        "snippet": "\u001b[0m \u001b[90m 153 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 154 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 155 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 156 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 157 |\u001b[39m\n \u001b[90m 158 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 159 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 160 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 161 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 162 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 163 |\u001b[39m\n \u001b[90m 164 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
                             "column": 28,
-                            "line": 155
+                            "line": 161
                           },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n\n\u001b[0m \u001b[90m 153 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 154 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 155 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 156 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 157 |\u001b[39m\n \u001b[90m 158 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:155:28\u001b[22m"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n\n\u001b[0m \u001b[90m 159 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 160 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 161 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 162 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 163 |\u001b[39m\n \u001b[90m 164 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:161:28\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.544Z",
+                      "startTime": "2025-10-12T20:38:21.401Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -511,7 +631,7 @@
                       "errorLocation": {
                         "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
                         "column": 28,
-                        "line": 155
+                        "line": 161
                       }
                     }
                   ],
@@ -520,7 +640,7 @@
               ],
               "id": "e0f2b3f5c1ecc224a2ed-e39c72cedb6a832eb156",
               "file": "landing-page.spec.ts",
-              "line": 135,
+              "line": 141,
               "column": 3
             },
             {
@@ -539,12 +659,12 @@
                       "workerIndex": 10,
                       "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 7385,
+                      "duration": 5638,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.526Z",
+                      "startTime": "2025-10-12T20:38:21.401Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -554,7 +674,7 @@
               ],
               "id": "e0f2b3f5c1ecc224a2ed-7e80fe2b8ce8d28f0194",
               "file": "landing-page.spec.ts",
-              "line": 158,
+              "line": 164,
               "column": 3
             },
             {
@@ -573,12 +693,12 @@
                       "workerIndex": 11,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 3843,
+                      "duration": 6709,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-12T11:13:46.494Z",
+                      "startTime": "2025-10-12T20:38:21.371Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -588,2047 +708,7 @@
               ],
               "id": "e0f2b3f5c1ecc224a2ed-6d7c4d03c010ce99b0ae",
               "file": "landing-page.spec.ts",
-              "line": 173,
-              "column": 3
-            },
-            {
-              "title": "should load successfully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 13,
-                      "parallelIndex": 11,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.637Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-dbba5eb2f6cb6a4efb44",
-              "file": "landing-page.spec.ts",
-              "line": 10,
-              "column": 3
-            },
-            {
-              "title": "should display all main sections",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 12,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.605Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-a11f1acee020de350c52",
-              "file": "landing-page.spec.ts",
-              "line": 20,
-              "column": 3
-            },
-            {
-              "title": "should register service worker",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 15,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 7,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.741Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-cf4844d0904a98910955",
-              "file": "landing-page.spec.ts",
-              "line": 38,
-              "column": 3
-            },
-            {
-              "title": "should show cookie consent on first visit",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 23,
-                      "parallelIndex": 8,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.316Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-4c286e6aaa8a77f4adda",
-              "file": "landing-page.spec.ts",
-              "line": 59,
-              "column": 3
-            },
-            {
-              "title": "should navigate to features section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 19,
-                      "parallelIndex": 2,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.037Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-d5620392221036fd198e",
-              "file": "landing-page.spec.ts",
-              "line": 73,
-              "column": 3
-            },
-            {
-              "title": "should navigate to pricing section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 22,
-                      "parallelIndex": 3,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.268Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-289e962c092233fcf849",
-              "file": "landing-page.spec.ts",
-              "line": 83,
-              "column": 3
-            },
-            {
-              "title": "should open sign-in modal",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 20,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.114Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-5dcf00fb72f399a280c4",
-              "file": "landing-page.spec.ts",
-              "line": 93,
-              "column": 3
-            },
-            {
-              "title": "should be responsive on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 16,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.773Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-2209879255571cc75868",
-              "file": "landing-page.spec.ts",
-              "line": 107,
-              "column": 3
-            },
-            {
-              "title": "should load quickly",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 17,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.835Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-7f531174209754a2318f",
-              "file": "landing-page.spec.ts",
-              "line": 121,
-              "column": 3
-            },
-            {
-              "title": "should have no console errors",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 18,
-                      "parallelIndex": 6,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.944Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-d8b75a5368fae59c397c",
-              "file": "landing-page.spec.ts",
-              "line": 135,
-              "column": 3
-            },
-            {
-              "title": "should have accessible images",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 21,
-                      "parallelIndex": 10,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.189Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-c97ba60f9ba53c00e5aa",
-              "file": "landing-page.spec.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "should support keyboard navigation",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "firefox",
-                  "projectName": "firefox",
-                  "results": [
-                    {
-                      "workerIndex": 14,
-                      "parallelIndex": 9,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\firefox-1490\\firefox\\firefox.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:58.712Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-dd799c62cedd9b1f08b1",
-              "file": "landing-page.spec.ts",
-              "line": 173,
-              "column": 3
-            },
-            {
-              "title": "should load successfully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 24,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.951Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-2d83df7c094f8141e7df",
-              "file": "landing-page.spec.ts",
-              "line": 10,
-              "column": 3
-            },
-            {
-              "title": "should display all main sections",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 25,
-                      "parallelIndex": 11,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:13:59.981Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-ce134d7f12364de74f4a",
-              "file": "landing-page.spec.ts",
-              "line": 20,
-              "column": 3
-            },
-            {
-              "title": "should register service worker",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 26,
-                      "parallelIndex": 9,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.042Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-1ff5e67993d5f3784a54",
-              "file": "landing-page.spec.ts",
-              "line": 38,
-              "column": 3
-            },
-            {
-              "title": "should show cookie consent on first visit",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 27,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.060Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-a4a2cecc9af8e9dda8cf",
-              "file": "landing-page.spec.ts",
-              "line": 59,
-              "column": 3
-            },
-            {
-              "title": "should navigate to features section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 28,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 7,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.137Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-383399a7d4110456acc9",
-              "file": "landing-page.spec.ts",
-              "line": 73,
-              "column": 3
-            },
-            {
-              "title": "should navigate to pricing section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 29,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.199Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-53365e660bde4712423e",
-              "file": "landing-page.spec.ts",
-              "line": 83,
-              "column": 3
-            },
-            {
-              "title": "should open sign-in modal",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 30,
-                      "parallelIndex": 6,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.259Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-6b911f6b622435747eca",
-              "file": "landing-page.spec.ts",
-              "line": 93,
-              "column": 3
-            },
-            {
-              "title": "should be responsive on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 31,
-                      "parallelIndex": 2,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.368Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-7136aaf393bdfd29e5a4",
-              "file": "landing-page.spec.ts",
-              "line": 107,
-              "column": 3
-            },
-            {
-              "title": "should load quickly",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 32,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.429Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-41813e4340fdca2e1c24",
-              "file": "landing-page.spec.ts",
-              "line": 121,
-              "column": 3
-            },
-            {
-              "title": "should have no console errors",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 33,
-                      "parallelIndex": 10,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.505Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-43d94769344b07214d53",
-              "file": "landing-page.spec.ts",
-              "line": 135,
-              "column": 3
-            },
-            {
-              "title": "should have accessible images",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 34,
-                      "parallelIndex": 3,
-                      "status": "failed",
-                      "duration": 6,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.596Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-be00fc65d666c60595c3",
-              "file": "landing-page.spec.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "should support keyboard navigation",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "webkit",
-                  "projectName": "webkit",
-                  "results": [
-                    {
-                      "workerIndex": 35,
-                      "parallelIndex": 8,
-                      "status": "failed",
-                      "duration": 5,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:00.645Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-8b1fca9155045509d8d3",
-              "file": "landing-page.spec.ts",
-              "line": 173,
-              "column": 3
-            },
-            {
-              "title": "should load successfully",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 36,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3271,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.272Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-8dfe464114211fef9d86",
-              "file": "landing-page.spec.ts",
-              "line": 10,
-              "column": 3
-            },
-            {
-              "title": "should display all main sections",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 37,
-                      "parallelIndex": 11,
-                      "status": "passed",
-                      "duration": 3162,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.304Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-e8195c8df49169133b70",
-              "file": "landing-page.spec.ts",
-              "line": 20,
-              "column": 3
-            },
-            {
-              "title": "should register service worker",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 38,
-                      "parallelIndex": 9,
-                      "status": "passed",
-                      "duration": 4934,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.378Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-b7b2e1340da89594c1da",
-              "file": "landing-page.spec.ts",
-              "line": 38,
-              "column": 3
-            },
-            {
-              "title": "should show cookie consent on first visit",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 39,
-                      "parallelIndex": 5,
-                      "status": "passed",
-                      "duration": 4100,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.396Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-9ba2a08e522c1de053d7",
-              "file": "landing-page.spec.ts",
-              "line": 59,
-              "column": 3
-            },
-            {
-              "title": "should navigate to features section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 40,
-                      "parallelIndex": 7,
-                      "status": "timedOut",
-                      "duration": 30944,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 56,
-                            "line": 77
-                          },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Features' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#features\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Features</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    51 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n\n\u001b[0m \u001b[90m 75 |\u001b[39m     \n \u001b[90m 76 |\u001b[39m     \u001b[90m// Click Features link\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 77 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Features'\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 78 |\u001b[39m     \n \u001b[90m 79 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\n \u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Deploy Without the DevOps Headache/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:77:56\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.460Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-Mobile-Chrome\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-Mobile-Chrome\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page--4c7cc-avigate-to-features-section-Mobile-Chrome\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-861fd88d9191f4fb2dde",
-              "file": "landing-page.spec.ts",
-              "line": 73,
-              "column": 3
-            },
-            {
-              "title": "should navigate to pricing section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 41,
-                      "parallelIndex": 1,
-                      "status": "timedOut",
-                      "duration": 30982,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 55,
-                            "line": 87
-                          },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Pricing' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#pricing\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Pricing</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    51 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n\n\u001b[0m \u001b[90m 85 |\u001b[39m     \n \u001b[90m 86 |\u001b[39m     \u001b[90m// Click Pricing link\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 87 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Pricing'\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 88 |\u001b[39m     \n \u001b[90m 89 |\u001b[39m     \u001b[90m// Should scroll to pricing section\u001b[39m\n \u001b[90m 90 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Pricing that makes sense/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:87:55\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.535Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-navigate-to-pricing-section-Mobile-Chrome\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-navigate-to-pricing-section-Mobile-Chrome\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-navigate-to-pricing-section-Mobile-Chrome\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-e87df528ae8c527c6e69",
-              "file": "landing-page.spec.ts",
-              "line": 83,
-              "column": 3
-            },
-            {
-              "title": "should open sign-in modal",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 42,
-                      "parallelIndex": 6,
-                      "status": "timedOut",
-                      "duration": 30865,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 57,
-                            "line": 97
-                          },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    50 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\n\n\u001b[0m \u001b[90m  95 |\u001b[39m     \n \u001b[90m  96 |\u001b[39m     \u001b[90m// Click Sign In button\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  97 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  98 |\u001b[39m     \n \u001b[90m  99 |\u001b[39m     \u001b[90m// Modal should appear\u001b[39m\n \u001b[90m 100 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Sign in to Careerate/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:97:57\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:01.587Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-Mobile-Chrome\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-Mobile-Chrome\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-open-sign-in-modal-Mobile-Chrome\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-47621583ce7e04a5ae51",
-              "file": "landing-page.spec.ts",
-              "line": 93,
-              "column": 3
-            },
-            {
-              "title": "should be responsive on mobile",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 43,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 3772,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:02.117Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-67e484743fe8fd584705",
-              "file": "landing-page.spec.ts",
-              "line": 107,
-              "column": 3
-            },
-            {
-              "title": "should load quickly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 44,
-                      "parallelIndex": 4,
-                      "status": "passed",
-                      "duration": 4710,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:02.135Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-24cf8ed719d08ae77e27",
-              "file": "landing-page.spec.ts",
-              "line": 121,
-              "column": 3
-            },
-            {
-              "title": "should have no console errors",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 45,
-                      "parallelIndex": 10,
-                      "status": "failed",
-                      "duration": 5894,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:155:28",
-                        "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                          "column": 28,
-                          "line": 155
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 153 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 154 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 155 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 156 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 157 |\u001b[39m\n \u001b[90m 158 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                            "column": 28,
-                            "line": 155
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m1\u001b[39m\nReceived array:  \u001b[31m[\"Refused to apply style from 'https://gocareerate.com/assets/index.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.\"]\u001b[39m\n\n\u001b[0m \u001b[90m 153 |\u001b[39m     )\u001b[33m;\u001b[39m\n \u001b[90m 154 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 155 |\u001b[39m     expect(criticalErrors)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 156 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 157 |\u001b[39m\n \u001b[90m 158 |\u001b[39m   test(\u001b[32m'should have accessible images'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:155:28\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:02.145Z",
-                      "annotations": [],
-                      "attachments": [],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
-                        "column": 28,
-                        "line": 155
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-93af28fa119a298ffff7",
-              "file": "landing-page.spec.ts",
-              "line": 135,
-              "column": 3
-            },
-            {
-              "title": "should have accessible images",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 46,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 4524,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:02.174Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-2a3d4bd61c68e765c9cb",
-              "file": "landing-page.spec.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "should support keyboard navigation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Chrome",
-                  "projectName": "Mobile Chrome",
-                  "results": [
-                    {
-                      "workerIndex": 47,
-                      "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 4319,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:02.289Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-e1fb267c0c177e476138",
-              "file": "landing-page.spec.ts",
-              "line": 173,
-              "column": 3
-            },
-            {
-              "title": "should load successfully",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 54,
-                      "parallelIndex": 11,
-                      "status": "failed",
-                      "duration": 10,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:11.408Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-6eba60e1c04b3bf8100a",
-              "file": "landing-page.spec.ts",
-              "line": 10,
-              "column": 3
-            },
-            {
-              "title": "should display all main sections",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 51,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 17,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:11.160Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-e4c035d6455ec2aee349",
-              "file": "landing-page.spec.ts",
-              "line": 20,
-              "column": 3
-            },
-            {
-              "title": "should register service worker",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 53,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 8,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:11.302Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-e69e20671bca73b65f0d",
-              "file": "landing-page.spec.ts",
-              "line": 38,
-              "column": 3
-            },
-            {
-              "title": "should show cookie consent on first visit",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 50,
-                      "parallelIndex": 9,
-                      "status": "failed",
-                      "duration": 11,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:11.070Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-796e397ad65dbf2d9a6b",
-              "file": "landing-page.spec.ts",
-              "line": 59,
-              "column": 3
-            },
-            {
-              "title": "should navigate to features section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 52,
-                      "parallelIndex": 2,
-                      "status": "failed",
-                      "duration": 12,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:11.273Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-418479a925eb016a42d9",
-              "file": "landing-page.spec.ts",
-              "line": 73,
-              "column": 3
-            },
-            {
-              "title": "should navigate to pricing section",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 48,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 13,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:10.688Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-6d502571632ed73fa454",
-              "file": "landing-page.spec.ts",
-              "line": 83,
-              "column": 3
-            },
-            {
-              "title": "should open sign-in modal",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 55,
-                      "parallelIndex": 8,
-                      "status": "failed",
-                      "duration": 10,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:11.652Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-eb7533b1408763d91ef6",
-              "file": "landing-page.spec.ts",
-              "line": 93,
-              "column": 3
-            },
-            {
-              "title": "should be responsive on mobile",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 49,
-                      "parallelIndex": 3,
-                      "status": "failed",
-                      "duration": 14,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:10.829Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-930e9e6bc092c586bf28",
-              "file": "landing-page.spec.ts",
-              "line": 107,
-              "column": 3
-            },
-            {
-              "title": "should load quickly",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 56,
-                      "parallelIndex": 10,
-                      "status": "failed",
-                      "duration": 7,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:12.168Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-36e3bf1f66f61f7364da",
-              "file": "landing-page.spec.ts",
-              "line": 121,
-              "column": 3
-            },
-            {
-              "title": "should have no console errors",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 57,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 7,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:12.547Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-79c6718d44e1a642ea66",
-              "file": "landing-page.spec.ts",
-              "line": 135,
-              "column": 3
-            },
-            {
-              "title": "should have accessible images",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 58,
-                      "parallelIndex": 3,
-                      "status": "failed",
-                      "duration": 8,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:12.639Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-8cac0b57db007bd78032",
-              "file": "landing-page.spec.ts",
-              "line": 158,
-              "column": 3
-            },
-            {
-              "title": "should support keyboard navigation",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "Mobile Safari",
-                  "projectName": "Mobile Safari",
-                  "results": [
-                    {
-                      "workerIndex": 59,
-                      "parallelIndex": 9,
-                      "status": "failed",
-                      "duration": 8,
-                      "error": {
-                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                      },
-                      "errors": [
-                        {
-                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\Garvs\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-12T11:14:12.837Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "e0f2b3f5c1ecc224a2ed-4ad3612b291a256f6f4f",
-              "file": "landing-page.spec.ts",
-              "line": 173,
+              "line": 179,
               "column": 3
             }
           ]
@@ -2638,11 +718,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-12T11:13:35.630Z",
-    "duration": 58519.533,
-    "expected": 19,
+    "startTime": "2025-10-12T20:38:11.980Z",
+    "duration": 20891.621000000003,
+    "expected": 8,
     "skipped": 0,
-    "unexpected": 41,
+    "unexpected": 4,
     "flaky": 0
   }
 }

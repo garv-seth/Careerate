@@ -73,9 +73,11 @@ test.describe('Landing Page', () => {
   test('should navigate to features section', async ({ page }) => {
     await page.goto('/');
     
+    // Wait for page to load
+    await page.waitForLoadState('networkidle');
+    
     // Click Features link
     const featuresLink = page.getByRole('link', { name: 'Features' });
-    await featuresLink.scrollIntoViewIfNeeded();
     await featuresLink.click();
     
     // Should scroll to features section
@@ -97,9 +99,11 @@ test.describe('Landing Page', () => {
   test('should open sign-in modal', async ({ page }) => {
     await page.goto('/');
     
+    // Wait for page to load
+    await page.waitForLoadState('networkidle');
+    
     // Click Sign In button
     const signInButton = page.getByRole('button', { name: 'Sign In' });
-    await signInButton.scrollIntoViewIfNeeded();
     await signInButton.click();
     
     // Modal should appear
