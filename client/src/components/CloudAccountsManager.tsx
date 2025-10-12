@@ -183,6 +183,56 @@ export function CloudAccountsManager() {
     },
   });
 
+  // Ejection state
+  const [ejectDialog, setEjectDialog] = useState(false);
+  const [ejectingAccount, setEjectingAccount] = useState<CloudAccount | null>(null);
+
+  // Eject mutation (downloads IaC templates and disconnects)
+  const ejectMutation = useMutation({
+    mutationFn: async (integrationId: string) => {
+      const res = await fetch(`/api/eject/${integrationId}`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      if (!res.ok) throw new Error('Ejection failed');
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        toast({
+          title: 'Account Ejected Successfully',
+          description: data.message || 'Infrastructure templates downloaded. Your resources continue to run.',
+        });
+        
+        // Download templates
+        if (data.exportedTemplates && data.exportedTemplates.length > 0) {
+          data.exportedTemplates.forEach((template: any) => {
+            const blob = new Blob([JSON.stringify(template.template, null, 2)], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `careerate-${template.provider}-infrastructure.${template.format}`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          });
+        }
+
+        setEjectDialog(false);
+        setEjectingAccount(null);
+        queryClient.invalidateQueries({ queryKey: ['/api/integrations/cloud-providers'] });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: 'Ejection Failed',
+        description: error instanceof Error ? error.message : 'Unknown error',
+        variant: 'destructive',
+      });
+    },
+  });
+
   // Disconnect mutation
   const disconnectMutation = useMutation({
     mutationFn: async ({ provider, integrationId }: { provider: string; integrationId: string }) => {
@@ -250,20 +300,34 @@ export function CloudAccountsManager() {
 
           {isConnected ? (
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+              <div className="p-3 bg-muted/30 rounded-lg space-y-2">
                 <div>
                   <p className="text-xs text-muted-foreground">Account ID</p>
                   <p className="font-mono text-sm">{account.configuration?.accountId || account.configuration?.subscriptionId || account.configuration?.projectId}</p>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => disconnectMutation.mutate({ provider, integrationId: account.id })}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Unlink className="w-4 h-4 mr-1" />
-                  Disconnect
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setEjectingAccount(account);
+                      setEjectDialog(true);
+                    }}
+                    className="flex-1"
+                  >
+                    <Download className="w-4 h-4 mr-1" />
+                    Eject
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => disconnectMutation.mutate({ provider, integrationId: account.id })}
+                    className="flex-1 text-destructive hover:text-destructive"
+                  >
+                    <Unlink className="w-4 h-4 mr-1" />
+                    Disconnect
+                  </Button>
+                </div>
               </div>
             </div>
           ) : (
@@ -522,6 +586,84 @@ export function CloudAccountsManager() {
                 </>
               )}
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ejection Warning Dialog */}
+      <Dialog open={ejectDialog} onOpenChange={setEjectDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <AlertCircle className="w-6 h-6 text-orange-500" />
+              Eject {ejectingAccount?.provider.toUpperCase()} Account?
+            </DialogTitle>
+            <DialogDescription>
+              This will remove Careerate's management access while preserving your infrastructure
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-orange-400 mb-2">⚠️ What Happens When You Eject:</p>
+              <ul className="text-sm text-orange-300/90 space-y-1 ml-4 list-disc">
+                <li>Careerate will <strong>download</strong> Infrastructure-as-Code templates for all your deployments</li>
+                <li>We'll <strong>revoke our access</strong> to your cloud account (delete IAM role/service principal)</li>
+                <li>Your infrastructure <strong>continues to run</strong> normally in your cloud account</li>
+                <li>You <strong>lose access</strong> to Careerate's AI agents, monitoring, auto-scaling, and cost optimization</li>
+                <li>You'll need to <strong>manually manage</strong> your infrastructure using the downloaded templates</li>
+              </ul>
+            </div>
+
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-blue-400 mb-1">✓ What You'll Receive:</p>
+              <ul className="text-sm text-blue-300/90 space-y-1 ml-4 list-disc">
+                <li><strong>{ejectingAccount?.provider === 'aws' ? 'CloudFormation' : ejectingAccount?.provider === 'azure' ? 'ARM' : 'Terraform'} templates</strong> for all deployed resources</li>
+                <li><strong>Management guide</strong> for running infrastructure without Careerate</li>
+                <li>Your infrastructure remains <strong>100% yours</strong></li>
+              </ul>
+            </div>
+
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+              <p className="text-sm font-semibold text-red-400 mb-1">⚠️ Warning:</p>
+              <p className="text-sm text-red-300/90">
+                After ejection, monitoring alerts will stop, auto-scaling will be disabled, and cost optimization will cease. 
+                Your cloud bills may increase without Careerate's AI managing them.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-foreground/10">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setEjectDialog(false);
+                  setEjectingAccount(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  if (ejectingAccount) {
+                    ejectMutation.mutate(ejectingAccount.id);
+                  }
+                }}
+                disabled={ejectMutation.isPending}
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+              >
+                {ejectMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Ejecting...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4 mr-2" />
+                    Eject & Download Templates
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
