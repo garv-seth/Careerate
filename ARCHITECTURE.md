@@ -1,8 +1,18 @@
 # Careerate Architecture - Complete System Design
 
-**Date**: October 11, 2025  
+**Date**: October 12, 2025  
 **Version**: 2.0 (Complete Rebuild)  
-**Status**: Design Complete, Implementation In Progress
+**Status**: 90% Complete, Production Live
+
+---
+
+## ⚠️ CRITICAL UPDATE (Oct 12, 2025)
+
+**Microsoft Agent Framework** launched Oct 1, 2025 as the unified successor to Semantic Kernel + AutoGen.
+- **Status**: Semantic Kernel in maintenance mode (bug fixes only, no new features)
+- **Migration**: See `docs/AGENT_FRAMEWORK_MIGRATION.md` for complete migration plan
+- **Timeline**: 4 weeks after Node.js package release
+- **Impact**: This architecture reflects **Agent Framework** as the target state
 
 ---
 
@@ -10,13 +20,13 @@
 
 Careerate v2.0 is a complete ground-up rebuild using:
 - **Frontend**: Next.js 15 (App Router) + Progressive Web App (PWA)
-- **Backend**: Node.js + Express + Microsoft Semantic Kernel
+- **Backend**: Node.js + Express + **Microsoft Agent Framework**
 - **AI**: Azure AI Foundry (Claude 3.5 Sonnet, GPT-5, Phi-4)
 - **Infrastructure**: Multi-cloud deployment to user-owned accounts (AWS, Azure, GCP)
 - **Database**: Azure PostgreSQL Flexible Server
 - **Hosting**: Azure Container Apps
 
-**Key Innovation**: Porter.run-style ejectable infrastructure + AI-powered natural language deployment + multi-cloud intelligence.
+**Key Innovation**: Porter.run-style ejectable infrastructure + AI-powered natural language deployment + multi-cloud intelligence + MCP-native agent system.
 
 ---
 
@@ -45,14 +55,18 @@ Careerate v2.0 is a complete ground-up rebuild using:
            │                               │
            │                               ▼
            │                    ┌──────────────────────┐
-           │                    │  Microsoft Semantic  │
-           │                    │  Kernel (Agents)     │
+           │                    │ Microsoft Agent      │
+           │                    │ Framework (Agents)   │
            │                    │                      │
            │                    │  - Planner Agent     │
            │                    │  - Deployer Agent    │
            │                    │  - Monitor Agent     │
            │                    │  - Healer Agent      │
            │                    │  - Cost Optimizer    │
+           │                    │                      │
+           │                    │  MCP Servers:        │
+           │                    │  - AWS, Azure, GCP   │
+           │                    │  - GitHub, K8s       │
            │                    └──────────┬───────────┘
            │                               │
            │                               ▼
@@ -276,7 +290,7 @@ export function CookieConsent() {
 - **Runtime**: Node.js 20 LTS
 - **Framework**: Express 5.1+
 - **Language**: TypeScript 5.9+
-- **AI Framework**: Microsoft Semantic Kernel 1.0+
+- **AI Framework**: Microsoft Agent Framework (successor to Semantic Kernel + AutoGen)
 - **Database**: Drizzle ORM + PostgreSQL
 - **Authentication**: NextAuth.js + Azure AD
 - **Secrets**: Azure Key Vault SDK
@@ -294,7 +308,7 @@ server/
 │   ├── monitoring.ts                   # Real-time metrics
 │   └── ejection.ts                     # Infrastructure export/ejection
 │
-├── agents/                             # Semantic Kernel agents
+├── agents/                             # Microsoft Agent Framework agents
 │   ├── orchestrator.ts                 # Main agent coordinator
 │   ├── planner.ts                      # Analyzes intent, creates plans
 │   ├── deployer.ts                     # Executes cloud deployments
@@ -336,7 +350,7 @@ server/
     └── azure-keyvault.ts               # Secret management
 ```
 
-### Semantic Kernel Integration
+### Microsoft Agent Framework Integration
 
 **Initialization** (`server/agents/orchestrator.ts`):
 ```typescript
@@ -873,7 +887,7 @@ async function trackDeployment(deployment: Deployment) {
 
 1. Initialize Next.js 15 project with App Router
 2. Set up Azure AI Foundry workspace and deploy models
-3. Implement Semantic Kernel multi-agent system
+3. Implement Microsoft Agent Framework multi-agent system
 4. Build cloud provider adapters (AWS, Azure, GCP)
 5. Create database schema and migrations
 6. Develop frontend components (PWA-ready)
