@@ -44,8 +44,9 @@ export default function Dashboard() {
 
         if (!response.ok) {
           if (response.status === 401) {
-            // User not authenticated, redirect to login
-            setLocation('/');
+            // User not authenticated, show login prompt instead of redirecting
+            setError('Please sign in to access your dashboard');
+            setLoading(false);
             return;
           }
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
