@@ -34,6 +34,9 @@ const PageLoader = () => (
 );
 
 function Router() {
+  console.log('Router component loaded');
+  console.log('Current pathname:', window.location.pathname);
+  
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
