@@ -34,23 +34,20 @@ const PageLoader = () => (
 );
 
 function Router() {
-  console.log('Router component loaded');
-  console.log('Current pathname:', window.location.pathname);
-  
-  // Simple routing logic to test
   const pathname = window.location.pathname;
   
   if (pathname === '/dashboard') {
-    console.log('Rendering Dashboard component');
-    return <Dashboard />;
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4 text-primary">Dashboard</h1>
+          <p className="text-muted-foreground">Dashboard is loading correctly!</p>
+          <p className="text-sm text-muted-foreground mt-2">URL: {pathname}</p>
+        </div>
+      </div>
+    );
   }
   
-  if (pathname === '/') {
-    console.log('Rendering Landing component');
-    return <Landing />;
-  }
-  
-  console.log('Rendering Landing component as fallback');
   return <Landing />;
 }
 
