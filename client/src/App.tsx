@@ -56,6 +56,8 @@ function Router() {
 
 function App() {
   // Force rebuild: 2025-10-08T22:45:00Z - Complete SSR disable
+  console.log('App component loaded');
+  console.log('Current pathname:', window.location.pathname);
 
   return (
     <QueryClientProvider client={queryClient}>
