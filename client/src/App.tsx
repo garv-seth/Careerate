@@ -12,7 +12,7 @@ import Landing from "@/pages/landing-new";
 
 // Lazy load pages for better performance (except Landing which is the entry point)
 const NotFound = lazy(() => import("@/pages/not-found"));
-import Dashboard from "@/pages/dashboard"; // Import directly to test
+const Dashboard = lazy(() => import("@/pages/dashboard"));
 const IntegrationsPage = lazy(() => import("@/pages/integrations"));
 const PaymentPage = lazy(() => import("@/pages/payment"));
 const AccountSettings = lazy(() => import("@/pages/account-settings"));
@@ -34,21 +34,30 @@ const PageLoader = () => (
 );
 
 function Router() {
-  const pathname = window.location.pathname;
-  
-  if (pathname === '/dashboard') {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4 text-primary">Dashboard</h1>
-          <p className="text-muted-foreground">Dashboard is loading correctly!</p>
-          <p className="text-sm text-muted-foreground mt-2">URL: {pathname}</p>
-        </div>
-      </div>
-    );
-  }
-  
-  return <Landing />;
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <Switch>
+        {/* Public routes */}
+        <Route path="/" component={Landing} />
+        <Route path="/payment" component={PaymentPage} />
+        <Route path="/privacy" component={PrivacyPolicy} />
+        <Route path="/terms" component={TermsOfService} />
+
+        {/* App routes (auth handled per-page) */}
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/test" component={Test} />
+        <Route path="/minimal" component={Minimal} />
+        <Route path="/integrations" component={IntegrationsPage} />
+        <Route path="/account" component={AccountSettings} />
+        <Route path="/settings" component={AccountSettings} />
+        <Route path="/deploy" component={Deploy} />
+        <Route path="/install" component={Install} />
+
+        {/* 404 */}
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
+  );
 }
 
 function App() {
