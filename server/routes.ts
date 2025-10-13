@@ -2260,44 +2260,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.redirect('/dashboard?error=invalid_state');
       }
 
-      // If user is not authenticated, store OAuth data and redirect to sign in
-      if (!req.isAuthenticated || !req.isAuthenticated()) {
-        // Store for after login
-        if (req.session) {
-          req.session.pendingGitHubCode = code as string;
-          req.session.pendingGitHubState = state as string;
-        }
-        return res.redirect('/?pending_github_auth=true');
+      // Exchange code for token and get user info
+      const { accessToken, userInfo } = await multiCloudOAuth.exchangeGitHubCodeForToken(code as string);
+
+      if (!accessToken || !userInfo) {
+        return res.redirect('/dashboard?error=github_auth_failed');
       }
 
-      const userId = getUserId(req);
+      // Create or update user in our database
+      const user = await upsertUser({
+        sub: userInfo.id.toString(), // GitHub ID
+        email: userInfo.email,
+        name: userInfo.name || userInfo.login,
+        preferred_username: userInfo.login,
+      });
 
-      const config = {
-        clientId: process.env.GITHUB_CLIENT_ID || 'demo-client-id',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/callback/github`,
-        scopes: ['repo', 'user:email', 'read:org']
-      };
-
-      const result = await repositoryIntegrationService.handleGitHubOAuthCallback(
-        code as string,
-        state as string,
-        config,
-        userId
-      );
-
-      if (result.success) {
-        // Store access token in session for immediate use
-        if (req.session) {
-          req.session.githubAccessToken = result.accessToken;
-          req.session.githubUsername = result.userInfo?.login;
+      // Establish session
+      req.login(user, (err) => {
+        if (err) {
+          console.error('Session login error:', err);
+          return res.redirect('/dashboard?error=session_failed');
         }
-
-        // Redirect to dashboard import page
-        res.redirect('/dashboard/import?success=true');
-      } else {
-        res.redirect(`/dashboard?error=${encodeURIComponent(result.errorMessage || 'OAuth failed')}`);
-      }
+        res.redirect('/dashboard');
+      });
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
       res.redirect('/dashboard?error=callback_failed');
