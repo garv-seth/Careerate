@@ -1,0 +1,200 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - navigation [ref=e7]:
+        - link "Careerate" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img [ref=e9] [cursor=pointer]
+          - generic [ref=e11] [cursor=pointer]: Careerate
+        - button [ref=e13] [cursor=pointer]:
+          - img
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - link "Features" [ref=e17] [cursor=pointer]:
+          - /url: "#features"
+        - link "Pricing" [ref=e18] [cursor=pointer]:
+          - /url: "#pricing"
+        - link "Docs" [ref=e19] [cursor=pointer]:
+          - /url: "#docs"
+      - generic [ref=e20]:
+        - button "Sign In" [ref=e21] [cursor=pointer]
+        - button "Get Started" [ref=e22] [cursor=pointer]
+    - main [ref=e23]:
+      - generic [ref=e24]:
+        - img "Animated cybercore grid background" [ref=e25]
+        - main [ref=e100]:
+          - heading "Deploy to Any Cloud By Just Asking" [level=1] [ref=e101]:
+            - text: Deploy to Any Cloud
+            - text: By Just Asking
+          - paragraph [ref=e102]: Stop choosing between AWS, Azure, and GCP. Our AI picks the right one for your app, shows you the cost, and deploys it. Works with whatever you're already using.
+          - button "Import from GitHub" [ref=e104] [cursor=pointer]:
+            - img
+            - text: Import from GitHub
+      - generic [ref=e105]:
+        - generic [ref=e107]:
+          - generic [ref=e108]:
+            - heading "Deploy Without the DevOps Headache" [level=2] [ref=e109]
+            - paragraph [ref=e110]: You built your app. Now just tell our AI where it should go. It picks the right cloud, shows you what it'll cost, and handles everything. No Kubernetes. No Terraform. No weekend spent reading AWS docs.
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - img [ref=e114]
+              - heading "Smart Cloud Picker" [level=3] [ref=e122]
+              - paragraph [ref=e123]: Tell us what you're building. We'll figure out if it belongs on AWS, Azure, GCP, Vercel, or Railway—and explain why.
+            - generic [ref=e124]:
+              - img [ref=e126]
+              - heading "See Costs Upfront" [level=3] [ref=e128]
+              - paragraph [ref=e129]: No surprise bills. We show you exactly what you'll pay before we deploy anything. Change your mind? No problem.
+            - generic [ref=e130]:
+              - img [ref=e132]
+              - heading "Deploy to YOUR Cloud" [level=3] [ref=e134]
+              - paragraph [ref=e135]: We connect to your AWS/Azure/GCP account. You own the infrastructure. Kick us out anytime and it keeps running.
+            - generic [ref=e136]:
+              - img [ref=e138]
+              - heading "Just Talk to It" [level=3] [ref=e142]
+              - paragraph [ref=e143]: "\"Deploy my Next.js app to AWS with a Postgres database.\" That's it. The AI figures out the rest."
+            - generic [ref=e144]:
+              - img [ref=e146]
+              - heading "Sets Up Everything" [level=3] [ref=e148]
+              - paragraph [ref=e149]: Databases, CDN, monitoring, SSL certificates—all the boring stuff you'd spend hours googling gets configured automatically.
+            - generic [ref=e150]:
+              - img [ref=e152]
+              - heading "Works Everywhere" [level=3] [ref=e155]
+              - paragraph [ref=e156]: Connect GitHub, GitLab, AWS, Azure, GCP, Vercel, Railway. If you use it, we probably integrate with it.
+        - generic [ref=e158]:
+          - generic [ref=e159]:
+            - heading "Pricing that makes sense" [level=2] [ref=e160]
+            - paragraph [ref=e161]: Free to start. Pay only when you're actually using it.
+          - generic [ref=e162]:
+            - generic [ref=e163]:
+              - heading "Free" [level=3] [ref=e164]
+              - paragraph [ref=e165]: $0
+              - paragraph [ref=e166]: Try it out, no credit card
+              - list [ref=e167]:
+                - listitem [ref=e168]: • 1 project
+                - listitem [ref=e169]: • 1 deployment
+                - listitem [ref=e170]: • Community help
+                - listitem [ref=e171]: • All core features
+              - button "Get Started" [ref=e172] [cursor=pointer]
+            - generic [ref=e173]:
+              - heading "Pro" [level=3] [ref=e174]
+              - paragraph [ref=e175]: $49
+              - paragraph [ref=e176]: For real projects
+              - list [ref=e177]:
+                - listitem [ref=e178]: • Unlimited projects
+                - listitem [ref=e179]: • Unlimited deployments
+                - listitem [ref=e180]: • Email support
+                - listitem [ref=e181]: • Custom domains
+                - listitem [ref=e182]: • Priority deployment queue
+              - button "Get Started" [ref=e183] [cursor=pointer]
+            - generic [ref=e184]:
+              - heading "Enterprise" [level=3] [ref=e185]
+              - paragraph [ref=e186]: Let's talk
+              - paragraph [ref=e187]: For teams who need more
+              - list [ref=e188]:
+                - listitem [ref=e189]: • SSO & SAML
+                - listitem [ref=e190]: • Private cloud deployment
+                - listitem [ref=e191]: • 99.9% uptime SLA
+                - listitem [ref=e192]: • Dedicated support
+                - listitem [ref=e193]: • Custom integrations
+              - button "Get Started" [ref=e194] [cursor=pointer]
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - heading "Works how you work" [level=2] [ref=e199]
+            - paragraph [ref=e200]: Use the web UI, CLI, or API. Whatever fits your workflow. Docs are actually readable (we promise).
+            - generic [ref=e201]:
+              - link "Read the docs" [ref=e202] [cursor=pointer]:
+                - /url: /docs
+              - link "Try it now" [ref=e203] [cursor=pointer]:
+                - /url: /deploy
+          - generic [ref=e205]: "curl -X POST /api/ai/deploy \\ + -d '{\"project\":\"shop-app\",\"provider\":\"azure\",\"strategy\":\"blue-green\"}'"
+        - generic [ref=e210]:
+          - heading "Try it with your next project" [level=2] [ref=e211]
+          - paragraph [ref=e212]: Import from GitHub and we'll show you exactly what deployment would look like—which cloud, what it costs, how long it'll take. No commitment required.
+          - button "Import from GitHub" [ref=e213] [cursor=pointer]:
+            - img
+            - text: Import from GitHub
+        - generic [ref=e214]:
+          - img "Animated cybercore grid background" [ref=e216]
+          - generic [ref=e271]:
+            - generic [ref=e272]:
+              - generic [ref=e273]:
+                - heading "Careerate" [level=3] [ref=e274]
+                - paragraph [ref=e275]: Deploy to any cloud without the DevOps headache.
+              - generic [ref=e276]:
+                - heading "Migration" [level=4] [ref=e277]
+                - list [ref=e278]:
+                  - listitem [ref=e279]:
+                    - link "From Replit" [ref=e280] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e281]:
+                    - link "From Base44" [ref=e282] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e283]:
+                    - link "From Emergent" [ref=e284] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e285]:
+                    - link "From Bolt.new" [ref=e286] [cursor=pointer]:
+                      - /url: "#"
+              - generic [ref=e287]:
+                - heading "Platform" [level=4] [ref=e288]
+                - list [ref=e289]:
+                  - listitem [ref=e290]:
+                    - link "GitHub Integration" [ref=e291] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e292]:
+                    - link "Azure Infrastructure" [ref=e293] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e294]:
+                    - link "Auto-scaling" [ref=e295] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e296]:
+                    - link "Monitoring" [ref=e297] [cursor=pointer]:
+                      - /url: "#"
+              - generic [ref=e298]:
+                - heading "Enterprise" [level=4] [ref=e299]
+                - list [ref=e300]:
+                  - listitem [ref=e301]:
+                    - link "SSO & SAML" [ref=e302] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e303]:
+                    - link "Private Deployments" [ref=e304] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e305]:
+                    - link "Compliance" [ref=e306] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e307]:
+                    - link "Support" [ref=e308] [cursor=pointer]:
+                      - /url: "#"
+              - generic [ref=e309]:
+                - heading "Company" [level=4] [ref=e310]
+                - list [ref=e311]:
+                  - listitem [ref=e312]:
+                    - link "About" [ref=e313] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e314]:
+                    - link "Blog" [ref=e315] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e316]:
+                    - link "Careers" [ref=e317] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=e318]:
+                    - link "Contact" [ref=e319] [cursor=pointer]:
+                      - /url: "#"
+            - paragraph [ref=e321]: © 2025 Careerate. All rights reserved.
+  - generic [ref=e324]:
+    - paragraph [ref=e325]:
+      - text: We use essential cookies to make our site work. With your consent, we may also use non‑essential cookies to improve your experience. See our
+      - link "Privacy Policy" [ref=e326] [cursor=pointer]:
+        - /url: /privacy
+        - generic [ref=e327] [cursor=pointer]: Privacy Policy
+      - text: for details.
+    - generic [ref=e328]:
+      - button "Decline" [ref=e329] [cursor=pointer]
+      - button "Customize" [ref=e330] [cursor=pointer]
+      - button "Accept All" [ref=e331] [cursor=pointer]
+```

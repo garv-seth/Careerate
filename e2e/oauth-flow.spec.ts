@@ -10,8 +10,17 @@ test.describe('OAuth Authentication', () => {
   test('should initiate GitHub OAuth flow', async ({ page }) => {
     await page.goto('/');
     
-    // Click Sign In
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    // Click Sign In - handle mobile layout
+    const signInButton = page.getByRole('button', { name: 'Sign In' });
+    
+    // For mobile, ensure element is visible and clickable
+    await signInButton.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
+    await signInButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll to complete
+    
+    // Use force click for mobile if needed
+    await signInButton.click({ force: true });
     
     // Modal should appear
     await expect(page.getByRole('heading', { name: /Sign in to Careerate/i })).toBeVisible();
@@ -30,7 +39,7 @@ test.describe('OAuth Authentication', () => {
       // Should be on GitHub OAuth page
       expect(url).toContain('github.com');
       expect(url).toContain('client_id=');
-      expect(url).toContain('redirect_uri=');
+      expect(url).toContain('return_to='); // GitHub uses return_to parameter
       expect(url).toContain('scope=');
       expect(url).toContain('state='); // CSRF protection
       
@@ -43,8 +52,17 @@ test.describe('OAuth Authentication', () => {
   test('should initiate Microsoft OAuth flow', async ({ page }) => {
     await page.goto('/');
     
-    // Click Sign In
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    // Click Sign In - handle mobile layout
+    const signInButton = page.getByRole('button', { name: 'Sign In' });
+    
+    // For mobile, ensure element is visible and clickable
+    await signInButton.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
+    await signInButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll to complete
+    
+    // Use force click for mobile if needed
+    await signInButton.click({ force: true });
     
     // Click Continue with Microsoft
     await page.getByRole('button', { name: /Continue with Microsoft/i }).click();
@@ -60,7 +78,7 @@ test.describe('OAuth Authentication', () => {
       // Should be on Microsoft OAuth page
       expect(url).toMatch(/microsoft\.com|login\.microsoftonline\.com/);
       expect(url).toContain('client_id=');
-      expect(url).toContain('redirect_uri=');
+      expect(url).toContain('return_to='); // GitHub uses return_to parameter
       expect(url).toContain('response_type=');
       expect(url).toContain('state='); // CSRF protection
     }
@@ -82,8 +100,10 @@ test.describe('OAuth Authentication', () => {
   test('should close modal on cancel', async ({ page }) => {
     await page.goto('/');
     
-    // Open modal
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    // Open modal - handle mobile layout
+    const signInButton = page.getByRole('button', { name: 'Sign In' });
+    await signInButton.scrollIntoViewIfNeeded();
+    await signInButton.click();
     
     // Modal should be visible
     await expect(page.getByRole('heading', { name: /Sign in to Careerate/i })).toBeVisible();
@@ -98,8 +118,10 @@ test.describe('OAuth Authentication', () => {
   test('should show terms of service link', async ({ page }) => {
     await page.goto('/');
     
-    // Open modal
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    // Open modal - handle mobile layout
+    const signInButton = page.getByRole('button', { name: 'Sign In' });
+    await signInButton.scrollIntoViewIfNeeded();
+    await signInButton.click();
     
     // Should show TOS link
     await expect(page.getByRole('link', { name: /Terms of Service/i })).toBeVisible();

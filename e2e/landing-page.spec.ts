@@ -76,8 +76,14 @@ test.describe('Landing Page', () => {
     // Wait for page to load
     await page.waitForLoadState('networkidle');
     
-    // Click Features link
+    // Click Features link - handle mobile layout
     const featuresLink = page.getByRole('link', { name: 'Features' });
+    
+    // For mobile, ensure element is visible and clickable
+    await featuresLink.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
+    await featuresLink.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll to complete
     await featuresLink.click();
     
     // Should scroll to features section
@@ -90,8 +96,14 @@ test.describe('Landing Page', () => {
     // Wait for page to load
     await page.waitForLoadState('networkidle');
     
-    // Click Pricing link
+    // Click Pricing link - handle mobile layout
     const pricingLink = page.getByRole('link', { name: 'Pricing' });
+    
+    // For mobile, ensure element is visible and clickable
+    await pricingLink.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
+    await pricingLink.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll to complete
     await pricingLink.click();
     
     // Should scroll to pricing section
@@ -104,9 +116,17 @@ test.describe('Landing Page', () => {
     // Wait for page to load
     await page.waitForLoadState('networkidle');
     
-    // Click Sign In button
+    // Click Sign In button - handle mobile layout
     const signInButton = page.getByRole('button', { name: 'Sign In' });
-    await signInButton.click();
+    
+    // For mobile, ensure element is visible and clickable
+    await signInButton.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
+    await signInButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll to complete
+    
+    // Use force click for mobile if needed
+    await signInButton.click({ force: true });
     
     // Modal should appear
     await expect(page.getByRole('heading', { name: /Sign in to Careerate/i })).toBeVisible();

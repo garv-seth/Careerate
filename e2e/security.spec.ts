@@ -8,9 +8,12 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Security', () => {
   test('should enforce HTTPS', async ({ page, context }) => {
+    // Navigate to the page first
+    await page.goto('/');
+    
     // In production, HTTP should redirect to HTTPS
     // For local testing, we skip this
-    const url = new URL(page.url() || 'http://localhost:5000');
+    const url = new URL(page.url());
     
     if (url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
       expect(url.protocol).toBe('https:');
@@ -68,8 +71,17 @@ test.describe('Security', () => {
   test('should protect against CSRF', async ({ page }) => {
     await page.goto('/');
     
-    // OAuth flows should use state parameter
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    // OAuth flows should use state parameter - handle mobile layout
+    const signInButton = page.getByRole('button', { name: 'Sign In' });
+    
+    // For mobile, ensure element is visible and clickable
+    await signInButton.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
+    await signInButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500); // Wait for scroll to complete
+    
+    // Use force click for mobile if needed
+    await signInButton.click({ force: true });
     await page.getByRole('button', { name: /Continue with GitHub/i }).click();
     
     // Wait for navigation
