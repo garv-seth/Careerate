@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Sparkles, Code, Cloud, Shield, Brain, Globe, Users, Database, Terminal, Activity, GitBranch } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Code, Cloud, Shield, Cpu, Globe, Users, Database, Terminal, Activity, GitBranch } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { GradientDots } from "@/components/ui/gradient-dots";
 import CybercoreBackground from "@/components/ui/cybercore-section-hero";
@@ -37,7 +37,7 @@ const Features = () => (
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
-            { icon: Brain, title: "Smart Cloud Picker", description: "Tell us what you're building. We'll figure out if it belongs on AWS, Azure, GCP, Vercel, or Railway—and explain why.", colorClass: "from-primary to-secondary" },
+            { icon: Cpu, title: "Smart Cloud Picker", description: "Tell us what you're building. We'll figure out if it belongs on AWS, Azure, GCP, Vercel, or Railway—and explain why.", colorClass: "from-primary to-secondary" },
             { icon: Cloud, title: "See Costs Upfront", description: "No surprise bills. We show you exactly what you'll pay before we deploy anything. Change your mind? No problem.", colorClass: "from-green-500 to-emerald-500" },
             { icon: Shield, title: "Deploy to YOUR Cloud", description: "We connect to your AWS/Azure/GCP account. You own the infrastructure. Kick us out anytime and it keeps running.", colorClass: "from-orange-500 to-red-500" },
             { icon: GitBranch, title: "Just Talk to It", description: "\"Deploy my Next.js app to AWS with a Postgres database.\" That's it. The AI figures out the rest.", colorClass: "from-pink-500 to-rose-500" },
