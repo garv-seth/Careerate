@@ -2261,10 +2261,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Exchange code for token and get user info
-      const { accessToken, userInfo } = await multiCloudOAuth.exchangeGitHubCodeForToken(code as string);
+      const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          client_id: process.env.GITHUB_CLIENT_ID || 'Ov23liRwhk6ZbqmlHSz9',
+          client_secret: process.env.GITHUB_CLIENT_SECRET || 'demo-secret',
+          code: code as string,
+          redirect_uri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/callback/github`
+        })
+      });
 
-      if (!accessToken || !userInfo) {
+      const tokenData = await tokenResponse.json();
+
+      if (!tokenData.access_token) {
+        console.error('GitHub token exchange failed:', tokenData);
         return res.redirect('/dashboard?error=github_auth_failed');
+      }
+
+      // Get user info from GitHub
+      const userResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${tokenData.access_token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+
+      const userInfo = await userResponse.json();
+
+      if (!userInfo.id) {
+        console.error('GitHub user info failed:', userInfo);
+        return res.redirect('/dashboard?error=github_user_failed');
       }
 
       // Create or update user in our database

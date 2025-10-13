@@ -40,12 +40,13 @@ test.describe('OAuth Authentication', () => {
       expect(url).toContain('github.com');
       expect(url).toContain('client_id=');
       expect(url).toContain('return_to='); // GitHub uses return_to parameter
+      // Scope and state are embedded in the return_to parameter
       expect(url).toContain('scope=');
       expect(url).toContain('state='); // CSRF protection
       
-      // Should include required scopes
-      expect(url).toContain('read:user');
-      expect(url).toContain('user:email');
+      // Should include required scopes in the return_to parameter
+      expect(url).toContain('read%3Auser'); // URL encoded
+      expect(url).toContain('user%3Aemail'); // URL encoded
     }
   });
 
@@ -78,7 +79,7 @@ test.describe('OAuth Authentication', () => {
       // Should be on Microsoft OAuth page
       expect(url).toMatch(/microsoft\.com|login\.microsoftonline\.com/);
       expect(url).toContain('client_id=');
-      expect(url).toContain('return_to='); // GitHub uses return_to parameter
+      expect(url).toContain('redirect_uri='); // Microsoft uses redirect_uri parameter
       expect(url).toContain('response_type=');
       expect(url).toContain('state='); // CSRF protection
     }

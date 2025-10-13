@@ -183,4 +183,15 @@
                     - link "Contact" [ref=e316] [cursor=pointer]:
                       - /url: "#"
             - paragraph [ref=e318]: © 2025 Careerate. All rights reserved.
+  - generic [ref=e321]:
+    - paragraph [ref=e322]:
+      - text: We use essential cookies to make our site work. With your consent, we may also use non‑essential cookies to improve your experience. See our
+      - link "Privacy Policy" [ref=e323] [cursor=pointer]:
+        - /url: /privacy
+        - generic [ref=e324] [cursor=pointer]: Privacy Policy
+      - text: for details.
+    - generic [ref=e325]:
+      - button "Decline" [ref=e326] [cursor=pointer]
+      - button "Customize" [ref=e327] [cursor=pointer]
+      - button "Accept All" [ref=e328] [cursor=pointer]
 ```

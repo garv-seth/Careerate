@@ -15,55 +15,36 @@
           - strong [ref=e16]: GitHub
           - text: to continue to
           - strong [ref=e17]: Careerate
-      - generic [ref=e18]:
-        - generic [ref=e19]:
-          - generic [ref=e20]:
-            - generic [ref=e21]: Username or email address
-            - textbox "Username or email address" [active] [ref=e22]
-          - generic [ref=e23]:
-            - generic [ref=e24]: Password
-            - textbox "Password" [ref=e25]
-            - link "Forgot password?" [ref=e26] [cursor=pointer]:
-              - /url: /password_reset
-          - button "Sign in" [ref=e28] [cursor=pointer]
-        - generic [ref=e29]:
-          - generic [ref=e31]: or
-          - button "Continue with Google" [ref=e33] [cursor=pointer]:
-            - generic [ref=e34] [cursor=pointer]:
-              - generic:
-                - img:
-                  - img
-              - generic [ref=e35] [cursor=pointer]: Continue with Google
-          - button "Continue with Apple" [ref=e37] [cursor=pointer]:
-            - generic [ref=e38] [cursor=pointer]:
-              - generic:
-                - img:
-                  - img
-              - generic [ref=e39] [cursor=pointer]: Continue with Apple
-      - generic [ref=e40]:
-        - paragraph [ref=e42]:
-          - text: New to GitHub?
-          - link "Create an account" [ref=e43] [cursor=pointer]:
-            - /url: /join?return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail&source=oauth
-        - paragraph [ref=e45]:
-          - button "Sign in with a passkey" [ref=e46] [cursor=pointer]:
-            - generic [ref=e48] [cursor=pointer]: Sign in with a passkey
-  - contentinfo [ref=e49]:
-    - list [ref=e50]:
-      - listitem [ref=e51]:
-        - link "Terms" [ref=e52] [cursor=pointer]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: Username or email address
+          - textbox "Username or email address" [active] [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e24]: Password
+          - textbox "Password" [ref=e25]
+          - link "Forgot password?" [ref=e26] [cursor=pointer]:
+            - /url: /password_reset
+        - button "Sign in" [ref=e28] [cursor=pointer]
+      - paragraph [ref=e31]:
+        - text: New to GitHub?
+        - link "Create an account" [ref=e32] [cursor=pointer]:
+          - /url: /join?return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail&source=oauth
+  - contentinfo [ref=e33]:
+    - list [ref=e34]:
+      - listitem [ref=e35]:
+        - link "Terms" [ref=e36] [cursor=pointer]:
           - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
-      - listitem [ref=e53]:
-        - link "Privacy" [ref=e54] [cursor=pointer]:
+      - listitem [ref=e37]:
+        - link "Privacy" [ref=e38] [cursor=pointer]:
           - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
-      - listitem [ref=e55]:
-        - link "Docs" [ref=e56] [cursor=pointer]:
+      - listitem [ref=e39]:
+        - link "Docs" [ref=e40] [cursor=pointer]:
           - /url: https://docs.github.com
-      - listitem [ref=e57]:
-        - link "Contact GitHub Support" [ref=e58] [cursor=pointer]:
+      - listitem [ref=e41]:
+        - link "Contact GitHub Support" [ref=e42] [cursor=pointer]:
           - /url: https://support.github.com
-      - listitem [ref=e59]:
-        - button "Manage cookies" [ref=e61] [cursor=pointer]
-      - listitem [ref=e62]:
-        - button "Do not share my personal information" [ref=e64] [cursor=pointer]
+      - listitem [ref=e43]:
+        - button "Manage cookies" [ref=e45] [cursor=pointer]
+      - listitem [ref=e46]:
+        - button "Do not share my personal information" [ref=e48] [cursor=pointer]
 ```

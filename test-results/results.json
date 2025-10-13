@@ -159,12 +159,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1349,
+                      "duration": 9507,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.727Z",
+                      "startTime": "2025-10-13T19:06:17.029Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -193,12 +193,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1367,
+                      "duration": 6918,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.726Z",
+                      "startTime": "2025-10-13T19:06:16.996Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -227,12 +227,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 5021,
+                      "duration": 9661,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.807Z",
+                      "startTime": "2025-10-13T19:06:17.105Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -261,12 +261,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2243,
+                      "duration": 6275,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.776Z",
+                      "startTime": "2025-10-13T19:06:17.025Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -295,12 +295,12 @@
                       "workerIndex": 4,
                       "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 4721,
+                      "duration": 9666,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.794Z",
+                      "startTime": "2025-10-13T19:06:17.041Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -329,12 +329,12 @@
                       "workerIndex": 5,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 5649,
+                      "duration": 12004,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.792Z",
+                      "startTime": "2025-10-13T19:06:17.090Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -363,12 +363,12 @@
                       "workerIndex": 6,
                       "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 5985,
+                      "duration": 10641,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.807Z",
+                      "startTime": "2025-10-13T19:06:17.092Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -397,12 +397,12 @@
                       "workerIndex": 7,
                       "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 1269,
+                      "duration": 7327,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.776Z",
+                      "startTime": "2025-10-13T19:06:17.073Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -417,7 +417,7 @@
             },
             {
               "title": "should load quickly",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -430,18 +430,58 @@
                     {
                       "workerIndex": 8,
                       "parallelIndex": 8,
-                      "status": "passed",
-                      "duration": 3605,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 9969,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m8226\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m8226\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:164:22",
+                        "location": {
+                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                          "column": 22,
+                          "line": 164
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 162 |\u001b[39m     \n \u001b[90m 163 |\u001b[39m     \u001b[90m// Should load in less than 5 seconds (generous for CI)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 164 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 165 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 166 |\u001b[39m\n \u001b[90m 167 |\u001b[39m   test(\u001b[32m'should have no console errors'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                            "column": 22,
+                            "line": 164
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m5000\u001b[39m\nReceived:   \u001b[31m8226\u001b[39m\n\n\u001b[0m \u001b[90m 162 |\u001b[39m     \n \u001b[90m 163 |\u001b[39m     \u001b[90m// Should load in less than 5 seconds (generous for CI)\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 164 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m5000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 165 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 166 |\u001b[39m\n \u001b[90m 167 |\u001b[39m   test(\u001b[32m'should have no console errors'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:164:22\u001b[22m"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.854Z",
+                      "startTime": "2025-10-13T19:06:17.103Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\landing-page-Landing-Page-should-load-quickly-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts",
+                        "column": 22,
+                        "line": 164
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "e0f2b3f5c1ecc224a2ed-43f1408dbcd7209973c0",
@@ -465,12 +505,12 @@
                       "workerIndex": 9,
                       "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 4425,
+                      "duration": 8264,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.856Z",
+                      "startTime": "2025-10-13T19:06:17.092Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -499,12 +539,12 @@
                       "workerIndex": 10,
                       "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 3790,
+                      "duration": 5810,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.855Z",
+                      "startTime": "2025-10-13T19:06:17.119Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -533,12 +573,12 @@
                       "workerIndex": 11,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 2974,
+                      "duration": 7663,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:02.891Z",
+                      "startTime": "2025-10-13T19:06:17.165Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -564,15 +604,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 16,
+                      "workerIndex": 12,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 2499,
+                      "duration": 6105,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.762Z",
+                      "startTime": "2025-10-13T19:06:32.471Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -598,15 +638,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 17,
-                      "parallelIndex": 10,
+                      "workerIndex": 13,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 3453,
+                      "duration": 5400,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.747Z",
+                      "startTime": "2025-10-13T19:06:32.427Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -632,15 +672,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 12,
-                      "parallelIndex": 2,
+                      "workerIndex": 14,
+                      "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 4260,
+                      "duration": 4477,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.715Z",
+                      "startTime": "2025-10-13T19:06:32.411Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -666,15 +706,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 14,
-                      "parallelIndex": 4,
+                      "workerIndex": 15,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 3520,
+                      "duration": 5426,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.715Z",
+                      "startTime": "2025-10-13T19:06:32.536Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -700,15 +740,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 13,
-                      "parallelIndex": 7,
+                      "workerIndex": 17,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7048,
+                      "duration": 8160,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.699Z",
+                      "startTime": "2025-10-13T19:06:32.640Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -734,15 +774,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 15,
-                      "parallelIndex": 3,
+                      "workerIndex": 16,
+                      "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 7287,
+                      "duration": 8648,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.746Z",
+                      "startTime": "2025-10-13T19:06:32.561Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -769,14 +809,14 @@
                   "results": [
                     {
                       "workerIndex": 18,
-                      "parallelIndex": 0,
+                      "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 5867,
+                      "duration": 3700,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.793Z",
+                      "startTime": "2025-10-13T19:06:32.667Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -803,14 +843,14 @@
                   "results": [
                     {
                       "workerIndex": 19,
-                      "parallelIndex": 6,
+                      "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 4519,
+                      "duration": 6500,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:11.945Z",
+                      "startTime": "2025-10-13T19:06:33.211Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -837,14 +877,14 @@
                   "results": [
                     {
                       "workerIndex": 20,
-                      "parallelIndex": 5,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1851,
+                      "duration": 5485,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:12.178Z",
+                      "startTime": "2025-10-13T19:06:33.553Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -871,14 +911,14 @@
                   "results": [
                     {
                       "workerIndex": 21,
-                      "parallelIndex": 8,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 4919,
+                      "duration": 4408,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:12.241Z",
+                      "startTime": "2025-10-13T19:06:33.584Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -905,14 +945,14 @@
                   "results": [
                     {
                       "workerIndex": 22,
-                      "parallelIndex": 9,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 4869,
+                      "duration": 3360,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:12.518Z",
+                      "startTime": "2025-10-13T19:06:33.601Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -939,14 +979,14 @@
                   "results": [
                     {
                       "workerIndex": 23,
-                      "parallelIndex": 1,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 2027,
+                      "duration": 3194,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:12.581Z",
+                      "startTime": "2025-10-13T19:06:33.632Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -975,12 +1015,12 @@
                       "workerIndex": 26,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 1380,
+                      "duration": 4995,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:25.002Z",
+                      "startTime": "2025-10-13T19:06:48.053Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1006,15 +1046,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 25,
-                      "parallelIndex": 1,
+                      "workerIndex": 24,
+                      "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 1598,
+                      "duration": 4650,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:23.729Z",
+                      "startTime": "2025-10-13T19:06:47.518Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1041,14 +1081,14 @@
                   "results": [
                     {
                       "workerIndex": 27,
-                      "parallelIndex": 10,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 3984,
+                      "duration": 7491,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:25.504Z",
+                      "startTime": "2025-10-13T19:06:48.036Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1074,15 +1114,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 28,
-                      "parallelIndex": 4,
+                      "workerIndex": 25,
+                      "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 1940,
+                      "duration": 6195,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:25.627Z",
+                      "startTime": "2025-10-13T19:06:47.678Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1108,15 +1148,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 29,
-                      "parallelIndex": 6,
+                      "workerIndex": 28,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 7520,
+                      "duration": 14721,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:25.901Z",
+                      "startTime": "2025-10-13T19:06:48.299Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1142,15 +1182,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 30,
+                      "workerIndex": 29,
                       "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 8254,
+                      "duration": 10460,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:25.980Z",
+                      "startTime": "2025-10-13T19:06:48.563Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1176,15 +1216,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 34,
-                      "parallelIndex": 8,
+                      "workerIndex": 30,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 5783,
+                      "duration": 7680,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:26.761Z",
+                      "startTime": "2025-10-13T19:06:48.564Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1211,14 +1251,14 @@
                   "results": [
                     {
                       "workerIndex": 31,
-                      "parallelIndex": 0,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 2512,
+                      "duration": 5530,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:26.379Z",
+                      "startTime": "2025-10-13T19:06:48.595Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1244,15 +1284,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 32,
-                      "parallelIndex": 7,
+                      "workerIndex": 33,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2458,
+                      "duration": 5124,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:26.424Z",
+                      "startTime": "2025-10-13T19:06:49.144Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1278,15 +1318,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 33,
-                      "parallelIndex": 2,
+                      "workerIndex": 34,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 4506,
+                      "duration": 7536,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:26.487Z",
+                      "startTime": "2025-10-13T19:06:49.563Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1312,15 +1352,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 25,
-                      "parallelIndex": 1,
+                      "workerIndex": 35,
+                      "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 1469,
+                      "duration": 6126,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:25.557Z",
+                      "startTime": "2025-10-13T19:06:49.670Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1346,15 +1386,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 35,
-                      "parallelIndex": 3,
+                      "workerIndex": 32,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1965,
+                      "duration": 6031,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:28.680Z",
+                      "startTime": "2025-10-13T19:06:49.046Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1380,15 +1420,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 38,
-                      "parallelIndex": 0,
+                      "workerIndex": 36,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2067,
+                      "duration": 1956,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:34.352Z",
+                      "startTime": "2025-10-13T19:07:00.298Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1414,15 +1454,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 40,
-                      "parallelIndex": 8,
+                      "workerIndex": 37,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2021,
+                      "duration": 2267,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:34.521Z",
+                      "startTime": "2025-10-13T19:07:00.652Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1448,15 +1488,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 39,
-                      "parallelIndex": 3,
+                      "workerIndex": 41,
+                      "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 4084,
+                      "duration": 4587,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:34.383Z",
+                      "startTime": "2025-10-13T19:07:01.252Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1482,15 +1522,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 41,
-                      "parallelIndex": 7,
+                      "workerIndex": 39,
+                      "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 2212,
+                      "duration": 2331,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:35.213Z",
+                      "startTime": "2025-10-13T19:07:00.807Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1516,10 +1556,10 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 42,
+                      "workerIndex": 38,
                       "parallelIndex": 6,
                       "status": "timedOut",
-                      "duration": 32298,
+                      "duration": 32361,
                       "error": {
                         "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
                         "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
@@ -1540,7 +1580,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:35.977Z",
+                      "startTime": "2025-10-13T19:07:00.792Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1582,10 +1622,10 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 43,
-                      "parallelIndex": 2,
+                      "workerIndex": 40,
+                      "parallelIndex": 1,
                       "status": "timedOut",
-                      "duration": 32719,
+                      "duration": 32286,
                       "error": {
                         "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
                         "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
@@ -1600,13 +1640,13 @@
                             "column": 23,
                             "line": 107
                           },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Pricing' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#pricing\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Pricing</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    47 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n\u001b[0m \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// Should scroll to pricing section\u001b[39m\n \u001b[90m 110 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Pricing that makes sense/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:107:23\u001b[22m"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Pricing' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#pricing\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Pricing</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    46 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// Should scroll to pricing section\u001b[39m\n \u001b[90m 110 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Pricing that makes sense/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:107:23\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:35.937Z",
+                      "startTime": "2025-10-13T19:07:01.164Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1648,10 +1688,10 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 44,
-                      "parallelIndex": 9,
+                      "workerIndex": 42,
+                      "parallelIndex": 5,
                       "status": "failed",
-                      "duration": 3943,
+                      "duration": 3973,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:129:24",
@@ -1675,7 +1715,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:37.697Z",
+                      "startTime": "2025-10-13T19:07:02.427Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -1722,15 +1762,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 45,
-                      "parallelIndex": 5,
+                      "workerIndex": 43,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2266,
+                      "duration": 2252,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:38.543Z",
+                      "startTime": "2025-10-13T19:07:07.083Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1756,15 +1796,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 46,
-                      "parallelIndex": 1,
+                      "workerIndex": 36,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 6797,
+                      "duration": 2333,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:39.153Z",
+                      "startTime": "2025-10-13T19:07:02.454Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1790,15 +1830,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 47,
-                      "parallelIndex": 11,
+                      "workerIndex": 37,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 4196,
+                      "duration": 3997,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:39.307Z",
+                      "startTime": "2025-10-13T19:07:03.102Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1824,15 +1864,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 38,
-                      "parallelIndex": 0,
+                      "workerIndex": 39,
+                      "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 2420,
+                      "duration": 2774,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:36.618Z",
+                      "startTime": "2025-10-13T19:07:03.431Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1858,15 +1898,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 48,
-                      "parallelIndex": 4,
+                      "workerIndex": 45,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 3150,
+                      "duration": 2653,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:40.460Z",
+                      "startTime": "2025-10-13T19:07:07.531Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1892,15 +1932,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 50,
+                      "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 2185,
+                      "duration": 2296,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:49.241Z",
+                      "startTime": "2025-10-13T19:07:14.533Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1926,15 +1966,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 54,
-                      "parallelIndex": 8,
+                      "workerIndex": 51,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2352,
+                      "duration": 2278,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:49.176Z",
+                      "startTime": "2025-10-13T19:07:14.713Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1960,15 +2000,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 55,
-                      "parallelIndex": 11,
+                      "workerIndex": 52,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 4566,
+                      "duration": 4127,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:50.555Z",
+                      "startTime": "2025-10-13T19:07:15.093Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1994,15 +2034,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 56,
+                      "workerIndex": 53,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 2508,
+                      "duration": 2542,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:50.614Z",
+                      "startTime": "2025-10-13T19:07:15.250Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2028,10 +2068,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 57,
-                      "parallelIndex": 10,
+                      "workerIndex": 54,
+                      "parallelIndex": 8,
                       "status": "timedOut",
-                      "duration": 30931,
+                      "duration": 30889,
                       "error": {
                         "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
                         "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
@@ -2046,13 +2086,13 @@
                             "column": 24,
                             "line": 87
                           },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Features' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#features\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Features</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 85 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 86 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 87 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 88 |\u001b[39m     \n \u001b[90m 89 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\n \u001b[90m 90 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Deploy Without the DevOps Headache/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:87:24\u001b[22m"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Features' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#features\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Features</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - element is outside of the viewport\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 85 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 86 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 87 |\u001b[39m     \u001b[36mawait\u001b[39m featuresLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 88 |\u001b[39m     \n \u001b[90m 89 |\u001b[39m     \u001b[90m// Should scroll to features section\u001b[39m\n \u001b[90m 90 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Deploy Without the DevOps Headache/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:87:24\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:50.635Z",
+                      "startTime": "2025-10-13T19:07:15.251Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2094,10 +2134,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 58,
-                      "parallelIndex": 4,
+                      "workerIndex": 55,
+                      "parallelIndex": 0,
                       "status": "timedOut",
-                      "duration": 30816,
+                      "duration": 30731,
                       "error": {
                         "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
                         "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
@@ -2112,13 +2152,13 @@
                             "column": 23,
                             "line": 107
                           },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Pricing' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#pricing\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Pricing</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// Should scroll to pricing section\u001b[39m\n \u001b[90m 110 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Pricing that makes sense/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:107:23\u001b[22m"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Pricing' })\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"#pricing\" class=\"px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 text-foreground/80 hover:text-foreground hover:bg-primary/10\">Pricing</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - element is outside of the viewport\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m pricingLink\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 108 |\u001b[39m     \n \u001b[90m 109 |\u001b[39m     \u001b[90m// Should scroll to pricing section\u001b[39m\n \u001b[90m 110 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Pricing that makes sense/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeInViewport()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:107:23\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:51.121Z",
+                      "startTime": "2025-10-13T19:07:15.772Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2160,10 +2200,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 59,
-                      "parallelIndex": 9,
+                      "workerIndex": 56,
+                      "parallelIndex": 11,
                       "status": "failed",
-                      "duration": 8610,
+                      "duration": 8828,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\landing-page.spec.ts:129:24",
@@ -2187,7 +2227,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:51.523Z",
+                      "startTime": "2025-10-13T19:07:16.037Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2234,15 +2274,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 60,
-                      "parallelIndex": 7,
+                      "workerIndex": 57,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2353,
+                      "duration": 2453,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:52.248Z",
+                      "startTime": "2025-10-13T19:07:17.329Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2268,15 +2308,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 50,
+                      "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 2482,
+                      "duration": 2388,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:51.578Z",
+                      "startTime": "2025-10-13T19:07:16.965Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2302,15 +2342,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 54,
-                      "parallelIndex": 8,
+                      "workerIndex": 51,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 4334,
+                      "duration": 3976,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:51.733Z",
+                      "startTime": "2025-10-13T19:07:17.130Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2336,15 +2376,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 56,
+                      "workerIndex": 53,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1845,
+                      "duration": 2182,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:53.281Z",
+                      "startTime": "2025-10-13T19:07:17.947Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2370,15 +2410,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 52,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 2361,
+                      "duration": 2704,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:54.088Z",
+                      "startTime": "2025-10-13T19:07:19.369Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2421,10 +2461,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 7,
-                      "parallelIndex": 7,
+                      "workerIndex": 10,
+                      "parallelIndex": 10,
                       "status": "failed",
-                      "duration": 5493,
+                      "duration": 6398,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"scope=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"scope=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:43:19",
@@ -2448,7 +2488,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:04.263Z",
+                      "startTime": "2025-10-13T19:06:24.547Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2495,10 +2535,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "failed",
-                      "duration": 5909,
+                      "duration": 5445,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"return_to=\"\u001b[39m\nReceived string:    \u001b[31m\"https://login.microsoftonline.com/f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df/oauth2/v2.0/authorize?client_id=e8b1c661-2139-4583-a4ca-ce0c1cb946b1&response_type=code&redirect_uri=https%3A%2F%2Fgocareerate.com%2Fapi%2Fcallback&response_mode=query&scope=openid%20profile%20email%20offline_access&state=12345\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"return_to=\"\u001b[39m\nReceived string:    \u001b[31m\"https://login.microsoftonline.com/f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df/oauth2/v2.0/authorize?client_id=e8b1c661-2139-4583-a4ca-ce0c1cb946b1&response_type=code&redirect_uri=https%3A%2F%2Fgocareerate.com%2Fapi%2Fcallback&response_mode=query&scope=openid%20profile%20email%20offline_access&state=12345\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:81:19",
@@ -2522,7 +2562,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:04.263Z",
+                      "startTime": "2025-10-13T19:06:25.040Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2567,12 +2607,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 914,
+                      "duration": 4764,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:04.293Z",
+                      "startTime": "2025-10-13T19:06:25.629Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2598,10 +2638,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 7,
+                      "parallelIndex": 7,
                       "status": "failed",
-                      "duration": 4327,
+                      "duration": 4477,
                       "error": {
                         "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
                         "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:105:24",
@@ -2625,7 +2665,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:05.360Z",
+                      "startTime": "2025-10-13T19:06:26.114Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2672,15 +2712,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 11,
+                      "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 6294,
+                      "duration": 3900,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:05.248Z",
+                      "startTime": "2025-10-13T19:06:26.661Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2706,10 +2746,10 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 20,
-                      "parallelIndex": 5,
+                      "workerIndex": 18,
+                      "parallelIndex": 6,
                       "status": "failed",
-                      "duration": 4422,
+                      "duration": 5781,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"scope=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"scope=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:43:19",
@@ -2733,7 +2773,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:14.549Z",
+                      "startTime": "2025-10-13T19:06:37.749Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2780,10 +2820,10 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 23,
-                      "parallelIndex": 1,
+                      "workerIndex": 14,
+                      "parallelIndex": 7,
                       "status": "failed",
-                      "duration": 4431,
+                      "duration": 4643,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"return_to=\"\u001b[39m\nReceived string:    \u001b[31m\"https://login.microsoftonline.com/f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df/oauth2/v2.0/authorize?client_id=e8b1c661-2139-4583-a4ca-ce0c1cb946b1&response_type=code&redirect_uri=https%3A%2F%2Fgocareerate.com%2Fapi%2Fcallback&response_mode=query&scope=openid%20profile%20email%20offline_access&state=12345\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"return_to=\"\u001b[39m\nReceived string:    \u001b[31m\"https://login.microsoftonline.com/f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df/oauth2/v2.0/authorize?client_id=e8b1c661-2139-4583-a4ca-ce0c1cb946b1&response_type=code&redirect_uri=https%3A%2F%2Fgocareerate.com%2Fapi%2Fcallback&response_mode=query&scope=openid%20profile%20email%20offline_access&state=12345\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:81:19",
@@ -2807,7 +2847,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:15.128Z",
+                      "startTime": "2025-10-13T19:06:38.056Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -2854,15 +2894,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 16,
-                      "parallelIndex": 11,
+                      "workerIndex": 22,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 701,
+                      "duration": 1055,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:16.057Z",
+                      "startTime": "2025-10-13T19:06:38.316Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2888,15 +2928,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 12,
-                      "parallelIndex": 2,
+                      "workerIndex": 23,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 2591,
+                      "duration": 3666,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:16.564Z",
+                      "startTime": "2025-10-13T19:06:38.729Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2922,15 +2962,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 16,
-                      "parallelIndex": 11,
+                      "workerIndex": 21,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2390,
+                      "duration": 3069,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:16.785Z",
+                      "startTime": "2025-10-13T19:06:38.865Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2956,10 +2996,10 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 26,
-                      "parallelIndex": 11,
+                      "workerIndex": 24,
+                      "parallelIndex": 7,
                       "status": "failed",
-                      "duration": 9384,
+                      "duration": 10629,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"scope=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"scope=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:43:19",
@@ -2983,7 +3023,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:26.524Z",
+                      "startTime": "2025-10-13T19:06:53.457Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3030,10 +3070,10 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 25,
-                      "parallelIndex": 1,
+                      "workerIndex": 26,
+                      "parallelIndex": 11,
                       "status": "failed",
-                      "duration": 8846,
+                      "duration": 11371,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"return_to=\"\u001b[39m\nReceived string:    \u001b[31m\"https://login.microsoftonline.com/f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df/oauth2/v2.0/authorize?client_id=e8b1c661-2139-4583-a4ca-ce0c1cb946b1&response_type=code&redirect_uri=https%3A%2F%2Fgocareerate.com%2Fapi%2Fcallback&response_mode=query&scope=openid%20profile%20email%20offline_access&state=12345\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"return_to=\"\u001b[39m\nReceived string:    \u001b[31m\"https://login.microsoftonline.com/f6ccb4c3-52b8-4969-a5d8-af88c8b6c7df/oauth2/v2.0/authorize?client_id=e8b1c661-2139-4583-a4ca-ce0c1cb946b1&response_type=code&redirect_uri=https%3A%2F%2Fgocareerate.com%2Fapi%2Fcallback&response_mode=query&scope=openid%20profile%20email%20offline_access&state=12345\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:81:19",
@@ -3057,7 +3097,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:27.054Z",
+                      "startTime": "2025-10-13T19:06:53.797Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3104,15 +3144,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 28,
-                      "parallelIndex": 4,
+                      "workerIndex": 31,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 888,
+                      "duration": 1376,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:27.722Z",
+                      "startTime": "2025-10-13T19:06:54.335Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3127,7 +3167,7 @@
             },
             {
               "title": "should close modal on cancel",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -3138,60 +3178,20 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 36,
-                      "parallelIndex": 5,
-                      "status": "failed",
-                      "duration": 3702,
-                      "error": {
-                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
-                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:105:24",
-                        "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts",
-                          "column": 24,
-                          "line": 105
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 103 |\u001b[39m     \u001b[90m// Open modal - handle mobile layout\u001b[39m\n \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts",
-                            "column": 24,
-                            "line": 105
-                          },
-                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 103 |\u001b[39m     \u001b[90m// Open modal - handle mobile layout\u001b[39m\n \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:105:24\u001b[22m"
-                        }
-                      ],
+                      "workerIndex": 33,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7938,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:31.267Z",
+                      "startTime": "2025-10-13T19:06:54.374Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\oauth-flow-OAuth-Authentication-should-close-modal-on-cancel-webkit\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\oauth-flow-OAuth-Authentication-should-close-modal-on-cancel-webkit\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\oauth-flow-OAuth-Authentication-should-close-modal-on-cancel-webkit\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts",
-                        "column": 24,
-                        "line": 105
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "959ef144cd95482078c8-2766e6438f1cbe4d1711",
@@ -3212,10 +3212,10 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 28,
-                      "parallelIndex": 4,
+                      "workerIndex": 25,
+                      "parallelIndex": 6,
                       "status": "failed",
-                      "duration": 3539,
+                      "duration": 4157,
                       "error": {
                         "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
                         "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:123:24",
@@ -3239,7 +3239,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:28.633Z",
+                      "startTime": "2025-10-13T19:06:54.985Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3286,10 +3286,10 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 40,
-                      "parallelIndex": 8,
+                      "workerIndex": 44,
+                      "parallelIndex": 7,
                       "status": "failed",
-                      "duration": 3043,
+                      "duration": 3428,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:23:24",
@@ -3313,7 +3313,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:36.821Z",
+                      "startTime": "2025-10-13T19:07:07.588Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3360,10 +3360,10 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 41,
-                      "parallelIndex": 7,
+                      "workerIndex": 36,
+                      "parallelIndex": 3,
                       "status": "failed",
-                      "duration": 2904,
+                      "duration": 3057,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:65:24",
@@ -3387,7 +3387,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:37.967Z",
+                      "startTime": "2025-10-13T19:07:04.991Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3434,15 +3434,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 39,
-                      "parallelIndex": 3,
+                      "workerIndex": 46,
+                      "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 808,
+                      "duration": 1353,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:38.757Z",
+                      "startTime": "2025-10-13T19:07:08.520Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3468,10 +3468,10 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 38,
-                      "parallelIndex": 0,
+                      "workerIndex": 41,
+                      "parallelIndex": 9,
                       "status": "timedOut",
-                      "duration": 31583,
+                      "duration": 31975,
                       "error": {
                         "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
                         "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
@@ -3486,13 +3486,13 @@
                             "column": 24,
                             "line": 106
                           },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    48 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\n \u001b[90m 109 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Sign in to Careerate/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:106:24\u001b[22m"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    49 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\n \u001b[90m 109 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Sign in to Careerate/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:106:24\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:39.081Z",
+                      "startTime": "2025-10-13T19:07:06.259Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3535,9 +3535,9 @@
                   "results": [
                     {
                       "workerIndex": 39,
-                      "parallelIndex": 3,
+                      "parallelIndex": 10,
                       "status": "timedOut",
-                      "duration": 31434,
+                      "duration": 31870,
                       "error": {
                         "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
                         "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
@@ -3552,13 +3552,13 @@
                             "column": 24,
                             "line": 124
                           },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    47 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 122 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 124 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 125 |\u001b[39m     \n \u001b[90m 126 |\u001b[39m     \u001b[90m// Should show TOS link\u001b[39m\n \u001b[90m 127 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Terms of Service/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:124:24\u001b[22m"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    49 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 122 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 124 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 125 |\u001b[39m     \n \u001b[90m 126 |\u001b[39m     \u001b[90m// Should show TOS link\u001b[39m\n \u001b[90m 127 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Terms of Service/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:124:24\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:39.612Z",
+                      "startTime": "2025-10-13T19:07:06.259Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3600,10 +3600,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 60,
+                      "workerIndex": 50,
                       "parallelIndex": 7,
                       "status": "failed",
-                      "duration": 7170,
+                      "duration": 6859,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:23:24",
@@ -3627,7 +3627,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:54.790Z",
+                      "startTime": "2025-10-13T19:07:19.509Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3674,10 +3674,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 56,
-                      "parallelIndex": 5,
+                      "workerIndex": 57,
+                      "parallelIndex": 3,
                       "status": "failed",
-                      "duration": 6901,
+                      "duration": 6761,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:65:24",
@@ -3701,7 +3701,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:55.175Z",
+                      "startTime": "2025-10-13T19:07:20.013Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3748,15 +3748,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 55,
-                      "parallelIndex": 11,
+                      "workerIndex": 53,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 963,
+                      "duration": 1146,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:55.286Z",
+                      "startTime": "2025-10-13T19:07:20.198Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3782,34 +3782,31 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 54,
-                      "parallelIndex": 8,
-                      "status": "failed",
-                      "duration": 8065,
+                      "workerIndex": 51,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 30941,
                       "error": {
-                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
-                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:105:24",
-                        "location": {
-                          "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts",
-                          "column": 24,
-                          "line": 105
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 103 |\u001b[39m     \u001b[90m// Open modal - handle mobile layout\u001b[39m\n \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\u001b[0m"
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
                       },
                       "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
                         {
                           "location": {
                             "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts",
                             "column": 24,
-                            "line": 105
+                            "line": 106
                           },
-                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 103 |\u001b[39m     \u001b[90m// Open modal - handle mobile layout\u001b[39m\n \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:105:24\u001b[22m"
+                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    3 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\n\n\u001b[0m \u001b[90m 104 |\u001b[39m     \u001b[36mconst\u001b[39m signInButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Sign In'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 105 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n \u001b[90m 108 |\u001b[39m     \u001b[90m// Modal should be visible\u001b[39m\n \u001b[90m 109 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Sign in to Careerate/i\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:106:24\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:56.111Z",
+                      "startTime": "2025-10-13T19:07:21.165Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3827,12 +3824,7 @@
                           "contentType": "text/markdown",
                           "path": "C:\\Users\\Garvs\\CareerateV0\\test-results\\oauth-flow-OAuth-Authentication-should-close-modal-on-cancel-Mobile-Safari\\error-context.md"
                         }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts",
-                        "column": 24,
-                        "line": 105
-                      }
+                      ]
                     }
                   ],
                   "status": "unexpected"
@@ -3856,10 +3848,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 55,
-                      "parallelIndex": 11,
+                      "workerIndex": 53,
+                      "parallelIndex": 5,
                       "status": "failed",
-                      "duration": 6583,
+                      "duration": 6088,
                       "error": {
                         "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
                         "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\oauth-flow.spec.ts:123:24",
@@ -3883,7 +3875,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:56.275Z",
+                      "startTime": "2025-10-13T19:07:21.367Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -3947,15 +3939,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 11,
-                      "parallelIndex": 11,
+                      "workerIndex": 9,
+                      "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 3434,
+                      "duration": 3147,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:06.364Z",
+                      "startTime": "2025-10-13T19:06:27.388Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3981,15 +3973,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 8,
-                      "parallelIndex": 8,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2775,
+                      "duration": 2148,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:07.015Z",
+                      "startTime": "2025-10-13T19:06:28.319Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4015,15 +4007,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 10,
-                      "parallelIndex": 10,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2800,
+                      "duration": 2132,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:07.031Z",
+                      "startTime": "2025-10-13T19:06:28.354Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4049,10 +4041,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 9,
-                      "parallelIndex": 9,
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
                       "status": "failed",
-                      "duration": 3554,
+                      "duration": 4076,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:94:19",
@@ -4076,7 +4068,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:07.808Z",
+                      "startTime": "2025-10-13T19:06:28.418Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -4123,15 +4115,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
+                      "workerIndex": 6,
+                      "parallelIndex": 6,
                       "status": "passed",
-                      "duration": 2006,
+                      "duration": 1606,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:07.949Z",
+                      "startTime": "2025-10-13T19:06:29.519Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4157,15 +4149,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1613,
+                      "duration": 1891,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:08.272Z",
+                      "startTime": "2025-10-13T19:06:30.459Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4191,15 +4183,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 571,
+                      "duration": 542,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:08.751Z",
+                      "startTime": "2025-10-13T19:06:30.505Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4225,15 +4217,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1319,
+                      "duration": 1891,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:09.115Z",
+                      "startTime": "2025-10-13T19:06:30.526Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4259,15 +4251,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
+                      "workerIndex": 9,
+                      "parallelIndex": 9,
                       "status": "passed",
-                      "duration": 1509,
+                      "duration": 1237,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:09.351Z",
+                      "startTime": "2025-10-13T19:06:30.573Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4293,15 +4285,15 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 8,
-                      "parallelIndex": 8,
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1165,
+                      "duration": 1829,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:09.828Z",
+                      "startTime": "2025-10-13T19:06:30.659Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4327,15 +4319,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 17,
-                      "parallelIndex": 10,
+                      "workerIndex": 22,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1546,
+                      "duration": 2101,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:18.157Z",
+                      "startTime": "2025-10-13T19:06:39.413Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4361,15 +4353,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 14,
-                      "parallelIndex": 4,
+                      "workerIndex": 22,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1657,
+                      "duration": 1990,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:18.922Z",
+                      "startTime": "2025-10-13T19:06:41.538Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4395,15 +4387,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 21,
-                      "parallelIndex": 8,
+                      "workerIndex": 15,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1693,
+                      "duration": 1631,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:18.996Z",
+                      "startTime": "2025-10-13T19:06:41.966Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4429,10 +4421,10 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 12,
+                      "workerIndex": 21,
                       "parallelIndex": 2,
                       "status": "failed",
-                      "duration": 5120,
+                      "duration": 4939,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:94:19",
@@ -4456,7 +4448,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:19.195Z",
+                      "startTime": "2025-10-13T19:06:42.013Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -4503,15 +4495,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 16,
-                      "parallelIndex": 11,
+                      "workerIndex": 23,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 1709,
+                      "duration": 2758,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:19.225Z",
+                      "startTime": "2025-10-13T19:06:42.449Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4537,15 +4529,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 17,
-                      "parallelIndex": 10,
+                      "workerIndex": 13,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 1691,
+                      "duration": 3117,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:19.735Z",
+                      "startTime": "2025-10-13T19:06:42.672Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4571,15 +4563,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 24,
+                      "workerIndex": 22,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 3999,
+                      "duration": 1462,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:23.419Z",
+                      "startTime": "2025-10-13T19:06:43.549Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4605,15 +4597,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 14,
-                      "parallelIndex": 4,
+                      "workerIndex": 15,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1735,
+                      "duration": 2587,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:20.605Z",
+                      "startTime": "2025-10-13T19:06:43.631Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4639,15 +4631,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 21,
-                      "parallelIndex": 8,
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 3168,
+                      "duration": 2588,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:20.724Z",
+                      "startTime": "2025-10-13T19:06:43.763Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4673,15 +4665,15 @@
                   "projectName": "firefox",
                   "results": [
                     {
-                      "workerIndex": 19,
-                      "parallelIndex": 6,
+                      "workerIndex": 22,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1939,
+                      "duration": 2609,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:20.856Z",
+                      "startTime": "2025-10-13T19:06:45.046Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4707,15 +4699,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 31,
-                      "parallelIndex": 0,
+                      "workerIndex": 32,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1712,
+                      "duration": 1926,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:29.057Z",
+                      "startTime": "2025-10-13T19:06:55.230Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4741,15 +4733,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 32,
-                      "parallelIndex": 7,
+                      "workerIndex": 31,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1863,
+                      "duration": 1985,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:29.072Z",
+                      "startTime": "2025-10-13T19:06:55.753Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4775,15 +4767,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 27,
+                      "workerIndex": 35,
                       "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 907,
+                      "duration": 1373,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:29.655Z",
+                      "startTime": "2025-10-13T19:06:55.985Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4810,9 +4802,9 @@
                   "results": [
                     {
                       "workerIndex": 27,
-                      "parallelIndex": 10,
+                      "parallelIndex": 4,
                       "status": "failed",
-                      "duration": 11054,
+                      "duration": 11413,
                       "error": {
                         "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m",
                         "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"state=\"\u001b[39m\nReceived string:    \u001b[31m\"https://github.com/login?client_id=Ov23liRwhk6ZbqmlHSz9&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail\"\u001b[39m\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:94:19",
@@ -4836,7 +4828,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:30.587Z",
+                      "startTime": "2025-10-13T19:06:56.294Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -4883,15 +4875,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 35,
+                      "workerIndex": 30,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1971,
+                      "duration": 2044,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:30.811Z",
+                      "startTime": "2025-10-13T19:06:56.472Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4917,15 +4909,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 31,
-                      "parallelIndex": 0,
+                      "workerIndex": 32,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1883,
+                      "duration": 1777,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:30.794Z",
+                      "startTime": "2025-10-13T19:06:57.186Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4951,15 +4943,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 32,
-                      "parallelIndex": 7,
+                      "workerIndex": 34,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1038,
+                      "duration": 966,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:30.958Z",
+                      "startTime": "2025-10-13T19:06:57.224Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -4985,15 +4977,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 33,
-                      "parallelIndex": 2,
+                      "workerIndex": 35,
+                      "parallelIndex": 10,
                       "status": "passed",
-                      "duration": 2518,
+                      "duration": 1884,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:31.198Z",
+                      "startTime": "2025-10-13T19:06:57.383Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5019,15 +5011,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 32,
-                      "parallelIndex": 7,
+                      "workerIndex": 31,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1462,
+                      "duration": 1824,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:32.015Z",
+                      "startTime": "2025-10-13T19:06:57.762Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5053,15 +5045,15 @@
                   "projectName": "webkit",
                   "results": [
                     {
-                      "workerIndex": 37,
-                      "parallelIndex": 4,
+                      "workerIndex": 34,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 2654,
+                      "duration": 1742,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:33.885Z",
+                      "startTime": "2025-10-13T19:06:58.221Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5087,15 +5079,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 45,
-                      "parallelIndex": 5,
+                      "workerIndex": 37,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 3948,
+                      "duration": 2275,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:41.461Z",
+                      "startTime": "2025-10-13T19:07:07.165Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5121,15 +5113,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 49,
-                      "parallelIndex": 10,
+                      "workerIndex": 47,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 2868,
+                      "duration": 2410,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:44.980Z",
+                      "startTime": "2025-10-13T19:07:10.259Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5155,15 +5147,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 50,
-                      "parallelIndex": 8,
+                      "workerIndex": 48,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 1257,
+                      "duration": 1633,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:44.931Z",
+                      "startTime": "2025-10-13T19:07:11.105Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5189,34 +5181,34 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 51,
-                      "parallelIndex": 7,
+                      "workerIndex": 37,
+                      "parallelIndex": 2,
                       "status": "failed",
-                      "duration": 4786,
+                      "duration": 2299,
                       "error": {
-                        "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
-                        "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:84:24",
+                        "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
+                        "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:80:24",
                         "location": {
                           "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
                           "column": 24,
-                          "line": 84
+                          "line": 80
                         },
-                        "snippet": "\u001b[0m \u001b[90m 82 |\u001b[39m     \n \u001b[90m 83 |\u001b[39m     \u001b[90m// Use force click for mobile if needed\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 84 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick({ force\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 85 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Continue with GitHub/i\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 86 |\u001b[39m     \n \u001b[90m 87 |\u001b[39m     \u001b[90m// Wait for navigation\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mwaitFor({ state\u001b[33m:\u001b[39m \u001b[32m'visible'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m window\u001b[33m.\u001b[39mscrollTo(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m0\u001b[39m))\u001b[33m;\u001b[39m \u001b[90m// Scroll to top first\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n \u001b[90m 82 |\u001b[39m     \n \u001b[90m 83 |\u001b[39m     \u001b[90m// Use force click for mobile if needed\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
                             "column": 24,
-                            "line": 84
+                            "line": 80
                           },
-                          "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n\n\u001b[0m \u001b[90m 82 |\u001b[39m     \n \u001b[90m 83 |\u001b[39m     \u001b[90m// Use force click for mobile if needed\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 84 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mclick({ force\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 85 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[35m/Continue with GitHub/i\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 86 |\u001b[39m     \n \u001b[90m 87 |\u001b[39m     \u001b[90m// Wait for navigation\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:84:24\u001b[22m"
+                          "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n\n\u001b[0m \u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mwaitFor({ state\u001b[33m:\u001b[39m \u001b[32m'visible'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m window\u001b[33m.\u001b[39mscrollTo(\u001b[35m0\u001b[39m\u001b[33m,\u001b[39m \u001b[35m0\u001b[39m))\u001b[33m;\u001b[39m \u001b[90m// Scroll to top first\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m signInButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Wait for scroll to complete\u001b[39m\n \u001b[90m 82 |\u001b[39m     \n \u001b[90m 83 |\u001b[39m     \u001b[90m// Use force click for mobile if needed\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:80:24\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:44.981Z",
+                      "startTime": "2025-10-13T19:07:09.485Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -5238,7 +5230,7 @@
                       "errorLocation": {
                         "file": "C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts",
                         "column": 24,
-                        "line": 84
+                        "line": 80
                       }
                     }
                   ],
@@ -5263,15 +5255,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 52,
-                      "parallelIndex": 9,
+                      "workerIndex": 43,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2953,
+                      "duration": 2244,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:46.188Z",
+                      "startTime": "2025-10-13T19:07:09.613Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5297,15 +5289,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 48,
-                      "parallelIndex": 4,
+                      "workerIndex": 49,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2047,
+                      "duration": 1850,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:44.231Z",
+                      "startTime": "2025-10-13T19:07:13.044Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5331,15 +5323,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 47,
+                      "workerIndex": 46,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 406,
+                      "duration": 937,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:44.280Z",
+                      "startTime": "2025-10-13T19:07:10.691Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5365,15 +5357,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 47,
-                      "parallelIndex": 11,
+                      "workerIndex": 45,
+                      "parallelIndex": 8,
                       "status": "passed",
-                      "duration": 2648,
+                      "duration": 2549,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:44.717Z",
+                      "startTime": "2025-10-13T19:07:10.729Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5399,15 +5391,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 45,
-                      "parallelIndex": 5,
+                      "workerIndex": 46,
+                      "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 2551,
+                      "duration": 2379,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:45.459Z",
+                      "startTime": "2025-10-13T19:07:11.668Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5433,15 +5425,15 @@
                   "projectName": "Mobile Chrome",
                   "results": [
                     {
-                      "workerIndex": 48,
-                      "parallelIndex": 4,
+                      "workerIndex": 43,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2699,
+                      "duration": 1882,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:46.302Z",
+                      "startTime": "2025-10-13T19:07:11.892Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5467,15 +5459,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 52,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 2282,
+                      "duration": 2038,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:56.497Z",
+                      "startTime": "2025-10-13T19:07:22.137Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5501,15 +5493,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 52,
+                      "parallelIndex": 4,
                       "status": "passed",
-                      "duration": 2400,
+                      "duration": 2247,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:11:58.808Z",
+                      "startTime": "2025-10-13T19:07:24.207Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5535,15 +5527,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 58,
+                      "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 1103,
+                      "duration": 931,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:01.227Z",
+                      "startTime": "2025-10-13T19:07:27.971Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5569,10 +5561,10 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 61,
-                      "parallelIndex": 9,
+                      "workerIndex": 52,
+                      "parallelIndex": 4,
                       "status": "failed",
-                      "duration": 5656,
+                      "duration": 5960,
                       "error": {
                         "message": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n",
                         "stack": "Error: locator.click: Element is outside of the viewport\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign In' })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/10 hover:text-accent-foreground hover:scale-105 h-10 px-4 py-2 rounded-full text-sm\">Sign In</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\n    at C:\\Users\\Garvs\\CareerateV0\\e2e\\security.spec.ts:84:24",
@@ -5596,7 +5588,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:03.429Z",
+                      "startTime": "2025-10-13T19:07:26.492Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -5643,15 +5635,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 59,
+                      "parallelIndex": 7,
                       "status": "passed",
-                      "duration": 2033,
+                      "duration": 2137,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:02.356Z",
+                      "startTime": "2025-10-13T19:07:29.012Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5677,15 +5669,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 62,
-                      "parallelIndex": 7,
+                      "workerIndex": 60,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2079,
+                      "duration": 2275,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:05.015Z",
+                      "startTime": "2025-10-13T19:07:29.278Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5711,15 +5703,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 63,
+                      "workerIndex": 61,
                       "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 826,
+                      "duration": 720,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:04.916Z",
+                      "startTime": "2025-10-13T19:07:30.022Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5745,15 +5737,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 64,
+                      "workerIndex": 58,
                       "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 2011,
+                      "duration": 2131,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:05.963Z",
+                      "startTime": "2025-10-13T19:07:29.041Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5779,15 +5771,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 53,
-                      "parallelIndex": 1,
+                      "workerIndex": 61,
+                      "parallelIndex": 5,
                       "status": "passed",
-                      "duration": 1861,
+                      "duration": 1441,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:04.416Z",
+                      "startTime": "2025-10-13T19:07:30.884Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5813,15 +5805,15 @@
                   "projectName": "Mobile Safari",
                   "results": [
                     {
-                      "workerIndex": 65,
-                      "parallelIndex": 8,
+                      "workerIndex": 58,
+                      "parallelIndex": 11,
                       "status": "passed",
-                      "duration": 1735,
+                      "duration": 2392,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-13T02:12:07.152Z",
+                      "startTime": "2025-10-13T19:07:31.193Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -5841,8 +5833,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-13T02:10:54.636Z",
-    "duration": 88261.19499999999,
+    "startTime": "2025-10-13T19:06:06.567Z",
+    "duration": 106454.036,
     "expected": 107,
     "skipped": 0,
     "unexpected": 28,

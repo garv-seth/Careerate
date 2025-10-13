@@ -91,6 +91,7 @@ test.describe('Security', () => {
     
     // Should have state parameter in OAuth URL
     if (url.includes('github.com')) {
+      // State parameter is embedded in the return_to parameter for GitHub
       expect(url).toContain('state=');
     }
   });

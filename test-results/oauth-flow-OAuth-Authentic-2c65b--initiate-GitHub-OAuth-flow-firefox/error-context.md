@@ -40,30 +40,26 @@
                 - img:
                   - img
               - generic [ref=e39] [cursor=pointer]: Continue with Apple
-      - generic [ref=e40]:
-        - paragraph [ref=e42]:
-          - text: New to GitHub?
-          - link "Create an account" [ref=e43] [cursor=pointer]:
-            - /url: /join?return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail&source=oauth
-        - paragraph [ref=e45]:
-          - button "Sign in with a passkey" [ref=e46] [cursor=pointer]:
-            - generic [ref=e48] [cursor=pointer]: Sign in with a passkey
-  - contentinfo [ref=e49]:
-    - list [ref=e50]:
-      - listitem [ref=e51]:
-        - link "Terms" [ref=e52] [cursor=pointer]:
+      - paragraph [ref=e42]:
+        - text: New to GitHub?
+        - link "Create an account" [ref=e43] [cursor=pointer]:
+          - /url: /join?return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3DOv23liRwhk6ZbqmlHSz9%26redirect_uri%3Dhttps%253A%252F%252Fgocareerate.com%252Fapi%252Fcallback%252Fgithub%26scope%3Dread%253Auser%2Buser%253Aemail&source=oauth
+  - contentinfo [ref=e44]:
+    - list [ref=e45]:
+      - listitem [ref=e46]:
+        - link "Terms" [ref=e47] [cursor=pointer]:
           - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
-      - listitem [ref=e53]:
-        - link "Privacy" [ref=e54] [cursor=pointer]:
+      - listitem [ref=e48]:
+        - link "Privacy" [ref=e49] [cursor=pointer]:
           - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
-      - listitem [ref=e55]:
-        - link "Docs" [ref=e56] [cursor=pointer]:
+      - listitem [ref=e50]:
+        - link "Docs" [ref=e51] [cursor=pointer]:
           - /url: https://docs.github.com
-      - listitem [ref=e57]:
-        - link "Contact GitHub Support" [ref=e58] [cursor=pointer]:
+      - listitem [ref=e52]:
+        - link "Contact GitHub Support" [ref=e53] [cursor=pointer]:
           - /url: https://support.github.com
-      - listitem [ref=e59]:
-        - button "Manage cookies" [ref=e61] [cursor=pointer]
-      - listitem [ref=e62]:
-        - button "Do not share my personal information" [ref=e64] [cursor=pointer]
+      - listitem [ref=e54]:
+        - button "Manage cookies" [ref=e56] [cursor=pointer]
+      - listitem [ref=e57]:
+        - button "Do not share my personal information" [ref=e59] [cursor=pointer]
 ```

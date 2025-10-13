@@ -123,10 +123,15 @@ test.describe('Landing Page', () => {
     await signInButton.waitFor({ state: 'visible' });
     await page.evaluate(() => window.scrollTo(0, 0)); // Scroll to top first
     await signInButton.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(500); // Wait for scroll to complete
+    await page.waitForTimeout(1000); // Wait for scroll to complete
     
-    // Use force click for mobile if needed
-    await signInButton.click({ force: true });
+    // Try multiple click strategies for mobile
+    try {
+      await signInButton.click({ force: true });
+    } catch (error) {
+      // If force click fails, try regular click
+      await signInButton.click();
+    }
     
     // Modal should appear
     await expect(page.getByRole('heading', { name: /Sign in to Careerate/i })).toBeVisible();
