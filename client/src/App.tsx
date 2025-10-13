@@ -12,7 +12,7 @@ import Landing from "@/pages/landing-new";
 
 // Lazy load pages for better performance (except Landing which is the entry point)
 const NotFound = lazy(() => import("@/pages/not-found"));
-const Dashboard = lazy(() => import("@/pages/dashboard"));
+import Dashboard from "@/pages/dashboard"; // Import directly to test
 const IntegrationsPage = lazy(() => import("@/pages/integrations"));
 const PaymentPage = lazy(() => import("@/pages/payment"));
 const AccountSettings = lazy(() => import("@/pages/account-settings"));
