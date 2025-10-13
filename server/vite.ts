@@ -77,10 +77,18 @@ export function serveStatic(app: Express) {
   }
 
   // Serve static assets (CSS, JS, images) but not HTML files
-  app.use('/assets', express.static(path.resolve(distPath, 'assets')));
-  app.use('/manifest.json', express.static(path.resolve(distPath, 'manifest.json')));
-  app.use('/sw.js', express.static(path.resolve(distPath, 'sw.js')));
-  app.use('/favicon.ico', express.static(path.resolve(distPath, 'favicon.ico')));
+  app.use('/assets', express.static(path.resolve(distPath, 'assets'), { maxAge: '1y', immutable: true }));
+  
+  // Serve individual files
+  app.get('/manifest.json', (_req, res) => {
+    res.sendFile(path.resolve(distPath, 'manifest.json'));
+  });
+  app.get('/sw.js', (_req, res) => {
+    res.sendFile(path.resolve(distPath, 'sw.js'));
+  });
+  app.get('/favicon.ico', (_req, res) => {
+    res.sendFile(path.resolve(distPath, 'careerate-favicon.svg'));
+  });
 
   // Always serve dynamically rewritten HTML for all routes
   app.use(/.*/, async (_req, res) => {
