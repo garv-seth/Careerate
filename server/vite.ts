@@ -76,11 +76,13 @@ export function serveStatic(app: Express) {
     );
   }
 
-  // Serve static assets but let our catch-all handle index.html
-  app.use(express.static(distPath, { index: false }));
+  // Serve static assets (CSS, JS, images) but not HTML files
+  app.use('/assets', express.static(path.resolve(distPath, 'assets')));
+  app.use('/manifest.json', express.static(path.resolve(distPath, 'manifest.json')));
+  app.use('/sw.js', express.static(path.resolve(distPath, 'sw.js')));
+  app.use('/favicon.ico', express.static(path.resolve(distPath, 'favicon.ico')));
 
-  // fall through to index.html if the file doesn't exist
-  // but dynamically rewrite hashed asset names so we always serve the latest build
+  // Always serve dynamically rewritten HTML for all routes
   app.use(/.*/, async (_req, res) => {
     try {
       const indexPath = path.resolve(distPath, "index.html");
