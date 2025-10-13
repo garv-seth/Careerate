@@ -25,10 +25,21 @@ interface DashboardData {
 }
 
 export default function Dashboard() {
+  console.log('Dashboard component loaded!');
   const [, setLocation] = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Temporary test - return simple message to see if component loads
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold mb-4">Dashboard Component Loaded!</h1>
+        <p className="text-muted-foreground">This is a test to see if the routing is working.</p>
+      </div>
+    </div>
+  );
 
   useEffect(() => {
     // Check authentication and load user data
