@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 export function useAuth() {
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading, error } = useQuery({
     queryKey: ["/api/user"],
     retry: false,
     queryFn: async () => {
@@ -23,7 +23,7 @@ export function useAuth() {
 
   return {
     user,
-    isLoading,
+    isLoading: isLoading && !error, // Only show loading if there's no error
     isAuthenticated: !!user,
   };
 }
