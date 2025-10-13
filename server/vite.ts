@@ -90,8 +90,19 @@ export function serveStatic(app: Express) {
     res.sendFile(path.resolve(distPath, 'careerate-favicon.svg'));
   });
 
-  // Always serve dynamically rewritten HTML for all routes
-  app.use(/.*/, async (_req, res) => {
+  // Always serve dynamically rewritten HTML for all non-asset routes
+  // Skip this middleware for /assets, /manifest.json, /sw.js, /favicon.ico, and /api routes
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/assets') || 
+        req.path.startsWith('/api') || 
+        req.path === '/manifest.json' || 
+        req.path === '/sw.js' || 
+        req.path === '/favicon.ico') {
+      return next();
+    }
+    
+    // Serve dynamically rewritten HTML
+    (async () => {
     try {
       const indexPath = path.resolve(distPath, "index.html");
       let html = await fs.promises.readFile(indexPath, "utf-8");
@@ -126,5 +137,6 @@ export function serveStatic(app: Express) {
       // As a fallback, serve the original file
       res.sendFile(path.resolve(distPath, "index.html"));
     }
+    })().catch(next);
   });
 }
