@@ -1,5 +1,5 @@
 // Careerate Service Worker
-const CACHE_NAME = 'careerate-v1';
+const CACHE_NAME = 'careerate-v2';
 const RUNTIME_CACHE = 'careerate-runtime';
 
 // Assets to cache on install
@@ -7,6 +7,7 @@ const STATIC_ASSETS = [
   '/',
   '/deploy',
   '/integrations',
+  '/dashboard',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
