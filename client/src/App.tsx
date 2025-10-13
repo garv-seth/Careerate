@@ -37,30 +37,21 @@ function Router() {
   console.log('Router component loaded');
   console.log('Current pathname:', window.location.pathname);
   
-  return (
-    <Suspense fallback={<PageLoader />}>
-      <Switch>
-        {/* Public routes */}
-        <Route path="/" component={Landing} />
-        <Route path="/payment" component={PaymentPage} />
-        <Route path="/privacy" component={PrivacyPolicy} />
-        <Route path="/terms" component={TermsOfService} />
-
-        {/* App routes (auth handled per-page) */}
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/test" component={Test} />
-        <Route path="/minimal" component={Minimal} />
-        <Route path="/integrations" component={IntegrationsPage} />
-        <Route path="/account" component={AccountSettings} />
-        <Route path="/settings" component={AccountSettings} />
-        <Route path="/deploy" component={Deploy} />
-        <Route path="/install" component={Install} />
-
-        {/* 404 */}
-        <Route component={NotFound} />
-      </Switch>
-    </Suspense>
-  );
+  // Simple routing logic to test
+  const pathname = window.location.pathname;
+  
+  if (pathname === '/dashboard') {
+    console.log('Rendering Dashboard component');
+    return <Dashboard />;
+  }
+  
+  if (pathname === '/') {
+    console.log('Rendering Landing component');
+    return <Landing />;
+  }
+  
+  console.log('Rendering Landing component as fallback');
+  return <Landing />;
 }
 
 function App() {
