@@ -128,7 +128,7 @@ jobs:
       run: |
         echo "🔍 Running comprehensive deployment verification..."
 
-        APP_URL="https://careerate-web.politetree-6f564ad5.westus2.azurecontainerapps.io"
+        APP_URL="https://gocareerate.com"
         MAX_RETRIES=10
         RETRY_COUNT=0
 
