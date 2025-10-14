@@ -5,6 +5,7 @@
 
 import { keyVaultService } from './azureKeyVaultService';
 import { storage } from '../storage';
+import { secretsManager } from '../secretsManager';
 
 export interface OAuthConfig {
   clientId: string;
@@ -98,7 +99,7 @@ class MultiCloudOAuthService {
       const userInfo = await userResponse.json();
 
       // Store integration
-      await storage.createUserIntegration({
+      const integration = await storage.createUserIntegration({
         userId,
         service: 'github',
         type: 'repository',
@@ -112,6 +113,25 @@ class MultiCloudOAuthService {
         createdAt: new Date(),
         lastSync: null
       });
+
+      // Store encrypted access token as integration secret
+      try {
+        const encrypted = await secretsManager.encryptApiKey(tokenData.access_token, 'github', 'production');
+        await storage.createIntegrationSecret({
+          integrationId: integration.id,
+          secretType: 'oauth-token',
+          secretName: 'accessToken',
+          encryptedValue: encrypted.encryptedValue,
+          encryptionAlgorithm: encrypted.algorithm,
+          keyId: encrypted.keyId,
+          environment: 'production',
+          scope: [{ repo: 'all' }],
+          rotationPolicy: {},
+          metadata: { provider: 'github' }
+        });
+      } catch (e) {
+        console.warn('Failed to persist GitHub token secret:', (e as Error).message);
+      }
 
       return {
         success: true,

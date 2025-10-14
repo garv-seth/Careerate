@@ -5915,6 +5915,42 @@ Never deploy without explicit user confirmation.`;
     }
   });
 
+  // List GitHub repositories for current user
+  app.get('/api/github/repos', isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      // Fetch latest GitHub integration for this user
+      const integrations = await storage.getUserIntegrations(userId, 'repository');
+      const gh = integrations.find((i: any) => i.service === 'github');
+      if (!gh) return res.status(404).json({ message: 'GitHub not connected' });
+
+      // Get access token secret
+      const secrets = await storage.getIntegrationSecrets(gh.id);
+      const tokenSecret = secrets.find((s: any) => s.secretName === 'accessToken');
+      if (!tokenSecret) return res.status(400).json({ message: 'GitHub token not found' });
+
+      // Decrypt token
+      const token = await secretsManager.decryptApiKey({
+        encryptedValue: tokenSecret.encryptedValue,
+        algorithm: tokenSecret.encryptionAlgorithm,
+        keyId: tokenSecret.keyId
+      });
+
+      const response = await fetch('https://api.github.com/user/repos?per_page=100&sort=updated', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (!response.ok) throw new Error(`GitHub API error ${response.status}`);
+      const repos = await response.json();
+      res.json(repos.map((r: any) => ({ id: r.id, name: r.full_name, private: r.private, default_branch: r.default_branch })));
+    } catch (error: any) {
+      console.error('List GitHub repos failed:', error);
+      res.status(500).json({ message: error.message || 'Failed to list repositories' });
+    }
+  });
+
   return server;
 }
 

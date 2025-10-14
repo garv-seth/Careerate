@@ -347,135 +347,30 @@ export async function setupAuth(app: Express) {
   // GitHub OAuth callback
   app.get("/api/callback/github", async (req, res) => {
     console.log('=== GitHub OAuth Callback ===');
-    console.log('Full request URL:', req.url);
-    console.log('Query params:', req.query);
-    console.log('Headers host:', req.get('host'));
-    console.log('Protocol:', req.protocol);
-
     const { code, error, error_description } = req.query as { code?: string; error?: string; error_description?: string };
 
-    // Check for OAuth errors first
     if (error) {
       console.error('GitHub OAuth error received:', { error, error_description });
-      return res.status(400).json({
-        error: 'GitHub OAuth error',
-        details: { error, error_description }
-      });
+      return res.redirect(`/integrations?error=${encodeURIComponent(error_description || error)}`);
     }
 
-    console.log('GitHub callback received:', { code: code ? 'present' : 'missing', query: req.query });
-
     if (!code) {
-      console.error('No GitHub authorization code received');
-      return res.status(400).json({ error: "Authorization code not received" });
+      return res.redirect('/integrations?error=missing_code');
     }
 
     try {
-      const redirectUri = `${req.protocol}://${req.get('host')}/api/callback/github`;
-      console.log('GitHub token exchange attempt:', {
-        clientId: process.env.GITHUB_CLIENT_ID ? 'set' : 'missing',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET ? 'set' : 'missing',
-        redirectUri
-      });
+      const userId = (req as any).user?.id || (req as any).user?.sub;
+      const { multiCloudOAuth } = await import('./services/multiCloudOAuth');
+      const result = await multiCloudOAuth.handleGitHubCallback(code, userId);
 
-      const tokenRes = await fetch("https://github.com/login/oauth/access_token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
-          code,
-          redirect_uri: redirectUri,
-        }),
-      });
-
-      console.log('GitHub token response status:', tokenRes.status);
-      console.log('GitHub token response headers:', Object.fromEntries(tokenRes.headers.entries()));
-
-      const tokenJson = await tokenRes.json();
-      console.log('GitHub token response body:', tokenJson);
-
-      if (!tokenJson.access_token) {
-        console.error("GitHub token exchange failed:", tokenJson);
-        return res.status(400).json({ error: "GitHub authentication failed", details: tokenJson });
+      if (!result.success) {
+        return res.redirect(`/integrations?error=${encodeURIComponent(result.errorMessage || 'github_oauth_failed')}`);
       }
 
-      // Get user info
-      console.log('Fetching GitHub user info...');
-      const userRes = await fetch("https://api.github.com/user", {
-        headers: { Authorization: `Bearer ${tokenJson.access_token}`, "User-Agent": "careerate-app" },
-      });
-
-      console.log('GitHub user response status:', userRes.status);
-      const ghUser: any = await userRes.json();
-      console.log('GitHub user info:', ghUser);
-
-      // Get primary email (may require separate call)
-      let email = ghUser.email || "";
-      if (!email) {
-        const emailsRes = await fetch("https://api.github.com/user/emails", {
-          headers: { Authorization: `Bearer ${tokenJson.access_token}`, "User-Agent": "careerate-app" },
-        });
-        const emails: any[] = await emailsRes.json();
-        const primary = emails?.find((e) => e.primary && e.verified) || emails?.[0];
-        email = primary?.email || "";
-      }
-
-      const payload: UserPayload = {
-        sub: `github-${ghUser.id}`,
-        preferred_username: email,
-        name: ghUser.name || ghUser.login,
-      };
-
-      console.log('GitHub user payload:', payload);
-      console.log('Upserting GitHub user...');
-
-      let dbUser;
-      try {
-        dbUser = await upsertUser(payload);
-        console.log('GitHub user upserted successfully:', dbUser);
-      } catch (upsertError) {
-        console.error('GitHub user upsert failed:', upsertError);
-
-        // Try to find existing user by email as fallback
-        try {
-          const existingUser = await storage.getUserByEmail(payload.preferred_username || '');
-          if (existingUser) {
-            console.log('Found existing user by email, using that instead:', existingUser);
-            dbUser = existingUser;
-          } else {
-            throw upsertError;
-          }
-        } catch (fallbackError) {
-          console.error('Fallback user lookup failed:', fallbackError);
-          throw upsertError;
-        }
-      }
-
-      console.log('Attempting GitHub session login...');
-
-      // Store GitHub access token in session for repo access
-      if (req.session) {
-        (req.session as any).githubAccessToken = tokenJson.access_token;
-        console.log('Stored GitHub access token in session');
-      }
-
-      req.login(dbUser, (err) => {
-        if (err) {
-          console.error('GitHub session login error:', err);
-          return res.status(500).json({ error: "Login failed", details: err.message });
-        }
-        console.log('GitHub session login successful, redirecting to /dashboard');
-        res.redirect("/dashboard");
-      });
-    } catch (error) {
-      console.error('=== GitHub OAuth Error ===');
-      console.error('Error:', error);
-      console.error('Stack:', error instanceof Error ? error.stack : 'No stack trace');
-      res.status(500).json({
-        error: "GitHub authentication failed",
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
+      return res.redirect('/integrations?github=connected');
+    } catch (e: any) {
+      console.error('GitHub callback processing failed:', e);
+      return res.redirect(`/integrations?error=${encodeURIComponent(e.message)}`);
     }
   });
 }

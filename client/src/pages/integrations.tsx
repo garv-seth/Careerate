@@ -81,6 +81,9 @@ export default function IntegrationsPage() {
           <p className="text-foreground/70 mb-6">Additional services and tools for monitoring, notifications, and more.</p>
         </div>
 
+        {/* GitHub Repo Selector when connected */}
+        <GitHubRepoSelector />
+
         {isLoading ? (
           <div className="text-foreground/60">Loading…</div>
         ) : (
@@ -621,6 +624,54 @@ export function DevOpsIntegrations() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function GitHubRepoSelector() {
+  const { toast } = useToast();
+  const [repos, setRepos] = React.useState<any[] | null>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const connected = params.get('github') === 'connected';
+    if (!connected) return;
+    setLoading(true);
+    fetch('/api/github/repos', { credentials: 'include' })
+      .then(async r => {
+        if (!r.ok) throw new Error((await r.json()).message || 'Failed to load repos');
+        return r.json();
+      })
+      .then(data => setRepos(data))
+      .catch(e => { setError(e.message); toast({ title: 'GitHub', description: e.message, variant: 'destructive' }); })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (repos === null && !loading && !error) return null;
+
+  return (
+    <div className="glass-pane rounded-2xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-lg font-semibold text-foreground">GitHub Repositories</h3>
+        <Badge>Connected</Badge>
+      </div>
+      {loading && <div className="text-foreground/60">Loading repositories…</div>}
+      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {repos && (
+        <div className="grid md:grid-cols-2 gap-3">
+          {repos.map(r => (
+            <div key={r.id} className="p-3 rounded-lg border border-border flex items-center justify-between">
+              <div>
+                <div className="font-medium text-foreground">{r.name}</div>
+                <div className="text-xs text-foreground/60">{r.private ? 'Private' : 'Public'} • {r.default_branch}</div>
+              </div>
+              <Button size="sm" onClick={() => window.location.href = `/deploy?repo=${encodeURIComponent(r.name)}`}>Select</Button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
