@@ -638,6 +638,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Stripe Billing Portal session
+  app.post('/api/subscription/portal', isAuthenticated, async (req, res) => {
+    try {
+      if (!stripe) {
+        return res.status(400).json({ message: 'Stripe is not configured' });
+      }
+      const userId = getUserId(req);
+      const user = await storage.getUser(userId);
+      if (!user?.email) {
+        return res.status(400).json({ message: 'No user email on file' });
+      }
+
+      // Try to find existing subscription and get customer id; otherwise ensure a customer exists
+      const existing = await subscriptionService.getUserSubscription(userId);
+      let customerId: string | undefined;
+      if (existing?.stripeSubscriptionId) {
+        const sub = await stripe.subscriptions.retrieve(existing.stripeSubscriptionId);
+        customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
+      }
+      if (!customerId) {
+        customerId = await subscriptionService.createOrGetStripeCustomer(
+          userId,
+          user.email,
+          `${user.firstName || ''} ${user.lastName || ''}`.trim()
+        );
+      }
+
+      const portal = await stripe.billingPortal.sessions.create({
+        customer: customerId!,
+        return_url: `${process.env.BASE_URL || 'https://gocareerate.com'}/settings`
+      });
+
+      res.json({ url: portal.url });
+    } catch (error: any) {
+      console.error('Create billing portal session error:', error);
+      res.status(500).json({ message: error.message || 'Failed to create billing portal session' });
+    }
+  });
+
   // Stripe webhook handler (from javascript_stripe blueprint)
   app.post('/api/webhooks/stripe', express.raw({type: 'application/json'}), async (req, res) => {
     const sig = req.headers['stripe-signature'];

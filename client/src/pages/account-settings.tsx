@@ -381,6 +381,12 @@ export default function AccountSettings() {
                     variant="outline"
                     className="border-border text-foreground hover:bg-primary/10 rounded-full"
                     onClick={async () => {
+                      // First try to open billing portal; if not available, create a subscription
+                      const portal = await fetch('/api/subscription/portal', { method: 'POST', credentials: 'include' });
+                      if (portal.ok) {
+                        const j = await portal.json();
+                        if (j?.url) { window.location.href = j.url; return; }
+                      }
                       const res = await fetch('/api/get-or-create-subscription', { method: 'POST', credentials: 'include' });
                       const data = await res.json();
                       if (data?.clientSecret) {
