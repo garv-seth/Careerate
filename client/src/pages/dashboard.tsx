@@ -1,220 +1,115 @@
-import { useLocation } from 'wouter';
-import { useAuth } from '@/hooks/useAuth';
-import { AppShell } from '@/components/AppShell';
-
 export default function Dashboard() {
-  const { user, isAuthenticated } = useAuth();
-  const [, setLocation] = useLocation();
-
-  // Show sign-in prompt if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <AppShell>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-center max-w-md mx-auto px-4">
-            <div className="mb-8">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🔐</span>
-              </div>
-              <h1 className="text-2xl font-bold text-foreground mb-2">Authentication Required</h1>
-              <p className="text-muted-foreground">
-                Please sign in to access your dashboard and manage your deployments.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <button 
-                onClick={() => setLocation('/')}
-                className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
-              >
-                Go to Sign In
-              </button>
-              <button 
-                onClick={() => setLocation('/')}
-                className="w-full px-6 py-3 border border-border text-foreground rounded-lg hover:bg-background/50 transition-colors"
-              >
-                Back to Home
-              </button>
-            </div>
+  return (
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#0a0a0a', 
+      color: '#ffffff',
+      padding: '2rem',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+          Dashboard
+        </h1>
+        <p style={{ color: '#a1a1aa', marginBottom: '2rem' }}>
+          Welcome to your Careerate dashboard. This is a simplified version to avoid hydration issues.
+        </p>
+        
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+          gap: '1rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{ 
+            backgroundColor: '#1a1a1a', 
+            border: '1px solid #333', 
+            borderRadius: '8px', 
+            padding: '1.5rem'
+          }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.5rem' }}>Total Projects</h3>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#f59e0b' }}>0</div>
+            <p style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>+2 from last month</p>
+          </div>
+          
+          <div style={{ 
+            backgroundColor: '#1a1a1a', 
+            border: '1px solid #333', 
+            borderRadius: '8px', 
+            padding: '1.5rem'
+          }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.5rem' }}>Active Deployments</h3>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>0</div>
+            <p style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>All systems operational</p>
+          </div>
+          
+          <div style={{ 
+            backgroundColor: '#1a1a1a', 
+            border: '1px solid #333', 
+            borderRadius: '8px', 
+            padding: '1.5rem'
+          }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.5rem' }}>Monthly Cost</h3>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#3b82f6' }}>$0</div>
+            <p style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>-12% from last month</p>
+          </div>
+          
+          <div style={{ 
+            backgroundColor: '#1a1a1a', 
+            border: '1px solid #333', 
+            borderRadius: '8px', 
+            padding: '1.5rem'
+          }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.5rem' }}>Uptime</h3>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>99.9%</div>
+            <p style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>Last 30 days</p>
           </div>
         </div>
-      </AppShell>
-    );
-  }
-
-  return (
-    <AppShell>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto max-w-7xl px-4 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Welcome back, {user?.name || user?.preferred_username || 'User'}!
-            </h1>
-            <p className="text-muted-foreground">
-              Here's what's happening with your deployments and infrastructure.
-            </p>
-          </div>
-
-          {/* Simple Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Projects</p>
-                  <p className="text-2xl font-bold">0</p>
-                </div>
-                <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">📁</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Active Deployments</p>
-                  <p className="text-2xl font-bold">0</p>
-                </div>
-                <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">⚡</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Monthly Cost</p>
-                  <p className="text-2xl font-bold">$0</p>
-                </div>
-                <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">💰</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Uptime</p>
-                  <p className="text-2xl font-bold">99.9%</p>
-                </div>
-                <div className="h-8 w-8 bg-green-500/10 rounded-full flex items-center justify-center">
-                  <span className="text-green-500 text-sm">✓</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <button 
-                onClick={() => setLocation('/deploy')}
-                className="p-4 bg-background/50 border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
-              >
-                <div className="text-lg font-medium mb-1">Deploy New Project</div>
-                <div className="text-sm text-muted-foreground">Start a new deployment</div>
-              </button>
-              
-              <button 
-                onClick={() => setLocation('/integrations')}
-                className="p-4 bg-background/50 border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
-              >
-                <div className="text-lg font-medium mb-1">Manage Integrations</div>
-                <div className="text-sm text-muted-foreground">Connect cloud providers</div>
-              </button>
-              
-              <button 
-                onClick={() => setLocation('/account')}
-                className="p-4 bg-background/50 border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
-              >
-                <div className="text-lg font-medium mb-1">View Costs</div>
-                <div className="text-sm text-muted-foreground">Monitor spending</div>
-              </button>
-              
-              <button 
-                onClick={() => setLocation('/settings')}
-                className="p-4 bg-background/50 border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
-              >
-                <div className="text-lg font-medium mb-1">Account Settings</div>
-                <div className="text-sm text-muted-foreground">Manage your account</div>
-              </button>
-            </div>
-          </div>
-
-          {/* Recent Activity */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-            <div className="bg-background/50 border border-border rounded-lg p-6">
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                  <div>
-                    <p className="text-sm font-medium">Successfully deployed Next.js app to AWS</p>
-                    <p className="text-xs text-muted-foreground">2 hours ago</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
-                  <div>
-                    <p className="text-sm font-medium">High CPU usage detected on production server</p>
-                    <p className="text-xs text-muted-foreground">4 hours ago</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  <div>
-                    <p className="text-sm font-medium">GitHub integration updated successfully</p>
-                    <p className="text-xs text-muted-foreground">6 hours ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Cloud Accounts */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Cloud Accounts</h2>
-            <div className="bg-background/50 border border-border rounded-lg p-6">
-              <div className="text-center py-8">
-                <div className="text-4xl mb-4">☁️</div>
-                <h3 className="text-lg font-semibold mb-2">No cloud accounts connected</h3>
-                <p className="text-muted-foreground mb-4">
-                  Connect your cloud providers to start deploying
-                </p>
-                <button 
-                  onClick={() => setLocation('/integrations')}
-                  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                  Connect Cloud Account
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Projects Overview */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Your Projects</h2>
-            <div className="bg-background/50 border border-border rounded-lg p-6">
-              <div className="text-center py-8">
-                <div className="text-4xl mb-4">🚀</div>
-                <h3 className="text-lg font-semibold mb-2">No projects yet</h3>
-                <p className="text-muted-foreground mb-4">
-                  Deploy your first application to get started
-                </p>
-                <button 
-                  onClick={() => setLocation('/deploy')}
-                  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                  Deploy New Project
-                </button>
-              </div>
-            </div>
+        
+        <div style={{ 
+          backgroundColor: '#1a1a1a', 
+          border: '1px solid #333', 
+          borderRadius: '8px', 
+          padding: '1.5rem'
+        }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Quick Actions</h2>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <button style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#f59e0b',
+              color: '#000',
+              border: 'none',
+              borderRadius: '6px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}>
+              Deploy New Project
+            </button>
+            <button style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'transparent',
+              color: '#ffffff',
+              border: '1px solid #333',
+              borderRadius: '6px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}>
+              Manage Integrations
+            </button>
+            <button style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'transparent',
+              color: '#ffffff',
+              border: '1px solid #333',
+              borderRadius: '6px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}>
+              View Costs
+            </button>
           </div>
         </div>
       </div>
-    </AppShell>
+    </div>
   );
 }

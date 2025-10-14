@@ -1,5 +1,5 @@
 // Careerate Service Worker
-const CACHE_NAME = 'careerate-v3';
+const CACHE_NAME = 'careerate-v4';
 const RUNTIME_CACHE = 'careerate-runtime';
 
 // Assets to cache on install
