@@ -242,47 +242,31 @@ export default function Agent() {
       <div className="min-h-screen bg-background">
         <div className="container mx-auto max-w-6xl px-4 py-8">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              🤖 AI Agent Console
-            </h1>
-            <p className="text-muted-foreground">
-              Interact with our intelligent agents to plan, deploy, monitor, heal, and optimize your applications.
-            </p>
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Agent Suite Console</h1>
+              <p className="text-muted-foreground">Plan, deploy, monitor, heal, and optimize your applications.</p>
+            </div>
+            <select
+              value={selectedAgent}
+              onChange={e => setSelectedAgent(e.target.value as any)}
+              className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground"
+              aria-label="Select agent"
+            >
+              <option value="planner">Planner Agent</option>
+              <option value="deployer">Deployer Agent</option>
+              <option value="monitor">Monitor Agent</option>
+              <option value="healer">Healer Agent</option>
+              <option value="optimizer">Cost Optimizer</option>
+            </select>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Agent Selection Sidebar */}
+            {/* Agent Selection Sidebar (condensed) */}
             <div className="lg:col-span-1">
               <div className="bg-background/50 border border-border rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Choose Agent</h2>
-                <div className="space-y-3">
-                  {[
-                    { id: 'planner', name: 'Planner Agent', icon: '📋', desc: 'Plan deployments' },
-                    { id: 'deployer', name: 'Deployer Agent', icon: '🚀', desc: 'Execute deployments' },
-                    { id: 'monitor', name: 'Monitor Agent', icon: '📊', desc: 'Monitor health' },
-                    { id: 'healer', name: 'Healer Agent', icon: '🔧', desc: 'Auto-fix issues' },
-                    { id: 'optimizer', name: 'Cost Optimizer', icon: '💰', desc: 'Optimize costs' }
-                  ].map((agent) => (
-                    <button
-                      key={agent.id}
-                      onClick={() => setSelectedAgent(agent.id as any)}
-                      className={`w-full p-3 rounded-lg text-left transition-colors ${
-                        selectedAgent === agent.id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-background border border-border hover:bg-background/80'
-                      }`}
-                    >
-                      <div className="text-lg font-medium mb-1">
-                        {agent.icon} {agent.name}
-                      </div>
-                      <div className={`text-sm ${selectedAgent === agent.id ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
-                        {agent.desc}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-
+                <h2 className="text-xl font-semibold mb-4">Agent</h2>
+                <p className="text-sm text-muted-foreground">Selected: {selectedAgent}</p>
                 {!currentSession && (
                   <button
                     onClick={createAgentSession}
@@ -310,8 +294,7 @@ export default function Agent() {
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   {messages.length === 0 ? (
                     <div className="text-center text-muted-foreground">
-                      <div className="text-4xl mb-4">🤖</div>
-                  <h3 className="text-lg font-semibold mb-2">Welcome to Careerate</h3>
+                      <h3 className="text-lg font-semibold mb-2">Welcome to Careerate</h3>
                       <p>Select an agent and start a conversation to get help with your deployments.</p>
                     </div>
                   ) : (
