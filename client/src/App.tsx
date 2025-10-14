@@ -19,6 +19,7 @@ const AccountSettings = lazy(() => import("@/pages/account-settings"));
 const Deploy = lazy(() => import("@/pages/deploy"));
 const Install = lazy(() => import("@/pages/install"));
 const Test = lazy(() => import("@/pages/test"));
+const TestDashboard = lazy(() => import("@/pages/test-dashboard"));
 const Minimal = lazy(() => import("@/pages/minimal"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("@/pages/TermsOfService"));
@@ -45,6 +46,7 @@ function Router() {
 
         {/* App routes (auth handled per-page) */}
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/test-dashboard" component={TestDashboard} />
         <Route path="/test" component={Test} />
         <Route path="/minimal" component={Minimal} />
         <Route path="/integrations" component={IntegrationsPage} />
