@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { AppShell } from '@/components/AppShell';
+import { FolderOpen, Cloud, DollarSign, CheckCircle, Activity, Rocket, Link, Settings } from 'lucide-react';
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -94,7 +95,7 @@ export default function Dashboard() {
                   <p className="text-2xl font-bold">{totalProjects}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">📁</span>
+                  <FolderOpen className="h-4 w-4 text-primary" />
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
@@ -109,7 +110,7 @@ export default function Dashboard() {
                   <p className="text-2xl font-bold">{connectedProviders}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">☁️</span>
+                  <Cloud className="h-4 w-4 text-primary" />
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
@@ -124,7 +125,7 @@ export default function Dashboard() {
                   <p className="text-2xl font-bold">${totalCost || '–'}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">💰</span>
+                  <DollarSign className="h-4 w-4 text-primary" />
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
@@ -139,7 +140,7 @@ export default function Dashboard() {
                   <p className="text-2xl font-bold">{uptime}</p>
                 </div>
                 <div className="h-8 w-8 bg-green-500/10 rounded-full flex items-center justify-center">
-                  <span className="text-green-500 text-sm">✓</span>
+                  <CheckCircle className="h-4 w-4 text-green-500" />
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
@@ -153,7 +154,7 @@ export default function Dashboard() {
             <div className="lg:col-span-1">
               <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <span className="text-lg">⚡</span>
+                  <Activity className="h-5 w-5 text-primary" />
                   Quick Actions
                 </h2>
                 <div className="space-y-3">
@@ -161,7 +162,10 @@ export default function Dashboard() {
                     onClick={() => setLocation('/agent')}
                     className="w-full p-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-left font-medium"
                   >
-                    <div className="text-sm font-semibold mb-1">🤖 Talk to AI Agent</div>
+                    <div className="text-sm font-semibold mb-1 flex items-center gap-2">
+                      <Activity className="h-4 w-4" />
+                      Talk to AI Agent
+                    </div>
                     <div className="text-xs opacity-90">Get intelligent deployment help</div>
                   </button>
 
@@ -169,7 +173,10 @@ export default function Dashboard() {
                     onClick={() => setLocation('/deploy')}
                     className="w-full p-3 bg-background border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
                   >
-                    <div className="text-sm font-semibold mb-1">🚀 Deploy New Project</div>
+                    <div className="text-sm font-semibold mb-1 flex items-center gap-2">
+                      <Rocket className="h-4 w-4" />
+                      Deploy New Project
+                    </div>
                     <div className="text-xs text-muted-foreground">Start a new deployment</div>
                   </button>
 
@@ -177,7 +184,10 @@ export default function Dashboard() {
                     onClick={() => setLocation('/integrations')}
                     className="w-full p-3 bg-background border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
                   >
-                    <div className="text-sm font-semibold mb-1">🔗 Manage Integrations</div>
+                    <div className="text-sm font-semibold mb-1 flex items-center gap-2">
+                      <Link className="h-4 w-4" />
+                      Manage Integrations
+                    </div>
                     <div className="text-xs text-muted-foreground">Connect cloud providers</div>
                   </button>
 
@@ -185,7 +195,10 @@ export default function Dashboard() {
                     onClick={() => setLocation('/account')}
                     className="w-full p-3 bg-background border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
                   >
-                    <div className="text-sm font-semibold mb-1">💰 View Costs</div>
+                    <div className="text-sm font-semibold mb-1 flex items-center gap-2">
+                      <DollarSign className="h-4 w-4" />
+                      View Costs
+                    </div>
                     <div className="text-xs text-muted-foreground">Monitor spending</div>
                   </button>
 
@@ -193,7 +206,10 @@ export default function Dashboard() {
                     onClick={() => setLocation('/settings')}
                     className="w-full p-3 bg-background border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
                   >
-                    <div className="text-sm font-semibold mb-1">⚙️ Account Settings</div>
+                    <div className="text-sm font-semibold mb-1 flex items-center gap-2">
+                      <Settings className="h-4 w-4" />
+                      Account Settings
+                    </div>
                     <div className="text-xs text-muted-foreground">Manage your account</div>
                   </button>
                 </div>

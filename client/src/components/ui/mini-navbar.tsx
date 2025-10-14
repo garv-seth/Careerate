@@ -25,10 +25,10 @@ export function Navbar() {
           <Link href="/" className="text-white/80 hover:text-white transition-colors">
             Features
           </Link>
-          <Link href="/#pricing" className="text-white/80 hover:text-white transition-colors">
+          <Link href="/" className="text-white/80 hover:text-white transition-colors">
             Pricing
           </Link>
-          <Link href="/#docs" className="text-white/80 hover:text-white transition-colors">
+          <Link href="/" className="text-white/80 hover:text-white transition-colors">
             Docs
           </Link>
         </div>

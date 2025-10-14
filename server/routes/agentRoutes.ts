@@ -32,7 +32,14 @@ router.post('/session', isAuthenticated, async (req: Request, res: Response) => 
     const { sessionType = 'deployment', initialContext } = req.body;
     const userId = req.user!.id;
 
+    console.log('Creating agent session:', { userId, sessionType, initialContext });
+
+    // Ensure orchestrator is initialized
+    await orchestrator.ensureInitialized();
+
     const sessionId = await orchestrator.createSession(userId, sessionType, initialContext);
+
+    console.log('Agent session created successfully:', sessionId);
 
     res.json({
       success: true,

@@ -33,21 +33,21 @@ const Footer = () => (
                 <h4 className="font-semibold mb-4">Platform</h4>
                 <ul className="space-y-3">
                     <li><Link href="/"><a className="text-sm text-foreground/60 hover:text-foreground transition">Features</a></Link></li>
-                    <li><Link href="#pricing"><a className="text-sm text-foreground/60 hover:text-foreground transition">Pricing</a></Link></li>
+                    <li><Link href="/"><a className="text-sm text-foreground/60 hover:text-foreground transition">Pricing</a></Link></li>
                     <li><Link href="/integrations"><a className="text-sm text-foreground/60 hover:text-foreground transition">Integrations</a></Link></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-4">Company</h4>
                 <ul className="space-y-3">
-                    <li><a href="#about" className="text-sm text-foreground/60 hover:text-foreground transition">About</a></li>
-                    <li><a href="#contact" className="text-sm text-foreground/60 hover:text-foreground transition">Contact</a></li>
+                    <li><a href="/" className="text-sm text-foreground/60 hover:text-foreground transition">About</a></li>
+                    <li><a href="/" className="text-sm text-foreground/60 hover:text-foreground transition">Contact</a></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-4">Resources</h4>
                 <ul className="space-y-3">
-                    <li><a href="#docs" className="text-sm text-foreground/60 hover:text-foreground transition">Documentation</a></li>
+                    <li><a href="/" className="text-sm text-foreground/60 hover:text-foreground transition">Documentation</a></li>
                     <li><a href="#support" className="text-sm text-foreground/60 hover:text-foreground transition">Support</a></li>
                 </ul>
             </div>
@@ -130,8 +130,8 @@ export function AppShell({ children, className, hideFooter = false }: { children
     const UnauthenticatedNav = () => (
         <>
             <NavLink href="/">Features</NavLink>
-            <NavLink href="#pricing">Pricing</NavLink>
-            <NavLink href="#docs">Docs</NavLink>
+            <NavLink href="/">Pricing</NavLink>
+            <NavLink href="/">Docs</NavLink>
         </>
     );
 
@@ -206,7 +206,7 @@ export function AppShell({ children, className, hideFooter = false }: { children
                     </Button>
                     <Button
                         className="rounded-full text-sm bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg shadow-orange-500/25"
-                        onClick={() => document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                        onClick={() => window.location.href = '/'}
                         disabled={isLoading}
                     >
                         Get Started

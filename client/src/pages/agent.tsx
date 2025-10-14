@@ -28,6 +28,7 @@ export default function Agent() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentSession, setCurrentSession] = useState<AgentSession | null>(null);
   const [selectedAgent, setSelectedAgent] = useState<'planner' | 'deployer' | 'monitor' | 'healer' | 'optimizer'>('planner');
+  const [autoChooseEnabled, setAutoChooseEnabled] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-select agent via query parameter
@@ -150,8 +151,8 @@ export default function Agent() {
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    // Auto-choose agent if no session exists
-    if (!currentSession) {
+    // Auto-choose agent if no session exists and auto-choose is enabled
+    if (!currentSession && autoChooseEnabled) {
       const autoSelectedAgent = autoChooseAgent(inputMessage);
       setSelectedAgent(autoSelectedAgent);
       try {
@@ -310,6 +311,32 @@ export default function Agent() {
               <div className="bg-background/50 border border-border rounded-lg p-6">
                 <h2 className="text-xl font-semibold mb-4">Agent</h2>
                 <p className="text-sm text-muted-foreground">Selected: {selectedAgent}</p>
+                
+                {/* Auto-Choose Toggle */}
+                <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Auto-Choose Agent</span>
+                    <button
+                      onClick={() => setAutoChooseEnabled(!autoChooseEnabled)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        autoChooseEnabled ? 'bg-primary' : 'bg-muted'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          autoChooseEnabled ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {autoChooseEnabled 
+                      ? 'AI will automatically select the best agent based on your message'
+                      : 'Manually select agents from the dropdown above'
+                    }
+                  </p>
+                </div>
+
                 {!currentSession && (
                   <button
                     onClick={createAgentSession}
