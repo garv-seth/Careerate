@@ -6,7 +6,7 @@ export function useAuth() {
     retry: false,
     queryFn: async () => {
       try {
-        const res = await fetch("/api/user");
+        const res = await fetch("/api/user", { credentials: 'include' });
         if (res.status === 401) {
           return null; // Not authenticated, return null instead of throwing
         }
