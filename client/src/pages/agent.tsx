@@ -30,6 +30,15 @@ export default function Agent() {
   const [selectedAgent, setSelectedAgent] = useState<'planner' | 'deployer' | 'monitor' | 'healer' | 'optimizer'>('planner');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Auto-select agent via query parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const a = params.get('agent') as any;
+    if (a && ['planner','deployer','monitor','healer','optimizer'].includes(a)) {
+      setSelectedAgent(a);
+    }
+  }, []);
+
   // Show sign-in prompt if not authenticated
   if (!isAuthenticated) {
     return (
@@ -37,10 +46,7 @@ export default function Agent() {
         <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center max-w-md mx-auto px-4">
             <div className="mb-8">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🤖</span>
-              </div>
-              <h1 className="text-2xl font-bold text-foreground mb-2">AI Agent Access Required</h1>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Agent Suite Access Required</h1>
               <p className="text-muted-foreground">
                 Please sign in to interact with our AI agents and deploy your applications.
               </p>
@@ -88,7 +94,7 @@ export default function Agent() {
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
         role: 'assistant',
-        content: `🤖 **${selectedAgent.charAt(0).toUpperCase() + selectedAgent.slice(1)} Agent** activated!\n\nI'm ready to help you with ${getAgentDescription(selectedAgent)}. What would you like to do?`,
+        content: `**${selectedAgent.charAt(0).toUpperCase() + selectedAgent.slice(1)} Agent** activated. I'm ready to help with ${getAgentDescription(selectedAgent)}.`,
         timestamp: new Date(),
         type: selectedAgent as any
       }]);

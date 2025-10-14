@@ -30,6 +30,13 @@ export class GCPOAuth {
   async initiateOAuth(userId: string): Promise<GCPConnectionResult> {
     try {
       if (!this.clientId) {
+        // Lazy-load from Key Vault if not present in env
+        const { keyVaultService } = await import('../../services/azureKeyVaultService');
+        this.clientId = (await keyVaultService.getSecret('GCP-OAUTH-CLIENT-ID')) || '';
+        this.clientSecret = this.clientSecret || (await keyVaultService.getSecret('GCP-OAUTH-CLIENT-SECRET')) || '';
+        this.redirectUri = this.redirectUri || (await keyVaultService.getSecret('GCP-OAUTH-REDIRECT-URI')) || `${process.env.BASE_URL}/api/oauth/gcp/callback`;
+      }
+      if (!this.clientId) {
         return {
           success: false,
           error: 'GCP OAuth not configured. Missing GCP_OAUTH_CLIENT_ID.'
