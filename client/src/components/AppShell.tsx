@@ -1,6 +1,6 @@
 import { useState, useEffect, ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Sparkles, Code, Cloud, Shield, User, Settings, LogOut } from "lucide-react";
+import { Menu, X, Sparkles, Code, Cloud, Shield, User, Settings, LogOut, Brain, BarChart3, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginModal } from "@/components/LoginModal";
@@ -137,40 +137,40 @@ export function AppShell({ children, className, hideFooter = false }: { children
 
     const AuthenticatedNav = () => (
         <>
-            <Link href="/dashboard#agent">
+            <Link href="/dashboard">
                 <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    location === "/dashboard" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
-                    <Brain className="h-4 w-4 mr-2" />
-                    Cara
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Dashboard
                 </a>
             </Link>
-          <Link href="/integrations">
+            <Link href="/integrations">
                 <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    location === "/integrations" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
                     <Shield className="h-4 w-4 mr-2" />
                     Integrations
                 </a>
             </Link>
-            <Link href="/dashboard#projects">
+            <Link href="/deploy">
                 <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    location === "/deploy" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
-                    <GitBranch className="h-4 w-4 mr-2" />
-                    Projects
+                    <Cloud className="h-4 w-4 mr-2" />
+                    Deploy
                 </a>
             </Link>
-            <Link href="/dashboard#overview">
+            <Link href="/settings">
                 <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    location === "/settings" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
-                    <BarChart3 className="h-4 w-4 mr-2" />
-                    Overview
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
                 </a>
             </Link>
         </>
