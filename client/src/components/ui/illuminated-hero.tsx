@@ -49,7 +49,7 @@ export function IlluminatedHero() {
                         className="px-8 py-6 text-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold border-white/30 hover:border-white/50 transition-all duration-200"
                         asChild
                     >
-                        <a href="#features">See How It Works</a>
+                        <a href="/">See How It Works</a>
                     </Button>
                 </div>
 

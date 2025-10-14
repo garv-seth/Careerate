@@ -32,7 +32,7 @@ const Footer = () => (
             <div>
                 <h4 className="font-semibold mb-4">Platform</h4>
                 <ul className="space-y-3">
-                    <li><Link href="#features"><a className="text-sm text-foreground/60 hover:text-foreground transition">Features</a></Link></li>
+                    <li><Link href="/"><a className="text-sm text-foreground/60 hover:text-foreground transition">Features</a></Link></li>
                     <li><Link href="#pricing"><a className="text-sm text-foreground/60 hover:text-foreground transition">Pricing</a></Link></li>
                     <li><Link href="/integrations"><a className="text-sm text-foreground/60 hover:text-foreground transition">Integrations</a></Link></li>
                 </ul>
@@ -129,7 +129,7 @@ export function AppShell({ children, className, hideFooter = false }: { children
 
     const UnauthenticatedNav = () => (
         <>
-            <NavLink href="#features">Features</NavLink>
+            <NavLink href="/">Features</NavLink>
             <NavLink href="#pricing">Pricing</NavLink>
             <NavLink href="#docs">Docs</NavLink>
         </>

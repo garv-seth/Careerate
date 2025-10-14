@@ -8,7 +8,7 @@ export default function HeroSection() {
         highlight="Guiding your career evolution"
         description="Experience the Careerate platform—Cara orchestrates a team of masterful agents that explore, build, and ship your next career leap."
         primaryCta={{ label: "Launch the platform", href: "/app" }}
-        secondaryCta={{ label: "See how teams scale", href: "#features" }}
+        secondaryCta={{ label: "See how teams scale", href: "/" }}
         className="text-foreground"
       />
       <div className="absolute inset-x-0 bottom-0 hidden text-xs text-center text-muted-foreground/80 md:block">

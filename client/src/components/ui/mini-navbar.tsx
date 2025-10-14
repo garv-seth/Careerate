@@ -22,7 +22,7 @@ export function Navbar() {
       <nav className="flex items-center justify-between">
         <Logo />
         <div className="flex items-center gap-4">
-          <Link href="/#features" className="text-white/80 hover:text-white transition-colors">
+          <Link href="/" className="text-white/80 hover:text-white transition-colors">
             Features
           </Link>
           <Link href="/#pricing" className="text-white/80 hover:text-white transition-colors">
