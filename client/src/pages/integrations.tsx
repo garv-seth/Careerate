@@ -267,7 +267,8 @@ const devopsIntegrations: DevOpsIntegration[] = [
     icon: Cloud,
     status: 'disconnected',
     provider: 'oci',
-    authType: 'api-key'
+    authType: 'api-key',
+    logo: '/oracle-logo.svg'
   },
   {
     id: 'pagerduty',

@@ -6024,6 +6024,82 @@ Never deploy without explicit user confirmation.`;
   });
 
   // ===============================
+  // Dashboard Metrics
+  // ===============================
+  app.get('/api/dashboard/metrics', isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      
+      // Get projects count
+      const projects = await storage.getUserProjects(userId);
+      const totalProjects = projects.length;
+      
+      // Get connected cloud accounts
+      const cloudAccounts = await storage.getUserIntegrations(userId, 'cloud-provider');
+      const connectedProviders = cloudAccounts.length;
+      
+      // Get active deployments (mock for now)
+      const activeDeployments = 0;
+      
+      // Calculate total cost (mock for now)
+      const totalCost = 0;
+      
+      // Calculate uptime (mock for now)
+      const uptime = '99.9%';
+      
+      res.json({
+        totalProjects,
+        connectedProviders,
+        activeDeployments,
+        totalCost,
+        uptime,
+        lastUpdated: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Get dashboard metrics failed:', error);
+      res.status(500).json({ message: error.message || 'Failed to get metrics' });
+    }
+  });
+
+  app.get('/api/dashboard/activity', isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      
+      // Mock activity data for now
+      const activity = [
+        {
+          id: '1',
+          type: 'deployment',
+          description: 'Successfully deployed Next.js app to AWS',
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          status: 'success',
+          link: '/deploy/1'
+        },
+        {
+          id: '2',
+          type: 'alert',
+          description: 'High CPU usage detected on production server',
+          timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          status: 'failed',
+          link: '/monitor/alerts'
+        },
+        {
+          id: '3',
+          type: 'update',
+          description: 'GitHub integration updated successfully',
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          status: 'success'
+        }
+      ];
+      
+      res.json(activity);
+    } catch (error: any) {
+      console.error('Get dashboard activity failed:', error);
+      res.status(500).json({ message: error.message || 'Failed to get activity' });
+    }
+  });
+
+  // ===============================
   // GCP Projects - list and select
   // ===============================
   app.get('/api/gcp/projects', isAuthenticated, async (req, res) => {

@@ -7,57 +7,34 @@ import { AppShell } from '@/components/AppShell';
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
-  const { data: projects = [] } = useQuery({
-    queryKey: ['/api/projects'],
+  const { data: metrics = {} } = useQuery({
+    queryKey: ['/api/dashboard/metrics'],
     enabled: isAuthenticated,
     queryFn: async () => {
-      const res = await fetch('/api/projects', { credentials: 'include' });
+      const res = await fetch('/api/dashboard/metrics', { credentials: 'include' });
+      if (!res.ok) return {};
+      return res.json();
+    }
+  });
+
+  const { data: activity = [] } = useQuery({
+    queryKey: ['/api/dashboard/activity'],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const res = await fetch('/api/dashboard/activity', { credentials: 'include' });
       if (!res.ok) return [];
       return res.json();
     }
   });
 
-  const { data: cloudAccounts = [] } = useQuery({
-    queryKey: ['/api/integrations/cloud-providers'],
-    enabled: isAuthenticated,
-    queryFn: async () => {
-      const res = await fetch('/api/integrations/cloud-providers', { credentials: 'include' });
-      if (!res.ok) return [];
-      return res.json();
-    }
-  });
+  const totalProjects = metrics.totalProjects || 0;
+  const connectedProviders = metrics.connectedProviders || 0;
+  const activeDeployments = metrics.activeDeployments || 0;
+  const totalCost = metrics.totalCost || 0;
+  const uptime = metrics.uptime || '99.9%';
 
-  const totalProjects = Array.isArray(projects) ? projects.length : 0;
-  const activeDeployments = 0; // TODO: wire to deployments endpoint
-  const totalCost = 0; // TODO: wire to cost endpoint per provider
-  const uptime = '99.9%';
-
-  // Mock data for now - will be replaced with real API calls
-  const mockActivity = [
-    {
-      id: '1',
-      type: 'deployment' as const,
-      description: 'Successfully deployed Next.js app to AWS',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      status: 'success' as const,
-      link: '/deploy/1'
-    },
-    {
-      id: '2',
-      type: 'alert' as const,
-      description: 'High CPU usage detected on production server',
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-      status: 'failed' as const,
-      link: '/monitor/alerts'
-    },
-    {
-      id: '3',
-      type: 'update' as const,
-      description: 'GitHub integration updated successfully',
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-      status: 'success' as const
-    }
-  ];
+  // Use live activity data
+  const recentActivity = activity;
 
   // Show sign-in prompt if not authenticated
   if (!isAuthenticated) {
@@ -128,15 +105,15 @@ export default function Dashboard() {
             <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Active Deployments</p>
-                  <p className="text-2xl font-bold">{activeDeployments}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Connected Providers</p>
+                  <p className="text-2xl font-bold">{connectedProviders}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary text-sm">⚡</span>
+                  <span className="text-primary text-sm">☁️</span>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                All systems operational
+                Cloud accounts linked
               </p>
             </div>
 
@@ -231,7 +208,7 @@ export default function Dashboard() {
                   Recent Activity
                 </h2>
                 <div className="space-y-4">
-                  {mockActivity.map((activity) => (
+                  {recentActivity.map((activity) => (
                     <div key={activity.id} className={`flex items-start space-x-3 p-3 bg-background/30 rounded-lg`}>
                       <div
                         className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${

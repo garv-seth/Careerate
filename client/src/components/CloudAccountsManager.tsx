@@ -286,6 +286,15 @@ export function CloudAccountsManager() {
     const account = getConnectedAccount(provider);
     const isConnected = !!account;
 
+    const getProviderLogo = (provider: string) => {
+      switch (provider) {
+        case 'aws': return '/aws-logo.svg';
+        case 'azure': return '/azure-logo.svg';
+        case 'gcp': return '/gcp-logo.svg';
+        default: return null;
+      }
+    };
+
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -295,8 +304,12 @@ export function CloudAccountsManager() {
         <Card className="p-6 bg-gradient-to-br from-background to-muted/20 border-2 hover:border-primary/50 transition-all">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-lg ${color} flex items-center justify-center text-2xl`}>
-                {icon}
+              <div className={`w-12 h-12 rounded-lg ${color} flex items-center justify-center`}>
+                {getProviderLogo(provider) ? (
+                  <img src={getProviderLogo(provider)} alt={name} className="w-8 h-8" />
+                ) : (
+                  <span className="text-2xl">{icon}</span>
+                )}
               </div>
               <div>
                 <h3 className="font-semibold text-lg">{name}</h3>
