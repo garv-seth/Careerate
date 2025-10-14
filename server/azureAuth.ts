@@ -359,15 +359,70 @@ export async function setupAuth(app: Express) {
     }
 
     try {
-      const userId = (req as any).user?.id || (req as any).user?.sub;
-      const { multiCloudOAuth } = await import('./services/multiCloudOAuth');
-      const result = await multiCloudOAuth.handleGitHubCallback(code, userId);
+      // Get GitHub user info first
+      const clientId = process.env.GITHUB_CLIENT_ID || await keyVaultService.getSecret('GITHUB-CLIENT-ID');
+      const clientSecret = process.env.GITHUB_CLIENT_SECRET || await keyVaultService.getSecret('GITHUB-CLIENT-SECRET');
+      const redirectUri = process.env.GITHUB_REDIRECT_URI || await keyVaultService.getSecret('GITHUB-REDIRECT-URI');
 
-      if (!result.success) {
-        return res.redirect(`/integrations?error=${encodeURIComponent(result.errorMessage || 'github_oauth_failed')}`);
+      if (!clientId || !clientSecret) {
+        return res.redirect('/integrations?error=github_not_configured');
       }
 
-      return res.redirect('/integrations?github=connected');
+      // Exchange code for token
+      const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          code,
+          redirect_uri: redirectUri
+        })
+      });
+
+      const tokenData = await tokenResponse.json();
+
+      if (!tokenData.access_token) {
+        return res.redirect('/integrations?error=github_token_failed');
+      }
+
+      // Get user info
+      const userResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${tokenData.access_token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+
+      const userInfo = await userResponse.json();
+
+      // Create or find user
+      const dbUser = await upsertUser({
+        sub: userInfo.id.toString(),
+        preferred_username: userInfo.login,
+        email: userInfo.email || `${userInfo.login}@github.local`,
+        given_name: userInfo.name?.split(' ')[0] || userInfo.login,
+        family_name: userInfo.name?.split(' ').slice(1).join(' ') || '',
+        name: userInfo.name || userInfo.login
+      });
+
+      // Store GitHub integration
+      const { multiCloudOAuth } = await import('./services/multiCloudOAuth');
+      await multiCloudOAuth.handleGitHubCallback(code, dbUser.id);
+
+      // Create session
+      req.login(dbUser, (err) => {
+        if (err) {
+          console.error('GitHub session login error:', err);
+          return res.redirect('/integrations?error=session_failed');
+        }
+        console.log('GitHub session login successful, redirecting to dashboard');
+        res.redirect('/dashboard');
+      });
+
     } catch (e: any) {
       console.error('GitHub callback processing failed:', e);
       return res.redirect(`/integrations?error=${encodeURIComponent(e.message)}`);
