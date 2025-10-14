@@ -6023,6 +6023,74 @@ Never deploy without explicit user confirmation.`;
     }
   });
 
+  // ===============================
+  // GCP Projects - list and select
+  // ===============================
+  app.get('/api/gcp/projects', isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const integrations = await storage.getUserIntegrations(userId, 'cloud-provider');
+      const gcp = integrations.find((i: any) => i.service === 'gcp');
+      if (!gcp) return res.status(404).json({ message: 'GCP not connected' });
+
+      const secrets = await storage.getIntegrationSecrets(gcp.id);
+      const access = secrets.find((s: any) => s.secretName === 'accessToken');
+      if (!access) return res.status(400).json({ message: 'GCP token not found' });
+
+      // Decrypt token (same scheme as gcpOAuth)
+      const token = (() => {
+        const keyHex = process.env.ENCRYPTION_KEY;
+        if (!keyHex) throw new Error('ENCRYPTION_KEY not configured');
+        const [encryptedHex, ivHex, tagHex] = access.encryptedValue.split(':');
+        const iv = Buffer.from(ivHex, 'hex');
+        const tag = Buffer.from(tagHex, 'hex');
+        const encryptedBuf = Buffer.from(encryptedHex, 'hex');
+        const crypto = require('crypto');
+        const decipher = crypto.createDecipheriv('aes-256-gcm', Buffer.from(keyHex.slice(0, 64), 'hex'), iv);
+        decipher.setAuthTag(tag);
+        const decrypted = Buffer.concat([decipher.update(encryptedBuf), decipher.final()]).toString('utf8');
+        return decrypted;
+      })();
+
+      const response = await fetch('https://cloudresourcemanager.googleapis.com/v1/projects', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error(`GCP API ${response.status}`);
+      const data = await response.json();
+      const projects = (data.projects || []).map((p: any) => ({ projectId: p.projectId, name: p.name, projectNumber: p.projectNumber }));
+      res.json(projects);
+    } catch (error: any) {
+      console.error('List GCP projects failed:', error);
+      res.status(500).json({ message: error.message || 'Failed to list GCP projects' });
+    }
+  });
+
+  app.post('/api/gcp/select-project', isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const { projectId, name, projectNumber } = req.body;
+      if (!projectId) return res.status(400).json({ message: 'projectId required' });
+
+      const integrations = await storage.getUserIntegrations(userId, 'cloud-provider');
+      const gcp = integrations.find((i: any) => i.service === 'gcp');
+      if (!gcp) return res.status(404).json({ message: 'GCP not connected' });
+
+      await storage.updateIntegration(gcp.id, {
+        configuration: {
+          ...(gcp.configuration || {}),
+          projectId,
+          projectName: name || gcp.configuration?.projectName,
+          projectNumber: projectNumber || gcp.configuration?.projectNumber,
+          selectedAt: new Date().toISOString()
+        }
+      });
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('Select GCP project failed:', error);
+      res.status(500).json({ message: error.message || 'Failed to select GCP project' });
+    }
+  });
+
   return server;
 }
 
