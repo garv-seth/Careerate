@@ -27,7 +27,11 @@
       "Bash(az containerapp revision show:*)",
       "WebSearch",
       "Bash(az:*)",
-      "Bash(npm run test:*)"
+      "Bash(npm run test:*)",
+      "Bash(npm run test:run:*)",
+      "WebFetch(domain:devblogs.microsoft.com)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

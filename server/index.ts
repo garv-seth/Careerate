@@ -180,7 +180,11 @@ app.get('/api/health', (req, res) => {
     
     // Register agent routes
     app.use('/api/agent', agentRoutes);
-    
+
+    // Register deployment routes (NEW - CORE FEATURE)
+    const deploymentRoutes = (await import('./routes/deployment')).default;
+    app.use('/api/deploy', deploymentRoutes);
+
     // Register ejection routes
     app.use('/api/eject', ejectionRoutes);
 
