@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { AppShell } from '@/components/AppShell';
@@ -6,12 +7,30 @@ import { AppShell } from '@/components/AppShell';
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
-  const [stats, setStats] = useState({
-    totalProjects: 0,
-    activeDeployments: 0,
-    totalCost: 0,
-    uptime: '99.9%'
+  const { data: projects = [] } = useQuery({
+    queryKey: ['/api/projects'],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const res = await fetch('/api/projects', { credentials: 'include' });
+      if (!res.ok) return [];
+      return res.json();
+    }
   });
+
+  const { data: cloudAccounts = [] } = useQuery({
+    queryKey: ['/api/integrations/cloud-providers'],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const res = await fetch('/api/integrations/cloud-providers', { credentials: 'include' });
+      if (!res.ok) return [];
+      return res.json();
+    }
+  });
+
+  const totalProjects = Array.isArray(projects) ? projects.length : 0;
+  const activeDeployments = 0; // TODO: wire to deployments endpoint
+  const totalCost = 0; // TODO: wire to cost endpoint per provider
+  const uptime = '99.9%';
 
   // Mock data for now - will be replaced with real API calls
   const mockActivity = [
@@ -95,7 +114,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Total Projects</p>
-                  <p className="text-2xl font-bold">{stats.totalProjects}</p>
+                  <p className="text-2xl font-bold">{totalProjects}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
                   <span className="text-primary text-sm">📁</span>
@@ -110,7 +129,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Active Deployments</p>
-                  <p className="text-2xl font-bold">{stats.activeDeployments}</p>
+                  <p className="text-2xl font-bold">{activeDeployments}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
                   <span className="text-primary text-sm">⚡</span>
@@ -125,7 +144,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Monthly Cost</p>
-                  <p className="text-2xl font-bold">${stats.totalCost}</p>
+                  <p className="text-2xl font-bold">${totalCost || '–'}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
                   <span className="text-primary text-sm">💰</span>
@@ -140,7 +159,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Uptime</p>
-                  <p className="text-2xl font-bold">{stats.uptime}</p>
+                  <p className="text-2xl font-bold">{uptime}</p>
                 </div>
                 <div className="h-8 w-8 bg-green-500/10 rounded-full flex items-center justify-center">
                   <span className="text-green-500 text-sm">✓</span>
@@ -213,11 +232,13 @@ export default function Dashboard() {
                 </h2>
                 <div className="space-y-4">
                   {mockActivity.map((activity) => (
-                    <div key={activity.id} className="flex items-start space-x-3 p-3 bg-background/30 rounded-lg">
-                      <div className="flex-shrink-0 w-2 h-2 rounded-full mt-2" style={{
-                        backgroundColor: activity.status === 'success' ? '#10b981' :
-                                        activity.status === 'failed' ? '#ef4444' : '#6b7280'
-                      }}></div>
+                    <div key={activity.id} className={`flex items-start space-x-3 p-3 bg-background/30 rounded-lg`}>
+                      <div
+                        className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
+                          activity.status === 'success' ? 'bg-emerald-500' :
+                          activity.status === 'failed' ? 'bg-red-500' : 'bg-gray-500'
+                        }`}
+                      />
                       <div className="flex-grow">
                         <p className="text-sm font-medium text-foreground">{activity.description}</p>
                         <p className="text-xs text-muted-foreground mt-1">

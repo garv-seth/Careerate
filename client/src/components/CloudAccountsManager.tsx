@@ -134,6 +134,12 @@ export function CloudAccountsManager() {
     onSuccess: (data) => {
       if (data.success && data.authUrl) {
         window.location.href = data.authUrl;
+      } else if (!data.success) {
+        toast({
+          title: 'Azure Connection Error',
+          description: data.error || 'Failed to start Azure OAuth',
+          variant: 'destructive',
+        });
       }
     },
   });
@@ -150,6 +156,12 @@ export function CloudAccountsManager() {
     onSuccess: (data) => {
       if (data.success && data.authUrl) {
         window.location.href = data.authUrl;
+      } else if (!data.success) {
+        toast({
+          title: 'GCP Connection Error',
+          description: data.error || 'Failed to start Google OAuth',
+          variant: 'destructive',
+        });
       }
     },
   });
@@ -418,7 +430,7 @@ export function CloudAccountsManager() {
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5" />
                 <div className="text-sm text-blue-300">
-                  <p className="font-semibold mb-1">Porter-style Connection</p>
+                <p className="font-semibold mb-1">CloudFormation Connection</p>
                   <p>Careerate will create a CloudFormation stack in your AWS account that grants us permission to deploy and manage your infrastructure.</p>
                 </div>
               </div>

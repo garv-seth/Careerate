@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useAgentSession } from '@/hooks/useAgentSession';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { AppShell } from '@/components/AppShell';
@@ -72,22 +73,13 @@ export default function Agent() {
     scrollToBottom();
   }, [messages]);
 
+  const { create } = useAgentSession();
+
   const createAgentSession = async () => {
     try {
-      const response = await fetch('/api/agent/session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionType: selectedAgent,
-          initialContext: { userId: user?.id }
-        })
-      });
-
-      if (!response.ok) throw new Error('Failed to create session');
-
-      const data = await response.json();
+      const sessionId = await create(selectedAgent, { userId: user?.id });
       setCurrentSession({
-        sessionId: data.sessionId,
+        sessionId,
         status: 'active',
         agentType: selectedAgent,
         startTime: new Date()
@@ -313,7 +305,7 @@ export default function Agent() {
                   {messages.length === 0 ? (
                     <div className="text-center text-muted-foreground">
                       <div className="text-4xl mb-4">🤖</div>
-                      <h3 className="text-lg font-semibold mb-2">Welcome to Careerate AI</h3>
+                  <h3 className="text-lg font-semibold mb-2">Welcome to Careerate</h3>
                       <p>Select an agent and start a conversation to get help with your deployments.</p>
                     </div>
                   ) : (

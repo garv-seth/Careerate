@@ -28,7 +28,7 @@ const getUserId = (req: any): string => {
 router.post('/deploy', isAuthenticated, async (req, res) => {
   try {
     const userId = getUserId(req);
-    const { naturalLanguageInput, repositoryUrl, repositoryFiles } = req.body;
+  const { naturalLanguageInput, repositoryUrl, repositoryFiles, executionPolicy } = req.body;
 
     if (!naturalLanguageInput) {
       return res.status(400).json({ error: 'Natural language input required' });
@@ -72,7 +72,7 @@ router.post('/deploy', isAuthenticated, async (req, res) => {
         complianceChecks: plan.complianceChecks
       },
       techStack,
-      approvalRequired: true,
+      approvalRequired: executionPolicy !== 'fully-autonomous',
       message: 'Review and approve the deployment plan to proceed'
     });
 

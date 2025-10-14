@@ -56,7 +56,7 @@ export function AutonomyLevelModal({
               setAcceptedRisk(false);
             }
           }}
-          className="space-y-4 mt-4"
+          className="mt-4 grid gap-4 md:grid-cols-2"
         >
           {/* Supervised */}
           <Label

@@ -152,7 +152,7 @@ export function AppShell({ children, className, hideFooter = false }: { children
                     location === "/agent" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
                     <Sparkles className="h-4 w-4 mr-2" />
-                    AI Agent
+                    Agent Suite
                 </a>
             </Link>
             <Link href="/deploy">

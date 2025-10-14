@@ -1,5 +1,5 @@
 /**
- * AWS OAuth Service - Porter-style CloudFormation Stack
+ * AWS OAuth Service - CloudFormation Stack
  * User connects AWS account by creating a CloudFormation stack that grants Careerate permissions
  */
 
@@ -148,7 +148,8 @@ export class AWSCloudFormationOAuth {
   }
 
   /**
-   * Generate AWS Console URL to create the stack
+   * Generate AWS Console URL to create the stack using Quick Create and a hosted template URL
+   * This avoids very long URLs (414) from embedding the entire template in query params.
    */
   generateStackCreationURL(userId: string, region: string = 'us-east-1'): {
     url: string;
@@ -157,16 +158,17 @@ export class AWSCloudFormationOAuth {
   } {
     const externalId = crypto.randomBytes(16).toString('hex');
     const stackName = `Careerate-Infrastructure-${Date.now()}`;
-    const template = this.generateCloudFormationTemplate(userId, externalId);
-    
-    // Encode template for URL
-    const templateBody = encodeURIComponent(template);
-    
-    // AWS Console URL to create stack
-    const consoleURL = `https://console.aws.amazon.com/cloudformation/home?region=${region}#/stacks/create/review` +
-      `?stackName=${stackName}` +
-      `&templateBody=${templateBody}`;
-    
+
+    // Publicly accessible template URL served by our app (no auth)
+    const baseUrl = process.env.PUBLIC_BASE_URL || process.env.BASE_URL || 'https://gocareerate.com';
+    const templateURL = encodeURIComponent(`${baseUrl}/public/aws/cloudformation-template.json`);
+
+    // Use CloudFormation Quick Create with parameter mapping for ExternalId
+    const consoleURL = `https://console.aws.amazon.com/cloudformation/home?region=${region}` +
+      `#/stacks/quickcreate?templateURL=${templateURL}` +
+      `&stackName=${encodeURIComponent(stackName)}` +
+      `&param_ExternalId=${encodeURIComponent(externalId)}`;
+
     return {
       url: consoleURL,
       externalId,

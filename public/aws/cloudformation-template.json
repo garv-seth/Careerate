@@ -1,0 +1,65 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Careerate Infrastructure Management - Grants Careerate access to manage infrastructure in your AWS account",
+  "Parameters": {
+    "ExternalId": {
+      "Type": "String",
+      "Description": "External ID for secure cross-account access"
+    }
+  },
+  "Resources": {
+    "CareerateRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": { "Fn::Sub": "Careerate-InfrastructureRole-${ExternalId}" },
+        "Description": "Role for Careerate to manage infrastructure deployments",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": { "AWS": "arn:aws:iam::123456789012:root" },
+              "Action": "sts:AssumeRole",
+              "Condition": { "StringEquals": { "sts:ExternalId": { "Ref": "ExternalId" } } }
+            }
+          ]
+        },
+        "ManagedPolicyArns": [ "arn:aws:iam::aws:policy/PowerUserAccess" ],
+        "Policies": [
+          {
+            "PolicyName": "CareerateDeploymentPolicy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ecs:*","ecr:*","ec2:*","elasticloadbalancing:*","autoscaling:*","cloudwatch:*","logs:*","rds:*","s3:*","lambda:*","apigateway:*","cloudformation:*","route53:*","acm:*","secretsmanager:*","ssm:*"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": ["iam:GetRole","iam:PassRole","iam:CreateServiceLinkedRole","iam:AttachRolePolicy","iam:PutRolePolicy"],
+                  "Resource": "*",
+                  "Condition": { "StringLike": { "iam:PassedToService": ["ecs-tasks.amazonaws.com","lambda.amazonaws.com","rds.amazonaws.com"] } }
+                }
+              ]
+            }
+          }
+        ],
+        "Tags": [
+          { "Key": "ManagedBy", "Value": "Careerate" },
+          { "Key": "Purpose", "Value": "Infrastructure-Deployment" }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "RoleARN": {
+      "Description": "ARN of the IAM role for Careerate",
+      "Value": { "Fn::GetAtt": ["CareerateRole", "Arn"] }
+    }
+  }
+}
+

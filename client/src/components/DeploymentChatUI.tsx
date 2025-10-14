@@ -40,7 +40,7 @@ export function DeploymentChatUI() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ sessionType: 'deployment' })
+        body: JSON.stringify({ sessionType: 'deployment', initialContext: { executionPolicy: autonomyLevel } })
       });
       
       if (!res.ok) throw new Error('Failed to create session');

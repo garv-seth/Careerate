@@ -1,12 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CloudAccountsManager } from "@/components/CloudAccountsManager";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 export default function IntegrationsPage() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   const { data, isLoading } = useQuery({
     queryKey: ["/api/integrations/catalog"],
     retry: false,
@@ -27,6 +32,22 @@ export default function IntegrationsPage() {
       }
     },
   });
+
+  // Handle oauth callback query params and refresh cloud accounts
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('azure') === 'connected' || params.get('gcp') === 'connected') {
+      toast({ title: 'Integration Connected', description: 'Your cloud account is now connected.' });
+      queryClient.invalidateQueries({ queryKey: ['/api/integrations/cloud-providers'] });
+      const url = window.location.pathname; // drop params
+      window.history.replaceState({}, '', url);
+    }
+    if (params.get('error')) {
+      toast({ title: 'Integration Error', description: params.get('error')!, variant: 'destructive' });
+      const url = window.location.pathname;
+      window.history.replaceState({}, '', url);
+    }
+  }, [queryClient, toast]);
 
   const mapStatus = new Map<string, { ready: boolean; missing: string[] }>();
   (data?.status || []).forEach((s: any) => mapStatus.set(s.id, s));
@@ -230,6 +251,37 @@ const devopsIntegrations: DevOpsIntegration[] = [
     status: 'disconnected',
     provider: 'datadog',
     authType: 'api-key'
+  },
+  // Additional stubs (Coming soon)
+  {
+    id: 'oci',
+    name: 'Oracle Cloud Infrastructure',
+    description: 'Compute, networking, and databases on OCI',
+    category: 'cloud',
+    icon: Cloud,
+    status: 'disconnected',
+    provider: 'oci',
+    authType: 'api-key'
+  },
+  {
+    id: 'pagerduty',
+    name: 'PagerDuty',
+    description: 'On-call management and incident response',
+    category: 'monitoring',
+    icon: Activity,
+    status: 'disconnected',
+    provider: 'pagerduty',
+    authType: 'api-key'
+  },
+  {
+    id: 'vercel',
+    name: 'Vercel',
+    description: 'Frontend hosting and serverless functions',
+    category: 'deployment',
+    icon: Globe,
+    status: 'disconnected',
+    provider: 'vercel',
+    authType: 'oauth'
   },
   {
     id: 'newrelic',

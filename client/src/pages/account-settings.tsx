@@ -377,12 +377,22 @@ export default function AccountSettings() {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <Button variant="outline" className="border-border text-foreground hover:bg-primary/10 rounded-full">
+                  <Button
+                    variant="outline"
+                    className="border-border text-foreground hover:bg-primary/10 rounded-full"
+                    onClick={async () => {
+                      const res = await fetch('/api/get-or-create-subscription', { method: 'POST', credentials: 'include' });
+                      const data = await res.json();
+                      if (data?.clientSecret) {
+                        window.location.href = '/payment?client_secret=' + encodeURIComponent(data.clientSecret);
+                      }
+                    }}
+                  >
                     <CreditCard className="h-4 w-4 mr-2" />
-                    Manage Payment Methods
+                    Subscribe / Manage
                   </Button>
-                  <Button className="bg-gradient-to-r from-primary to-secondary hover:from-primary/80 hover:to-secondary/80 text-primary-foreground rounded-full">
-                    Upgrade Plan
+                  <Button disabled className="bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-full opacity-60 cursor-not-allowed" title="Coming soon">
+                    Advanced Plans (Coming soon)
                   </Button>
                 </div>
               </CardContent>

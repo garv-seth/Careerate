@@ -40,17 +40,17 @@ export function Navigation() {
 
   const UnauthenticatedNav = () => (
     <>
-      <NavLink href="#features">Features</NavLink>
-      <NavLink href="#pricing">Pricing</NavLink>
-      <NavLink href="#docs">Docs</NavLink>
+      <NavLink href="/#features">Features</NavLink>
+      <NavLink href="/#pricing">Pricing</NavLink>
+      <NavLink href="/#docs">Docs</NavLink>
     </>
   );
 
   const AuthenticatedNav = () => (
     <>
-      <NavLink href="/#agent">Cara</NavLink>
-      <NavLink href="/#projects">Projects</NavLink>
-      <NavLink href="/#overview">Overview</NavLink>
+      <NavLink href="/agent">Agent Suite</NavLink>
+      <NavLink href="/projects">Projects</NavLink>
+      <NavLink href="/dashboard">Overview</NavLink>
     </>
   );
 
