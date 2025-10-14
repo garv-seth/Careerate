@@ -146,13 +146,13 @@ export function AppShell({ children, className, hideFooter = false }: { children
                     Dashboard
                 </a>
             </Link>
-            <Link href="/integrations">
+            <Link href="/agent">
                 <a className={cn(
                     "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
-                    location === "/integrations" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                    location === "/agent" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
-                    <Shield className="h-4 w-4 mr-2" />
-                    Integrations
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    AI Agent
                 </a>
             </Link>
             <Link href="/deploy">
@@ -162,6 +162,15 @@ export function AppShell({ children, className, hideFooter = false }: { children
                 )}>
                     <Cloud className="h-4 w-4 mr-2" />
                     Deploy
+                </a>
+            </Link>
+            <Link href="/integrations">
+                <a className={cn(
+                    "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center",
+                    location === "/integrations" ? "text-foreground bg-primary/10" : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
+                )}>
+                    <Shield className="h-4 w-4 mr-2" />
+                    Integrations
                 </a>
             </Link>
             <Link href="/settings">

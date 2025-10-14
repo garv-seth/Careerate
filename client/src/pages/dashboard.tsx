@@ -162,11 +162,19 @@ export default function Dashboard() {
                 </h2>
                 <div className="space-y-3">
                   <button
-                    onClick={() => setLocation('/deploy')}
+                    onClick={() => setLocation('/agent')}
                     className="w-full p-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-left font-medium"
                   >
+                    <div className="text-sm font-semibold mb-1">🤖 Talk to AI Agent</div>
+                    <div className="text-xs opacity-90">Get intelligent deployment help</div>
+                  </button>
+
+                  <button
+                    onClick={() => setLocation('/deploy')}
+                    className="w-full p-3 bg-background border border-border rounded-lg hover:bg-background/80 transition-colors text-left"
+                  >
                     <div className="text-sm font-semibold mb-1">🚀 Deploy New Project</div>
-                    <div className="text-xs opacity-90">Start a new deployment</div>
+                    <div className="text-xs text-muted-foreground">Start a new deployment</div>
                   </button>
 
                   <button
