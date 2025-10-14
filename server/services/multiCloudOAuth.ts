@@ -5,7 +5,7 @@
 
 import { keyVaultService } from './azureKeyVaultService';
 import { storage } from '../storage';
-import { secretsManager } from '../secretsManager';
+import { encryptionService } from './encryptionService';
 
 export interface OAuthConfig {
   clientId: string;
@@ -116,14 +116,14 @@ class MultiCloudOAuthService {
 
       // Store encrypted access token as integration secret
       try {
-        const encrypted = await secretsManager.encryptApiKey(tokenData.access_token, 'github', 'production');
+        const encryptedValue = await encryptionService.encryptCredentials({ token: tokenData.access_token });
         await storage.createIntegrationSecret({
           integrationId: integration.id,
           secretType: 'oauth-token',
           secretName: 'accessToken',
-          encryptedValue: encrypted.encryptedValue,
-          encryptionAlgorithm: encrypted.algorithm,
-          keyId: encrypted.keyId,
+          encryptedValue: encryptedValue,
+          encryptionAlgorithm: 'aes-256-gcm',
+          keyId: 'ENCRYPTION_MASTER_KEY',
           environment: 'production',
           scope: [{ repo: 'all' }],
           rotationPolicy: {},
