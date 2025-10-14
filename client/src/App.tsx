@@ -1,13 +1,11 @@
 import { Switch, Route } from "wouter";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { lazy, Suspense } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DeploymentInfo } from "@/components/DeploymentInfo";
 import { CookieConsent } from "@/components/CookieConsent";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Landing from "@/pages/landing-new";
 
 // Lazy load pages for better performance (except Landing which is the entry point)
@@ -63,10 +61,6 @@ function Router() {
 }
 
 function App() {
-  // Force rebuild: 2025-10-08T22:45:00Z - Complete SSR disable
-  console.log('App component loaded');
-  console.log('Current pathname:', window.location.pathname);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
