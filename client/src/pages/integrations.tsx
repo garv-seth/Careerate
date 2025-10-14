@@ -99,11 +99,34 @@ export default function IntegrationsPage() {
                   const ready = st?.ready;
                   const isGitHub = i.id === 'github';
 
+                  const getIntegrationLogo = (id: string) => {
+                    const logoMap: Record<string, string> = {
+                      'aws': '/aws-logo.svg',
+                      'azure': '/azure-logo.svg',
+                      'gcp': '/gcp-logo.svg',
+                      'github': '/github-logo.svg',
+                      'vercel': '/vercel-logo.svg',
+                      'datadog': '/datadog-logo.svg',
+                      'pagerduty': '/pagerduty-logo.svg',
+                      'oracle': '/oracle-logo.svg',
+                    };
+                    return logoMap[id] || null;
+                  };
+
                   return (
                     <Card key={i.id} className="glass-pane rounded-2xl hover:border-primary/50 transition-colors">
                       <CardHeader className="pb-2">
                         <CardTitle className="flex items-center justify-between text-sm">
-                          <span className="text-foreground">{i.name}</span>
+                          <div className="flex items-center gap-2">
+                            {getIntegrationLogo(i.id) ? (
+                              <img src={getIntegrationLogo(i.id)} alt={i.name} className="w-6 h-6" />
+                            ) : (
+                              <div className="w-6 h-6 bg-primary/20 rounded flex items-center justify-center">
+                                <span className="text-xs font-bold text-primary">{i.name.charAt(0)}</span>
+                              </div>
+                            )}
+                            <span className="text-foreground">{i.name}</span>
+                          </div>
                           <Badge className={ready ? "bg-green-500/20 text-green-300 border-green-500/30" : "bg-foreground/10 text-foreground/60 border-foreground/20"}>
                             {ready ? "Connected" : "Disconnected"}
                           </Badge>

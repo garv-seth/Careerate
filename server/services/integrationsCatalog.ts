@@ -33,6 +33,17 @@ export const INTEGRATIONS: Integration[] = [
 
   // Storage/CDN
   { id: "vercel", name: "Vercel", category: "storage", docsUrl: "https://vercel.com/docs", requiredSecrets: ["vercel-api-token"] },
+  
+  // Additional Cloud Providers
+  { id: "oracle", name: "Oracle Cloud Infrastructure", category: "cloud", docsUrl: "https://docs.oracle.com", requiredSecrets: ["oracle-user-ocid","oracle-tenancy-ocid","oracle-fingerprint","oracle-private-key"] },
+  
+  // Additional Monitoring
+  { id: "pagerduty", name: "PagerDuty", category: "monitoring", docsUrl: "https://developer.pagerduty.com", requiredSecrets: ["pagerduty-api-key"] },
+  { id: "newrelic", name: "New Relic", category: "monitoring", docsUrl: "https://docs.newrelic.com", requiredSecrets: ["newrelic-api-key"] },
+  
+  // Additional Notifications
+  { id: "discord", name: "Discord", category: "notifications", docsUrl: "https://discord.com/developers", requiredSecrets: ["discord-bot-token"] },
+  { id: "teams", name: "Microsoft Teams", category: "notifications", docsUrl: "https://docs.microsoft.com/teams", requiredSecrets: ["teams-webhook-url"] },
 ];
 
 export async function getIntegrationStatus() {

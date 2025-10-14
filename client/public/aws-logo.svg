@@ -1,4 +1,11 @@
-<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M3 6L12 2L21 6V18L12 22L3 18V6Z" fill="#FF9900"/>
-  <path d="M12 4L18 7V17L12 20L6 17V7L12 4Z" fill="#FFFFFF"/>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="awsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF6600;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="8" fill="url(#awsGradient)"/>
+  <text x="50" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">AWS</text>
+  <path d="M20 60 L30 45 L40 60 L50 45 L60 60 L70 45 L80 60" stroke="white" stroke-width="2" fill="none"/>
 </svg>
