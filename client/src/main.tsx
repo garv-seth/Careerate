@@ -3,9 +3,18 @@ import App from "./App";
 import "./index.css";
 import { initializePWA } from "./lib/pwa";
 
-// Initialize PWA features
+// Initialize PWA features once
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  initializePWA().catch(console.error);
+  // Prevent duplicate registration caused by accidental double import
+  if (!(window as any).__careerate_pwa_initialized) {
+    (window as any).__careerate_pwa_initialized = true;
+    initializePWA().catch(console.error);
+  }
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Render app only once
+const rootEl = document.getElementById("root")!;
+if (!(rootEl as any).__mounted) {
+  (rootEl as any).__mounted = true;
+  createRoot(rootEl).render(<App />);
+}

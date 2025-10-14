@@ -24,7 +24,8 @@
       "Bash(az containerapp revision restart:*)",
       "Bash(az containerapp show:*)",
       "Bash(az containerapp secret set:*)",
-      "Bash(az containerapp revision show:*)"
+      "Bash(az containerapp revision show:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
