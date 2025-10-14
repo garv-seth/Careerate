@@ -45,7 +45,7 @@ export function getSession() {
   });
 }
 
-async function upsertUser(payload: UserPayload) {
+export async function upsertUser(payload: UserPayload) {
   try {
     console.log('Upserting user with payload:', payload);
     const fullName = payload.name || [payload.given_name, payload.family_name].filter(Boolean).join(' ') || (payload.preferred_username || payload.email || '');

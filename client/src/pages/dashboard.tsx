@@ -1,25 +1,40 @@
-import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { AppShell } from '@/components/AppShell';
 
 export default function Dashboard() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
+  // Show sign-in prompt if not authenticated
+  if (!isAuthenticated) {
     return (
       <AppShell>
         <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading dashboard...</p>
+          <div className="text-center max-w-md mx-auto px-4">
+            <div className="mb-8">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🔐</span>
+              </div>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Authentication Required</h1>
+              <p className="text-muted-foreground">
+                Please sign in to access your dashboard and manage your deployments.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <button 
+                onClick={() => setLocation('/')}
+                className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+              >
+                Go to Sign In
+              </button>
+              <button 
+                onClick={() => setLocation('/')}
+                className="w-full px-6 py-3 border border-border text-foreground rounded-lg hover:bg-background/50 transition-colors"
+              >
+                Back to Home
+              </button>
+            </div>
           </div>
         </div>
       </AppShell>

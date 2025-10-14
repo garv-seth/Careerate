@@ -6,7 +6,7 @@ import { storage } from "./storage";
 import autonomousDeploymentRoutes from "./routes/autonomousDeployment";
 import runbookRoutes from "./routes/runbooks";
 import { sseService } from "./services/sseService.js";
-import { setupAuth, isAuthenticated } from "./azureAuth";
+import { setupAuth, isAuthenticated, upsertUser } from "./azureAuth";
 import {
   insertProjectSchema,
   insertCodeGenerationSchema,
