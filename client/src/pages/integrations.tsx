@@ -633,12 +633,19 @@ function GitHubRepoSelector() {
   const [repos, setRepos] = React.useState<any[] | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [user, setUser] = React.useState<{ login: string } | null>(null);
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const connected = params.get('github') === 'connected';
     if (!connected) return;
     setLoading(true);
+    // Load user first for header
+    fetch('/api/github/user', { credentials: 'include' })
+      .then(r => r.ok ? r.json() : null)
+      .then(u => setUser(u))
+      .catch(() => {})
+      .finally(() => {});
     fetch('/api/github/repos', { credentials: 'include' })
       .then(async r => {
         if (!r.ok) throw new Error((await r.json()).message || 'Failed to load repos');
@@ -654,7 +661,7 @@ function GitHubRepoSelector() {
   return (
     <div className="glass-pane rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-foreground">GitHub Repositories</h3>
+        <h3 className="text-lg font-semibold text-foreground">GitHub Repositories {user ? `• @${user.login}` : ''}</h3>
         <Badge>Connected</Badge>
       </div>
       {loading && <div className="text-foreground/60">Loading repositories…</div>}

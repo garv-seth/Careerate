@@ -5951,6 +5951,39 @@ Never deploy without explicit user confirmation.`;
     }
   });
 
+  // Get GitHub user info
+  app.get('/api/github/user', isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const integrations = await storage.getUserIntegrations(userId, 'repository');
+      const gh = integrations.find((i: any) => i.service === 'github');
+      if (!gh) return res.status(404).json({ message: 'GitHub not connected' });
+
+      const secrets = await storage.getIntegrationSecrets(gh.id);
+      const tokenSecret = secrets.find((s: any) => s.secretName === 'accessToken');
+      if (!tokenSecret) return res.status(400).json({ message: 'GitHub token not found' });
+
+      const token = await secretsManager.decryptApiKey({
+        encryptedValue: tokenSecret.encryptedValue,
+        algorithm: tokenSecret.encryptionAlgorithm,
+        keyId: tokenSecret.keyId
+      });
+
+      const response = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (!response.ok) throw new Error(`GitHub API error ${response.status}`);
+      const user = await response.json();
+      res.json({ login: user.login, id: user.id, avatar_url: user.avatar_url });
+    } catch (error: any) {
+      console.error('Get GitHub user failed:', error);
+      res.status(500).json({ message: error.message || 'Failed to get user' });
+    }
+  });
+
   return server;
 }
 
