@@ -5,6 +5,7 @@ import Stripe from "stripe"; // From javascript_stripe blueprint
 import { storage } from "./storage";
 import autonomousDeploymentRoutes from "./routes/autonomousDeployment";
 import runbookRoutes from "./routes/runbooks";
+import agentRoutes from "./routes/agentRoutes";
 import { sseService } from "./services/sseService.js";
 import { setupAuth, isAuthenticated, upsertUser } from "./azureAuth";
 import {
@@ -5685,6 +5686,7 @@ Never deploy without explicit user confirmation.`;
   // Register autonomous deployment routes
   app.use('/api/autonomous', autonomousDeploymentRoutes);
   app.use('/api/runbooks', runbookRoutes);
+  app.use('/api/agent', agentRoutes);
 
   // =====================================================
   // CLOUD OAUTH ROUTES

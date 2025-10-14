@@ -39,6 +39,25 @@ export default function Agent() {
     }
   }, []);
 
+  // Auto-choose agent based on input
+  const autoChooseAgent = (input: string) => {
+    const lowerInput = input.toLowerCase();
+    
+    if (lowerInput.includes('plan') || lowerInput.includes('design') || lowerInput.includes('architecture')) {
+      return 'planner';
+    } else if (lowerInput.includes('deploy') || lowerInput.includes('launch') || lowerInput.includes('publish')) {
+      return 'deployer';
+    } else if (lowerInput.includes('monitor') || lowerInput.includes('watch') || lowerInput.includes('track')) {
+      return 'monitor';
+    } else if (lowerInput.includes('fix') || lowerInput.includes('heal') || lowerInput.includes('repair') || lowerInput.includes('error')) {
+      return 'healer';
+    } else if (lowerInput.includes('optimize') || lowerInput.includes('cost') || lowerInput.includes('performance')) {
+      return 'optimizer';
+    }
+    
+    return 'planner'; // Default to planner
+  };
+
   // Show sign-in prompt if not authenticated
   if (!isAuthenticated) {
     return (
@@ -82,8 +101,14 @@ export default function Agent() {
   const { create } = useAgentSession();
 
   const createAgentSession = async () => {
+    setIsLoading(true);
     try {
-      const sessionId = await create(selectedAgent, { userId: user?.id });
+      const sessionId = await create(selectedAgent, { 
+        userId: user?.id,
+        agentType: selectedAgent,
+        timestamp: new Date().toISOString()
+      });
+      
       setCurrentSession({
         sessionId,
         status: 'active',
@@ -106,6 +131,8 @@ export default function Agent() {
         content: '❌ Failed to start agent session. Please try again.',
         timestamp: new Date()
       }]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -121,7 +148,23 @@ export default function Agent() {
   };
 
   const sendMessage = async () => {
-    if (!inputMessage.trim() || !currentSession) return;
+    if (!inputMessage.trim()) return;
+
+    // Auto-choose agent if no session exists
+    if (!currentSession) {
+      const autoSelectedAgent = autoChooseAgent(inputMessage);
+      setSelectedAgent(autoSelectedAgent);
+      try {
+        await createAgentSession();
+        // After creating session, send the message
+        setTimeout(() => {
+          sendMessage();
+        }, 100);
+      } catch (error) {
+        console.error('Failed to create session:', error);
+      }
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
