@@ -1,14 +1,15 @@
 /**
- * Planner Agent - REAL GPT-5 via Direct OpenAI API
+ * Planner Agent - GPT-5 with Reasoning (October 2025)
  *
- * Uses: gpt-5 model with reasoning_effort parameter
- * Cost: $1.25/M input, $10/M output
+ * Uses: GPT-5 flagship model with reasoning_effort parameter
+ * Cost: ~$5/M input, ~$20/M output (estimated)
+ * Reasoning Levels: minimal, low, medium, high
  *
  * Responsibilities:
- * - Analyze user's natural language deployment request
- * - Detect tech stack
- * - Create deployment plan
- * - Estimate costs
+ * - Analyze user's natural language deployment request with deep reasoning
+ * - Detect tech stack and dependencies
+ * - Create optimal deployment plan
+ * - Estimate costs accurately
  */
 
 import OpenAI from 'openai';
@@ -96,13 +97,15 @@ Be specific and practical. Default to Azure Container Apps unless user specifies
 
     try {
       const response = await this.client.chat.completions.create({
-        model: 'gpt-4o',  // Use latest available model
+        model: 'gpt-5',  // GPT-5 flagship (October 2025)
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage }
         ],
         temperature: 0.7,
-        response_format: { type: 'json_object' }
+        response_format: { type: 'json_object' },
+        // Use medium reasoning effort for deployment planning
+        reasoning_effort: 'medium' as any // Type assertion for new parameter
       });
 
       const content = response.choices[0].message.content || '{}';

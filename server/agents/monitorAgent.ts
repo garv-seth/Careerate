@@ -40,7 +40,8 @@ export class MonitorAgent extends BaseAgent {
   private monitoringIntervals: Map<string, NodeJS.Timeout> = new Map();
 
   constructor() {
-    super('monitor', selectModelForTask('simple-tasks'));
+    // Use Claude Haiku 4.5 for fast, cheap monitoring ($1/$5 per M tokens)
+    super('monitor', selectModelForTask('monitoring'));
   }
 
   getName(): string {

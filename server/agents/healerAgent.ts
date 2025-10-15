@@ -40,7 +40,8 @@ export interface RemediationResult {
  */
 export class HealerAgent extends BaseAgent {
   constructor() {
-    super('healer', selectModelForTask('reasoning'));
+    // Use Phi-4 for cheap reasoning ($0.13/$0.50 per M tokens)
+    super('healer', selectModelForTask('healing'));
   }
 
   getName(): string {
