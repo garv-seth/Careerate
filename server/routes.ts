@@ -6033,7 +6033,7 @@ Never deploy without explicit user confirmation.`;
       const userId = getUserId(req);
       
       // Get projects count
-      const projects = await storage.getUserProjects(userId);
+      const projects = await storage.getProjectsByUserId(userId);
       const totalProjects = projects.length;
       
       // Get connected cloud accounts

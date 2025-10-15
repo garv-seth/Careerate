@@ -92,7 +92,10 @@ export default function Agent() {
   }
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only scroll if there are messages and the ref exists
+    if (messages.length > 0 && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    }
   };
 
   useEffect(() => {
@@ -286,41 +289,29 @@ export default function Agent() {
       <div className="min-h-screen bg-background">
         <div className="container mx-auto max-w-6xl px-4 py-8">
           {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-8">
             <div>
               <h1 className="text-3xl font-bold text-foreground mb-2">Agent Suite Console</h1>
               <p className="text-muted-foreground">Plan, deploy, monitor, heal, and optimize your applications.</p>
             </div>
-            <select
-              value={selectedAgent}
-              onChange={e => setSelectedAgent(e.target.value as any)}
-              className="bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground"
-              aria-label="Select agent"
-            >
-              <option value="planner">Planner Agent</option>
-              <option value="deployer">Deployer Agent</option>
-              <option value="monitor">Monitor Agent</option>
-              <option value="healer">Healer Agent</option>
-              <option value="optimizer">Cost Optimizer</option>
-            </select>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Agent Selection Sidebar (condensed) */}
             <div className="lg:col-span-1">
               <div className="bg-background/50 border border-border rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Agent</h2>
-                <p className="text-sm text-muted-foreground">Selected: {selectedAgent}</p>
-                
+                <h2 className="text-xl font-semibold mb-4">Agent Control</h2>
+
                 {/* Auto-Choose Toggle */}
-                <div className="mt-4 p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Auto-Choose Agent</span>
+                <div className="mb-4 p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Auto-Choose</span>
                     <button
                       onClick={() => setAutoChooseEnabled(!autoChooseEnabled)}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                         autoChooseEnabled ? 'bg-primary' : 'bg-muted'
                       }`}
+                      aria-label="Toggle auto-choose agent"
                     >
                       <span
                         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -329,20 +320,46 @@ export default function Agent() {
                       />
                     </button>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {autoChooseEnabled 
-                      ? 'AI will automatically select the best agent based on your message'
-                      : 'Manually select agents from the dropdown above'
+                  <p className="text-xs text-muted-foreground">
+                    {autoChooseEnabled
+                      ? 'AI will automatically select the best agent'
+                      : 'Manually select agent from dropdown below'
                     }
+                  </p>
+                </div>
+
+                {/* Agent Dropdown */}
+                <div className="mb-4">
+                  <label htmlFor="agent-select" className="text-sm font-medium text-foreground mb-2 block">
+                    Select Agent
+                  </label>
+                  <select
+                    id="agent-select"
+                    value={selectedAgent}
+                    onChange={e => setSelectedAgent(e.target.value as any)}
+                    disabled={autoChooseEnabled}
+                    className={`w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground ${
+                      autoChooseEnabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                    }`}
+                    aria-label="Select agent"
+                  >
+                    <option value="planner">Planner Agent</option>
+                    <option value="deployer">Deployer Agent</option>
+                    <option value="monitor">Monitor Agent</option>
+                    <option value="healer">Healer Agent</option>
+                    <option value="optimizer">Cost Optimizer</option>
+                  </select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Current: {selectedAgent.charAt(0).toUpperCase() + selectedAgent.slice(1)}
                   </p>
                 </div>
 
                 {!currentSession && (
                   <button
                     onClick={createAgentSession}
-                    className="w-full mt-6 px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                    className="w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
                   >
-                    Start {selectedAgent.charAt(0).toUpperCase() + selectedAgent.slice(1)} Agent
+                    {autoChooseEnabled ? 'Start' : `Start ${selectedAgent.charAt(0).toUpperCase() + selectedAgent.slice(1)} Agent`}
                   </button>
                 )}
 

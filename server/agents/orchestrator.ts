@@ -51,13 +51,13 @@ export class AgentOrchestrator {
       // Initialize Semantic Kernel
       await kernelConfig.initialize();
 
-      // Verify at least one model is available
+      // Check available models (non-fatal if none configured)
       const availableModels = kernelConfig.getAvailableModels();
       if (availableModels.length === 0) {
-        throw new Error('No AI models available. Please configure Azure AI Foundry credentials.');
+        agentLogger.warn('No AI models configured. Agent functionality will be limited.');
+      } else {
+        agentLogger.info(`Kernel initialized with models: ${availableModels.join(', ')}`);
       }
-
-      agentLogger.info(`Kernel initialized with models: ${availableModels.join(', ')}`);
 
       // Agent instances will be lazy-loaded when first requested
       this.initialized = true;

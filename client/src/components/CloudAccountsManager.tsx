@@ -311,9 +311,9 @@ export function CloudAccountsManager() {
                   <span className="text-2xl">{icon}</span>
                 )}
               </div>
-              <div>
-                <h3 className="font-semibold text-lg">{name}</h3>
-                <p className="text-sm text-muted-foreground">{description}</p>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-semibold text-lg truncate">{name}</h3>
+                <p className="text-sm text-muted-foreground truncate">{description}</p>
               </div>
             </div>
             {isConnected && (
@@ -407,22 +407,22 @@ export function CloudAccountsManager() {
           <CloudProviderCard
             provider="aws"
             icon="☁️"
-            name="Amazon Web Services"
-            description="ECS, Lambda, RDS, S3"
+            name="AWS"
+            description="Container Apps, Functions"
             color="bg-gradient-to-br from-orange-500/20 to-orange-600/20"
           />
           <CloudProviderCard
             provider="azure"
             icon="⚡"
-            name="Microsoft Azure"
+            name="Azure"
             description="Container Apps, Functions"
             color="bg-gradient-to-br from-blue-500/20 to-blue-600/20"
           />
           <CloudProviderCard
             provider="gcp"
             icon="🔥"
-            name="Google Cloud Platform"
-            description="Cloud Run, Cloud Functions"
+            name="GCP"
+            description="Cloud Run, Functions"
             color="bg-gradient-to-br from-green-500/20 to-green-600/20"
           />
         </div>
