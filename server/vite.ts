@@ -78,7 +78,15 @@ export function serveStatic(app: Express) {
 
   // Serve static assets (CSS, JS, images) but not HTML files
   app.use('/assets', express.static(path.resolve(distPath, 'assets'), { maxAge: '1y', immutable: true }));
-  
+
+  // Serve ALL .svg, .png, .jpg, .ico files from root (for logos)
+  app.use(express.static(distPath, {
+    maxAge: '1y',
+    immutable: true,
+    index: false, // Don't serve index.html for directory requests
+    extensions: ['svg', 'png', 'jpg', 'jpeg', 'ico', 'webp']
+  }));
+
   // Serve individual files
   app.get('/manifest.json', (_req, res) => {
     res.sendFile(path.resolve(distPath, 'manifest.json'));
