@@ -8,6 +8,7 @@ import { DefaultAzureCredential } from '@azure/identity';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as path from 'path';
+import { retryOnTransientError } from '../utils/retry';
 
 const execAsync = promisify(exec);
 
@@ -71,9 +72,20 @@ export class ACRService {
         --file ${dockerfile} \
         "${repoPath}"`;
 
-      const { stdout, stderr } = await execAsync(buildCommand, {
-        maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large builds
-      });
+      // Build with retry on transient failures
+      const { stdout, stderr } = await retryOnTransientError(
+        async () => execAsync(buildCommand, {
+          maxBuffer: 10 * 1024 * 1024, // 10MB buffer for large builds
+          timeout: 600000 // 10 minute timeout
+        }),
+        {
+          maxAttempts: 2, // Only retry once for builds (they're expensive)
+          initialDelay: 5000,
+          onRetry: (error, attempt) => {
+            console.log(`[ACRService] Build attempt ${attempt} failed, retrying...`);
+          }
+        }
+      );
 
       if (stderr && !stderr.includes('Successfully')) {
         console.error('[ACRService] Build warnings:', stderr);

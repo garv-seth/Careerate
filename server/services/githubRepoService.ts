@@ -8,6 +8,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { retryOnTransientError } from '../utils/retry';
 
 const execAsync = promisify(exec);
 
@@ -61,7 +62,7 @@ export class GitHubRepoService {
   }
 
   /**
-   * Clone repository to local directory
+   * Clone repository to local directory with retry logic
    */
   async cloneRepo(repoUrl: string): Promise<string> {
     const { owner, repo } = this.parseGitHubUrl(repoUrl);
@@ -77,8 +78,21 @@ export class GitHubRepoService {
 
     console.log(`[GitHubRepoService] Cloning ${owner}/${repo}...`);
 
-    // Clone with depth=1 for speed
-    await execAsync(`git clone --depth 1 ${repoUrl} "${repoPath}"`);
+    // Clone with depth=1 for speed, with retry on network errors
+    await retryOnTransientError(
+      async () => {
+        await execAsync(`git clone --depth 1 ${repoUrl} "${repoPath}"`, {
+          timeout: 120000 // 2 minute timeout
+        });
+      },
+      {
+        maxAttempts: 3,
+        initialDelay: 2000,
+        onRetry: (error, attempt) => {
+          console.log(`[GitHubRepoService] Clone attempt ${attempt} failed, retrying...`);
+        }
+      }
+    );
 
     console.log(`[GitHubRepoService] ✅ Cloned to ${repoPath}`);
     return repoPath;
