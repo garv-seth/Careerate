@@ -128,8 +128,9 @@ export async function setupAuth(app: Express) {
       });
     }
 
-    // Use standard Azure AD OAuth instead of B2C
-    const authUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize?` +
+    // Use "common" endpoint to allow BOTH personal and work/school accounts
+    // NOT using specific tenantId to avoid restricting to organizational accounts only
+    const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?` +
       `client_id=${clientId}&` +
       `response_type=code&` +
       `redirect_uri=${redirectUri}&` +
@@ -158,8 +159,9 @@ export async function setupAuth(app: Express) {
       });
     }
 
-    // Use standard Azure AD OAuth instead of B2C
-    const authUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize?` +
+    // Use "common" endpoint to allow BOTH personal and work/school accounts
+    // NOT using specific tenantId to avoid restricting to organizational accounts only
+    const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?` +
       `client_id=${clientId}&` +
       `response_type=code&` +
       `redirect_uri=${redirectUri}&` +
@@ -198,8 +200,8 @@ export async function setupAuth(app: Express) {
     console.log('Authorization code received:', code ? 'YES' : 'NO');
 
     try {
-      // Exchange code for tokens using Azure AD
-      const tokenUrl = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`;
+      // Exchange code for tokens using Azure AD (use "common" to support personal accounts)
+      const tokenUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/token`;
       const baseUrl = (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, "");
       const redirectUri = `${baseUrl}/api/callback`;
 

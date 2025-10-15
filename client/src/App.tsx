@@ -66,7 +66,8 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
-        <CookieConsent />
+        {/* Cookie consent temporarily disabled for testing */}
+        {/* <CookieConsent /> */}
         <DeploymentInfo />
       </TooltipProvider>
     </QueryClientProvider>
