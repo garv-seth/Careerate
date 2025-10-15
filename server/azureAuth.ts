@@ -113,15 +113,14 @@ export async function setupAuth(app: Express) {
 
   // Microsoft OAuth login redirect (using Azure AD)
   app.get("/api/login", (req, res) => {
-    const tenantId = process.env.AZURE_TENANT_ID;
     const clientId = process.env.AZURE_CLIENT_ID;
     const baseUrl = (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, "");
     const redirectUri = encodeURIComponent(`${baseUrl}/api/callback`);
 
-    console.log('Microsoft OAuth Login attempt:', { tenantId, clientId: clientId ? 'set' : 'missing', redirectUri });
+    console.log('Microsoft OAuth Login attempt (personal accounts enabled):', { clientId: clientId ? 'set' : 'missing', redirectUri });
 
-    if (!tenantId || !clientId) {
-      console.error("Azure AD env vars missing. Expected AZURE_TENANT_ID, AZURE_CLIENT_ID");
+    if (!clientId) {
+      console.error("Azure AD client ID missing. Expected AZURE_CLIENT_ID");
       return res.status(500).json({
         error: "Microsoft authentication is temporarily unavailable",
         details: "Azure AD configuration incomplete"
@@ -138,21 +137,20 @@ export async function setupAuth(app: Express) {
       `scope=openid%20profile%20email%20offline_access&` +
       `state=12345`;
 
-    console.log('Azure AD Auth URL:', authUrl);
+    console.log('Azure AD Auth URL (allows personal accounts):', authUrl);
     res.redirect(authUrl);
   });
 
   // Microsoft OAuth login redirect (alias for /api/login)
   app.get("/api/login/microsoft", (req, res) => {
-    const tenantId = process.env.AZURE_TENANT_ID;
     const clientId = process.env.AZURE_CLIENT_ID;
     const baseUrl = (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, "");
     const redirectUri = encodeURIComponent(`${baseUrl}/api/callback`);
 
-    console.log('Microsoft OAuth Login attempt:', { tenantId, clientId: clientId ? 'set' : 'missing', redirectUri });
+    console.log('Microsoft OAuth Login attempt (personal accounts enabled):', { clientId: clientId ? 'set' : 'missing', redirectUri });
 
-    if (!tenantId || !clientId) {
-      console.error("Azure AD env vars missing. Expected AZURE_TENANT_ID, AZURE_CLIENT_ID");
+    if (!clientId) {
+      console.error("Azure AD client ID missing. Expected AZURE_CLIENT_ID");
       return res.status(500).json({
         error: "Microsoft authentication is temporarily unavailable",
         details: "Azure AD configuration incomplete"
@@ -169,7 +167,7 @@ export async function setupAuth(app: Express) {
       `scope=openid%20profile%20email%20offline_access&` +
       `state=12345`;
 
-    console.log('Azure AD Auth URL:', authUrl);
+    console.log('Azure AD Auth URL (allows personal accounts):', authUrl);
     res.redirect(authUrl);
   });
 
