@@ -68,45 +68,41 @@ export function DeploymentChatUI() {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const userInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      // Create session if needed
-      let activeSessionId = sessionId;
-      if (!activeSessionId) {
-        activeSessionId = await createSession();
-        if (!activeSessionId) {
-          setIsLoading(false);
-          return;
-        }
-      }
+      // Extract GitHub URL if present (optional)
+      const githubUrlMatch = userInput.match(/https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w-]+/);
+      const repoUrl = githubUrlMatch ? githubUrlMatch[0] : undefined;
 
-      // Call Planner Agent
-      const res = await fetch('/api/agent/plan', {
+      // Call NEW Deployment Planner API (GPT-4o with direct OpenAI)
+      const res = await fetch('/api/deploy/plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          sessionId: activeSessionId,
-          naturalLanguageInput: input,
-          autonomyLevel,
-          costLimit: 50000 // $500/month default limit
+          input: userInput,
+          repoUrl
         })
       });
 
-      if (!res.ok) throw new Error('Failed to create plan');
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to create plan');
+      }
 
-      const { plan } = await res.json();
-      setCurrentPlan(plan);
+      const { planId, plan } = await res.json();
+      setCurrentPlan({ ...plan, planId });
 
       // Add agent response
       const agentMessage: Message = {
         role: 'agent',
-        content: `I've analyzed your request and created a deployment plan.`,
+        content: `I've analyzed your request and created a deployment plan using GPT-4o.`,
         timestamp: new Date(),
         type: 'plan',
-        data: plan
+        data: { ...plan, planId }
       };
 
       setMessages(prev => [...prev, agentMessage]);
@@ -119,7 +115,7 @@ export function DeploymentChatUI() {
         type: 'error'
       };
       setMessages(prev => [...prev, errorMessage]);
-      
+
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Unknown error',
@@ -131,41 +127,62 @@ export function DeploymentChatUI() {
   };
 
   const handleDeploy = async () => {
-    if (!currentPlan || !sessionId) return;
+    if (!currentPlan) return;
 
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/agent/deploy', {
+      const progressMessage: Message = {
+        role: 'agent',
+        content: `Starting deployment... This will take 5-10 minutes.`,
+        timestamp: new Date(),
+        type: 'progress',
+        data: { status: 'starting' }
+      };
+      setMessages(prev => [...prev, progressMessage]);
+
+      // Call NEW Deployment Execute API (Real Azure deployment)
+      const res = await fetch('/api/deploy/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          sessionId,
-          planId: currentPlan.planId,
-          autonomyLevel,
-          costLimit: 50000
+          planId: currentPlan.planId
         })
       });
 
-      if (!res.ok) throw new Error('Deployment failed');
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Deployment failed');
+      }
 
       const { deployment } = await res.json();
 
-      const deployMessage: Message = {
+      // Success!
+      const completeMessage: Message = {
         role: 'agent',
-        content: `Deployment started! ${deployment.totalSteps} steps to complete.`,
+        content: `🎉 Deployment completed successfully!\n\nYour app is live at:\n${deployment.url}\n\nApp Name: ${deployment.appName}\nRegion: ${deployment.region}\nStatus: ${deployment.status}`,
         timestamp: new Date(),
-        type: 'progress',
+        type: 'complete',
         data: deployment
       };
 
-      setMessages(prev => [...prev, deployMessage]);
+      setMessages(prev => [...prev, completeMessage]);
 
-      // Monitor deployment progress
-      monitorDeployment(deployment.deploymentId);
+      toast({
+        title: 'Deployment Success!',
+        description: `App deployed to ${deployment.url}`,
+      });
 
     } catch (error) {
+      const errorMessage: Message = {
+        role: 'agent',
+        content: `❌ Deployment failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        timestamp: new Date(),
+        type: 'error'
+      };
+      setMessages(prev => [...prev, errorMessage]);
+
       toast({
         title: 'Deployment Failed',
         description: error instanceof Error ? error.message : 'Unknown error',
@@ -251,26 +268,26 @@ export function DeploymentChatUI() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full text-left justify-start"
-                  onClick={() => setInput("Deploy my Next.js app to Vercel with auto-scaling")}
+                  className="w-full text-left justify-start text-xs"
+                  onClick={() => setInput("Deploy my Next.js app from https://github.com/vercel/next.js/tree/canary/examples/hello-world")}
                 >
-                  "Deploy my Next.js app to Vercel with auto-scaling"
+                  "Deploy this Next.js demo: https://github.com/vercel/next.js/tree/canary/examples/hello-world"
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full text-left justify-start"
-                  onClick={() => setInput("Set up a Node.js API on AWS with PostgreSQL database")}
+                  className="w-full text-left justify-start text-xs"
+                  onClick={() => setInput("Deploy a simple web app to Azure with auto-scaling")}
                 >
-                  "Set up a Node.js API on AWS with PostgreSQL database"
+                  "Deploy a simple web app to Azure with auto-scaling"
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full text-left justify-start"
-                  onClick={() => setInput("Create a staging environment on Azure for my React app")}
+                  className="w-full text-left justify-start text-xs"
+                  onClick={() => setInput("Deploy my GitHub repository (paste your repo URL)")}
                 >
-                  "Create a staging environment on Azure for my React app"
+                  "Deploy my GitHub repository (paste your repo URL)"
                 </Button>
               </div>
             </CardContent>
@@ -296,12 +313,12 @@ export function DeploymentChatUI() {
                 <div className="mt-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <Badge className="bg-foreground/10 text-foreground border-foreground/20">
-                      {message.data.provider.toUpperCase()}
+                      {message.data.techStack || 'Unknown'}
                     </Badge>
                     <div className="flex items-center gap-1 text-foreground/80">
                       <DollarSign className="w-4 h-4" />
                       <span className="text-sm font-medium">
-                        ${(message.data.costEstimate.monthly / 100).toFixed(2)}/month
+                        ${message.data.costEstimate?.monthly || 0}/month
                       </span>
                     </div>
                   </div>
@@ -309,18 +326,24 @@ export function DeploymentChatUI() {
                   <div className="space-y-1">
                     <p className="text-xs text-foreground/60 uppercase font-semibold">Architecture</p>
                     <div className="text-sm text-foreground/80">
-                      <p>• Compute: {message.data.architecture.compute}</p>
-                      {message.data.architecture.database && (
-                        <p>• Database: {message.data.architecture.database}</p>
+                      <p>• Compute: {message.data.infrastructure?.compute || 'N/A'}</p>
+                      {message.data.infrastructure?.database && message.data.infrastructure.database !== 'none' && (
+                        <p>• Database: {message.data.infrastructure.database}</p>
                       )}
-                      <p>• Region: {message.data.region}</p>
+                      {message.data.infrastructure?.storage && message.data.infrastructure.storage !== 'none' && (
+                        <p>• Storage: {message.data.infrastructure.storage}</p>
+                      )}
+                      <p>• Region: {message.data.region || 'westus2'}</p>
+                      <p>• Resources: {message.data.cpu || 0.5} CPU, {message.data.memory || '1Gi'} RAM</p>
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <p className="text-xs text-foreground/60 uppercase font-semibold">Reasoning</p>
-                    <p className="text-sm text-foreground/80">{message.data.reasoning}</p>
-                  </div>
+                  {message.data.reasoning && (
+                    <div className="space-y-1">
+                      <p className="text-xs text-foreground/60 uppercase font-semibold">Reasoning</p>
+                      <p className="text-sm text-foreground/80">{message.data.reasoning}</p>
+                    </div>
+                  )}
 
                   <Button
                     onClick={handleDeploy}
