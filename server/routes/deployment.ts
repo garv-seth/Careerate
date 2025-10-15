@@ -47,7 +47,8 @@ router.post('/plan', async (req, res) => {
       architecture: plan.infrastructure,
       costEstimate: plan.costEstimate,
       reasoning: plan.reasoning,
-      status: 'pending'
+      status: 'pending',
+      metadata: { repoUrl, framework } // Store repo URL for later
     });
 
     res.json({
@@ -103,10 +104,16 @@ router.post('/execute', async (req, res) => {
       reasoning: planRecord.reasoning
     };
 
-    console.log(`[DeploymentAPI] Executing plan ${planId}`);
+    // Extract repoUrl from metadata
+    const repoUrl = planRecord.metadata?.repoUrl;
 
-    // Deploy with Deployer Agent (REAL Azure SDK)
-    const result = await deployer.deploy(plan, userId);
+    console.log(`[DeploymentAPI] Executing plan ${planId}`);
+    if (repoUrl) {
+      console.log(`[DeploymentAPI] Building from GitHub: ${repoUrl}`);
+    }
+
+    // Deploy with Deployer Agent (REAL Azure SDK + GitHub integration)
+    const result = await deployer.deploy(plan, userId, repoUrl);
 
     // Update plan status
     await storageV2.updateDeploymentPlan(planId, { status: 'deployed' });
