@@ -1,13 +1,15 @@
 /**
- * Healer Agent
- * 
+ * Healer Agent - REAL Azure Container Apps Integration
+ *
  * Auto-diagnoses and remediates deployment issues
- * Uses AI to analyze problems and apply fixes
+ * Uses AI + REAL Azure APIs to analyze problems and apply fixes
  */
 
 import { BaseAgent, AgentContext, AgentActionBuilder } from './baseAgent';
 import { selectModelForTask } from './kernel.config';
 import { HealthMetrics, Alert } from './monitorAgent';
+import { ContainerAppsAPIClient } from '@azure/arm-appcontainers';
+import { DefaultAzureCredential } from '@azure/identity';
 
 export interface Diagnosis {
   issue: string;
@@ -39,9 +41,24 @@ export interface RemediationResult {
  * Intelligent auto-remediation of deployment issues
  */
 export class HealerAgent extends BaseAgent {
+  private azureClient: ContainerAppsAPIClient;
+  private subscriptionId: string;
+  private resourceGroup: string;
+
   constructor() {
     // Use Phi-4 for cheap reasoning ($0.13/$0.50 per M tokens)
     super('healer', selectModelForTask('healing'));
+
+    // Initialize Azure Container Apps Client
+    const credential = new DefaultAzureCredential();
+    this.subscriptionId = process.env.AZURE_SUBSCRIPTION_ID || '';
+    this.resourceGroup = process.env.AZURE_RESOURCE_GROUP || 'Careerate';
+
+    if (!this.subscriptionId) {
+      console.warn('[HealerAgent] AZURE_SUBSCRIPTION_ID not set - healing will be limited');
+    }
+
+    this.azureClient = new ContainerAppsAPIClient(credential, this.subscriptionId);
   }
 
   getName(): string {
@@ -341,43 +358,165 @@ Output JSON only.`;
   }
 
   /**
-   * Restart deployment
+   * Restart deployment - REAL Azure Container Apps API
    */
   private async restartDeployment(deploymentId: string): Promise<void> {
-    // Mock implementation
-    await this.sleep(1000);
+    if (!this.subscriptionId) {
+      console.warn('[HealerAgent] Simulating restart (no Azure credentials)');
+      await this.sleep(1000);
+      return;
+    }
+
+    console.log(`[HealerAgent] 🔄 Restarting ${deploymentId}...`);
+
+    // Get current app configuration
+    const app = await this.azureClient.containerApps.get(this.resourceGroup, deploymentId);
+
+    // Trigger restart by updating a non-functional property
+    await this.azureClient.containerApps.beginUpdateAndWait(
+      this.resourceGroup,
+      deploymentId,
+      {
+        ...app,
+        properties: {
+          ...app.properties,
+          template: {
+            ...app.properties?.template,
+            revisionSuffix: `restart-${Date.now()}`
+          }
+        }
+      }
+    );
+
+    console.log(`[HealerAgent] ✅ Restarted ${deploymentId}`);
   }
 
   /**
-   * Scale deployment
+   * Scale deployment - REAL Azure Container Apps API
    */
   private async scaleDeployment(deploymentId: string, direction: 'up' | 'down'): Promise<void> {
-    // Mock implementation
-    await this.sleep(1000);
+    if (!this.subscriptionId) {
+      console.warn('[HealerAgent] Simulating scale (no Azure credentials)');
+      await this.sleep(1000);
+      return;
+    }
+
+    console.log(`[HealerAgent] 📈 Scaling ${deploymentId} ${direction}...`);
+
+    const app = await this.azureClient.containerApps.get(this.resourceGroup, deploymentId);
+    const currentMin = app.properties?.template?.scale?.minReplicas || 1;
+    const currentMax = app.properties?.template?.scale?.maxReplicas || 10;
+
+    const newMin = direction === 'up' ? currentMin + 1 : Math.max(1, currentMin - 1);
+    const newMax = Math.max(newMin, currentMax);
+
+    await this.azureClient.containerApps.beginUpdateAndWait(
+      this.resourceGroup,
+      deploymentId,
+      {
+        ...app,
+        properties: {
+          ...app.properties,
+          template: {
+            ...app.properties?.template,
+            scale: {
+              minReplicas: newMin,
+              maxReplicas: newMax
+            }
+          }
+        }
+      }
+    );
+
+    console.log(`[HealerAgent] ✅ Scaled ${deploymentId} to ${newMin}-${newMax} replicas`);
   }
 
   /**
-   * Clear cache
+   * Clear cache (restart is effectively cache clear for stateless containers)
    */
   private async clearCache(deploymentId: string): Promise<void> {
-    // Mock implementation
-    await this.sleep(500);
+    console.log('[HealerAgent] Clearing cache via restart...');
+    await this.restartDeployment(deploymentId);
   }
 
   /**
-   * Rollback deployment
+   * Rollback deployment - REAL Azure Container Apps API
    */
   private async rollbackDeployment(deploymentId: string): Promise<void> {
-    // Mock implementation
-    await this.sleep(2000);
+    if (!this.subscriptionId) {
+      console.warn('[HealerAgent] Simulating rollback (no Azure credentials)');
+      await this.sleep(2000);
+      return;
+    }
+
+    console.log(`[HealerAgent] ⏮️ Rolling back ${deploymentId}...`);
+
+    // Get revision history
+    const revisions = await this.azureClient.containerAppsRevisions.listRevisions(
+      this.resourceGroup,
+      deploymentId
+    );
+
+    const activeRevisions = [];
+    for await (const revision of revisions) {
+      if (revision.properties?.active) {
+        activeRevisions.push(revision);
+      }
+    }
+
+    if (activeRevisions.length < 2) {
+      throw new Error('No previous revision available for rollback');
+    }
+
+    // Sort by creation time, get previous revision
+    activeRevisions.sort((a, b) =>
+      new Date(b.properties?.createdDate || 0).getTime() -
+      new Date(a.properties?.createdDate || 0).getTime()
+    );
+
+    const previousRevision = activeRevisions[1];
+
+    // Update traffic to route 100% to previous revision
+    const app = await this.azureClient.containerApps.get(this.resourceGroup, deploymentId);
+
+    await this.azureClient.containerApps.beginUpdateAndWait(
+      this.resourceGroup,
+      deploymentId,
+      {
+        ...app,
+        properties: {
+          ...app.properties,
+          configuration: {
+            ...app.properties?.configuration,
+            ingress: {
+              ...app.properties?.configuration?.ingress,
+              traffic: [{
+                revisionName: previousRevision.name,
+                weight: 100
+              }]
+            }
+          }
+        }
+      }
+    );
+
+    console.log(`[HealerAgent] ✅ Rolled back to ${previousRevision.name}`);
   }
 
   /**
-   * Update configuration
+   * Update configuration - REAL Azure Container Apps API
    */
   private async updateConfig(deploymentId: string): Promise<void> {
-    // Mock implementation
-    await this.sleep(1000);
+    if (!this.subscriptionId) {
+      console.warn('[HealerAgent] Simulating config update (no Azure credentials)');
+      await this.sleep(1000);
+      return;
+    }
+
+    console.log(`[HealerAgent] ⚙️ Updating config for ${deploymentId}...`);
+
+    // For now, just trigger a restart which will pick up any env var changes
+    await this.restartDeployment(deploymentId);
   }
 
   /**
