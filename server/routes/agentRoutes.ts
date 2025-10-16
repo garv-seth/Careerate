@@ -556,6 +556,77 @@ router.get('/cost/budget', isAuthenticated, async (req: Request, res: Response) 
 });
 
 /**
+ * POST /api/agent/chat
+ * Start agent chat session (UI entry point)
+ */
+router.post('/chat', isAuthenticated, async (req: Request, res: Response) => {
+  try {
+    const { sessionType = 'deployment', initialContext, message } = req.body;
+    const userId = req.user!.id;
+
+    console.log('[AgentChat] Creating session:', { userId, sessionType, initialContext });
+
+    // Ensure orchestrator is initialized
+    await orchestrator.ensureInitialized();
+
+    // Create session
+    const sessionId = await orchestrator.createSession(userId, sessionType, initialContext);
+
+    console.log('[AgentChat] Session created:', sessionId);
+
+    // If there's an initial message, process it
+    let response = null;
+    if (message) {
+      response = await orchestrator.processMessage(sessionId, message);
+    }
+
+    res.json({
+      success: true,
+      sessionId,
+      message: response || 'Agent session started',
+      data: response
+    });
+  } catch (error) {
+    console.error('[AgentChat] Error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to start agent session'
+    });
+  }
+});
+
+/**
+ * POST /api/agent/chat/:sessionId/message
+ * Send message to agent session
+ */
+router.post('/chat/:sessionId/message', isAuthenticated, async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.params;
+    const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({
+        success: false,
+        error: 'Message is required'
+      });
+    }
+
+    const response = await orchestrator.processMessage(sessionId, message);
+
+    res.json({
+      success: true,
+      response
+    });
+  } catch (error) {
+    console.error('[AgentChat] Message error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to process message'
+    });
+  }
+});
+
+/**
  * GET /api/agent/status
  * Get orchestrator status
  */

@@ -45,7 +45,8 @@
       "Bash(npm run dev:*)",
       "Bash(npm run test:e2e:prod:*)",
       "Bash(tsx scripts/test-deployment-agent.ts:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []
