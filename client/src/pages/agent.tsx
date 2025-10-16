@@ -29,6 +29,8 @@ export default function Agent() {
   const [currentSession, setCurrentSession] = useState<AgentSession | null>(null);
   const [selectedAgent, setSelectedAgent] = useState<'planner' | 'deployer' | 'monitor' | 'healer' | 'optimizer'>('planner');
   const [autoChooseEnabled, setAutoChooseEnabled] = useState(true);
+  const [repositories, setRepositories] = useState<Array<{ id: string; name: string; fullName?: string }>>([]);
+  const [selectedRepositoryId, setSelectedRepositoryId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-select agent via query parameter
@@ -58,6 +60,21 @@ export default function Agent() {
     
     return 'planner'; // Default to planner
   };
+
+  // Load repositories if GitHub is connected (best-effort)
+  useEffect(() => {
+    fetch('/api/integrations/github/repositories', { credentials: 'include' })
+      .then(async (r) => {
+        if (!r.ok) return null;
+        return r.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        const repos = Array.isArray(data) ? data : (data.repositories || []);
+        setRepositories(repos.map((r: any) => ({ id: r.id, name: r.name, fullName: r.fullName || r.full_name })));
+      })
+      .catch(() => {});
+  }, []);
 
   // Show sign-in prompt if not authenticated
   if (!isAuthenticated) {
@@ -201,6 +218,9 @@ export default function Agent() {
             sessionId: currentSession.sessionId,
             projectDescription: inputMessage,
             targetProvider: 'auto', // Let AI decide
+            sourceRepository: selectedRepositoryId
+              ? (repositories.find(r => r.id === selectedRepositoryId)?.fullName || repositories.find(r => r.id === selectedRepositoryId)?.name)
+              : undefined,
             requirements: { autonomy: 'supervised' }
           };
           break;
@@ -351,6 +371,27 @@ export default function Agent() {
                   </select>
                   <p className="text-xs text-muted-foreground mt-1">
                     Current: {selectedAgent.charAt(0).toUpperCase() + selectedAgent.slice(1)}
+                  </p>
+                </div>
+
+                {/* Source Repository (optional) */}
+                <div className="mb-4">
+                  <label htmlFor="repo-select" className="text-sm font-medium text-foreground mb-2 block">
+                    Source Repository (optional)
+                  </label>
+                  <select
+                    id="repo-select"
+                    value={selectedRepositoryId}
+                    onChange={e => setSelectedRepositoryId(e.target.value)}
+                    className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground"
+                  >
+                    <option value="">None</option>
+                    {repositories.map(r => (
+                      <option key={r.id} value={r.id}>{r.fullName || r.name}</option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    If set, the deployer will use this repository as source.
                   </p>
                 </div>
 

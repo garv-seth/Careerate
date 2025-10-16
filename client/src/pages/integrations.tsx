@@ -43,6 +43,16 @@ export default function IntegrationsPage() {
       const url = window.location.pathname; // drop params
       window.history.replaceState({}, '', url);
     }
+    if (params.get('github') === 'connected') {
+      toast({ title: 'GitHub Connected', description: 'Your GitHub account is now connected.' });
+      const url = window.location.pathname;
+      window.history.replaceState({}, '', url);
+    }
+    if (params.get('gitlab') === 'connected') {
+      toast({ title: 'GitLab Connected', description: 'Your GitLab account is now connected.' });
+      const url = window.location.pathname;
+      window.history.replaceState({}, '', url);
+    }
     if (params.get('error')) {
       toast({ title: 'Integration Error', description: params.get('error')!, variant: 'destructive' });
       const url = window.location.pathname;
@@ -61,6 +71,25 @@ export default function IntegrationsPage() {
 
   const handleConnectGitHub = () => {
     window.location.href = "/api/integrations/github/oauth/initiate";
+  };
+
+  const handleConnectGitLab = async () => {
+    try {
+      const res = await fetch('/api/integrations/gitlab/oauth/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({})
+      });
+      const j = await res.json();
+      if (j.authUrl) {
+        window.location.href = j.authUrl;
+      } else {
+        toast({ title: 'GitLab', description: j.message || 'Failed to start GitLab OAuth', variant: 'destructive' });
+      }
+    } catch (e: any) {
+      toast({ title: 'GitLab', description: e.message || 'Failed to start GitLab OAuth', variant: 'destructive' });
+    }
   };
 
   return (
@@ -131,12 +160,26 @@ export default function IntegrationsPage() {
 
                   const IconComponent = getIntegrationIcon(i.id);
 
+                  const logoSrcById: Record<string, string> = {
+                    aws: '/aws-logo.svg',
+                    azure: '/azure-logo.svg',
+                    gcp: '/gcp-logo.svg',
+                    github: '/github-logo.svg',
+                    datadog: '/datadog-logo.svg',
+                    pagerduty: '/pagerduty-logo.svg',
+                    vercel: '/vercel-logo.svg',
+                    oracle: '/oracle-logo.svg'
+                  };
+                  const logoSrc = logoSrcById[i.id];
+
                   return (
                     <Card key={i.id} className="glass-pane rounded-2xl hover:border-primary/50 transition-colors">
                       <CardHeader className="pb-2">
                         <CardTitle className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-2">
-                            {IconComponent ? (
+                            {logoSrc ? (
+                              <img src={logoSrc} alt={i.name} className="w-6 h-6" />
+                            ) : IconComponent ? (
                               <IconComponent className="w-6 h-6 text-foreground" />
                             ) : (
                               <div className="w-6 h-6 bg-primary/20 rounded flex items-center justify-center">
@@ -170,6 +213,15 @@ export default function IntegrationsPage() {
                               className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white"
                             >
                               Connect GitHub
+                            </Button>
+                          )}
+                          {i.id === 'gitlab' && !ready && (
+                            <Button
+                              onClick={handleConnectGitLab}
+                              size="sm"
+                              className="rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white"
+                            >
+                              Connect GitLab
                             </Button>
                           )}
                           {i.docsUrl && (
@@ -691,12 +743,12 @@ function GitHubRepoSelector() {
       .then(u => setUser(u))
       .catch(() => {})
       .finally(() => {});
-    fetch('/api/github/repos', { credentials: 'include' })
+    fetch('/api/integrations/github/repositories', { credentials: 'include' })
       .then(async r => {
         if (!r.ok) throw new Error((await r.json()).message || 'Failed to load repos');
         return r.json();
       })
-      .then(data => setRepos(data))
+      .then(data => setRepos(Array.isArray(data) ? data : (data.repositories || [])))
       .catch(e => { setError(e.message); toast({ title: 'GitHub', description: e.message, variant: 'destructive' }); })
       .finally(() => setLoading(false));
   }, []);
