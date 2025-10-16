@@ -30,7 +30,9 @@ class AzureKeyVaultService {
 
     try {
       const vaultUrl = `https://${this.vaultName}.vault.azure.net`;
-      const credential = new DefaultAzureCredential();
+      const credential = new DefaultAzureCredential({
+        additionallyAllowedTenants: ["*"] // Allow access to KeyVault in any tenant
+      });
       this.client = new SecretClient(vaultUrl, credential);
       this.isInitialized = true;
       console.log(`✅ Azure Key Vault connected: ${this.vaultName}`);

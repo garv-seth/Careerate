@@ -17,7 +17,9 @@ let secretClient: SecretClient | null = null;
  */
 function getSecretClient(): SecretClient {
   if (!secretClient) {
-    const credential = new DefaultAzureCredential();
+    const credential = new DefaultAzureCredential({
+      additionallyAllowedTenants: ["*"] // Allow access to KeyVault in any tenant
+    });
     secretClient = new SecretClient(VAULT_URL, credential);
   }
   return secretClient;
