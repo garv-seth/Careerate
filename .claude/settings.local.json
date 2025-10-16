@@ -41,7 +41,8 @@
       "Bash(timeout:*)",
       "Bash(node:*)",
       "Bash(gh run watch:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

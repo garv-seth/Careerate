@@ -56,7 +56,7 @@ export function DeploymentChatUI() {
   const fetchRepositories = async () => {
     setLoadingRepos(true);
     try {
-      const res = await fetch('/api/github/repos', { credentials: 'include' });
+      const res = await fetch('/api/integrations/github/repositories', { credentials: 'include' });
 
       if (!res.ok) {
         // Not connected to GitHub/GitLab yet
@@ -67,13 +67,14 @@ export function DeploymentChatUI() {
       const repos: Repository[] = [];
 
       // GitHub repos
-      if (data && Array.isArray(data)) {
-        data.forEach((repo: any) => {
+      const gh = Array.isArray(data) ? data : (data.repositories || []);
+      if (gh && Array.isArray(gh)) {
+        gh.forEach((repo: any) => {
           repos.push({
             provider: 'github',
             id: repo.id?.toString() || repo.name,
-            name: repo.name || repo.full_name,
-            url: repo.html_url || repo.url
+            name: repo.fullName || repo.name,
+            url: repo.url || repo.html_url || repo.cloneUrl
           });
         });
       }

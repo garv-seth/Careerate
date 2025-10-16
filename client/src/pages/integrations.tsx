@@ -18,19 +18,6 @@ export default function IntegrationsPage() {
     retry: false,
     staleTime: 60_000,
     gcTime: 5 * 60_000,
-  const { data: connectedData } = useQuery({
-    queryKey: ["/api/integrations/connected-services"],
-    retry: false,
-    queryFn: async () => {
-      try {
-        const res = await fetch('/api/integrations/connected-services', { credentials: 'include' });
-        if (!res.ok) return { connected: [] };
-        return res.json();
-      } catch {
-        return { connected: [] };
-      }
-    }
-  });
     queryFn: async () => {
       try {
         const res = await fetch("/api/integrations/catalog", { credentials: "include" });
@@ -47,6 +34,20 @@ export default function IntegrationsPage() {
         return { integrations: [], status: [] };
       }
     },
+  });
+
+  const { data: connectedData } = useQuery({
+    queryKey: ["/api/integrations/connected-services"],
+    retry: false,
+    queryFn: async () => {
+      try {
+        const res = await fetch('/api/integrations/connected-services', { credentials: 'include' });
+        if (!res.ok) return { connected: [] };
+        return res.json();
+      } catch {
+        return { connected: [] };
+      }
+    }
   });
 
   // Handle oauth callback query params and refresh cloud accounts

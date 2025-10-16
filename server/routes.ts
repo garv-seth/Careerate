@@ -2325,91 +2325,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/callback/github", async (req, res) => {
     try {
       const { code, state } = req.query;
-
       if (!code || typeof code !== 'string') {
-        return res.redirect('/dashboard?error=no_code');
+        return res.redirect('/integrations?error=no_code');
       }
-
-      // Verify state if we stored it
+      // Verify state if stored
       if (req.session?.githubOAuthState && state !== req.session.githubOAuthState) {
-        return res.redirect('/dashboard?error=invalid_state');
+        return res.redirect('/integrations?error=invalid_state');
       }
 
-      // Exchange code for token and get user info
-      const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          client_id: process.env.GITHUB_CLIENT_ID || 'Ov23liRwhk6ZbqmlHSz9',
-          client_secret: process.env.GITHUB_CLIENT_SECRET || 'demo-secret',
-          code: code as string,
-          redirect_uri: `${process.env.BASE_URL || 'https://gocareerate.com'}/api/callback/github`
-        })
-      });
+      // Use unified flow: exchange + store integration via service
+      const beforeUserId = getUserId(req);
+      const result = await multiCloudOAuth.handleGitHubCallback(code as string, beforeUserId || '');
 
-      const tokenData = await tokenResponse.json();
-
-      if (!tokenData.access_token) {
-        console.error('GitHub token exchange failed:', tokenData);
-        return res.redirect('/dashboard?error=github_auth_failed');
-      }
-
-      // Get user info from GitHub
-      const userResponse = await fetch('https://api.github.com/user', {
-        headers: {
-          'Authorization': `Bearer ${tokenData.access_token}`,
-          'Accept': 'application/vnd.github.v3+json'
+      // If no user session, we still need basic user info to create/login user
+      let user = req.user as any;
+      if (!user) {
+        // Fetch user info using the token we just stored by calling GitHub API with result.accessToken
+        if (!result.accessToken) {
+          // Best effort: redirect with error
+          return res.redirect('/integrations?error=missing_token');
         }
-      });
-
-      const userInfo = await userResponse.json();
-
-      if (!userInfo.id) {
-        console.error('GitHub user info failed:', userInfo);
-        return res.redirect('/dashboard?error=github_user_failed');
+        const ghUser = await fetch('https://api.github.com/user', {
+          headers: { 'Authorization': `Bearer ${result.accessToken}`, 'Accept': 'application/vnd.github.v3+json' }
+        }).then(r => r.json());
+        user = await upsertUser({
+          sub: `github-${ghUser.id}`,
+          email: ghUser.email || `${ghUser.login}@github.local`,
+          name: ghUser.name || ghUser.login,
+          preferred_username: ghUser.login,
+        }) as any;
+        await new Promise<void>((resolve) => req.login(user, () => resolve()));
       }
 
-      // Check if user is already authenticated (integration flow) or not (login flow)
-      const userId = getUserId(req);
-
-      if (!userId) {
-        // Not logged in - this is a login flow, create user
-        const user = await upsertUser({
-          sub: `github-${userInfo.id}`,
-          email: userInfo.email,
-          name: userInfo.name || userInfo.login,
-          preferred_username: userInfo.login,
-        });
-
-        // Establish session
-        return req.login(user, (err) => {
-          if (err) {
-            console.error('Session login error:', err);
-            return res.redirect('/integrations?error=session_failed');
-          }
-          // After login, link integration as well so repos are accessible
-          multiCloudOAuth.handleGitHubCallback(code as string, (user as any).id)
-            .then(() => res.redirect('/integrations?github=connected'))
-            .catch((_e) => res.redirect('/integrations?error=github_link_failed'));
-        });
+      // Persist token in session for repo fallback
+      if (result.accessToken && req.session) {
+        (req.session as any).githubAccessToken = result.accessToken;
       }
 
-      // User is already logged in - this is an integration flow
-      try {
-        await multiCloudOAuth.handleGitHubCallback(code as string, userId);
-
-        // Redirect to integrations page with success
-        res.redirect('/integrations?github=connected');
-      } catch (error) {
-        console.error('GitHub integration error:', error);
-        res.redirect('/integrations?error=github_failed');
-      }
+      return res.redirect('/integrations?github=connected');
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
-      res.redirect('/dashboard?error=callback_failed');
+      res.redirect('/integrations?error=callback_failed');
     }
   });
 
@@ -2422,19 +2378,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const integrations = await storage.getUserIntegrations(userId);
       const githubIntegration = integrations.find(i => i.service === 'github' && i.type === 'repository');
 
-      if (!githubIntegration) {
+      let accessToken: string | undefined;
+      if (githubIntegration) {
+        const secrets = await storage.getIntegrationSecrets(githubIntegration.id);
+        const accessTokenSecret = secrets.find(s => s.secretName === 'access_token' || s.secretName === 'accessToken');
+        if (accessTokenSecret) {
+          accessToken = await secretsManager.getSecret(accessTokenSecret.id, userId);
+        }
+      }
+      // Fallback to session token if integration not found
+      if (!accessToken && (req.session as any)?.githubAccessToken) {
+        accessToken = (req.session as any).githubAccessToken as string;
+      }
+      if (!accessToken) {
         return res.status(404).json({ message: "GitHub not connected" });
       }
-
-      // Get access token
-      const secrets = await storage.getIntegrationSecrets(githubIntegration.id);
-      const accessTokenSecret = secrets.find(s => s.secretName === 'access_token' || s.secretName === 'accessToken');
-
-      if (!accessTokenSecret) {
-        return res.status(401).json({ message: "No GitHub access token found" });
-      }
-
-      const accessToken = await secretsManager.getSecret(accessTokenSecret.id, userId);
 
       // Fetch repositories from GitHub
       const response = await fetch('https://api.github.com/user/repos?per_page=100&sort=updated', {

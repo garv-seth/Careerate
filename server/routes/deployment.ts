@@ -7,8 +7,12 @@ import express from 'express';
 import { PlannerAgent } from '../agents/plannerAgent';
 import { DeployerAgent } from '../agents/deployerAgent';
 import { storageV2 } from '../storage-v2';
+import { isAuthenticated } from '../azureAuth';
 
 const router = express.Router();
+
+// Apply authentication middleware to all routes
+router.use(isAuthenticated);
 
 const planner = new PlannerAgent();
 const deployer = new DeployerAgent();
