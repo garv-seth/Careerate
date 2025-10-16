@@ -16,6 +16,8 @@ export default function IntegrationsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["/api/integrations/catalog"],
     retry: false,
+    staleTime: 60_000,
+    gcTime: 5 * 60_000,
     queryFn: async () => {
       try {
         const res = await fetch("/api/integrations/catalog", { credentials: "include" });
@@ -63,7 +65,9 @@ export default function IntegrationsPage() {
   const mapStatus = new Map<string, { ready: boolean; missing: string[] }>();
   (data?.status || []).forEach((s: any) => mapStatus.set(s.id, s));
 
-  const grouped = (data?.integrations || []).reduce((acc: any, i: any) => {
+  // Filter out providers already represented in CloudAccountsManager cards
+  const hiddenIds = new Set(['aws','azure','gcp']);
+  const grouped = (data?.integrations || []).filter((i: any) => !hiddenIds.has(i.id)).reduce((acc: any, i: any) => {
     acc[i.category] = acc[i.category] || [];
     acc[i.category].push(i);
     return acc;

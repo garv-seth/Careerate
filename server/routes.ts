@@ -2625,59 +2625,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/integrations/gitlab/oauth/initiate", isAuthenticated, async (req, res) => {
     try {
-      const { redirectUri, scopes = ['api', 'read_user'], baseUrl } = req.body;
-      
-      const config = {
-        clientId: process.env.GITLAB_CLIENT_ID || 'demo-client-id',
-        clientSecret: process.env.GITLAB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: redirectUri || `${process.env.BASE_URL || 'http://localhost:5000'}/api/integrations/gitlab/oauth/callback`,
-        scopes,
-        baseUrl
-      };
+      const { redirectUri } = req.body;
+      const { authUrl, state } = await multiCloudOAuth.initiateGitLabOAuth(
+        redirectUri || `${process.env.BASE_URL || 'https://gocareerate.com'}/api/callback/gitlab`
+      );
 
-      const result = repositoryIntegrationService.initiateGitLabOAuth(config);
-      res.json(result);
+      if (req.session) (req.session as any).gitlabOAuthState = state;
+      res.json({ success: true, authUrl });
     } catch (error) {
       console.error('GitLab OAuth initiate error:', error);
       res.status(500).json({ message: "Failed to initiate GitLab OAuth" });
     }
   });
 
-  app.post("/api/integrations/gitlab/oauth/callback", isAuthenticated, async (req, res) => {
+  // GitLab OAuth callback (GET redirect from GitLab)
+  app.get("/api/callback/gitlab", async (req, res) => {
     try {
-      const userId = getUserId(req);
-      const { code, state, baseUrl } = req.body;
-      
-      const config = {
-        clientId: process.env.GITLAB_CLIENT_ID || 'demo-client-id',
-        clientSecret: process.env.GITLAB_CLIENT_SECRET || 'demo-client-secret',
-        redirectUri: `${process.env.BASE_URL || 'http://localhost:5000'}/api/integrations/gitlab/oauth/callback`,
-        scopes: ['api', 'read_user'],
-        baseUrl
-      };
+      const { code, state } = req.query as { code?: string; state?: string };
+      if (!code) return res.redirect('/integrations?error=gitlab_missing_code');
 
-      const result = await repositoryIntegrationService.handleGitLabOAuthCallback(
-        code,
-        state,
-        config,
-        userId
-      );
-
-      if (result.success) {
-        res.json({
-          success: true,
-          integration: result.integration,
-          userInfo: result.userInfo
-        });
-      } else {
-        res.status(400).json({
-          success: false,
-          error: result.errorMessage
-        });
+      // Optional state verification if we stored it
+      if ((req.session as any)?.gitlabOAuthState && state !== (req.session as any).gitlabOAuthState) {
+        return res.redirect('/integrations?error=gitlab_invalid_state');
       }
-    } catch (error) {
+
+      const userId = getUserId(req);
+      if (!userId) {
+        // Require session; if not present, route to dashboard to sign in
+        return res.redirect('/dashboard?error=login_required');
+      }
+
+      const result = await multiCloudOAuth.handleGitLabCallback(code as string, userId);
+      if (result.success) {
+        return res.redirect('/integrations?gitlab=connected');
+      }
+      return res.redirect(`/integrations?error=${encodeURIComponent(result.errorMessage || 'gitlab_failed')}`);
+    } catch (error: any) {
       console.error('GitLab OAuth callback error:', error);
-      res.status(500).json({ message: "Failed to handle GitLab OAuth callback" });
+      res.redirect('/integrations?error=gitlab_callback_failed');
     }
   });
 
