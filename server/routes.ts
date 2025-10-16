@@ -2373,9 +2373,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return req.login(user, (err) => {
           if (err) {
             console.error('Session login error:', err);
-            return res.redirect('/dashboard?error=session_failed');
+            return res.redirect('/integrations?error=session_failed');
           }
-          res.redirect('/dashboard');
+          // After login, link integration as well so repos are accessible
+          multiCloudOAuth.handleGitHubCallback(code as string, (user as any).id)
+            .then(() => res.redirect('/integrations?github=connected'))
+            .catch((_e) => res.redirect('/integrations?error=github_link_failed'));
         });
       }
 
@@ -2410,7 +2413,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Get access token
       const secrets = await storage.getIntegrationSecrets(githubIntegration.id);
-      const accessTokenSecret = secrets.find(s => s.secretName === 'access_token');
+      const accessTokenSecret = secrets.find(s => s.secretName === 'access_token' || s.secretName === 'accessToken');
 
       if (!accessTokenSecret) {
         return res.status(401).json({ message: "No GitHub access token found" });

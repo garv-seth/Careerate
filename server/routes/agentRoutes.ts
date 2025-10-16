@@ -176,18 +176,12 @@ router.post('/deploy', isAuthenticated, async (req: Request, res: Response) => {
       sessionId,
       planId,
       autonomyLevel = 'supervised',
-      costLimit
+      costLimit,
+      sourceRepository,
+      repositoryUrl
     } = req.body;
 
-    const userId = req.user!.id;
-
-    // Validate input
-    if (!planId) {
-      return res.status(400).json({
-        success: false,
-        error: 'planId is required'
-      });
-    }
+    const userId = (req.user as any)!.id;
 
     // Create context
     const context = {
@@ -197,13 +191,33 @@ router.post('/deploy', isAuthenticated, async (req: Request, res: Response) => {
       costLimit
     };
 
-    // Execute deployment
-    const result = await deployerAgent.deploy(planId, context);
+    // If a planId is provided, deploy using existing plan from storage/service
+    if (planId) {
+      const result = await deployerAgent.deploy(planId as any, context as any);
+      return res.json({ success: true, deployment: result });
+    }
 
-    res.json({
-      success: true,
-      deployment: result
-    });
+    // Otherwise, if a repository URL is provided, synthesize a minimal plan and deploy from repo
+    const repo = repositoryUrl || sourceRepository;
+    if (!repo) {
+      return res.status(400).json({ success: false, error: 'planId or repositoryUrl/sourceRepository is required' });
+    }
+
+    // Generate a simple default plan for repo-based deploys
+    const defaultPlan: any = {
+      appName: `app-${Date.now()}`,
+      techStack: 'auto',
+      infrastructure: { compute: 'Azure Container Apps' },
+      region: process.env.DEFAULT_REGION || 'westus2',
+      port: 3000,
+      cpu: 0.5,
+      memory: '1Gi',
+      costEstimate: { monthly: 50, breakdown: { compute: 50 } },
+      reasoning: 'Auto-generated for repo-based deployment'
+    };
+
+    const result = await (deployerAgent as any).deploy(defaultPlan, userId, repo);
+    return res.json({ success: true, deployment: result });
   } catch (error) {
     console.error('Deploy error:', error);
     res.status(500).json({
