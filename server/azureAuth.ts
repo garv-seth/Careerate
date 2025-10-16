@@ -413,6 +413,11 @@ export async function setupAuth(app: Express) {
       const { multiCloudOAuth } = await import('./services/multiCloudOAuth');
       await multiCloudOAuth.handleGitHubCallback(code, dbUser.id);
 
+      // Store GitHub token in session for backwards compatibility
+      if (req.session) {
+        (req.session as any).githubToken = tokenData.access_token;
+      }
+
       // Create session
       req.login(dbUser, (err) => {
         if (err) {

@@ -46,7 +46,8 @@
       "Bash(npm run test:e2e:prod:*)",
       "Bash(tsx scripts/test-deployment-agent.ts:*)",
       "Bash(npx tsx:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(Select-Object -First 200)"
     ],
     "deny": [],
     "ask": []

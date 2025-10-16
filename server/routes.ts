@@ -3794,28 +3794,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // List GitHub repositories
-  app.get("/api/integrations/github/repositories", isAuthenticated, async (req, res) => {
-    try {
-      const token = req.session ? (req.session as any).githubToken : null;
-
-      if (!token) {
-        return res.status(401).json({ message: "GitHub not connected" });
-      }
-
-      const { githubService } = await import("./services/githubService");
-      const repositories = await githubService.listRepositories(token);
-
-      res.json({ repositories });
-    } catch (error) {
-      console.error('List repositories error:', error);
-      res.status(500).json({
-        message: "Failed to fetch repositories",
-        correlationId: (res as any).locals?.requestId
-      });
-    }
-  });
-
   // Link GitHub repository to project
   app.post("/api/integrations/github/link", isAuthenticated, async (req, res) => {
     try {
