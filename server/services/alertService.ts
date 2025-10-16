@@ -6,6 +6,8 @@
 
 import { storage } from "../storage";
 import type { AlertChannel, AlertRule, Deployment } from "@shared/schema";
+import sgMail from '@sendgrid/mail';
+import twilio from 'twilio';
 
 interface AlertPayload {
   title: string;
@@ -165,24 +167,31 @@ export class AlertService {
    * Send Email alert
    */
   private async sendEmailAlert(alert: AlertPayload, config: EmailConfig): Promise<void> {
-    // For now, log email (in production, use SendGrid/AWS SES)
-    console.log('📧 Email Alert:', {
-      to: config.to,
-      subject: `[${alert.severity.toUpperCase()}] ${alert.title}`,
-      body: alert.message,
-      metadata: alert.metadata
-    });
+    if (!process.env.SENDGRID_API_KEY) {
+      console.warn('⚠️  SendGrid API key not configured, skipping email alert');
+      return;
+    }
 
-    // TODO: Integrate with SendGrid or AWS SES
-    // Example with SendGrid:
-    // const sgMail = require('@sendgrid/mail');
-    // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    // await sgMail.send({
-    //   to: config.to,
-    //   from: config.from || 'alerts@careerate.com',
-    //   subject: `[${alert.severity.toUpperCase()}] ${alert.title}`,
-    //   html: this.generateEmailHTML(alert)
-    // });
+    try {
+      // Initialize SendGrid
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+      // Send email
+      await sgMail.send({
+        to: config.to,
+        from: config.from || 'alerts@careerate.com',
+        subject: `[${alert.severity.toUpperCase()}] ${alert.title}`,
+        html: this.generateEmailHTML(alert)
+      });
+
+      console.log('📧 Email Alert sent successfully:', {
+        to: config.to,
+        subject: `[${alert.severity.toUpperCase()}] ${alert.title}`
+      });
+    } catch (error) {
+      console.error('❌ Failed to send email via SendGrid:', error);
+      throw error;
+    }
   }
 
   /**
@@ -214,22 +223,45 @@ export class AlertService {
   }
 
   /**
-   * Send SMS alert (placeholder)
+   * Send SMS alert via Twilio
    */
   private async sendSMSAlert(alert: AlertPayload, config: any): Promise<void> {
-    console.log('📱 SMS Alert:', {
-      to: config.phoneNumber,
-      message: `[${alert.severity.toUpperCase()}] ${alert.title}: ${alert.message}`
-    });
-    
-    // TODO: Integrate with Twilio
-    // const twilio = require('twilio');
-    // const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
-    // await client.messages.create({
-    //   to: config.phoneNumber,
-    //   from: process.env.TWILIO_PHONE,
-    //   body: `[${alert.severity.toUpperCase()}] ${alert.title}: ${alert.message}`
-    // });
+    if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+      console.warn('⚠️  Twilio credentials not configured, skipping SMS alert');
+      return;
+    }
+
+    if (!config.phoneNumber) {
+      console.warn('⚠️  No phone number configured for SMS alert');
+      return;
+    }
+
+    try {
+      // Initialize Twilio client
+      const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+      // Get Twilio phone number from config or environment
+      const fromPhone = config.fromPhone || process.env.TWILIO_PHONE_NUMBER;
+
+      if (!fromPhone) {
+        throw new Error('Twilio phone number not configured');
+      }
+
+      // Send SMS
+      await client.messages.create({
+        to: config.phoneNumber,
+        from: fromPhone,
+        body: `[${alert.severity.toUpperCase()}] ${alert.title}: ${alert.message}`
+      });
+
+      console.log('📱 SMS Alert sent successfully:', {
+        to: config.phoneNumber,
+        message: alert.title
+      });
+    } catch (error) {
+      console.error('❌ Failed to send SMS via Twilio:', error);
+      throw error;
+    }
   }
 
   /**

@@ -38,7 +38,7 @@ export function AutonomyLevelModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl glass-pane border-foreground/20">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col glass-pane border-foreground/20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-foreground">
             Choose Agent Autonomy Level
@@ -48,16 +48,17 @@ export function AutonomyLevelModal({
           </DialogDescription>
         </DialogHeader>
 
-        <RadioGroup
-          value={selectedLevel}
-          onValueChange={(value: any) => {
-            setSelectedLevel(value);
-            if (value !== 'fully-autonomous') {
-              setAcceptedRisk(false);
-            }
-          }}
-          className="mt-4 grid gap-4 md:grid-cols-2"
-        >
+        <div className="overflow-y-auto pr-2 -mr-2 flex-1">
+          <RadioGroup
+            value={selectedLevel}
+            onValueChange={(value: any) => {
+              setSelectedLevel(value);
+              if (value !== 'fully-autonomous') {
+                setAcceptedRisk(false);
+              }
+            }}
+            className="mt-4 grid gap-4 md:grid-cols-2"
+          >
           {/* Supervised */}
           <Label
             htmlFor="supervised"
@@ -183,10 +184,11 @@ export function AutonomyLevelModal({
               )}
             </div>
           </Label>
-        </RadioGroup>
+          </RadioGroup>
+        </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between mt-6 pt-4 border-t border-foreground/10">
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-foreground/10 flex-shrink-0">
           <Button
             variant="outline"
             onClick={onClose}
@@ -204,7 +206,7 @@ export function AutonomyLevelModal({
         </div>
 
         {/* Footer Note */}
-        <p className="text-xs text-foreground/50 text-center mt-2">
+        <p className="text-xs text-foreground/50 text-center mt-2 flex-shrink-0">
           You can change this setting anytime in Settings or before each deployment.
         </p>
       </DialogContent>

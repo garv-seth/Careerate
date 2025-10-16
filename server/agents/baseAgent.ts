@@ -7,6 +7,7 @@
 
 import { kernelConfig, agentLogger, estimateAICost, estimateTokens } from './kernel.config';
 import { storageV2 } from '../storage-v2';
+import { alertService } from '../services/alertService';
 
 export interface AgentContext {
   userId: string;
@@ -100,6 +101,9 @@ export abstract class BaseAgent {
           requiresApproval: true
         });
 
+        // Send notification to user about pending approval
+        await this.notifyUserApprovalNeeded(context, action, actionRecord.id);
+
         // Return early - frontend will show approval modal
         return {
           success: false,
@@ -148,6 +152,9 @@ export abstract class BaseAgent {
         actionId: actionRecord.id,
         executionTime
       });
+
+      // Notify user about completion (only in fully-autonomous mode)
+      await this.notifyActionCompleted(context, action, result);
 
       return {
         success: true,
@@ -367,6 +374,85 @@ export abstract class BaseAgent {
     }, 0);
 
     return totalCost;
+  }
+
+  /**
+   * Notify user that approval is needed for an action
+   */
+  private async notifyUserApprovalNeeded(
+    context: AgentContext,
+    action: AgentAction,
+    actionId: string
+  ): Promise<void> {
+    try {
+      // Get user's configured alert channels from storage
+      const user = await storageV2.getUser(context.userId);
+      if (!user) {
+        agentLogger.warn(`[${this.agentType}] User not found for notification: ${context.userId}`);
+        return;
+      }
+
+      // Send notification through available channels
+      // Note: In production, fetch user's preferred notification channels from database
+      const channelIds: string[] = []; // TODO: Load from user settings
+
+      await alertService.sendAlert(
+        {
+          title: `Action Approval Required - ${this.agentType}`,
+          message: `${action.description}\n\nRisk: ${action.riskLevel}\nCost Impact: $${(action.costImpact / 100).toFixed(2)}\n\nReasoning: ${action.reasoning}`,
+          severity: action.riskLevel === 'high' ? 'critical' : 'warning',
+          projectId: context.projectId || context.deploymentId || context.sessionId,
+          metadata: { actionId, action, autonomyLevel: context.autonomyLevel },
+          actionUrl: `https://gocareerate.com/agent?actionId=${actionId}`
+        },
+        channelIds
+      );
+
+      agentLogger.info(`[${this.agentType}] Approval notification sent`, { actionId });
+    } catch (error) {
+      agentLogger.error(`[${this.agentType}] Failed to send approval notification`, {
+        error: error instanceof Error ? error.message : error
+      });
+      // Don't throw - notification failure shouldn't block the action
+    }
+  }
+
+  /**
+   * Notify user about completed action (for fully-autonomous mode)
+   */
+  protected async notifyActionCompleted(
+    context: AgentContext,
+    action: AgentAction,
+    result: any
+  ): Promise<void> {
+    // Only notify in fully-autonomous mode
+    if (context.autonomyLevel !== 'fully-autonomous') {
+      return;
+    }
+
+    try {
+      const user = await storageV2.getUser(context.userId);
+      if (!user) return;
+
+      const channelIds: string[] = []; // TODO: Load from user settings
+
+      await alertService.sendAlert(
+        {
+          title: `Action Completed - ${this.agentType}`,
+          message: `${action.description}\n\nCompleted successfully in fully-autonomous mode.\n\nReasoning: ${action.reasoning}`,
+          severity: 'info',
+          projectId: context.projectId || context.deploymentId || context.sessionId,
+          metadata: { action, result, autonomyLevel: context.autonomyLevel }
+        },
+        channelIds
+      );
+
+      agentLogger.info(`[${this.agentType}] Completion notification sent`);
+    } catch (error) {
+      agentLogger.error(`[${this.agentType}] Failed to send completion notification`, {
+        error: error instanceof Error ? error.message : error
+      });
+    }
   }
 
   /**
