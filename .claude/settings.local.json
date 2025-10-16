@@ -36,7 +36,10 @@
       "Bash(\"AZURE_RESOURCE_GROUP=Careerate\" )",
       "Bash(\"AZURE_MANAGED_ENV_ID=/subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/managedEnvironments/careerate-agents-env\" )",
       "Bash(\"AZURE_CONTAINER_REGISTRY=careerateacr\" )",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Bash(npm start)",
+      "Bash(timeout:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []
