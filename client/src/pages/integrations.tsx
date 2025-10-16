@@ -7,6 +7,7 @@ import { CloudAccountsManager } from "@/components/CloudAccountsManager";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { Cloud, Github, GitBranch, Database, Activity, Bell, MessageSquare, Mail, Monitor } from "lucide-react";
 
 export default function IntegrationsPage() {
   const queryClient = useQueryClient();
@@ -99,27 +100,44 @@ export default function IntegrationsPage() {
                   const ready = st?.ready;
                   const isGitHub = i.id === 'github';
 
-                  const getIntegrationLogo = (id: string) => {
-                    const logoMap: Record<string, string> = {
-                      'aws': '/aws-logo.svg',
-                      'azure': '/azure-logo.svg',
-                      'gcp': '/gcp-logo.svg',
-                      'github': '/github-logo.svg',
-                      'vercel': '/vercel-logo.svg',
-                      'datadog': '/datadog-logo.svg',
-                      'pagerduty': '/pagerduty-logo.svg',
-                      'oracle': '/oracle-logo.svg',
+                  const getIntegrationIcon = (id: string) => {
+                    const iconMap: Record<string, React.ElementType> = {
+                      // Cloud providers
+                      'aws': Cloud,
+                      'azure': Cloud,
+                      'gcp': Cloud,
+                      'oracle': Cloud,
+                      'vercel': Cloud,
+                      // Source control
+                      'github': Github,
+                      'gitlab': GitBranch,
+                      // Databases
+                      'mongodb': Database,
+                      'neon': Database,
+                      'railway': Database,
+                      // Monitoring
+                      'datadog': Activity,
+                      'pagerduty': Bell,
+                      'newrelic': Monitor,
+                      'opentelemetry': Activity,
+                      // Notifications
+                      'slack': MessageSquare,
+                      'discord': MessageSquare,
+                      'teams': MessageSquare,
+                      'sendgrid': Mail,
                     };
-                    return logoMap[id] || null;
+                    return iconMap[id] || Cloud;
                   };
+
+                  const IconComponent = getIntegrationIcon(i.id);
 
                   return (
                     <Card key={i.id} className="glass-pane rounded-2xl hover:border-primary/50 transition-colors">
                       <CardHeader className="pb-2">
                         <CardTitle className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-2">
-                            {getIntegrationLogo(i.id) ? (
-                              <img src={getIntegrationLogo(i.id)} alt={i.name} className="w-6 h-6" />
+                            {IconComponent ? (
+                              <IconComponent className="w-6 h-6 text-foreground" />
                             ) : (
                               <div className="w-6 h-6 bg-primary/20 rounded flex items-center justify-center">
                                 <span className="text-xs font-bold text-primary">{i.name.charAt(0)}</span>

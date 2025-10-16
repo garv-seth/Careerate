@@ -3,9 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { SendHorizontal, Loader2, AlertCircle, CheckCircle2, DollarSign } from 'lucide-react';
+import { SendHorizontal, Loader2, AlertCircle, CheckCircle2, DollarSign, Github, GitBranch } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AutonomyLevelModal } from './AutonomyLevelModal';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Message {
   role: 'user' | 'agent';
@@ -13,6 +14,13 @@ interface Message {
   timestamp: Date;
   type?: 'plan' | 'progress' | 'complete' | 'error';
   data?: any;
+}
+
+interface Repository {
+  provider: 'github' | 'gitlab';
+  id: string;
+  name: string;
+  url: string;
 }
 
 export function DeploymentChatUI() {
@@ -23,6 +31,9 @@ export function DeploymentChatUI() {
   const [currentPlan, setCurrentPlan] = useState<any>(null);
   const [showAutonomyModal, setShowAutonomyModal] = useState(false);
   const [autonomyLevel, setAutonomyLevel] = useState<'supervised' | 'semi-autonomous' | 'fully-autonomous'>('supervised');
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [selectedRepo, setSelectedRepo] = useState<string>('');
+  const [loadingRepos, setLoadingRepos] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -36,6 +47,44 @@ export function DeploymentChatUI() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Fetch repositories on mount
+  useEffect(() => {
+    fetchRepositories();
+  }, []);
+
+  const fetchRepositories = async () => {
+    setLoadingRepos(true);
+    try {
+      const res = await fetch('/api/github/repos', { credentials: 'include' });
+
+      if (!res.ok) {
+        // Not connected to GitHub/GitLab yet
+        return;
+      }
+
+      const data = await res.json();
+      const repos: Repository[] = [];
+
+      // GitHub repos
+      if (data && Array.isArray(data)) {
+        data.forEach((repo: any) => {
+          repos.push({
+            provider: 'github',
+            id: repo.id?.toString() || repo.name,
+            name: repo.name || repo.full_name,
+            url: repo.html_url || repo.url
+          });
+        });
+      }
+
+      setRepositories(repos);
+    } catch (error) {
+      console.error('Failed to fetch repositories:', error);
+    } finally {
+      setLoadingRepos(false);
+    }
+  };
 
   const createSession = async () => {
     try {
@@ -62,23 +111,30 @@ export function DeploymentChatUI() {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && !selectedRepo) || isLoading) return;
+
+    // Use selected repo or manual input
+    const finalInput = selectedRepo || input;
+    const selectedRepoData = repositories.find(r => `${r.provider}:${r.name}` === selectedRepo);
 
     const userMessage: Message = {
       role: 'user',
-      content: input,
+      content: selectedRepoData
+        ? `Deploy ${selectedRepoData.name} from ${selectedRepoData.provider === 'github' ? 'GitHub' : 'GitLab'}`
+        : input,
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const userInput = input;
+    const userInput = selectedRepoData?.url || input;
     setInput('');
+    setSelectedRepo('');
     setIsLoading(true);
 
     try {
-      // Extract GitHub URL if present (optional)
-      const githubUrlMatch = userInput.match(/https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w-]+/);
-      const repoUrl = githubUrlMatch ? githubUrlMatch[0] : undefined;
+      // Extract repository URL
+      const githubUrlMatch = userInput.match(/https?:\/\/(www\.)?(github\.com|gitlab\.com)\/[\w-]+\/[\w-]+/);
+      const repoUrl = githubUrlMatch ? githubUrlMatch[0] : (selectedRepoData?.url || undefined);
 
       // Call NEW Deployment Planner API (GPT-4o with direct OpenAI)
       const res = await fetch('/api/deploy/plan', {
@@ -240,23 +296,64 @@ export function DeploymentChatUI() {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="glass-pane rounded-2xl p-4 mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-foreground">AI Deployment Agent</h2>
-          <p className="text-sm text-foreground/60">
-            Describe your deployment in natural language
-          </p>
+      <div className="glass-pane rounded-2xl p-4 mb-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-foreground">AI Deployment Agent</h2>
+            <p className="text-sm text-foreground/60">
+              Select a repository or describe your deployment
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowAutonomyModal(true)}
+            className="rounded-full"
+          >
+            {autonomyLevel === 'supervised' && '👁️ Supervised'}
+            {autonomyLevel === 'semi-autonomous' && '⚡ Semi-Autonomous'}
+            {autonomyLevel === 'fully-autonomous' && '🤖 Fully Autonomous'}
+          </Button>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowAutonomyModal(true)}
-          className="rounded-full"
-        >
-          {autonomyLevel === 'supervised' && '👁️ Supervised'}
-          {autonomyLevel === 'semi-autonomous' && '⚡ Semi-Autonomous'}
-          {autonomyLevel === 'fully-autonomous' && '🤖 Fully Autonomous'}
-        </Button>
+
+        {/* Repository Selector */}
+        {repositories.length > 0 && (
+          <div className="flex items-center gap-2">
+            <GitBranch className="w-4 h-4 text-foreground/60" />
+            <Select value={selectedRepo} onValueChange={setSelectedRepo}>
+              <SelectTrigger className="flex-1 rounded-xl border-foreground/10">
+                <SelectValue placeholder="Select a repository (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                {repositories.map((repo) => (
+                  <SelectItem key={`${repo.provider}:${repo.name}`} value={`${repo.provider}:${repo.name}`}>
+                    <div className="flex items-center gap-2">
+                      {repo.provider === 'github' ? (
+                        <Github className="w-4 h-4" />
+                      ) : (
+                        <GitBranch className="w-4 h-4" />
+                      )}
+                      <span>{repo.name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {loadingRepos && (
+          <div className="text-sm text-foreground/60 flex items-center gap-2">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Loading repositories...
+          </div>
+        )}
+
+        {!loadingRepos && repositories.length === 0 && (
+          <div className="text-sm text-foreground/60">
+            💡 Connect <a href="/integrations" className="text-orange-500 hover:underline">GitHub or GitLab</a> to see your repositories
+          </div>
+        )}
       </div>
 
       {/* Messages */}
@@ -419,7 +516,7 @@ export function DeploymentChatUI() {
         />
         <Button
           onClick={handleSend}
-          disabled={!input.trim() || isLoading}
+          disabled={(!input.trim() && !selectedRepo) || isLoading}
           size="icon"
           className="rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white h-12 w-12"
         >
