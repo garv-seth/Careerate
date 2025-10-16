@@ -39,7 +39,8 @@
       "Bash(gh run view:*)",
       "Bash(npm start)",
       "Bash(timeout:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(gh run watch:*)"
     ],
     "deny": [],
     "ask": []
