@@ -71,8 +71,9 @@ export class AgentOrchestrator {
 
   /**
    * Ensure orchestrator is initialized (auto-init if enabled)
+   * Made public so routes can call it
    */
-  private async ensureInitialized(): Promise<void> {
+  async ensureInitialized(): Promise<void> {
     if (!this.initialized && this.config.enableAutoInit) {
       await this.initialize();
     }

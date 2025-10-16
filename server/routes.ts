@@ -2003,6 +2003,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // INTEGRATIONS HUB API ENDPOINTS
   // =====================================================
 
+  // Get integrations catalog (all available integrations with status)
+  app.get("/api/integrations/catalog", async (req, res) => {
+    try {
+      const { INTEGRATIONS, getIntegrationStatus } = await import('./services/integrationsCatalog');
+      const statuses = await getIntegrationStatus();
+
+      res.json({
+        integrations: INTEGRATIONS,
+        status: statuses
+      });
+    } catch (error) {
+      console.error('Get integrations catalog error:', error);
+      res.status(500).json({
+        message: "Failed to get integrations catalog",
+        integrations: [],
+        status: []
+      });
+    }
+  });
+
   // Integration Management
   app.get("/api/integrations", isAuthenticated, async (req, res) => {
     try {
@@ -2337,22 +2357,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.redirect('/dashboard?error=github_user_failed');
       }
 
-      // Create or update user in our database
-      const user = await upsertUser({
-        sub: userInfo.id.toString(), // GitHub ID
-        email: userInfo.email,
-        name: userInfo.name || userInfo.login,
-        preferred_username: userInfo.login,
-      });
+      // Check if user is already authenticated (integration flow) or not (login flow)
+      const userId = getUserId(req);
 
-      // Establish session
-      req.login(user, (err) => {
-        if (err) {
-          console.error('Session login error:', err);
-          return res.redirect('/dashboard?error=session_failed');
-        }
-        res.redirect('/dashboard');
-      });
+      if (!userId) {
+        // Not logged in - this is a login flow, create user
+        const user = await upsertUser({
+          sub: `github-${userInfo.id}`,
+          email: userInfo.email,
+          name: userInfo.name || userInfo.login,
+          preferred_username: userInfo.login,
+        });
+
+        // Establish session
+        return req.login(user, (err) => {
+          if (err) {
+            console.error('Session login error:', err);
+            return res.redirect('/dashboard?error=session_failed');
+          }
+          res.redirect('/dashboard');
+        });
+      }
+
+      // User is already logged in - this is an integration flow
+      try {
+        await multiCloudOAuth.handleGitHubCallback(code as string, userId);
+
+        // Redirect to integrations page with success
+        res.redirect('/integrations?github=connected');
+      } catch (error) {
+        console.error('GitHub integration error:', error);
+        res.redirect('/integrations?error=github_failed');
+      }
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
       res.redirect('/dashboard?error=callback_failed');
