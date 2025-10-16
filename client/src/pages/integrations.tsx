@@ -18,6 +18,19 @@ export default function IntegrationsPage() {
     retry: false,
     staleTime: 60_000,
     gcTime: 5 * 60_000,
+  const { data: connectedData } = useQuery({
+    queryKey: ["/api/integrations/connected-services"],
+    retry: false,
+    queryFn: async () => {
+      try {
+        const res = await fetch('/api/integrations/connected-services', { credentials: 'include' });
+        if (!res.ok) return { connected: [] };
+        return res.json();
+      } catch {
+        return { connected: [] };
+      }
+    }
+  });
     queryFn: async () => {
       try {
         const res = await fetch("/api/integrations/catalog", { credentials: "include" });
@@ -64,6 +77,13 @@ export default function IntegrationsPage() {
 
   const mapStatus = new Map<string, { ready: boolean; missing: string[] }>();
   (data?.status || []).forEach((s: any) => mapStatus.set(s.id, s));
+  // Force mark connected providers as ready if backend reports them linked
+  (connectedData?.connected || []).forEach((id: string) => {
+    const existing = mapStatus.get(id);
+    if (existing) {
+      mapStatus.set(id, { ready: true, missing: [] });
+    }
+  });
 
   // Filter out providers already represented in CloudAccountsManager cards
   const hiddenIds = new Set(['aws','azure','gcp']);
@@ -164,6 +184,7 @@ export default function IntegrationsPage() {
 
                   const IconComponent = getIntegrationIcon(i.id);
 
+                  // Prefer local assets, fall back to brand SVGs via simple-icons CDN
                   const logoSrcById: Record<string, string> = {
                     aws: '/aws-logo.svg',
                     azure: '/azure-logo.svg',
@@ -172,7 +193,22 @@ export default function IntegrationsPage() {
                     datadog: '/datadog-logo.svg',
                     pagerduty: '/pagerduty-logo.svg',
                     vercel: '/vercel-logo.svg',
-                    oracle: '/oracle-logo.svg'
+                    oracle: '/oracle-logo.svg',
+                    gitlab: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/gitlab.svg',
+                    slack: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/slack.svg',
+                    discord: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/discord.svg',
+                    mongodb: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mongodb.svg',
+                    newrelic: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/newrelic.svg',
+                    grafana: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/grafana.svg',
+                    prometheus: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/prometheus.svg',
+                    stripe: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/stripe.svg',
+                    sendgrid: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/sendgrid.svg',
+                    twilio: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/twilio.svg',
+                    jira: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/jirasoftware.svg',
+                    notion: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/notion.svg',
+                    trello: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/trello.svg',
+                    docker: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/docker.svg',
+                    kubernetes: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/kubernetes.svg',
                   };
                   const logoSrc = logoSrcById[i.id];
 

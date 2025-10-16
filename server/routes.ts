@@ -2023,6 +2023,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Per-user connected services summary
+  app.get("/api/integrations/connected-services", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const integrations = await storage.getUserIntegrations(userId);
+      const connected = Array.from(new Set(integrations
+        .filter(i => i.status === 'active')
+        .map(i => i.service)));
+      res.json({ connected });
+    } catch (error) {
+      console.error('Get connected services error:', error);
+      res.status(500).json({ connected: [] });
+    }
+  });
+
   // Integration Management
   app.get("/api/integrations", isAuthenticated, async (req, res) => {
     try {
