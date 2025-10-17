@@ -3,6 +3,7 @@ import { useAgentSession } from '@/hooks/useAgentSession';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { AppShell } from '@/components/AppShell';
+import { useGitHubRepos } from '@/hooks/useGitHubRepos';
 
 interface Message {
   id: string;
@@ -304,6 +305,8 @@ export default function Agent() {
     }
   };
 
+  const { repos } = useGitHubRepos();
+
   return (
     <AppShell>
       <div className="min-h-screen bg-background">
@@ -379,17 +382,19 @@ export default function Agent() {
                   <label htmlFor="repo-select" className="text-sm font-medium text-foreground mb-2 block">
                     Source Repository (optional)
                   </label>
-                  <select
-                    id="repo-select"
-                    value={selectedRepositoryId}
-                    onChange={e => setSelectedRepositoryId(e.target.value)}
-                    className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground"
-                  >
-                    <option value="">None</option>
-                    {repositories.map(r => (
-                      <option key={r.id} value={r.id}>{r.fullName || r.name}</option>
-                    ))}
-                  </select>
+                  {repos && repos.length > 0 && (
+                    <select
+                      id="repo-select"
+                      value={selectedRepositoryId}
+                      onChange={e => setSelectedRepositoryId(e.target.value)}
+                      className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground"
+                    >
+                      <option value="">None</option>
+                      {repos.map(r => (
+                        <option key={r.id} value={r.id}>{r.fullName || r.name}</option>
+                      ))}
+                    </select>
+                  )}
                   <p className="text-xs text-muted-foreground mt-1">
                     If set, the deployer will use this repository as source.
                   </p>

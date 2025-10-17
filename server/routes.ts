@@ -2376,11 +2376,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
         (req.session as any).githubAccessToken = result.accessToken;
       }
 
+      // Upsert identity integration for GitHub
+      try {
+        const userId = getUserId(req);
+        const list = await storage.getUserIntegrations(userId);
+        const exists = list.find(i => i.type === 'identity' && i.service === 'github');
+        if (!exists) {
+          await storage.createIntegration({
+            userId,
+            projectId: null,
+            name: 'GitHub Account',
+            type: 'identity',
+            service: 'github',
+            category: 'identity',
+            connectionType: 'oauth',
+            status: 'active',
+            configuration: {},
+            endpoints: {},
+            permissions: [],
+            rateLimits: {},
+            healthCheck: { enabled: false, interval: 0, timeout: 0, retries: 0 },
+            isEnabled: true,
+            autoRotate: false,
+            metadata: {}
+          } as any);
+        }
+      } catch (e) {
+        console.warn('Failed to upsert GitHub identity integration (non-fatal):', e);
+      }
       return res.redirect('/integrations?github=connected');
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
       res.redirect('/integrations?error=callback_failed');
     }
+  });
+
+  // Diagnostics for integrations/env
+  app.get('/api/diagnostics/integrations', async (req, res) => {
+    const env = {
+      SESSION_SECRET: !!process.env.SESSION_SECRET,
+      DATABASE_URL: !!process.env.DATABASE_URL,
+      GITHUB_CLIENT_ID: !!process.env.GITHUB_CLIENT_ID,
+      GITHUB_CLIENT_SECRET: !!process.env.GITHUB_CLIENT_SECRET,
+      GITHUB_REDIRECT_URI: !!process.env.GITHUB_REDIRECT_URI,
+      AZURE_CLIENT_ID: !!process.env.AZURE_CLIENT_ID,
+      AZURE_CLIENT_SECRET: !!process.env.AZURE_CLIENT_SECRET,
+      AZURE_TENANT_ID: !!process.env.AZURE_TENANT_ID,
+    };
+    const session = { isAuthenticated: req.isAuthenticated?.() || false, user: (req as any).user || null };
+    let userIntegrations: any[] = [];
+    if (session.isAuthenticated) {
+      const userId = getUserId(req);
+      userIntegrations = await storage.getUserIntegrations(userId);
+    }
+    res.json({ env, session, userIntegrations });
   });
 
   // Get GitHub repositories for the authenticated user
@@ -2449,6 +2498,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Get GitHub repositories error:', error);
       res.status(500).json({ message: "Failed to fetch repositories" });
+    }
+  });
+
+  // Return authenticated GitHub user (uses stored token)
+  app.get("/api/github/user", isAuthenticated, async (req, res) => {
+    try {
+      const userId = getUserId(req);
+      const integrations = await storage.getUserIntegrations(userId);
+      const githubIntegration = integrations.find(i => i.service === 'github' && i.type === 'repository');
+
+      let accessToken: string | undefined;
+      if (githubIntegration) {
+        const secrets = await storage.getIntegrationSecrets(githubIntegration.id);
+        const accessTokenSecret = secrets.find(s => s.secretName === 'access_token' || s.secretName === 'accessToken');
+        if (accessTokenSecret) {
+          accessToken = await secretsManager.getSecret(accessTokenSecret.id, userId);
+        }
+      }
+      if (!accessToken && (req.session as any)?.githubAccessToken) {
+        accessToken = (req.session as any).githubAccessToken as string;
+      }
+      if (!accessToken) {
+        return res.status(404).json({ message: "GitHub not connected" });
+      }
+
+      const response = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Careerate'
+        }
+      });
+      if (!response.ok) {
+        return res.status(502).json({ message: 'Failed to fetch GitHub user' });
+      }
+      const ghUser = await response.json();
+      res.json({ login: ghUser.login, id: ghUser.id, name: ghUser.name, email: ghUser.email, avatar_url: ghUser.avatar_url });
+    } catch (e) {
+      console.error('Failed to load GitHub user', e);
+      res.status(500).json({ message: 'Failed to load GitHub user' });
     }
   });
 
@@ -4423,6 +4512,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const { INTEGRATIONS, getIntegrationStatus } = await import("./services/integrationsCatalog");
     const status = await getIntegrationStatus();
     res.json({ integrations: INTEGRATIONS, status });
+  });
+
+  // Azure discovery routes
+  app.get('/api/azure/subscriptions', isAuthenticated, async (_req, res) => {
+    try {
+      const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+      const list = await azureOAuth.listSubscriptions();
+      res.json({ subscriptions: list.map((s: any) => ({ subscriptionId: s.subscriptionId, displayName: s.displayName })) });
+    } catch (e) {
+      res.status(500).json({ subscriptions: [] });
+    }
+  });
+
+  app.get('/api/azure/resource-groups', isAuthenticated, async (req, res) => {
+    try {
+      const { subscriptionId } = req.query as { subscriptionId?: string };
+      if (!subscriptionId) return res.status(400).json({ resourceGroups: [] });
+      const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+      const list = await azureOAuth.listResourceGroups(subscriptionId);
+      res.json({ resourceGroups: list.map((g: any) => ({ name: g.name, location: g.location })) });
+    } catch (e) {
+      res.status(500).json({ resourceGroups: [] });
+    }
+  });
+
+  app.get('/api/azure/container-apps', isAuthenticated, async (req, res) => {
+    try {
+      const { subscriptionId, resourceGroup } = req.query as { subscriptionId?: string; resourceGroup?: string };
+      if (!subscriptionId) return res.status(400).json({ containerApps: [] });
+      const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+      const list = await azureOAuth.listContainerApps(subscriptionId, resourceGroup);
+      res.json({ containerApps: list.map((a: any) => ({ id: a.id, name: a.name, location: a.location, resourceGroup: a.id?.split('/resourceGroups/')[1]?.split('/')[0] })) });
+    } catch (e) {
+      res.status(500).json({ containerApps: [] });
+    }
+  });
+
+  app.get('/api/azure/registries', isAuthenticated, async (req, res) => {
+    try {
+      const { subscriptionId, resourceGroup } = req.query as { subscriptionId?: string; resourceGroup?: string };
+      if (!subscriptionId) return res.status(400).json({ registries: [] });
+      const { azureOAuth } = await import('./services/cloudOAuth/azureOAuth');
+      const list = await azureOAuth.listContainerRegistries(subscriptionId, resourceGroup);
+      res.json({ registries: list.map((r: any) => ({ id: r.id, name: r.name, location: r.location, resourceGroup: r.id?.split('/resourceGroups/')[1]?.split('/')[0] })) });
+    } catch (e) {
+      res.status(500).json({ registries: [] });
+    }
   });
 
   // Preflight validation and plan

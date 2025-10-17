@@ -17,6 +17,23 @@ export class AzureOAuth {
   private clientId: string;
   private clientSecret: string;
   private redirectUri: string;
+  
+  // App registration flow (client credentials) for discovery
+  private async getAppToken(): Promise<string> {
+    const clientId = process.env.AZURE_CLIENT_ID || this.clientId;
+    const clientSecret = process.env.AZURE_CLIENT_SECRET || this.clientSecret;
+    const tenantId = process.env.AZURE_TENANT_ID || 'common';
+    if (!clientId || !clientSecret) throw new Error('Azure OAuth not configured');
+    const params = new URLSearchParams();
+    params.set('grant_type', 'client_credentials');
+    params.set('client_id', clientId);
+    params.set('client_secret', clientSecret);
+    params.set('scope', 'https://management.azure.com/.default');
+    const resp = await fetch(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`, { method: 'POST', body: params });
+    const json = await resp.json();
+    if (!resp.ok) throw new Error(json.error_description || 'Failed to get Azure app token');
+    return json.access_token;
+  }
 
   constructor() {
     this.clientId = process.env.AZURE_OAUTH_CLIENT_ID || process.env.AZURE_CLIENT_ID || '';
@@ -229,6 +246,56 @@ export class AzureOAuth {
     }
   }
 
+  // Public discovery methods used by API routes (client credentials)
+  async listSubscriptions(): Promise<any[]> {
+    try {
+      const token = await this.getAppToken();
+      const r = await fetch('https://management.azure.com/subscriptions?api-version=2020-01-01', { headers: { Authorization: `Bearer ${token}` } });
+      const j = await r.json();
+      return j.value || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async listResourceGroups(subscriptionId: string): Promise<any[]> {
+    try {
+      const token = await this.getAppToken();
+      const r = await fetch(`https://management.azure.com/subscriptions/${subscriptionId}/resourcegroups?api-version=2021-04-01`, { headers: { Authorization: `Bearer ${token}` } });
+      const j = await r.json();
+      return j.value || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async listContainerApps(subscriptionId: string, resourceGroup?: string): Promise<any[]> {
+    try {
+      const token = await this.getAppToken();
+      const url = resourceGroup
+        ? `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.App/containerApps?api-version=2022-11-01`
+        : `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.App/containerApps?api-version=2022-11-01`;
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      const j = await r.json();
+      return j.value || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  async listContainerRegistries(subscriptionId: string, resourceGroup?: string): Promise<any[]> {
+    try {
+      const token = await this.getAppToken();
+      const url = resourceGroup
+        ? `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.ContainerRegistry/registries?api-version=2023-01-01-preview`
+        : `https://management.azure.com/subscriptions/${subscriptionId}/providers/Microsoft.ContainerRegistry/registries?api-version=2023-01-01-preview`;
+      const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      const j = await r.json();
+      return j.value || [];
+    } catch (e) {
+      return [];
+    }
+  }
   /**
    * Get user's Azure subscriptions
    */

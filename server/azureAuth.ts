@@ -284,8 +284,40 @@ export async function setupAuth(app: Express) {
           console.error('Session login error:', err);
           return res.status(500).json({ error: 'Login failed', details: err.message });
         }
-        console.log('Session login successful, redirecting to /');
-        res.redirect('/');
+      console.log('Session login successful, ensuring identity integration...');
+      try {
+        const { storage } = await import('./storage');
+        const userId = (dbUser as any).id;
+        // Upsert identity integration for Microsoft
+        const existing = await storage.getUserIntegrations(userId).then(list => list.find(i => i.type === 'identity' && i.service === 'microsoft'));
+        if (!existing) {
+          await storage.createIntegration({
+            userId,
+            projectId: null,
+            name: 'Microsoft Account',
+            type: 'identity',
+            service: 'microsoft',
+            category: 'identity',
+            connectionType: 'oauth',
+            status: 'active',
+            configuration: {
+              upn: payload.preferred_username || payload.email,
+              name: payload.name,
+            },
+            endpoints: {},
+            permissions: [],
+            rateLimits: {},
+            healthCheck: { enabled: false, interval: 0, timeout: 0, retries: 0 },
+            isEnabled: true,
+            autoRotate: false,
+            metadata: {}
+          } as any);
+        }
+      } catch (e) {
+        console.warn('Failed to upsert Microsoft identity integration (non-fatal):', e);
+      }
+      console.log('Redirecting to /dashboard');
+      res.redirect('/dashboard');
       });
 
     } catch (error) {
@@ -344,95 +376,8 @@ export async function setupAuth(app: Express) {
     res.redirect(authUrl);
   });
 
-  // GitHub OAuth callback
-  app.get("/api/callback/github", async (req, res) => {
-    console.log('=== GitHub OAuth Callback ===');
-    const { code, error, error_description } = req.query as { code?: string; error?: string; error_description?: string };
-
-    if (error) {
-      console.error('GitHub OAuth error received:', { error, error_description });
-      return res.redirect(`/integrations?error=${encodeURIComponent(error_description || error)}`);
-    }
-
-    if (!code) {
-      return res.redirect('/integrations?error=missing_code');
-    }
-
-    try {
-      // Get GitHub user info first
-      const clientId = process.env.GITHUB_CLIENT_ID || await keyVaultService.getSecret('GITHUB-CLIENT-ID');
-      const clientSecret = process.env.GITHUB_CLIENT_SECRET || await keyVaultService.getSecret('GITHUB-CLIENT-SECRET');
-      const redirectUri = process.env.GITHUB_REDIRECT_URI || await keyVaultService.getSecret('GITHUB-REDIRECT-URI');
-
-      if (!clientId || !clientSecret) {
-        return res.redirect('/integrations?error=github_not_configured');
-      }
-
-      // Exchange code for token
-      const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          client_id: clientId,
-          client_secret: clientSecret,
-          code,
-          redirect_uri: redirectUri
-        })
-      });
-
-      const tokenData = await tokenResponse.json();
-
-      if (!tokenData.access_token) {
-        return res.redirect('/integrations?error=github_token_failed');
-      }
-
-      // Get user info
-      const userResponse = await fetch('https://api.github.com/user', {
-        headers: {
-          'Authorization': `Bearer ${tokenData.access_token}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-
-      const userInfo = await userResponse.json();
-
-      // Create or find user
-      const dbUser = await upsertUser({
-        sub: userInfo.id.toString(),
-        preferred_username: userInfo.login,
-        email: userInfo.email || `${userInfo.login}@github.local`,
-        given_name: userInfo.name?.split(' ')[0] || userInfo.login,
-        family_name: userInfo.name?.split(' ').slice(1).join(' ') || '',
-        name: userInfo.name || userInfo.login
-      });
-
-      // Store GitHub integration
-      const { multiCloudOAuth } = await import('./services/multiCloudOAuth');
-      await multiCloudOAuth.handleGitHubCallback(code, dbUser.id);
-
-      // Store GitHub token in session for backwards compatibility
-      if (req.session) {
-        (req.session as any).githubToken = tokenData.access_token;
-      }
-
-      // Create session
-      req.login(dbUser, (err) => {
-        if (err) {
-          console.error('GitHub session login error:', err);
-          return res.redirect('/integrations?error=session_failed');
-        }
-        console.log('GitHub session login successful, redirecting to dashboard');
-        res.redirect('/dashboard');
-      });
-
-    } catch (e: any) {
-      console.error('GitHub callback processing failed:', e);
-      return res.redirect(`/integrations?error=${encodeURIComponent(e.message)}`);
-    }
-  });
+  // GitHub OAuth callback is defined in server/routes.ts.
+  // This duplicate route caused session/login inconsistencies and 401s after GitHub connect.
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
