@@ -157,14 +157,68 @@ export class AgentOrchestrator {
    */
   async getUserActiveSessions(userId: string) {
     await this.ensureInitialized();
-    
+
     const sessions = await storageV2.getUserAgentSessions(userId);
     return sessions.filter(s => s.status === 'active');
   }
 
   /**
+   * Process a message in an agent session
+   */
+  async processMessage(sessionId: string, message: string): Promise<any> {
+    await this.ensureInitialized();
+
+    // Get session
+    const session = await this.getSession(sessionId);
+    if (!session) {
+      throw new Error(`Session not found: ${sessionId}`);
+    }
+
+    // Determine which agent to use based on session type
+    let response;
+    try {
+      switch (session.sessionType) {
+        case 'deployment':
+          // Use planner agent for deployment requests
+          const planner = await this.getAgent('planner');
+          response = await planner.analyze(message);
+          break;
+
+        case 'monitoring':
+          const monitor = await this.getAgent('monitor');
+          response = await monitor.analyzeMetrics(message);
+          break;
+
+        case 'cost-optimization':
+          const costOptimizer = await this.getAgent('cost-optimizer');
+          response = await costOptimizer.analyze(message);
+          break;
+
+        default:
+          // General purpose - use planner
+          const generalAgent = await this.getAgent('planner');
+          response = await generalAgent.analyze(message);
+      }
+
+      // Update session conversation history
+      await storageV2.updateAgentSession(sessionId, {
+        conversationHistory: [
+          ...session.conversationHistory,
+          { role: 'user', content: message, timestamp: new Date() },
+          { role: 'assistant', content: JSON.stringify(response), timestamp: new Date() }
+        ]
+      });
+
+      return response;
+    } catch (error) {
+      agentLogger.error(`Error processing message in session ${sessionId}:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Get or create agent instance
-   * 
+   *
    * Agents are lazy-loaded and cached
    */
   private async getAgent(agentType: string): Promise<any> {
@@ -180,43 +234,33 @@ export class AgentOrchestrator {
 
     switch (agentType) {
       case 'planner':
-        // Will be implemented in Phase 5
-        // const { PlannerAgent } = await import('./plannerAgent');
-        // agent = new PlannerAgent(kernelConfig);
-        agentLogger.warn('PlannerAgent not yet implemented');
-        agent = null;
+        const { PlannerAgent } = await import('./plannerAgent');
+        agent = new PlannerAgent();
+        agentLogger.info('PlannerAgent loaded');
         break;
 
       case 'deployer':
-        // Will be implemented in Phase 5
-        // const { DeployerAgent } = await import('./deployerAgent');
-        // agent = new DeployerAgent(kernelConfig);
-        agentLogger.warn('DeployerAgent not yet implemented');
-        agent = null;
+        const { DeployerAgent } = await import('./deployerAgent');
+        agent = new DeployerAgent();
+        agentLogger.info('DeployerAgent loaded');
         break;
 
       case 'monitor':
-        // Will be implemented in Phase 5
-        // const { MonitorAgent } = await import('./monitorAgent');
-        // agent = new MonitorAgent(kernelConfig);
-        agentLogger.warn('MonitorAgent not yet implemented');
-        agent = null;
+        const { MonitorAgent } = await import('./monitorAgent');
+        agent = new MonitorAgent();
+        agentLogger.info('MonitorAgent loaded');
         break;
 
       case 'healer':
-        // Will be implemented in Phase 5
-        // const { HealerAgent } = await import('./healerAgent');
-        // agent = new HealerAgent(kernelConfig);
-        agentLogger.warn('HealerAgent not yet implemented');
-        agent = null;
+        const { HealerAgent } = await import('./healerAgent');
+        agent = new HealerAgent();
+        agentLogger.info('HealerAgent loaded');
         break;
 
       case 'cost-optimizer':
-        // Will be implemented in Phase 5
-        // const { CostOptimizerAgent } = await import('./costOptimizerAgent');
-        // agent = new CostOptimizerAgent(kernelConfig);
-        agentLogger.warn('CostOptimizerAgent not yet implemented');
-        agent = null;
+        const { CostOptimizerAgent } = await import('./costOptimizerAgent');
+        agent = new CostOptimizerAgent();
+        agentLogger.info('CostOptimizerAgent loaded');
         break;
 
       default:
@@ -240,8 +284,7 @@ export class AgentOrchestrator {
     if (!agent) {
       throw new Error('Planner agent not available');
     }
-    // Will call agent.analyzeIntent(input, context) when implemented
-    return { message: 'Planner agent not yet implemented' };
+    return await agent.analyze(input, context);
   }
 
   /**
@@ -252,8 +295,7 @@ export class AgentOrchestrator {
     if (!agent) {
       throw new Error('Deployer agent not available');
     }
-    // Will call agent.execute(plan, context) when implemented
-    return { message: 'Deployer agent not yet implemented' };
+    return await agent.deploy(plan, context.userId, context.repositoryUrl);
   }
 
   /**
@@ -264,8 +306,7 @@ export class AgentOrchestrator {
     if (!agent) {
       throw new Error('Monitor agent not available');
     }
-    // Will call agent.watchDeployment(deploymentId) when implemented
-    return { message: 'Monitor agent not yet implemented' };
+    return await agent.getMetrics(deploymentId);
   }
 
   /**
@@ -276,8 +317,7 @@ export class AgentOrchestrator {
     if (!agent) {
       throw new Error('Healer agent not available');
     }
-    // Will call agent.diagnoseAndFix(deploymentId, issue) when implemented
-    return { message: 'Healer agent not yet implemented' };
+    return await agent.diagnoseAndFix(deploymentId, issue, { userId: 'system', sessionId: 'system', autonomyLevel: 'autonomous' });
   }
 
   /**
@@ -288,8 +328,7 @@ export class AgentOrchestrator {
     if (!agent) {
       throw new Error('Cost optimizer agent not available');
     }
-    // Will call agent.analyze(userId, deploymentId) when implemented
-    return { message: 'Cost optimizer agent not yet implemented' };
+    return await agent.analyzeCosts(userId, { userId, sessionId: 'system', autonomyLevel: 'autonomous' }, 'monthly');
   }
 
   /**
