@@ -1,0 +1,181 @@
+id: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/containerapps/careerate-web
+identity:
+  principalId: bd66c19a-feb0-4eaa-850d-ca4fe30a7e66
+  tenantId: bd436098-a352-4d8e-b029-849de3e6c5af
+  type: SystemAssigned
+location: West US 2
+name: careerate-web
+properties:
+  configuration:
+    activeRevisionsMode: Single
+    dapr: null
+    identitySettings: []
+    ingress:
+      additionalPortMappings: null
+      allowInsecure: false
+      clientCertificateMode: null
+      corsPolicy: null
+      customDomains:
+      - bindingType: SniEnabled
+        certificateId: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/managedEnvironments/careerate-agents-env/managedCertificates/gocareerate.com-careerat-250918030213
+        name: gocareerate.com
+      exposedPort: 0
+      external: true
+      fqdn: careerate-web.politetree-6f564ad5.westus2.azurecontainerapps.io
+      ipSecurityRestrictions: null
+      stickySessions: null
+      targetPort: 5000
+      traffic:
+      - latestRevision: true
+        weight: 100
+      transport: Auto
+    maxInactiveRevisions: 100
+    registries:
+    - identity: ''
+      passwordSecretRef: careerateacrazurecrio-careerateacr
+      server: careerateacr.azurecr.io
+      username: careerateacr
+    runtime: null
+    secrets:
+    - identity: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.ManagedIdentity/userAssignedIdentities/careerateIdentity
+      keyVaultUrl: https://CareeerateSecretsVault.vault.azure.net/secrets/PHI-4-ENDPOINT
+      name: phi-4-endpoint
+    - name: appinsights-connection-string
+    - identity: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.ManagedIdentity/userAssignedIdentities/careerateIdentity
+      keyVaultUrl: https://CareeerateSecretsVault.vault.azure.net/secrets/AZURE-OPENAI-ENDPOINT
+      name: azure-openai-endpoint
+    - identity: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.ManagedIdentity/userAssignedIdentities/careerateIdentity
+      keyVaultUrl: https://CareeerateSecretsVault.vault.azure.net/secrets/PHI-4-KEY
+      name: phi-4-key
+    - name: ai-hub-key
+    - identity: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.ManagedIdentity/userAssignedIdentities/careerateIdentity
+      keyVaultUrl: https://CareeerateSecretsVault.vault.azure.net/secrets/AZURE-OPENAI-KEY
+      name: azure-openai-key
+    - name: careerateacrazurecrio-careerateacr
+    - identity: system
+      keyVaultUrl: https://CareeerateSecretsVault.vault.azure.net/secrets/DATABASE-URL
+      name: database-url
+    - name: ai-hub-endpoint
+    service: null
+  customDomainVerificationId: 3CE77307286A904626CEBEE146F3AC998C5551B33BDBA51C17D73850A238749B
+  delegatedIdentities: []
+  environmentId: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/managedEnvironments/careerate-agents-env
+  eventStreamEndpoint: https://westus2.azurecontainerapps.dev/subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/containerApps/careerate-web/eventstream
+  latestReadyRevisionName: careerate-web--20251017053355
+  latestRevisionFqdn: careerate-web--20251017053355.politetree-6f564ad5.westus2.azurecontainerapps.io
+  latestRevisionName: careerate-web--20251017053355
+  managedEnvironmentId: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/managedEnvironments/careerate-agents-env
+  outboundIpAddresses:
+  - 20.115.194.124
+  - 20.115.194.128
+  - 4.149.180.200
+  - 4.149.180.226
+  - 4.149.180.199
+  - 4.149.180.180
+  - 4.149.180.182
+  - 4.149.180.147
+  - 4.149.180.173
+  - 4.149.180.193
+  - 4.149.180.197
+  - 4.149.176.15
+  - 20.115.194.137
+  - 20.64.134.21
+  - 172.179.51.54
+  - 4.155.95.38
+  - 20.3.46.41
+  - 20.3.35.8
+  - 4.155.93.184
+  - 20.115.194.126
+  - 20.29.134.80
+  - 20.29.134.79
+  - 20.29.134.41
+  - 20.29.134.75
+  - 20.29.132.146
+  - 20.29.134.12
+  - 20.69.82.220
+  - 20.69.83.13
+  - 4.149.134.120
+  - 4.149.134.146
+  - 4.149.133.111
+  - 4.149.134.145
+  - 4.149.133.205
+  - 4.149.133.144
+  - 4.149.132.135
+  - 4.149.132.138
+  - 4.149.133.20
+  - 4.149.135.62
+  - 20.69.83.5
+  - 20.29.139.120
+  - 4.246.51.190
+  - 4.149.66.153
+  - 4.242.107.55
+  - 4.154.251.118
+  - 4.246.4.169
+  - 20.69.83.46
+  - 20.115.200.188
+  - 20.115.201.160
+  - 20.115.201.51
+  - 20.115.201.152
+  - 20.115.201.28
+  - 20.115.201.167
+  - 4.149.231.14
+  provisioningState: Failed
+  runningStatus: Running
+  template:
+    containers:
+    - env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: '5000'
+      - name: WEBSITES_PORT
+        value: '5000'
+      - name: BASE_URL
+        value: https://gocareerate.com
+      - name: AZURE_KEY_VAULT_NAME
+        value: CareeerateSecretsVault
+      - name: AZURE_SUBSCRIPTION_ID
+        value: 46c583cc-1f11-4953-9502-d8d723fca7e9
+      - name: AZURE_RESOURCE_GROUP
+        value: Careerate
+      - name: AZURE_MANAGED_ENV_ID
+        value: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/managedEnvironments/careerate-agents-env
+      - name: AZURE_CONTAINER_REGISTRY
+        value: careerateacr
+      - name: APPINSIGHTS_ENABLED
+        value: 'true'
+      - name: GPT_4O_DEPLOYMENT
+        value: gpt-4o
+      - name: GPT_41_DEPLOYMENT
+        value: gpt-4
+      - name: GPT_4O_MINI_DEPLOYMENT
+        value: gpt-4o-mini
+      - name: PHI_4_DEPLOYMENT
+        value: phi-4
+      image: careerateacr.azurecr.io/careerate-app:194b874a94391b49a65e7582169cee84757ad86c
+      name: careerate-web
+      resources:
+        cpu: 0.5
+        ephemeralStorage: 2Gi
+        memory: 1Gi
+    initContainers: null
+    revisionSuffix: fix-20251017020143
+    scale:
+      cooldownPeriod: 300
+      maxReplicas: 3
+      minReplicas: 1
+      pollingInterval: 30
+      rules: null
+    serviceBinds: null
+    terminationGracePeriodSeconds: null
+    volumes: null
+  workloadProfileName: Consumption
+resourceGroup: Careerate
+systemData:
+  createdAt: '2025-10-10T09:17:29.3357328'
+  createdBy: Garvseth@outlook.com
+  createdByType: User
+  lastModifiedAt: '2025-10-17T09:01:45.847208'
+  lastModifiedBy: Garvseth@outlook.com
+  lastModifiedByType: User
+type: Microsoft.App/containerApps

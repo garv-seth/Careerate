@@ -1,0 +1,49 @@
+properties:
+  configuration:
+    secrets:
+    - name: appinsights-connection-string
+    - name: ai-hub-key
+    - name: careerateacrazurecrio-careerateacr
+    - identity: system
+      keyVaultUrl: https://CareeerateSecretsVault.vault.azure.net/secrets/DATABASE-URL
+      name: database-url
+    - name: ai-hub-endpoint
+  template:
+    containers:
+    - name: careerate-web
+      image: careerateacr.azurecr.io/careerate-app:194b874a94391b49a65e7582169cee84757ad86c
+      resources:
+        cpu: 0.5
+        memory: 1Gi
+      env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "5000"
+      - name: WEBSITES_PORT
+        value: "5000"
+      - name: BASE_URL
+        value: https://gocareerate.com
+      - name: AZURE_KEY_VAULT_NAME
+        value: CareeerateSecretsVault
+      - name: AZURE_SUBSCRIPTION_ID
+        value: 46c583cc-1f11-4953-9502-d8d723fca7e9
+      - name: AZURE_RESOURCE_GROUP
+        value: Careerate
+      - name: AZURE_MANAGED_ENV_ID
+        value: /subscriptions/46c583cc-1f11-4953-9502-d8d723fca7e9/resourceGroups/Careerate/providers/Microsoft.App/managedEnvironments/careerate-agents-env
+      - name: AZURE_CONTAINER_REGISTRY
+        value: careerateacr
+      - name: APPINSIGHTS_ENABLED
+        value: "true"
+      - name: GPT_4O_DEPLOYMENT
+        value: gpt-4o
+      - name: GPT_41_DEPLOYMENT
+        value: gpt-4
+      - name: GPT_4O_MINI_DEPLOYMENT
+        value: gpt-4o-mini
+      - name: PHI_4_DEPLOYMENT
+        value: phi-4
+    scale:
+      minReplicas: 1
+      maxReplicas: 3
