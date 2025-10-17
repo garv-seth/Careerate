@@ -71,98 +71,72 @@ export class KernelConfig {
     agentLogger.info('Initializing Semantic Kernel...');
 
     try {
-      // Load Claude Sonnet 4.5 configuration (best for complex agents/coding)
-      const claudeSonnetEndpoint = await keyVaultService.getSecret('AZURE-CLAUDE-ENDPOINT');
-      const claudeSonnetApiKey = await keyVaultService.getSecret('AZURE-CLAUDE-API-KEY');
+      // Load Anthropic Claude API configuration (use direct Anthropic API)
+      const anthropicApiKey = await keyVaultService.getSecret('ANTHROPIC-API-KEY');
 
-      if (claudeSonnetEndpoint && claudeSonnetApiKey) {
+      if (anthropicApiKey) {
+        // Claude Sonnet 4.5 via Anthropic API
         this.models.set('claude-sonnet-45', {
-          endpoint: claudeSonnetEndpoint,
-          apiKey: claudeSonnetApiKey,
-          modelId: 'claude-sonnet-4-5-20251015'
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          apiKey: anthropicApiKey,
+          modelId: 'claude-sonnet-4-5-20250514'
         });
-        agentLogger.info('✓ Claude Sonnet 4.5 configured ($3/$15 per M tokens)');
-      } else {
-        agentLogger.warn('⚠ Claude Sonnet 4.5 credentials not found in Key Vault');
-      }
+        agentLogger.info('✓ Claude Sonnet 4.5 configured via Anthropic API ($3/$15 per M tokens)');
 
-      // Load Claude Haiku 4.5 configuration (fast, cheap, near-frontier)
-      const claudeHaikuEndpoint = await keyVaultService.getSecret('AZURE-CLAUDE-HAIKU-ENDPOINT');
-      const claudeHaikuApiKey = await keyVaultService.getSecret('AZURE-CLAUDE-HAIKU-API-KEY');
-
-      if (claudeHaikuEndpoint && claudeHaikuApiKey) {
+        // Claude Haiku 4.5 via Anthropic API (same key, different model)
         this.models.set('claude-haiku-45', {
-          endpoint: claudeHaikuEndpoint,
-          apiKey: claudeHaikuApiKey,
-          modelId: 'claude-haiku-4-5-20251015'
+          endpoint: 'https://api.anthropic.com/v1/messages',
+          apiKey: anthropicApiKey,
+          modelId: 'claude-haiku-4-5-20250514'
         });
-        agentLogger.info('✓ Claude Haiku 4.5 configured ($1/$5 per M tokens - cheapest!)');
+        agentLogger.info('✓ Claude Haiku 4.5 configured via Anthropic API ($1/$5 per M tokens - cheapest!)');
       } else {
-        agentLogger.warn('⚠ Claude Haiku 4.5 credentials not found in Key Vault');
+        agentLogger.warn('⚠ Anthropic API key not found in Key Vault');
       }
 
-      // Load GPT-5 configuration (flagship reasoning model)
-      const gpt5Endpoint = await keyVaultService.getSecret('AZURE-GPT5-ENDPOINT');
-      const gpt5ApiKey = await keyVaultService.getSecret('AZURE-GPT5-API-KEY');
-      const gpt5Deployment = await keyVaultService.getSecret('AZURE-GPT5-DEPLOYMENT-NAME');
+      // Load Azure OpenAI configuration (use existing Azure OpenAI)
+      const azureOpenAIEndpoint = await keyVaultService.getSecret('AZURE-OPENAI-ENDPOINT');
+      const azureOpenAIKey = await keyVaultService.getSecret('AZURE-OPENAI-KEY');
 
-      if (gpt5Endpoint && gpt5ApiKey && gpt5Deployment) {
+      if (azureOpenAIEndpoint && azureOpenAIKey) {
+        // Use gpt-4o as flagship model (most capable OpenAI model available)
         this.models.set('gpt-5', {
-          endpoint: gpt5Endpoint,
-          apiKey: gpt5ApiKey,
-          deployment: gpt5Deployment,
-          modelId: 'gpt-5' // Flagship model
+          endpoint: azureOpenAIEndpoint,
+          apiKey: azureOpenAIKey,
+          deployment: 'gpt-4o',
+          modelId: 'gpt-4o'
         });
-        agentLogger.info('✓ GPT-5 configured (flagship)');
-      } else {
-        agentLogger.warn('⚠ GPT-5 credentials not found in Key Vault');
-      }
+        agentLogger.info('✓ GPT-4o configured via Azure OpenAI (flagship)');
 
-      // Load GPT-5 Mini configuration (faster, cheaper)
-      const gpt5MiniEndpoint = await keyVaultService.getSecret('AZURE-GPT5-MINI-ENDPOINT');
-      const gpt5MiniApiKey = await keyVaultService.getSecret('AZURE-GPT5-MINI-API-KEY');
-      const gpt5MiniDeployment = await keyVaultService.getSecret('AZURE-GPT5-MINI-DEPLOYMENT-NAME');
-
-      if (gpt5MiniEndpoint && gpt5MiniApiKey && gpt5MiniDeployment) {
+        // Use gpt-4o-mini as fast model
         this.models.set('gpt-5-mini', {
-          endpoint: gpt5MiniEndpoint,
-          apiKey: gpt5MiniApiKey,
-          deployment: gpt5MiniDeployment,
-          modelId: 'gpt-5-mini' // 2x faster, 1/3 price
+          endpoint: azureOpenAIEndpoint,
+          apiKey: azureOpenAIKey,
+          deployment: 'gpt-4o-mini',
+          modelId: 'gpt-4o-mini'
         });
-        agentLogger.info('✓ GPT-5 Mini configured (2x faster)');
+        agentLogger.info('✓ GPT-4o-mini configured via Azure OpenAI (2x faster)');
       } else {
-        agentLogger.warn('⚠ GPT-5 Mini credentials not found in Key Vault');
+        agentLogger.warn('⚠ Azure OpenAI credentials not found in Key Vault');
       }
 
-      // Load Phi-4 configuration (cheap reasoning specialist - $0.13/$0.50 per M tokens!)
-      const phi4Endpoint = await keyVaultService.getSecret('AZURE-PHI4-ENDPOINT');
-      const phi4ApiKey = await keyVaultService.getSecret('AZURE-PHI4-API-KEY');
+      // Try standard OpenAI API as fallback
+      const openaiApiKey = await keyVaultService.getSecret('OPENAI-API-KEY');
 
-      if (phi4Endpoint && phi4ApiKey) {
-        this.models.set('phi-4', {
-          endpoint: phi4Endpoint,
-          apiKey: phi4ApiKey,
-          modelId: 'phi-4' // 14B params, reasoning specialist
+      if (openaiApiKey && !this.models.has('gpt-5')) {
+        this.models.set('gpt-5', {
+          endpoint: 'https://api.openai.com/v1',
+          apiKey: openaiApiKey,
+          modelId: 'gpt-4o'
         });
-        agentLogger.info('✓ Phi-4 configured ($0.13/$0.50 per M tokens - cheapest reasoning!)');
-      } else {
-        agentLogger.warn('⚠ Phi-4 credentials not found in Key Vault');
-      }
+        agentLogger.info('✓ GPT-4o configured via OpenAI API (fallback)');
 
-      // Load Phi-4 Mini Flash Reasoning (10x faster, ultra-low latency)
-      const phi4MiniEndpoint = await keyVaultService.getSecret('AZURE-PHI4-MINI-ENDPOINT');
-      const phi4MiniApiKey = await keyVaultService.getSecret('AZURE-PHI4-MINI-API-KEY');
-
-      if (phi4MiniEndpoint && phi4MiniApiKey) {
-        this.models.set('phi-4-mini-flash', {
-          endpoint: phi4MiniEndpoint,
-          apiKey: phi4MiniApiKey,
-          modelId: 'phi-4-mini-flash-reasoning' // 3.8B params, ultra-fast
+        this.models.set('gpt-5-mini', {
+          endpoint: 'https://api.openai.com/v1',
+          apiKey: openaiApiKey,
+          modelId: 'gpt-4o-mini'
         });
-        agentLogger.info('✓ Phi-4 Mini Flash configured (10x faster!)');
-      } else {
-        agentLogger.warn('⚠ Phi-4 Mini Flash credentials not found in Key Vault');
+        agentLogger.info('✓ GPT-4o-mini configured via OpenAI API (fallback)');
       }
 
       this.initialized = true;
