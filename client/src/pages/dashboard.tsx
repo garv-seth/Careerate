@@ -98,9 +98,11 @@ export default function Dashboard() {
                   <FolderOpen className="h-4 w-4 text-primary" />
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                +2 from last month
-              </p>
+              {metrics.projectsChange && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  {metrics.projectsChange > 0 ? '+' : ''}{metrics.projectsChange} from last month
+                </p>
+              )}
             </div>
 
             <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
@@ -114,7 +116,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Cloud accounts linked
+                {connectedProviders > 0 ? 'Cloud accounts linked' : 'Connect your first provider'}
               </p>
             </div>
 
@@ -122,29 +124,31 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Monthly Cost</p>
-                  <p className="text-2xl font-bold">${totalCost || '–'}</p>
+                  <p className="text-2xl font-bold">${totalCost > 0 ? totalCost.toFixed(2) : '0.00'}</p>
                 </div>
                 <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
                   <DollarSign className="h-4 w-4 text-primary" />
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                -12% from last month
-              </p>
+              {metrics.costChange && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  {metrics.costChange > 0 ? '+' : ''}{metrics.costChange}% from last month
+                </p>
+              )}
             </div>
 
             <div className="bg-background/50 border border-border rounded-lg p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Uptime</p>
-                  <p className="text-2xl font-bold">{uptime}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Active Deployments</p>
+                  <p className="text-2xl font-bold">{activeDeployments}</p>
                 </div>
                 <div className="h-8 w-8 bg-green-500/10 rounded-full flex items-center justify-center">
                   <CheckCircle className="h-4 w-4 text-green-500" />
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Last 30 days
+                {activeDeployments > 0 ? 'Currently running' : 'No active deployments'}
               </p>
             </div>
           </div>
