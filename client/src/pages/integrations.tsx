@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CloudAccountsManager } from "@/components/CloudAccountsManager";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Cloud, Github, GitBranch, Database, Activity, Bell, MessageSquare, Mail, Monitor } from "lucide-react";
 
 export default function IntegrationsPage() {
