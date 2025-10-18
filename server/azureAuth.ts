@@ -36,12 +36,11 @@ export function getSession() {
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    proxy: true, // CRITICAL: Trust reverse proxy (Azure Container Apps)
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for OAuth in production
+      sameSite: 'lax'
     },
   });
 }
@@ -285,41 +284,8 @@ export async function setupAuth(app: Express) {
           console.error('Session login error:', err);
           return res.status(500).json({ error: 'Login failed', details: err.message });
         }
-      console.log('Session login successful, ensuring identity integration...');
-      (async () => {
-        try {
-          const userId = (dbUser as any).id;
-          // Upsert identity integration for Microsoft
-          const existing = await storage.getUserIntegrations(userId).then(list => list.find(i => i.type === 'identity' && i.service === 'microsoft'));
-        if (!existing) {
-          await storage.createIntegration({
-            userId,
-            projectId: null,
-            name: 'Microsoft Account',
-            type: 'identity',
-            service: 'microsoft',
-            category: 'identity',
-            connectionType: 'oauth',
-            status: 'active',
-            configuration: {
-              upn: payload.preferred_username || payload.email,
-              name: payload.name,
-            },
-            endpoints: {},
-            permissions: [],
-            rateLimits: {},
-            healthCheck: { enabled: false, interval: 0, timeout: 0, retries: 0 },
-            isEnabled: true,
-            autoRotate: false,
-            metadata: {}
-          } as any);
-        }
-        } catch (e) {
-          console.warn('Failed to upsert Microsoft identity integration (non-fatal):', e);
-        }
-      })(); // Execute async IIFE immediately but don't wait
-      console.log('Redirecting to /dashboard');
-      res.redirect('/dashboard');
+        console.log('Session login successful, redirecting to /dashboard');
+        res.redirect('/dashboard');
       });
 
     } catch (error) {

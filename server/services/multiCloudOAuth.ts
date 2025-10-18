@@ -58,9 +58,10 @@ class MultiCloudOAuthService {
    * Handle GitHub OAuth callback
    */
   async handleGitHubCallback(code: string, userId: string): Promise<OAuthResult> {
-    const clientId = await keyVaultService.getSecret('GITHUB-CLIENT-ID');
-    const clientSecret = await keyVaultService.getSecret('GITHUB-CLIENT-SECRET');
-    const redirectUri = await keyVaultService.getSecret('GITHUB-REDIRECT-URI');
+    // Try environment variables first, then Key Vault (CRITICAL FIX)
+    const clientId = process.env.GITHUB_CLIENT_ID || await keyVaultService.getSecret('GITHUB-CLIENT-ID');
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET || await keyVaultService.getSecret('GITHUB-CLIENT-SECRET');
+    const redirectUri = process.env.GITHUB_REDIRECT_URI || await keyVaultService.getSecret('GITHUB-REDIRECT-URI');
 
     if (!clientId || !clientSecret) {
       return { success: false, errorMessage: 'GitHub OAuth not configured' };
