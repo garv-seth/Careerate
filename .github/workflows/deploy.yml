@@ -80,14 +80,13 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Deploy to Azure Container Apps
-      uses: azure/container-apps-deploy-action@v1
-      with:
-        containerAppName: ${{ env.CONTAINER_APP_NAME }}
-        resourceGroup: ${{ env.RESOURCE_GROUP }}
-        imageToDeploy: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
-        containerAppEnvironment: ${{ env.CONTAINER_APP_ENV }}
-        targetPort: 5000
-        ingress: external
+      run: |
+        echo "🚀 Deploying new image to container app..."
+        az containerapp update \
+          --name ${{ env.CONTAINER_APP_NAME }} \
+          --resource-group ${{ env.RESOURCE_GROUP }} \
+          --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
+        echo "✅ Image updated successfully"
 
     - name: Force Container App Restart and Cache Invalidation
       run: |

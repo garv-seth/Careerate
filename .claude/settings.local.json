@@ -50,7 +50,8 @@
       "Bash(Select-Object -First 200)",
       "Bash(npm run:*)",
       "Bash(python:*)",
-      "Bash(Select-Object -First 50)"
+      "Bash(Select-Object -First 50)",
+      "Bash(git mv:*)"
     ],
     "deny": [],
     "ask": []

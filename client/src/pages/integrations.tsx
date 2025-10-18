@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CloudAccountsManager } from "@/components/CloudAccountsManager";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Cloud, Github, GitBranch, Database, Activity, Bell, MessageSquare, Mail, Monitor } from "lucide-react";
 
 export default function IntegrationsPage() {
@@ -86,8 +86,8 @@ export default function IntegrationsPage() {
     }
   });
 
-  // In unified grid, hide items we surface via dedicated panels (Azure resources, GitHub repos) and remove OCI
-  const hiddenIds = new Set(['github','oracle']);
+  // Filter out providers already represented in CloudAccountsManager cards
+  const hiddenIds = new Set(['aws','azure','gcp']);
   const grouped = (data?.integrations || []).filter((i: any) => !hiddenIds.has(i.id)).reduce((acc: any, i: any) => {
     acc[i.category] = acc[i.category] || [];
     acc[i.category].push(i);
@@ -125,17 +125,19 @@ export default function IntegrationsPage() {
           <p className="text-foreground/70">Connect your accounts to enable AI agents to deploy and manage your infrastructure.</p>
         </div>
 
-        {/* Unified Integrations Grid */}
+        {/* Cloud Accounts Section */}
+        <CloudAccountsManager />
+
+        {/* GCP project selection when connected */}
+        <GcpProjectSelector />
+
+        <Separator className="my-8" />
+
+        {/* Other Integrations */}
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-1">Integrations</h2>
-          <p className="text-foreground/70 mb-6">Connect providers and tools. Agents will use these to deploy and manage your stack.</p>
+          <h2 className="text-2xl font-bold text-foreground mb-1">Other Integrations</h2>
+          <p className="text-foreground/70 mb-6">Additional services and tools for monitoring, notifications, and more.</p>
         </div>
-
-        {/* Azure Resources Panel */}
-        <AzureResourcesPanel />
-
-        {/* GitHub Repo Selector when connected */}
-        <GitHubRepoSelector />
 
         {/* GitHub Repo Selector when connected */}
         <GitHubRepoSelector />
@@ -282,97 +284,6 @@ export default function IntegrationsPage() {
   );
 }
 
-function AzureResourcesPanel() {
-  const [subs, setSubs] = React.useState<any[] | null>(null);
-  const [rg, setRg] = React.useState<any[] | null>(null);
-  const [apps, setApps] = React.useState<any[] | null>(null);
-  const [registries, setRegistries] = React.useState<any[] | null>(null);
-  const [selectedSub, setSelectedSub] = React.useState<string | null>(null);
-  const [selectedRg, setSelectedRg] = React.useState<string | null>(null);
-
-  useEffect(() => {
-    fetch('/api/azure/subscriptions', { credentials: 'include' })
-      .then(r => r.ok ? r.json() : null)
-      .then(j => setSubs(j?.subscriptions || null))
-      .catch(() => setSubs(null));
-  }, []);
-
-  useEffect(() => {
-    if (!selectedSub) return;
-    fetch(`/api/azure/resource-groups?subscriptionId=${encodeURIComponent(selectedSub)}`, { credentials: 'include' })
-      .then(r => r.ok ? r.json() : null)
-      .then(j => setRg(j?.resourceGroups || null))
-      .catch(() => setRg(null));
-  }, [selectedSub]);
-
-  useEffect(() => {
-    if (!selectedSub) return;
-    const rgParam = selectedRg ? `&resourceGroup=${encodeURIComponent(selectedRg)}` : '';
-    fetch(`/api/azure/container-apps?subscriptionId=${encodeURIComponent(selectedSub)}${rgParam}`, { credentials: 'include' })
-      .then(r => r.ok ? r.json() : null)
-      .then(j => setApps(j?.containerApps || null))
-      .catch(() => setApps(null));
-    fetch(`/api/azure/registries?subscriptionId=${encodeURIComponent(selectedSub)}${rgParam}`, { credentials: 'include' })
-      .then(r => r.ok ? r.json() : null)
-      .then(j => setRegistries(j?.registries || null))
-      .catch(() => setRegistries(null));
-  }, [selectedSub, selectedRg]);
-
-  if (!subs) return null;
-
-  return (
-    <div className="glass-pane rounded-2xl p-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-foreground">Azure Resources</h3>
-      </div>
-      <div className="flex gap-3 flex-wrap">
-        <select aria-label="Azure Subscription" className="bg-background border border-border rounded px-2 py-1" value={selectedSub || ''} onChange={e => setSelectedSub(e.target.value)}>
-          <option value="">Select Subscription</option>
-          {(subs || []).map((s: any) => (
-            <option key={s.subscriptionId} value={s.subscriptionId}>{s.displayName || s.subscriptionId}</option>
-          ))}
-        </select>
-        {selectedSub && (
-          <select aria-label="Azure Resource Group" className="bg-background border border-border rounded px-2 py-1" value={selectedRg || ''} onChange={e => setSelectedRg(e.target.value)}>
-            <option value="">All Resource Groups</option>
-            {(rg || []).map((g: any) => (
-              <option key={g.name} value={g.name}>{g.name}</option>
-            ))}
-          </select>
-        )}
-      </div>
-
-      {selectedSub && (
-        <div className="grid md:grid-cols-2 gap-3">
-          <div>
-            <div className="text-sm font-medium mb-1">Container Apps</div>
-            <div className="space-y-2">
-              {(apps || []).map((a: any) => (
-                <div key={a.id} className="p-2 rounded border border-border">
-                  <div className="text-sm">{a.name}</div>
-                  <div className="text-xs text-foreground/60">{a.resourceGroup} • {a.location}</div>
-                </div>
-              ))}
-              {!apps && <div className="text-foreground/60 text-sm">No data</div>}
-            </div>
-          </div>
-          <div>
-            <div className="text-sm font-medium mb-1">Container Registries</div>
-            <div className="space-y-2">
-              {(registries || []).map((r: any) => (
-                <div key={r.id} className="p-2 rounded border border-border">
-                  <div className="text-sm">{r.name}</div>
-                  <div className="text-xs text-foreground/60">{r.resourceGroup} • {r.location}</div>
-                </div>
-              ))}
-              {!registries && <div className="text-foreground/60 text-sm">No data</div>}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 function GitHubRepoSelector() {
   const { toast } = useToast();
   const [repos, setRepos] = React.useState<any[] | null>(null);
@@ -419,13 +330,11 @@ function GitHubRepoSelector() {
     <div className="glass-pane rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-lg font-semibold text-foreground">GitHub Repositories {user ? `• @${user.login}` : ''}</h3>
-        <Badge variant={repos && repos.length > 0 ? 'default' : 'secondary'}>
-          {repos && repos.length > 0 ? 'Connected' : 'Authorize to load repos'}
-        </Badge>
+        <Badge>Connected</Badge>
       </div>
       {loading && <div className="text-foreground/60">Loading repositories…</div>}
       {error && <div className="text-red-500 text-sm">{error}</div>}
-      {repos && repos.length > 0 && (
+      {repos && (
         <div className="grid md:grid-cols-2 gap-3">
           {repos.map(r => (
             <div key={r.id} className="p-3 rounded-lg border border-border flex items-center justify-between">

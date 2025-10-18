@@ -2404,7 +2404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (e) {
         console.warn('Failed to upsert GitHub identity integration (non-fatal):', e);
       }
-      return res.redirect('/integrations?github=connected');
+      return res.redirect('/dashboard?github=connected');
     } catch (error) {
       console.error('GitHub OAuth callback error:', error);
       res.redirect('/integrations?error=callback_failed');

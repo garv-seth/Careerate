@@ -36,11 +36,12 @@ export function getSession() {
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    proxy: true, // CRITICAL: Trust reverse proxy (Azure Container Apps)
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
-      sameSite: 'lax'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for OAuth in production
     },
   });
 }
@@ -285,11 +286,11 @@ export async function setupAuth(app: Express) {
           return res.status(500).json({ error: 'Login failed', details: err.message });
         }
       console.log('Session login successful, ensuring identity integration...');
-      try {
-        const { storage } = await import('./storage');
-        const userId = (dbUser as any).id;
-        // Upsert identity integration for Microsoft
-        const existing = await storage.getUserIntegrations(userId).then(list => list.find(i => i.type === 'identity' && i.service === 'microsoft'));
+      (async () => {
+        try {
+          const userId = (dbUser as any).id;
+          // Upsert identity integration for Microsoft
+          const existing = await storage.getUserIntegrations(userId).then(list => list.find(i => i.type === 'identity' && i.service === 'microsoft'));
         if (!existing) {
           await storage.createIntegration({
             userId,
@@ -313,9 +314,10 @@ export async function setupAuth(app: Express) {
             metadata: {}
           } as any);
         }
-      } catch (e) {
-        console.warn('Failed to upsert Microsoft identity integration (non-fatal):', e);
-      }
+        } catch (e) {
+          console.warn('Failed to upsert Microsoft identity integration (non-fatal):', e);
+        }
+      })(); // Execute async IIFE immediately but don't wait
       console.log('Redirecting to /dashboard');
       res.redirect('/dashboard');
       });
