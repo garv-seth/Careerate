@@ -647,5 +647,32 @@ router.get('/status', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * GET /api/agent/diagnostics
+ * Get agent system diagnostics (no auth required - for testing)
+ */
+router.get('/diagnostics', async (req: Request, res: Response) => {
+  try {
+    const status = orchestrator.getStatus();
+
+    res.json({
+      success: true,
+      orchestrator: status,
+      environment: {
+        nodeEnv: process.env.NODE_ENV,
+        hasOpenAI: !!process.env.OPENAI_API_KEY,
+        hasAnthropic: !!process.env.ANTHROPIC_API_KEY,
+        hasAzureOpenAI: !!(process.env.AZURE_OPENAI_KEY && process.env.AZURE_OPENAI_ENDPOINT)
+      }
+    });
+  } catch (error) {
+    console.error('Diagnostics error:', error);
+    res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Diagnostics failed'
+    });
+  }
+});
+
 export default router;
 

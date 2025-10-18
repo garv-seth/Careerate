@@ -235,7 +235,20 @@ app.get('/api/health', (req, res) => {
 
       // Initialize WebSocket server AFTER HTTP server is listening
       collaborationServer.initialize(server);
-      
+
+      // Initialize Agent Orchestrator
+      (async () => {
+        try {
+          const { orchestrator } = await import("./agents/orchestrator");
+          console.log('🤖 Initializing Agent Orchestrator...');
+          await orchestrator.initialize();
+          console.log('✅ Agent Orchestrator initialized successfully');
+        } catch (error) {
+          console.error('⚠️ Failed to initialize Agent Orchestrator:', error);
+          console.error('   Agents will auto-init on first use');
+        }
+      })();
+
       // Start health monitoring agent for all active deployments
       healthMonitor.start().then(() => {
         console.log(`🏥 Health Monitor started - monitoring active deployments`);
